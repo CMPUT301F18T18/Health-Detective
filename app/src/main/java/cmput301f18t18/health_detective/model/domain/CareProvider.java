@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class CareProvider extends User {
     public ArrayList<Patient> Patients;
 
+    public CareProvider() {
+        Patients = new ArrayList<>();
+    }
+
     public void AddPatient(Patient pat) {
         Patients.add(pat);
     }
