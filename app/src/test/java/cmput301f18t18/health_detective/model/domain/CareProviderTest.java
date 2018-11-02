@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective;
+package cmput301f18t18.health_detective.model.domain;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import cmput301f18t18.health_detective.model.domain.Patient;
 
 import static org.junit.Assert.*;
 
-public class TestDomain {
+public class CareProviderTest {
     @Test
     public void TestCareProviderAddPatient() {
         CareProvider Provider = new CareProvider();
@@ -20,5 +20,4 @@ public class TestDomain {
 
 
     }
-
 }

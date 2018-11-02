@@ -24,12 +24,11 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
 
     @Override
     public void removeProblem(int problemID) {
-
     }
 
     @Override
-    public void saveProblem(Problem problem) {
-
+    public boolean saveProblem(Problem problem) {
+        return false;
     }
 
     @Override
@@ -43,8 +42,8 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     }
 
     @Override
-    public void saveRecord(Record record) {
-
+    public boolean saveRecord(Record record) {
+        return false;
     }
 
     @Override
@@ -53,8 +52,8 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     }
 
     @Override
-    public void saveUser(User usr) {
-
+    public boolean saveUser(User usr) {
+        return false;
     }
 
     @Override
