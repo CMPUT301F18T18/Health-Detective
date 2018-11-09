@@ -1,34 +1,34 @@
 package cmput301f18t18.health_detective.model.domain;
 
 public class Geolocation {
-    private double Latitude;
-    private double Longitude;
+    private double latitude;
+    private double longitude;
 
 
     public Geolocation(double lat, double lon) {
-        Latitude = lat;
-        Longitude = lon;
+        latitude = lat;
+        longitude = lon;
     }
 
-    public void setLatitude(double latitude) {
-        Latitude = latitude;
+    public void setlatitude(double latitude) {
+        latitude = latitude;
     }
 
-    public void setLongitude(double longitude) {
-        Longitude = longitude;
+    public void setlongitude(double longitude) {
+        longitude = longitude;
     }
 
     public void setBoth(double lat, double lon) {
-        setLatitude(lat);
-        setLongitude(lon);
+        setlatitude(lat);
+        setlongitude(lon);
     }
 
-    public double getLatitude() {
-        return Latitude;
+    public double getlatitude() {
+        return latitude;
     }
 
-    public double getLongitude() {
-        return Longitude;
+    public double getlongitude() {
+        return longitude;
     }
 
     public double getDist(Geolocation geolocation) {

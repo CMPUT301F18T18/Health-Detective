@@ -1,22 +1,22 @@
 package cmput301f18t18.health_detective.model.domain;
 
 public class BodyPhoto {
-    private int XCord;
-    private int YCord;
+    private int xCord;
+    private int yCord;
 
-    public int getXCord() {
-        return XCord;
+    public int getxCord() {
+        return xCord;
     }
 
-    public void setXCord(int XCord) {
-        this.XCord = XCord;
+    public int getyCord() {
+        return yCord;
     }
 
-    public int getYCord() {
-        return YCord;
+    public void setxCord(int xCord) {
+        this.xCord = xCord;
     }
-
-    public void setYCord(int YCord) {
-        this.YCord = YCord;
+    
+    public void setyCord(int yCord) {
+        this.yCord = yCord;
     }
 }
