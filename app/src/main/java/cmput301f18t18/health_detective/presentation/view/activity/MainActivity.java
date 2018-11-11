@@ -36,13 +36,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this,user,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.signUpButton:
-                Toast.makeText(this,"signup",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,SignUpActivity.class);
+                changeActivity(intent);
                 break;
 
         }
     }
 
-    public void changeActvity(Intent intent){
+    public void changeActivity(Intent intent){
         startActivity(intent);
     }
 }
