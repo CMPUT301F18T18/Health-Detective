@@ -4,36 +4,36 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Problem implements Searchable  {
-    // ProblemID needs to be unique across all patients
-    private int ProblemID;
-    private String Title;
-    private Date StartDate;
-    private String Description;
-    private ArrayList<Record> Records;
+    // problemID needs to be unique across all patients
+    private int problemID;
+    private String title;
+    private Date startDate;
+    private String description;
+    private ArrayList<Record> records;
 
     public Problem() {
-        Records = new ArrayList<>();
+        records = new ArrayList<>();
     }
 
     public Problem(int PUID) {
         this();
-        this.ProblemID = PUID;
+        this.problemID = PUID;
     }
 
-    public int getProblemID() {
-        return ProblemID;
+    public int getproblemID() {
+        return problemID;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setdescription(String description) {
+        description = description;
     }
 
-    public String getDescription() {
-        return Description;
+    public String getdescription() {
+        return description;
     }
 
     public void addRecord(Record record) {
-        Records.add(record);
+        records.add(record);
     }
 
     @Override
@@ -55,6 +55,6 @@ public class Problem implements Searchable  {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.ProblemID ==  problem.getProblemID());
+        return (this.problemID ==  problem.getproblemID());
     }
 }

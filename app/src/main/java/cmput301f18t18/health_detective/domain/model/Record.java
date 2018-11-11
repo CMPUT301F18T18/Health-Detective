@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Record implements Searchable {
-    public int RecordID;
-    private String Title;
-    private String Comment;
-    private Geolocation Location;
-    private Set<BodyLocation> BodyLocations;
-    private Set<Photo> Photos;
+    public int recordID;
+    private String title;
+    private String comment;
+    private Geolocation location;
+    private Set<BodyLocation> bodyLocations;
+    private Set<Photo> photos;
 
     public Record() { }
 
     public Record(int RUID) {
         this();
-        this.RecordID = RUID;
+        this.recordID = RUID;
     }
 
     public int getRecordID() {
-        return RecordID;
+        return recordID;
     }
 
     @Override
@@ -33,11 +33,11 @@ public class Record implements Searchable {
     }
 
     public void addBodyLocation(BodyLocation loc) {
-        BodyLocations.add(loc);
+        bodyLocations.add(loc);
     }
 
     public void setLocation(Geolocation location) {
-        Location = location;
+        this.location = location;
     }
 
     @Override
@@ -49,6 +49,6 @@ public class Record implements Searchable {
             return false;
 
         Record record = (Record) o;
-        return (this.RecordID ==  record.getRecordID());
+        return (this.recordID ==  record.getRecordID());
     }
 }

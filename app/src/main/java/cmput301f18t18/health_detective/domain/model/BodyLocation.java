@@ -4,14 +4,15 @@ import java.util.Set;
 
 public class BodyLocation {
 
-    private BodyPart Location;
-    private Set<BodyPhoto> BodyPhotos;
+    private BodyPart location;
+    private Set<BodyPhoto> bodyPhotos;
 
     public BodyPart getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(BodyPart location) {
-        Location = location;
+        location = location;
     }
+
 }

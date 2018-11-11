@@ -1,32 +1,32 @@
 package cmput301f18t18.health_detective.domain.model;
 
 public abstract class User {
-    public String UserID;
-    private String PhoneNumber;
-    private String EmailAddress;
+    public String userID;
+    private String phoneNumber;
+    private String emailAddress;
 
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public void setUserID(String userID) {
-        UserID = userID;
+        this.userID = userID;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmailAddress() {
-        return EmailAddress;
+        return emailAddress;
     }
 
     public void setEmailAddress(String emailAddress) {
-        EmailAddress = emailAddress;
+        this.emailAddress = emailAddress;
     }
 
     @Override
@@ -38,7 +38,7 @@ public abstract class User {
             return false;
 
         User usr = (User) o;
-        return (this.UserID.equals(usr.getUserID()));
+        return (this.userID.equals(usr.getUserID()));
     }
 
 }
