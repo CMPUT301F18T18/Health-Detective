@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,9 +36,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this,user,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.signUpButton:
-                Toast.makeText(this,"signup",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,SignUpActivity.class);
+                changeActivity(intent);
                 break;
 
         }
+    }
+
+    public void changeActivity(Intent intent){
+        startActivity(intent);
     }
 }
