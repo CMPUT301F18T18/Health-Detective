@@ -3,11 +3,8 @@
     <color name="colorPrimary">#306ff9</color>
     <color name="colorPrimaryDark">#2350b4</color>
     <color name="colorAccent">#D81B60</color>
-<<<<<<< HEAD
     <color name="border_color">#000000</color>
     <color name="background_color">#FFFFFF</color>
-=======
     <color name="colorCareProvider">#f9303a</color>
     <color name="colorCareProviderDark">#b42328</color>
->>>>>>> jordan
 </resources>
