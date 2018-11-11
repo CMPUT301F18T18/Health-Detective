@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,5 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
+    }
+
+    public void changeActvity(Intent intent){
+        startActivity(intent);
     }
 }
