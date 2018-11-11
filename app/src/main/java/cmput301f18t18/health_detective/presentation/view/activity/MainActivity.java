@@ -31,13 +31,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.loginButton:
-                EditText userid = (EditText) findViewById(R.id.userIdLogin);
-                String user = userid.getText().toString();
-                Toast.makeText(this,user,Toast.LENGTH_SHORT).show();
+                Intent problemsIntent = new Intent(this,PatientProblemsActivity.class);
+                changeActivity(problemsIntent);
                 break;
             case R.id.signUpButton:
-                Intent intent = new Intent(this,SignUpActivity.class);
-                changeActivity(intent);
+                Intent signUpIntent = new Intent(this,SignUpActivity.class);
+                changeActivity(signUpIntent);
                 break;
 
         }
