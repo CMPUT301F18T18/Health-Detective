@@ -8,4 +8,9 @@
     <string name="user_phoneNum">Phone Number</string>
     <string name="patient">Patient</string>
     <string name="careProvider">Care Provider</string>
+    <string name="problemTitle">Problem Title</string>
+    <string name="problemDate">Problem Date</string>
+    <string name="problemDesc">Description</string>
+    <string name="cancelBtn">Cancel</string>
+    <string name="saveBtn">Save</string>
 </resources>

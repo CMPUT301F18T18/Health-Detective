@@ -2,6 +2,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import cmput301f18t18.health_detective.R;
 

@@ -6,4 +6,106 @@
     android:layout_height="match_parent"
     tools:context=".presentation.view.activity.ProblemEditAdd">
 
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="143dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="53dp"
+        android:text="@string/problemTitle"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/problemTitle"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/signup_border"
+        android:ems="10"
+        android:hint="@string/problemTitle"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleText" />
+
+    <EditText
+        android:id="@+id/problemDate"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/signup_border"
+        android:ems="10"
+        android:hint="@string/problemDate"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateText" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="54dp"
+        android:text="@string/problemDate"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
+
+    <EditText
+        android:id="@+id/problemDesc"
+        android:layout_width="0dp"
+        android:layout_height="174dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/signup_border"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/problemDesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descText" />
+
+    <TextView
+        android:id="@+id/descText"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="75dp"
+        android:text="@string/problemDesc"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/problemDate" />
+
+    <Button
+        android:id="@+id/cancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="179dp"
+        android:layout_marginTop="29dp"
+        android:text="@string/cancelBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/saveBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="29dp"
+        android:text="@string/saveBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
 </android.support.constraint.ConstraintLayout>

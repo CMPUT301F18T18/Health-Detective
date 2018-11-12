@@ -17,9 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.view.activity.SignUpActivity" />
-        <activity android:name=".presentation.view.activity.activity_patient_problems" />
         <activity android:name=".presentation.view.activity.PatientProblemsActivity" />
-        <activity android:name=".presentation.view.activity.ProblemEditAdd" />
+        <activity android:name=".presentation.view.activity.ProblemEditAddActivity" />
         <activity android:name=".presentation.view.activity.SearchActivity" />
         <activity android:name=".presentation.view.activity.PatientRecordsActivity" />
         <activity android:name=".presentation.view.activity.PatientRecordViewActivity" />
