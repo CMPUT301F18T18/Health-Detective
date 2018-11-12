@@ -1,19 +1,19 @@
 package cmput301f18t18.health_detective.domain.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CareProvider extends User {
-    public ArrayList<Patient> patients;
+    public HashMap<String, Patient> patients;
 
     public CareProvider() {
-        patients = new ArrayList<>();
+        patients = new HashMap<>();
     }
 
     public void AddPatient(Patient pat) {
-        patients.add(pat);
+        patients.put(pat.getUserID(), pat);
     }
 
-    public Patient GetPatient(int index) {
-        return patients.get(index);
+    public Patient GetPatient(String patientId) {
+        return patients.get(patientId);
     }
 }

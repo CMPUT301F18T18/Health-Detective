@@ -1,13 +1,13 @@
 package cmput301f18t18.health_detective.domain.interactors.base;
 
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutorContract;
-import cmput301f18t18.health_detective.domain.executor.MainThreadContract;
+import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.executor.MainThread;
 
-public abstract class AbstractInteractor implements InteractorContract {
+public abstract class AbstractInteractor implements Interactor {
     protected volatile boolean isExecuting;
     protected volatile boolean isStoped;
-    protected ThreadExecutorContract threadExecutor;
-    protected MainThreadContract mainThread;
+    protected ThreadExecutor threadExecutor;
+    protected MainThread mainThread;
 
     /**
      * Method contains the business logic of the interactor

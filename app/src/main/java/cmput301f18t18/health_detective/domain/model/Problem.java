@@ -24,11 +24,11 @@ public class Problem implements Searchable  {
         return problemID;
     }
 
-    public void setdescription(String description) {
+    public void setDescription(String description) {
         description = description;
     }
 
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 
