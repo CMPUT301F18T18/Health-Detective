@@ -19,11 +19,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         Button loginButton = findViewById(R.id.loginButton);
-        Button signUpButton = findViewById(R.id.signUpButton);
-
+        TextView signup = findViewById(R.id.signUpText);
 
         loginButton.setOnClickListener(this);
-        signUpButton.setOnClickListener(this);
+        signup.setOnClickListener(this);
 
     }
 
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent problemsIntent = new Intent(this,PatientProblemsActivity.class);
                 changeActivity(problemsIntent);
                 break;
-            case R.id.signUpButton:
+            case R.id.signUpText:
                 Intent signUpIntent = new Intent(this,SignUpActivity.class);
                 changeActivity(signUpIntent);
                 break;
