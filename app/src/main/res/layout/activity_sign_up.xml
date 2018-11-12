@@ -37,8 +37,8 @@
         android:layout_marginTop="26dp"
         android:background="@drawable/signup_border"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/user_email"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneEdit" />
@@ -52,8 +52,8 @@
         android:layout_marginTop="23dp"
         android:background="@drawable/signup_border"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/user_phoneNum"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userIdEdit" />
@@ -67,15 +67,15 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/signup_border"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/user_id"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpText" />
 
     <CheckBox
         android:id="@+id/CPcheckBox"
-        android:layout_width="wrap_content"
+        android:layout_width="116dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="66dp"
         android:text="@string/careProvider"
