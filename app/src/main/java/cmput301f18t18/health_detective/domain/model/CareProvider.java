@@ -6,6 +6,17 @@ public class CareProvider extends User {
     public HashMap<String, Patient> patients;
 
     public CareProvider() {
+        super();
+        patients = new HashMap<>();
+    }
+
+    public CareProvider(String userId) {
+        super(userId);
+        patients = new HashMap<>();
+    }
+
+    public CareProvider(String userId, String phoneNumber, String emailAddress) {
+        super(userId, phoneNumber, emailAddress);
         patients = new HashMap<>();
     }
 

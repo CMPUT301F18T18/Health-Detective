@@ -6,6 +6,21 @@ public class Patient extends User {
 
     private HashMap<Integer, Problem> problems;
 
+    public  Patient() {
+        super();
+        this.problems = new HashMap<>();
+    }
+
+    public Patient(String userId) {
+        super(userId);
+        this.problems = new HashMap<>();
+    }
+
+    public Patient(String userId, String phoneNumber, String emailAddress) {
+        super(userId, phoneNumber, emailAddress);
+        this.problems = new HashMap<>();
+    }
+
     public Problem getProblem(Integer problemId) {
         return problems.get(problemId);
     }
