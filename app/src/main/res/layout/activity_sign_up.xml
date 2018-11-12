@@ -25,12 +25,12 @@
         android:layout_marginBottom="106dp"
         android:text="@string/sign_up"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/userIdEdit"
+        app:layout_constraintBottom_toTopOf="@+id/emailEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/userIdEdit"
+        android:id="@+id/emailEdit"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="177dp"
@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/emailEdit"
+        android:id="@+id/phoneNumEdit"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="20dp"
@@ -59,10 +59,10 @@
         app:layout_constraintBottom_toTopOf="@+id/CPcheckBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userIdEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
 
     <EditText
-        android:id="@+id/phoneEdit"
+        android:id="@+id/userEdit"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="66dp"
@@ -73,7 +73,7 @@
         android:ems="10"
         android:hint="@string/user_id"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/userIdEdit"
+        app:layout_constraintBottom_toBottomOf="@+id/emailEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/signUpText" />
@@ -85,7 +85,7 @@
         android:layout_marginStart="14dp"
         android:text="@string/careProvider"
         app:layout_constraintBaseline_toBaselineOf="@+id/PcheckBox"
-        app:layout_constraintStart_toStartOf="@+id/emailEdit" />
+        app:layout_constraintStart_toStartOf="@+id/phoneNumEdit" />
 
     <CheckBox
         android:id="@+id/PcheckBox"
@@ -105,6 +105,6 @@
         android:layout_marginTop="137dp"
         android:text="@string/sign_up"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userIdEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
 
 </android.support.constraint.ConstraintLayout>

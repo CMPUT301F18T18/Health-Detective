@@ -10,8 +10,15 @@ public class SignUpPresenter implements CreateUserProfileContract.Callback {
     String userPhoneNum;
     Boolean userType;
 
+    public SignUpPresenter(String userName, String userEmail, String userPhoneNum, Boolean userType) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPhoneNum = userPhoneNum;
+        this.userType = userType;
+    }
+
     public void createNewUser(String userName, String userEmail, String userPhoneNum, Boolean userType){
-        
+
     }
 
     @Override
