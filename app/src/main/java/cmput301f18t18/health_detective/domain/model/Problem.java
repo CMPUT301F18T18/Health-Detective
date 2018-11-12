@@ -3,6 +3,8 @@ package cmput301f18t18.health_detective.domain.model;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.searchbox.annotations.JestId;
+
 public class Problem implements Searchable  {
     // problemID needs to be unique across all patients
     private int problemID;
@@ -10,6 +12,9 @@ public class Problem implements Searchable  {
     private Date startDate;
     private String description;
     private ArrayList<Record> records;
+
+    @JestId
+    private String problemJestId;
 
     public Problem() {
         records = new ArrayList<>();
@@ -20,15 +25,15 @@ public class Problem implements Searchable  {
         this.problemID = PUID;
     }
 
-    public int getproblemID() {
+    public int getProblemID() {
         return problemID;
     }
 
-    public void setdescription(String description) {
-        description = description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -55,6 +60,10 @@ public class Problem implements Searchable  {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemID ==  problem.getproblemID());
+        return (this.problemID ==  problem.getProblemID());
     }
+
+    public void setProblemJestId(String id) { this.problemJestId = id; }
+
+    public String getProblemJestId() { return this.problemJestId; }
 }

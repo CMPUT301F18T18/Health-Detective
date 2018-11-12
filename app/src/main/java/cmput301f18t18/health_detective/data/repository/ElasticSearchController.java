@@ -1,5 +1,10 @@
 package cmput301f18t18.health_detective.data.repository;
 
+import com.searchly.jestdroid.DroidClientConfig;
+import com.searchly.jestdroid.JestClientFactory;
+import com.searchly.jestdroid.JestDroidClient;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cmput301f18t18.health_detective.domain.model.Problem;
@@ -8,20 +13,46 @@ import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
+import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Index;
 
 public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRepo {
     private static final ElasticSearchController ourInstance = new ElasticSearchController();
+
+    static JestDroidClient client = null;
 
     public static ElasticSearchController getInstance() {
         return ourInstance;
     }
 
-    private ElasticSearchController() {
+    private ElasticSearchController() { }
+
+    public static void setClient() {
+        if (client == null) {
+            DroidClientConfig config = new DroidClientConfig
+                    .Builder("http://cmput301.softwareprocess.es:8080/")
+                    .build();
+            JestClientFactory factory = new JestClientFactory();
+            factory.setDroidClientConfig(config);
+            client = (JestDroidClient) factory.getObject();
+        }
     }
 
     @Override
     public void insertProblem(Problem problem) {
+        setClient();
+        Index index = new Index.Builder(problem)
+                .index("cmput301f18t18")
+                .type("problem")
+                .build();
+        try {
+            DocumentResult result = client.execute(index);
+            if (result.isSucceeded()) {
+                problem.setProblemJestId(result.getId());
+            }
+        } catch (IOException e) {
 
+        }
     }
 
     @Override
