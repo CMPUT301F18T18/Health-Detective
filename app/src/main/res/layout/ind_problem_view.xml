@@ -23,14 +23,6 @@
                 android:layout_marginTop="16dp"
                 android:text="TextView" />
 
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                app:srcCompat="@mipmap/editPencil" />
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
