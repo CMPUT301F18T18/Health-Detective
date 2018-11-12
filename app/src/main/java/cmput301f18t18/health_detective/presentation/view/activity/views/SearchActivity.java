@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.presentation.view.activity;
+package cmput301f18t18.health_detective.presentation.view.activity.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
