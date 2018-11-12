@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.activity.views.PatientRecordsActivity">
+    tools:context=".presentation.view.activity.PatientRecordsActivity">
 
 </android.support.constraint.ConstraintLayout>
