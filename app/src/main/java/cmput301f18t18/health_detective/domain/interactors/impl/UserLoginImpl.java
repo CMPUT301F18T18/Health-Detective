@@ -2,10 +2,8 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.interactors.GetUserProfile;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
-import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class UserLoginImpl extends AbstractInteractor implements UserLogin {

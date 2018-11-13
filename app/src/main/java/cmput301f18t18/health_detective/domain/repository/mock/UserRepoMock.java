@@ -41,4 +41,9 @@ public class UserRepoMock implements UserRepo {
     public void deleteUser(User user) {
         this.users.remove(user.getUserID());
     }
+
+    @Override
+    public void validateUserIdUniqueness(String userId) {
+
+    }
 }
