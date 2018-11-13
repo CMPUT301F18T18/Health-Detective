@@ -16,4 +16,7 @@
     <string name="recTitle">Record Title</string>
     <string name="recLoc">Location</string>
     <string name="recDate">Date</string>
+    <string name="blPic">Body Location Pictures</string>
+    <string name="mapTitle">Map</string>
+    <string name="allPhotos">All Photos</string>
 </resources>
