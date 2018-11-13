@@ -1,15 +1,26 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
-import cmput301f18t18.health_detective.domain.interactors.UserLoginContract;
-import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.interactors.UserLogin;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 
-public class LoginPresenter implements UserLoginContract.Callback {
+public class LoginPresenter implements UserLogin.Callback {
 
-    public void tryLogin(String user){
+
+    String userId;
+
+    public void tryLogin(String userId){
+
 
     }
+
     @Override
-    public void onLoginSuccess(User user) {
+    public void onLoginPatientSuccess(Patient patient) {
+
+    }
+
+    @Override
+    public void onLoginCareProviderSuccess(CareProvider careProvider) {
 
     }
 

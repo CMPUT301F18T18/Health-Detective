@@ -5,10 +5,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutorContract;
+import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 
-public class ThreadExecutorImpl implements ThreadExecutorContract {
+public class ThreadExecutorImpl implements ThreadExecutor {
 
     private static ThreadExecutorImpl executorInstance = null;
     private static final int CORE_POOL_SIZE = 3;

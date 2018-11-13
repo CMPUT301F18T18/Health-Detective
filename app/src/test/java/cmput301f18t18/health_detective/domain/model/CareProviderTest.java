@@ -13,6 +13,6 @@ public class CareProviderTest {
 
         Provider.AddPatient(pat);
 
-        assertEquals(pat, Provider.GetPatient(0));
+        assertEquals(pat, Provider.GetPatient("1"));
     }
 }

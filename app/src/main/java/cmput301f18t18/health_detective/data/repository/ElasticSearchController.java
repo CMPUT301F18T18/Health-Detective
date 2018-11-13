@@ -93,4 +93,9 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     public void deleteUser(User user) {
 
     }
+
+    @Override
+    public void validateUserIdUniqueness(String userId) {
+
+    }
 }

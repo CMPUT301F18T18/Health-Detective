@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,11 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         if (problemsListPresenter == null){
             problemsListPresenter = new ProblemsListPresenter();
         }
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Button addProblem = (Button)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);

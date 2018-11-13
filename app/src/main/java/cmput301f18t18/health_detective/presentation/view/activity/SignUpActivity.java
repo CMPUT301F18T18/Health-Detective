@@ -10,13 +10,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
 
+        signUpPresenter = new SignUpPresenter(
+                ThreadExecutorImpl.getInstance(),
+                MainThreadImpl.getInstance(),
+                new UserRepoMock()
+        );
+
 
         Button signUp = findViewById(R.id.signUpBtn);
         Button cancel = findViewById(R.id.cancelButton);
@@ -39,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
         cancel.setOnClickListener(this);
+
 
 
     }
@@ -78,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(user,email,phone,type);
+                signUpPresenter.createNewUser(user,email,phone);
                 changeActivity(intent);
         }
 
