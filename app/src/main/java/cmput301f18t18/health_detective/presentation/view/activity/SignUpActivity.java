@@ -31,12 +31,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
         Button signUp = findViewById(R.id.signUpBtn);
+        Button cancel = findViewById(R.id.cancelButton);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
+        cancel.setOnClickListener(this);
 
 
     }
@@ -60,6 +62,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.PcheckBox:
                 careCheck.setChecked(false);
+                break;
+            case R.id.cancelButton:
+                Intent intentReturn = new Intent(this,MainActivity.class);
+                changeActivity(intentReturn);
                 break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP
