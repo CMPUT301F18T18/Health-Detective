@@ -1,9 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.view.activity.PatientRecordViewActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
-</android.support.constraint.ConstraintLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+
+    android:layout_height="wrap_content" >
+
+<LinearLayout
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="fill_parent"
+
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/recTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recTitle"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/recordDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recDate" />
+
+    <ImageView
+        android:id="@+id/cutOutImg"
+        android:layout_width="match_parent"
+        android:layout_height="191dp"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/BLTitle"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:text="@string/blPic"
+        android:textSize="18sp" />
+
+    <HorizontalScrollView
+        android:id="@+id/bodyPhotoScroll"
+        android:layout_width="match_parent"
+        android:layout_height="106dp">
+
+        <LinearLayout
+            android:id="@+id/root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/commentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/problemDesc"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/commentView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/signup_border"
+        android:text="@string/problemDesc" />
+
+    <TextView
+        android:id="@+id/mapTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mapTitle"
+        android:textSize="18sp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="230dp" />
+
+    <TextView
+        android:id="@+id/allphotosTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/allPhotos" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="246dp" />
+
+    <Button
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 3" />
+
+<Button
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 4" />
+
+<Button
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 5" />
+
+<ProgressBar
+
+    android:id="@+id/progressBar1"
+
+    style="?android:attr/progressBarStyleHorizontal"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content" />
+
+<RadioButton
+
+    android:id="@+id/radioButton2"
+
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
+
+    android:text="RadioButton 1" />
+
+<RadioButton
+
+    android:id="@+id/radioButton1"
+
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
+
+    android:text="RadioButton 2" />
+
+<ToggleButton
+
+    android:id="@+id/toggleButton1"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="ToggleButton" />
+
+<Button
+
+    android:layout_width="fill_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 6" />
+
+<SeekBar
+
+    android:id="@+id/seekBar1"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content" />
+
+<Button
+
+    android:id="@+id/button3"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 7" />
+
+<Button
+
+    android:id="@+id/button4"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 8" />
+
+<CheckBox
+
+    android:id="@+id/checkBox1"
+
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
+
+    android:text="CheckBox" />
+
+<Button
+
+    android:id="@+id/button2"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 9" />
+
+<Button
+
+    android:id="@+id/button1"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:text="Button 10" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Button 11" />
+    </LinearLayout>
+    </ScrollView>
