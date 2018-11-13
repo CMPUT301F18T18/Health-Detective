@@ -1,9 +1,27 @@
 package cmput301f18t18.health_detective.domain.model;
 
 public abstract class User {
-    public String userID;
+    private String userID;
     private String phoneNumber;
     private String emailAddress;
+
+    public User() {
+        this.setUserID(null);
+        this.setPhoneNumber(null);
+        this.setEmailAddress(null);
+    }
+
+    public User(String userId) {
+        this.setUserID(userId);
+        this.setPhoneNumber(null);
+        this.setEmailAddress(null);
+    }
+
+    public User(String userId, String phoneNumber, String emailAddress) {
+        this.setUserID(userId);
+        this.setPhoneNumber(phoneNumber);
+        this.setEmailAddress(emailAddress);
+    }
 
     public String getUserID() {
         return userID;
