@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.interactors.impl.mock;
+package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
@@ -7,7 +7,7 @@ import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
-public class EditRecordMockSuccess extends AbstractInteractor implements EditRecord {
+public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     private EditRecord.Callback callback;
     private RecordRepo recordRepo;
@@ -15,9 +15,9 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
     private String title;
     private String comment;
 
-    public EditRecordMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                  EditRecord.Callback callback, RecordRepo recordRepo,
-                                  Record recordToEdit, String title, String comment)
+    public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                          EditRecord.Callback callback, RecordRepo recordRepo,
+                          Record recordToEdit, String title, String comment)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -29,6 +29,13 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
 
     @Override
     public void run() {
+        // Logic is unimplemented, so post failed
+        this.mainThread.post(new Runnable(){
 
+            @Override
+            public void run() {
+                callback.onERFail();
+            }
+        });
     }
 }

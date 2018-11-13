@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.interactors.impl.mock;
+package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import cmput301f18t18.health_detective.domain.interactors.EditProblem;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
-public class EditProblemMockSuccess extends AbstractInteractor implements EditProblem {
+public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     private EditProblem.Callback callback;
     private ProblemRepo problemRepo;
@@ -18,9 +18,9 @@ public class EditProblemMockSuccess extends AbstractInteractor implements EditPr
     private String description;
     private Date startDate;
 
-    public EditProblemMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                  EditProblem.Callback callback, ProblemRepo problemRepo,
-                                  Problem problemToEdit, String title, String description, Date startDate)
+    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                           EditProblem.Callback callback, ProblemRepo problemRepo,
+                           Problem problemToEdit, String title, String description, Date startDate)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -33,6 +33,13 @@ public class EditProblemMockSuccess extends AbstractInteractor implements EditPr
 
     @Override
     public void run() {
+        // Logic is unimplemented, so post failed
+        this.mainThread.post(new Runnable(){
 
+            @Override
+            public void run() {
+                callback.onEPFail();
+            }
+        });
     }
 }

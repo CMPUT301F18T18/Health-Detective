@@ -4,10 +4,15 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 
 public abstract class AbstractInteractor implements Interactor {
-    protected volatile boolean isExecuting;
-    protected volatile boolean isStoped;
+    protected volatile boolean isExecuting = false;
+    protected volatile boolean isStoped = false;
     protected ThreadExecutor threadExecutor;
     protected MainThread mainThread;
+
+    public AbstractInteractor(ThreadExecutor threadExecutor, MainThread mainThread) {
+        this.threadExecutor = threadExecutor;
+        this.mainThread = mainThread;
+    }
 
     /**
      * Method contains the business logic of the interactor

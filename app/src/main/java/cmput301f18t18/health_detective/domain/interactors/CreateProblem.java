@@ -4,8 +4,8 @@ import cmput301f18t18.health_detective.domain.interactors.base.Interactor;
 import cmput301f18t18.health_detective.domain.model.Problem;
 
 public interface CreateProblem extends Interactor {
-    public interface Callback {
-        void onCPSuccess(Problem problem);
+    interface Callback {
+        void onCPSuccess();
         void onCPFail();
     }
 }

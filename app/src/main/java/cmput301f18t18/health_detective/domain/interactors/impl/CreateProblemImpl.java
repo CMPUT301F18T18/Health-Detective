@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.interactors.impl.mock;
+package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class CreateProblemMockSuccess extends AbstractInteractor implements CreateProblem {
+public class CreateProblemImpl extends AbstractInteractor implements CreateProblem {
 
     private CreateProblem.Callback callback;
     private UserRepo userRepo;
@@ -20,9 +20,9 @@ public class CreateProblemMockSuccess extends AbstractInteractor implements Crea
     private String problemDescrioption;
     private Date startDate;
 
-    public CreateProblemMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                    CreateProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
-                                    Patient patient, String problemTitle, String problemDescription, Date startDate)
+    public CreateProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                             CreateProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
+                             Patient patient, String problemTitle, String problemDescription, Date startDate)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -37,6 +37,13 @@ public class CreateProblemMockSuccess extends AbstractInteractor implements Crea
 
     @Override
     public void run() {
+        // Logic is unimplemented, so post failed
+        this.mainThread.post(new Runnable(){
 
+            @Override
+            public void run() {
+                callback.onCPFail();
+            }
+        });
     }
 }

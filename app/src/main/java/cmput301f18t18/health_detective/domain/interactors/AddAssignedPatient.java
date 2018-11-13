@@ -4,8 +4,8 @@ import cmput301f18t18.health_detective.domain.interactors.base.Interactor;
 import cmput301f18t18.health_detective.domain.model.Patient;
 
 public interface AddAssignedPatient extends Interactor {
-    public interface Callback {
-        void onAAPSuccess(Patient patient);
+    interface Callback {
+        void onAAPSuccess();
         void onAAPFail();
     }
 }

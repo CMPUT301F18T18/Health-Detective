@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.interactors.impl.mock;
+package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
@@ -6,7 +6,7 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class CreateUserProfileMockSuccess extends AbstractInteractor implements CreateUserProfile {
+public class CreateUserProfileImpl extends AbstractInteractor implements CreateUserProfile {
 
     private CreateUserProfile.Callback callback;
     private UserRepo userRepo;
@@ -15,9 +15,9 @@ public class CreateUserProfileMockSuccess extends AbstractInteractor implements 
     private String phoneNumber;
     private boolean isCareProvider;
 
-    public CreateUserProfileMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                        CreateUserProfile.Callback callback, UserRepo userRepo,
-                                        String userId, String email, String phoneNumber, boolean isCareProvider)
+    public CreateUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                                 CreateUserProfile.Callback callback, UserRepo userRepo,
+                                 String userId, String email, String phoneNumber, boolean isCareProvider)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -30,6 +30,13 @@ public class CreateUserProfileMockSuccess extends AbstractInteractor implements 
 
     @Override
     public void run() {
+        // Logic is unimplemented, so post failed
+        this.mainThread.post(new Runnable(){
 
+            @Override
+            public void run() {
+                callback.onCUPFail();
+            }
+        });
     }
 }

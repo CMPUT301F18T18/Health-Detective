@@ -2,27 +2,24 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.interactors.GetProblems;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class RemoveAssignedPatientImpl extends AbstractInteractor implements RemoveAssignedPatient {
+public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
 
-    private RemoveAssignedPatient.Callback callback;
-    private UserRepo users;
-    private CareProvider careProvider;
+    private GetProblems.Callback callback;
+    private UserRepo userRepo;
     private Patient patient;
 
-    public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                     RemoveAssignedPatient.Callback callback, UserRepo users,
-                                     CareProvider careProvider, Patient patient) 
+    public GetProblemsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                           GetProblems.Callback callback, UserRepo userRepo,
+                           Patient patient)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
-        this.users = users;
-        this.careProvider = careProvider;
+        this.userRepo = userRepo;
         this.patient = patient;
     }
 
@@ -30,10 +27,10 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
     public void run() {
         // Logic is unimplemented, so post failed
         this.mainThread.post(new Runnable(){
-        
+
             @Override
             public void run() {
-                callback.onRAPFail();
+                callback.onGPFail();
             }
         });
     }

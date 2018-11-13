@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.interactors.impl.mock;
+package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
@@ -7,7 +7,7 @@ import cmput301f18t18.health_detective.domain.interactors.EditUserProfile;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class EditUserProfileMockSuccess extends AbstractInteractor implements EditUserProfile {
+public class EditUserProfileImpl extends AbstractInteractor implements EditUserProfile {
 
     private EditUserProfile.Callback callback;
     private UserRepo userRepo;
@@ -15,9 +15,9 @@ public class EditUserProfileMockSuccess extends AbstractInteractor implements Ed
     private String email;
     private String phoneNumber;
 
-    public EditUserProfileMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                      EditUserProfile.Callback callback, UserRepo userRepo,
-                                      User userToEdit, String email, String phoneNumber)
+    public EditUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                               EditUserProfile.Callback callback, UserRepo userRepo,
+                               User userToEdit, String email, String phoneNumber)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -30,6 +30,13 @@ public class EditUserProfileMockSuccess extends AbstractInteractor implements Ed
 
     @Override
     public void run() {
+        // Logic is unimplemented, so post failed
+        this.mainThread.post(new Runnable(){
 
+            @Override
+            public void run() {
+                callback.onEUPFail();
+            }
+        });
     }
 }

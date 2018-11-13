@@ -7,18 +7,17 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class GetAssignedPatientImpl extends AbstractInteractor implements GetAssignedPatients {
+public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAssignedPatients {
 
     private GetAssignedPatients.Callback callback;
     private UserRepo users;
     private CareProvider careProvider;
 
-    public GetAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                  GetAssignedPatients.Callback callback, UserRepo users,
-                                  CareProvider careProvider) 
+    public GetAssignedPatientsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                                   GetAssignedPatients.Callback callback, UserRepo users,
+                                   CareProvider careProvider)
     {
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
+        super(threadExecutor, mainThread);
         this.callback = callback;
         this.users = users;
         this.careProvider = careProvider;

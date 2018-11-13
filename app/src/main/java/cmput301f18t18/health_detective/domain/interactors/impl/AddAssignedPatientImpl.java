@@ -18,8 +18,7 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
                                   AddAssignedPatient.Callback callback, UserRepo users,
                                   CareProvider careProvider, String patientId)
     {
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
+        super(threadExecutor, mainThread);
         this.callback = callback;
         this.users = users;
         this.careProvider = careProvider;

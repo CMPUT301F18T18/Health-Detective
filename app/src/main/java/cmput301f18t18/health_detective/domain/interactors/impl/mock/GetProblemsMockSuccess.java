@@ -3,23 +3,24 @@ package cmput301f18t18.health_detective.domain.interactors.impl.mock;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.UserLogin;
+import cmput301f18t18.health_detective.domain.interactors.GetProblems;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class UserLoginMockPatientSuccess extends AbstractInteractor implements UserLogin {
+public class GetProblemsMockSuccess extends AbstractInteractor implements GetProblems {
 
-    private UserLogin.Callback callback;
+    private GetProblems.Callback callback;
     private UserRepo userRepo;
-    private String userId;
+    private Patient patient;
 
-    public UserLoginMockPatientSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                       UserLogin.Callback callback, UserRepo userRepo,
-                                       String userId)
+    public GetProblemsMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
+                                  GetProblems.Callback callback, UserRepo userRepo,
+                                  Patient patient)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.userRepo = userRepo;
-        this.userId = userId;
+        this.patient = patient;
     }
 
     @Override

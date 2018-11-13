@@ -11,19 +11,18 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class AddAssignedPatientMockSuccess extends AbstractInteractor implements AddAssignedPatient {
 
     private AddAssignedPatient.Callback callback;
-    private UserRepo users;
+    private UserRepo userRepo;
     private CareProvider careProvider;
     private String patientId;
 
 
     public AddAssignedPatientMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                  AddAssignedPatient.Callback callback, UserRepo users,
-                                  CareProvider careProvider, String patientId)
+                                         AddAssignedPatient.Callback callback, UserRepo userRepo,
+                                         CareProvider careProvider, String patientId)
     {
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
+        super(threadExecutor, mainThread);
         this.callback = callback;
-        this.users = users;
+        this.userRepo = userRepo;
         this.careProvider = careProvider;
         this.patientId = patientId;
     }
@@ -35,13 +34,13 @@ public class AddAssignedPatientMockSuccess extends AbstractInteractor implements
 
         // Add patient to careProvider and add to repo
         careProvider.AddPatient(patientToAdd);
-        users.updateUser(careProvider);
+        userRepo.updateUser(careProvider);
 
-        
+
         mainThread.post(new Runnable() {
             @Override
             public void run() {
-                callback.onAAPSuccess(patientToAdd);
+                callback.onAAPSuccess();
             }
         });
     }

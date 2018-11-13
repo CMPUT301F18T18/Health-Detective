@@ -6,15 +6,15 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class UserLoginMockPatientSuccess extends AbstractInteractor implements UserLogin {
+public class UserLoginMockCareProviderSuccess extends AbstractInteractor implements UserLogin {
 
     private UserLogin.Callback callback;
     private UserRepo userRepo;
     private String userId;
 
-    public UserLoginMockPatientSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                       UserLogin.Callback callback, UserRepo userRepo,
-                                       String userId)
+    public UserLoginMockCareProviderSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
+                                            UserLogin.Callback callback, UserRepo userRepo,
+                                            String userId)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
