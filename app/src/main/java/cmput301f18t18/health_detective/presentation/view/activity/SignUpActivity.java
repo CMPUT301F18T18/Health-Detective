@@ -16,11 +16,15 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Sig
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
-    static SignUpPresenter signUpPresenter = new SignUpPresenter();
+    private SignUpPresenter signUpPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        if (signUpPresenter == null){
+            signUpPresenter = new SignUpPresenter();
+        }
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
