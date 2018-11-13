@@ -8,7 +8,8 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ElasticSearchControllerTest {
 
@@ -16,8 +17,8 @@ public class ElasticSearchControllerTest {
 
     @Test
     public void testInsertRetrieveProblem() {
-        Problem problem = new Problem(1);
-
+        Problem problem = new Problem(7);
+        problem.setDescription("test");
         elasticSearchController.insertProblem(problem);
         Problem ret = elasticSearchController.retrieveProblemById(1);
 
