@@ -21,12 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
 public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener{
 
     ListView listView;
     ProblemListAdapter adapter;
     ArrayList<String> testList = new ArrayList<>();
+    static ProblemsListPresenter problemsListPresenter = new ProblemsListPresenter();
 
 
     @Override
