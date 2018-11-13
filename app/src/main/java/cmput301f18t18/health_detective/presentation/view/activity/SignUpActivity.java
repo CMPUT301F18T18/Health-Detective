@@ -9,14 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
-    TextView usertext;
-    TextView phonetext;
-    TextView emailtext;
-    static SignUpPresenter signUpPresenter = new SignUpPresenter();
+    private TextView usertext;
+    private TextView phonetext;
+    private TextView emailtext;
+    private SignUpPresenter signUpPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,11 +29,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phonetext = findViewById(R.id.phoneNumEdit);
         emailtext = findViewById(R.id.emailEdit);
 
+        signUpPresenter = new SignUpPresenter(
+                ThreadExecutorImpl.getInstance(),
+                MainThreadImpl.getInstance(),
+                new UserRepoMock()
+        );
+
 
         Button signUp = findViewById(R.id.signUpBtn);
         signUp.setOnClickListener(this);
-
-
     }
 
     @Override
