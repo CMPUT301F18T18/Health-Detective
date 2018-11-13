@@ -13,4 +13,7 @@
     <string name="problemDesc">Description</string>
     <string name="cancelBtn">Cancel</string>
     <string name="saveBtn">Save</string>
+    <string name="recTitle">Record Title</string>
+    <string name="recLoc">Location</string>
+    <string name="recDate">Date</string>
 </resources>
