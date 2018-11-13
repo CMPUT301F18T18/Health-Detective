@@ -1,9 +1,12 @@
 package cmput301f18t18.health_detective.domain.interactors.impl.mock;
 
+import java.util.Date;
+
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class UserLoginMockPatientSuccess extends AbstractInteractor implements UserLogin {
@@ -24,6 +27,17 @@ public class UserLoginMockPatientSuccess extends AbstractInteractor implements U
 
     @Override
     public void run() {
+        final Patient patient = new Patient(
+                this.userId,
+                "780-999-8888",
+                this.userId + "@email.com"
+        );
 
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onLoginPatientSuccess(patient);
+            }
+        });
     }
 }

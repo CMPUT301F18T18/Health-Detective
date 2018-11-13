@@ -28,6 +28,5 @@ public class RemoveAssignedPatientMockSuccess extends AbstractInteractor impleme
 
     @Override
     public void run() {
-
     }
 }

@@ -4,6 +4,8 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class CreateUserProfileMockSuccess extends AbstractInteractor implements CreateUserProfile {
@@ -31,5 +33,32 @@ public class CreateUserProfileMockSuccess extends AbstractInteractor implements 
     @Override
     public void run() {
 
+        if (isCareProvider){
+            final CareProvider careProvider = new CareProvider(
+                    this.userId,
+                    this.phoneNumber,
+                    this.email
+            );
+
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onCUPCareProviderSuccess(careProvider);
+                }
+            });
+        }
+
+        final Patient patient = new Patient(
+                this.userId,
+                this.phoneNumber,
+                this.email
+        );
+
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onCUPPatientSuccess(patient);
+            }
+        });
     }
 }

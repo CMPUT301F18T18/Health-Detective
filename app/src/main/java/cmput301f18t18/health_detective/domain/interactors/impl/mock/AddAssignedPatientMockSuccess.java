@@ -29,19 +29,6 @@ public class AddAssignedPatientMockSuccess extends AbstractInteractor implements
 
     @Override
     public void run() {
-        // Create new patient with user id
-        final Patient patientToAdd = new Patient(patientId);
 
-        // Add patient to careProvider and add to repo
-        careProvider.AddPatient(patientToAdd);
-        userRepo.updateUser(careProvider);
-
-
-        mainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onAAPSuccess();
-            }
-        });
     }
 }

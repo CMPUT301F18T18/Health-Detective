@@ -30,6 +30,14 @@ public class EditUserProfileMockSuccess extends AbstractInteractor implements Ed
 
     @Override
     public void run() {
+        userToEdit.setPhoneNumber(phoneNumber);
+        userToEdit.setEmailAddress(email);
 
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onEUPSuccess(userToEdit);
+            }
+        });
     }
 }

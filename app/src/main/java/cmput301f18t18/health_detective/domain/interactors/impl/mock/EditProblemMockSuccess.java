@@ -33,6 +33,15 @@ public class EditProblemMockSuccess extends AbstractInteractor implements EditPr
 
     @Override
     public void run() {
+        problemToEdit.setTitle(title);
+        problemToEdit.setDescription(description);
+        problemToEdit.setStartDate(startDate);
 
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onEPSuccess(problemToEdit);
+            }
+        });
     }
 }
