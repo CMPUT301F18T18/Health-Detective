@@ -5,20 +5,8 @@ import cmput301f18t18.health_detective.domain.model.User;
 
 public class SignUpPresenter implements CreateUserProfileContract.Callback {
 
-    String userName;
-    String userEmail;
-    String userPhoneNum;
-    Boolean userType;
-
-    public SignUpPresenter(String userName, String userEmail, String userPhoneNum, Boolean userType) {
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userPhoneNum = userPhoneNum;
-        this.userType = userType;
-    }
-
-    public void createNewUser(String userName, String userEmail, String userPhoneNum, Boolean userType){
-
+    public void createNewUser(String userName, String userEmail, String userPhoneNum){
+        return;
     }
 
     @Override

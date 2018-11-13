@@ -13,17 +13,17 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
-    //TextView usertext;
-    //TextView phonetext;
-    //TextView emailtext;
-    //SignUpPresenter signUpPresenter;
+    TextView usertext;
+    TextView phonetext;
+    TextView emailtext;
+    static SignUpPresenter signUpPresenter = new SignUpPresenter();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        //usertext = findViewById(R.id.userEdit);
-        //phonetext = findViewById(R.id.phoneNumEdit);
-        //emailtext = findViewById(R.id.emailEdit);
+        usertext = findViewById(R.id.userEdit);
+        phonetext = findViewById(R.id.phoneNumEdit);
+        emailtext = findViewById(R.id.emailEdit);
 
 
         Button signUp = findViewById(R.id.signUpBtn);
@@ -47,10 +47,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         Intent intent = new Intent(this,MainActivity.class);
 
-        //String user = (String) usertext.getText();
-        //String phone = (String) phonetext.getText();
-        //String email = (String) emailtext.getText();
-        //signUpPresenter = new SignUpPresenter(user, phone, email, Boolean.TRUE);
+        String user = usertext.getText().toString();
+        String phone = phonetext.getText().toString();
+        String email = emailtext.getText().toString();
+        signUpPresenter.createNewUser(user,email,phone);
         changeActivity(intent);
     }
 
