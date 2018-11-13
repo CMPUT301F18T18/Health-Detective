@@ -2,11 +2,11 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
 import java.util.ArrayList;
 
-import cmput301f18t18.health_detective.domain.interactors.DeleteProblemContract;
-import cmput301f18t18.health_detective.domain.interactors.GetPatientsProblemsContract;
+import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
+import cmput301f18t18.health_detective.domain.interactors.GetProblems;
 import cmput301f18t18.health_detective.domain.model.Problem;
 
-public class ProblemsListPresenter implements GetPatientsProblemsContract.Callback, DeleteProblemContract.Callback {
+public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback {
     private Integer problemId;
     private String userId;
 
@@ -27,13 +27,14 @@ public class ProblemsListPresenter implements GetPatientsProblemsContract.Callba
 
     }
 
+
     @Override
-    public void onGPPSuccess(ArrayList<Problem> patientProblems) {
+    public void onGPSuccess(ArrayList<Problem> patientProblems) {
 
     }
 
     @Override
-    public void onGPPFail() {
+    public void onGPFail() {
 
     }
 }

@@ -17,7 +17,6 @@ import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
-
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
@@ -27,9 +26,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        if (signUpPresenter == null){
-            signUpPresenter = new SignUpPresenter();
-        }
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
