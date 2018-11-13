@@ -10,7 +10,7 @@ public class Problem implements Searchable  {
     private String title;
     private Date startDate;
     private String description;
-    private HashSet<Record> records;
+    private HashSet<Integer> records;
 
     public Problem() {
         records = new HashSet<>();
@@ -39,7 +39,7 @@ public class Problem implements Searchable  {
     }
 
     public void setDescription(String description) {
-        description = description;
+        this.description = description;
     }
 
     public void setTitle(String title) {
@@ -67,7 +67,19 @@ public class Problem implements Searchable  {
     }
 
     public void addRecord(Record record) {
-        records.add(record);
+        records.add(record.getRecordId());
+    }
+
+    public void addRecord(Integer recordId) {
+        records.add(recordId);
+    }
+
+    public void removeRecord(Record record) {
+        records.remove(record.getRecordId());
+    }
+
+    public void removeRecord(Integer recordId) {
+        records.remove(recordId);
     }
 
     @Override

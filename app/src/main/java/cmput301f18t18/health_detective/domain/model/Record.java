@@ -11,9 +11,9 @@ public class Record implements Searchable {
     private String title;
     private String comment;
     private Date date;
-    private Geolocation location;
-    private Set<BodyLocation> bodyLocations;
-    private Set<Photo> photos;
+    // Body location
+    // geolocation
+    // photo's
 
     public Record() {
         Date createDate = new Date();
@@ -75,14 +75,6 @@ public class Record implements Searchable {
     @Override
     public boolean containsKeyword(ArrayList<String> keywords) {
         return false;
-    }
-
-    public void addBodyLocation(BodyLocation loc) {
-        bodyLocations.add(loc);
-    }
-
-    public void setLocation(Geolocation location) {
-        this.location = location;
     }
 
     @Override

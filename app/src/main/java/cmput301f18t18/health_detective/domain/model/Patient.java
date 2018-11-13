@@ -1,14 +1,12 @@
 package cmput301f18t18.health_detective.domain.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class Patient extends User {
 
     private HashSet<Integer> problemIds;
 
-    public  Patient() {
+    public Patient() {
         super();
         this.problemIds = new HashSet<>();
     }

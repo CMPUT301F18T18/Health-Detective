@@ -27,6 +27,8 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         // Logic is unimplemented, so post failed
         this.mainThread.post(new Runnable(){
 
+
+
             @Override
             public void run() {
                 callback.onLoginFail();

@@ -21,23 +21,23 @@ public class CareProvider extends User {
         patients = new HashSet<>();
     }
 
-    public void AddPatient(Patient patient) {
+    public void addPatient(Patient patient) {
         patients.add(patient.getUserID());
     }
 
-    public void AddPatient(String patientId) {
+    public void addPatient(String patientId) {
         patients.add(patientId);
     }
 
-    public void RemovePatient(Patient patient) {
+    public void removePatient(Patient patient) {
         patients.remove(patient.getUserID());
     }
 
-    public void RemovePatient(String patientId) {
+    public void removePatient(String patientId) {
         patients.remove(patientId);
     }
 
-    public boolean HasPatient(String patientId) {
+    public boolean hasPatient(String patientId) {
         if (this.patients.contains(patientId)) {
             return true;
         }
