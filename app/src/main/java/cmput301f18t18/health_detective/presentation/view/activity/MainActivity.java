@@ -8,8 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private TextView signUp;
+    static LoginPresenter loginPresenter = new LoginPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         Button loginButton = findViewById(R.id.loginButton);
-        TextView signup = findViewById(R.id.signUpText);
+        signUp = findViewById(R.id.signUpText);
 
         loginButton.setOnClickListener(this);
-        signup.setOnClickListener(this);
+        signUp.setOnClickListener(this);
 
     }
 
@@ -29,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.loginButton:
                 Intent problemsIntent = new Intent(this,PatientProblemsActivity.class);
+                String userId = signUp.getText().toString();
+                loginPresenter.tryLogin(userId);
+
                 changeActivity(problemsIntent);
                 break;
             case R.id.signUpText:

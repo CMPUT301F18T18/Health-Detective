@@ -5,9 +5,7 @@ import cmput301f18t18.health_detective.domain.model.User;
 
 public class LoginPresenter implements UserLoginContract.Callback {
 
-    String userId;
-
-    public void tryLogin(User user){
+    public void tryLogin(String user){
 
     }
     @Override

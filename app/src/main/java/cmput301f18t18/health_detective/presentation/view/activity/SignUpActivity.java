@@ -7,26 +7,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
-    TextView usertext;
-    TextView phonetext;
-    TextView emailtext;
+    private TextView userText, phoneText, emailText;
+    private CheckBox careCheck, patientCheck;
     static SignUpPresenter signUpPresenter = new SignUpPresenter();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        usertext = findViewById(R.id.userEdit);
-        phonetext = findViewById(R.id.phoneNumEdit);
-        emailtext = findViewById(R.id.emailEdit);
+        userText = findViewById(R.id.userEdit);
+        phoneText = findViewById(R.id.phoneNumEdit);
+        emailText = findViewById(R.id.emailEdit);
 
 
         Button signUp = findViewById(R.id.signUpBtn);
+        careCheck = findViewById(R.id.CPcheckBox);
+        patientCheck = findViewById(R.id.PcheckBox);
+        patientCheck.setChecked(true);
+        careCheck.setOnClickListener(this);
+        patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
 
 
@@ -45,13 +50,28 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this,MainActivity.class);
+        switch(v.getId()) {
+            case R.id.CPcheckBox:
+                patientCheck.setChecked(false);
+                break;
+            case R.id.PcheckBox:
+                careCheck.setChecked(false);
+                break;
+            case R.id.signUpBtn:
+                // if sign up completed set type to false if patient, true if CP
+                // call presenter method createNewUser
+                Boolean type = false;
+                Intent intent = new Intent(this,PatientProblemsActivity.class);
+                if (careCheck.isChecked()){
+                    type = true;
+                }
+                String user = userText.getText().toString();
+                String phone = phoneText.getText().toString();
+                String email = emailText.getText().toString();
+                signUpPresenter.createNewUser(user,email,phone,type);
+                changeActivity(intent);
+        }
 
-        String user = usertext.getText().toString();
-        String phone = phonetext.getText().toString();
-        String email = emailtext.getText().toString();
-        signUpPresenter.createNewUser(user,email,phone);
-        changeActivity(intent);
     }
 
     public void changeActivity(Intent intent){
