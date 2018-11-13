@@ -28,7 +28,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ListView listView;
     ProblemListAdapter adapter;
     ArrayList<String> testList = new ArrayList<>();
-    static ProblemsListPresenter problemsListPresenter = new ProblemsListPresenter();
+    ProblemsListPresenter problemsListPresenter;
 
 
     @Override
@@ -38,6 +38,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
         //Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         //setSupportActionBar(myToolbar);
+        if (problemsListPresenter == null){
+            problemsListPresenter = new ProblemsListPresenter();
+        }
 
         Button addProblem = (Button)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);

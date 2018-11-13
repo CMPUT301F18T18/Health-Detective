@@ -12,12 +12,16 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Log
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView signUp;
-    static LoginPresenter loginPresenter = new LoginPresenter();
+    LoginPresenter loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (loginPresenter == null){
+            loginPresenter = new LoginPresenter();
+        }
 
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUpText);
