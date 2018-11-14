@@ -89,8 +89,10 @@
         android:textSize="18sp" />
 
     <GridView
+        android:id="@+id/allPhotosView"
         android:layout_width="match_parent"
-        android:layout_height="246dp" />
+        android:layout_height="246dp"
+        android:numColumns="3"/>
 
     </LinearLayout>
     </ScrollView>
