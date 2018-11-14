@@ -16,12 +16,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.view.activity.SignUpActivity" />
-        <activity android:name=".presentation.view.activity.PatientProblemsActivity" />
-        <activity android:name=".presentation.view.activity.ProblemEditAddActivity" />
+        <activity android:name=".presentation.view.activity.SignUpActivity"/>
+        <activity android:name=".presentation.view.activity.PatientProblemsActivity"
+            android:parentActivityName=".presentation.view.activity.MainActivity"/>
+        <activity android:name=".presentation.view.activity.ProblemEditAddActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
         <activity android:name=".presentation.view.activity.SearchActivity" />
-        <activity android:name=".presentation.view.activity.PatientRecordsActivity" />
-        <activity android:name=".presentation.view.activity.PatientRecordViewActivity" />
+        <activity android:name=".presentation.view.activity.PatientRecordsActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
+        <activity android:name=".presentation.view.activity.PatientRecordViewActivity"
+            android:parentActivityName=".presentation.view.activity.PatientRecordsActivity"/>
         <activity android:name=".presentation.view.activity.PhotoViewActivity"></activity>
     </application>
 

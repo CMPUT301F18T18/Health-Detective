@@ -43,10 +43,10 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             problemsListPresenter = new ProblemsListPresenter();
         }
 
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // commented out as just adding the parent activity enables back arrow
+        //android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         Button addProblem = (Button)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
