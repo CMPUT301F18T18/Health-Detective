@@ -86,3 +86,4 @@
 //        assertNull(elasticSearchController.retrieveUserById("2"));
 //    }
 //}
+

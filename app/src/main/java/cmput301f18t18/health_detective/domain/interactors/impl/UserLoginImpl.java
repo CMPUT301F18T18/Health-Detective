@@ -64,7 +64,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
             return;
         }
-        
+
         else if (user instanceof CareProvider) {
             // It's a patient we can safely cast to careProvider
             this.mainThread.post(new Runnable() {

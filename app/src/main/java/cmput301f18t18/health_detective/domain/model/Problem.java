@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
+import io.searchbox.annotations.JestId;
+
 public class Problem implements Searchable  {
 
     private int problemId;
@@ -11,6 +13,9 @@ public class Problem implements Searchable  {
     private Date startDate;
     private String description;
     private HashSet<Integer> records;
+
+    @JestId
+    private String problemJestId;
 
     public Problem() {
         records = new HashSet<>();
@@ -41,7 +46,7 @@ public class Problem implements Searchable  {
     public void setDescription(String description) {
         this.description = description;
     }
-
+  
     public void setTitle(String title) {
         this.title = title;
     }
@@ -103,4 +108,8 @@ public class Problem implements Searchable  {
         Problem problem = (Problem) o;
         return (this.problemId ==  problem.getProblemID());
     }
+
+    public void setProblemJestId(String id) { this.problemJestId = id; }
+
+    public String getProblemJestId() { return this.problemJestId; }
 }
