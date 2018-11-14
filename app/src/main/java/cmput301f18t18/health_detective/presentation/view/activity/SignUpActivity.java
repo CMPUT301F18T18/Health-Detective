@@ -30,11 +30,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
 
+
         signUpPresenter = new SignUpPresenter(
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
                 new UserRepoMock()
         );
+
+
 
 
         Button signUp = findViewById(R.id.signUpBtn);

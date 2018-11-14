@@ -42,6 +42,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         testList.add("test");
         testList.add("test2");
 
+
         adapter = new RecordListAdapter(this, testList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

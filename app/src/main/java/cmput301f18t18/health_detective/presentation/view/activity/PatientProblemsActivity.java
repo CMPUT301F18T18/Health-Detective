@@ -1,25 +1,17 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
@@ -43,10 +35,10 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             problemsListPresenter = new ProblemsListPresenter();
         }
 
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // commented out as just adding the parent activity enables back arrow
+        //android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         Button addProblem = (Button)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
@@ -73,7 +65,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.problem_list_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -84,7 +76,8 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_search:
-                // User chose the "Settings" item, show the app settings UI...
+                Intent searchIntent = new Intent(this,SearchActivity.class);
+                changeActivity(searchIntent);
                 return true;
 
             default:
