@@ -21,7 +21,8 @@
             android:parentActivityName=".presentation.view.activity.MainActivity"/>
         <activity android:name=".presentation.view.activity.ProblemEditAddActivity"
             android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
-        <activity android:name=".presentation.view.activity.SearchActivity" />
+        <activity android:name=".presentation.view.activity.SearchActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
         <activity android:name=".presentation.view.activity.PatientRecordsActivity"
             android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
         <activity android:name=".presentation.view.activity.PatientRecordViewActivity"
