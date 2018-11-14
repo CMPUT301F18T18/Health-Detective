@@ -33,7 +33,7 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
         // UserId invalid
 
         // Patient already assigned
-        if (careProvider.HasPatient(patientId)) {
+        if (careProvider.hasPatient(patientId)) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
@@ -55,7 +55,7 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
         }
 
         // Add patient to careProvider and add to repo
-        careProvider.AddPatient(patientToAdd);
+        careProvider.addPatient(patientToAdd);
         userRepo.updateUser(careProvider);
 
         mainThread.post(new Runnable() {

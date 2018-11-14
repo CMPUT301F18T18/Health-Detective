@@ -13,12 +13,12 @@ public class UserRepoMock implements UserRepo {
 
     @Override
     public void insertUser(User user) {
-        this.users.put(user.getUserID(), user);
+        this.users.put(user.getUserId(), user);
     }
 
     @Override
     public void updateUser(User user) {
-        this.users.put(user.getUserID(), user);
+        this.users.put(user.getUserId(), user);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class UserRepoMock implements UserRepo {
 
     @Override
     public void deleteUser(User user) {
-        this.users.remove(user.getUserID());
+        this.users.remove(user.getUserId());
     }
 
     @Override

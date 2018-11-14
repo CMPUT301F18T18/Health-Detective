@@ -22,7 +22,7 @@ public class CareProvider extends User {
     }
 
     public void addPatient(Patient patient) {
-        patients.add(patient.getUserID());
+        patients.add(patient.getUserId());
     }
 
     public void addPatient(String patientId) {
@@ -30,7 +30,7 @@ public class CareProvider extends User {
     }
 
     public void removePatient(Patient patient) {
-        patients.remove(patient.getUserID());
+        patients.remove(patient.getUserId());
     }
 
     public void removePatient(String patientId) {
