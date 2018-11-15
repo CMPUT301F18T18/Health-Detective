@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Patient extends User {
@@ -19,5 +20,23 @@ public class Patient extends User {
     public Patient(String userId, String phoneNumber, String emailAddress) {
         super(userId, phoneNumber, emailAddress);
         this.problemIds = new HashSet<>();
+    }
+
+    public boolean isProblemsEmpty() {
+        return problemIds.isEmpty();
+    }
+
+    public ArrayList<Integer> getProblemIds() {
+        ArrayList<Integer> problems = new ArrayList<>();
+
+        if (this.isProblemsEmpty()) {
+            return problems;
+        }
+
+        for (Integer problemId: this.problemIds) {
+            problems.add(problemId);
+        }
+
+        return  problems;
     }
 }

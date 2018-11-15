@@ -8,6 +8,6 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 public interface GetProblems extends Interactor {
     interface Callback {
         void onGPSuccess(ArrayList<Problem> patientProblems);
-        void onGPFail();
+        void onGPNoProblems();
     }
 }

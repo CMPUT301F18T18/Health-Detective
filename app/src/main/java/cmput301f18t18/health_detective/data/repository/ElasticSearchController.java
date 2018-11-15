@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -133,22 +135,27 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     }
 
     @Override
-    public User retrieveUserById(String userID) {
-        return null;
-    }
-
-    @Override
-    public ArrayList<User> retrieveUsersById(ArrayList<String> userID) {
-        return null;
-    }
-
-    @Override
     public void deleteUser(User user) {
 
     }
 
     @Override
-    public void validateUserIdUniqueness(String userId) {
+    public Patient retrievePatientById(String patientId) {
+        return null;
+    }
 
+    @Override
+    public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
+        return null;
+    }
+
+    @Override
+    public CareProvider retrieveCareProviderById(String careProviderId) {
+        return null;
+    }
+
+    @Override
+    public boolean validateUserIdUniqueness(String userId) {
+        return false;
     }
 }

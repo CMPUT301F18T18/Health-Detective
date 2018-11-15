@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.AddAssignedPatient;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class AddAssignedPatientImpl extends AbstractInteractor implements AddAssignedPatient {
@@ -31,6 +32,16 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
         Patient patientToAdd;
 
         // UserId invalid
+        if (User.isValidUserId(patientId)) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onAAPNotValidUserId();
+                }
+            });
+
+            return;
+        }
 
         // Patient already assigned
         if (careProvider.hasPatient(patientId)) {
@@ -40,9 +51,11 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
                     callback.onAAPPatientAlreadyAssigned();
                 }
             });
+
+            return;
         }
 
-        patientToAdd = (Patient) userRepo.retrieveUserById(patientId);
+        patientToAdd = userRepo.retrievePatientById(patientId);
 
         // Patient does not exist
         if (patientToAdd == null) {
@@ -52,6 +65,8 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
                     callback.onAAPPatientDoesNotExist();
                 }
             });
+
+            return;
         }
 
         // Add patient to careProvider and add to repo

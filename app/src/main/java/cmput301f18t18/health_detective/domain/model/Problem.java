@@ -87,6 +87,24 @@ public class Problem implements Searchable  {
         records.remove(recordId);
     }
 
+    public boolean isRecordsEmpty() {
+        return records.isEmpty();
+    }
+
+    public ArrayList<Integer> getRecordIds() {
+        ArrayList<Integer> recordIds = new ArrayList<>();
+
+        if (this.isRecordsEmpty()) {
+            return recordIds;
+        }
+
+        for (Integer recordId: this.records) {
+            recordIds.add(recordId);
+        }
+
+        return  recordIds;
+    }
+
     @Override
     public boolean containsBodyPart(BodyPart bodyPart) {
         return false;
