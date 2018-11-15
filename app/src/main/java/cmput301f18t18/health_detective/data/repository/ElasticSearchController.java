@@ -18,24 +18,29 @@ import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
+import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
+import io.searchbox.indices.Refresh;
 
 public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRepo {
     private static final ElasticSearchController ourInstance = new ElasticSearchController();
 
-    static JestDroidClient client = null;
+    static private JestDroidClient client = null;
 
     public static ElasticSearchController getInstance() {
+        setClient();
         return ourInstance;
     }
 
     private ElasticSearchController() { }
 
-    public static void setClient() {
+    private static void setClient() {
         if (client == null) {
             DroidClientConfig config = new DroidClientConfig
                     .Builder("http://cmput301.softwareprocess.es:8080/")
@@ -46,17 +51,52 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    private String getProblemElasticSearchId(Integer problemID) {
+        String query = "{\n" +
+                "  \"query\": {\n" +
+                "    \"match\": {\n" +
+                "      \"problemId\": " + problemID.toString() + "\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        Log.d("ESC:getProblemElasticSearchId", query);
+        Search search = new Search.Builder(query)
+                .addIndex("cmput301f18t18")
+                .addType("problem")
+                .build();
+        try {
+            SearchResult result = client.execute(search);
+            List<Hit<Problem, Void>> problems = result.getHits(Problem.class);
+
+            Log.d("ESC:getProblemElasticSearchId", "Result succeeded");
+
+            if (problems.size() == 0) {
+                Log.d("ESC:getProblemElasticSearchId", "No results found");
+                return null;
+            }
+            for (Hit<Problem, Void> hit : problems) {
+                Problem prob = hit.source;
+                Log.d("ESC:getProblemElasticSearchId", hit.id);
+            }
+            return problems.get(0).id;
+        } catch (IOException e) { }
+
+        return null;
+    }
+
     @Override
     public void insertProblem(Problem problem) {
-        setClient();
         Index index = new Index.Builder(problem)
                 .index("cmput301f18t18")
                 .type("problem")
+                .refresh(true)
                 .build();
         try {
             DocumentResult result = client.execute(index);
             if (result.isSucceeded()) {
-                problem.setProblemJestId(result.getId());
+//                problem.setProblemJestId(result.getId());
+                Log.d("ESC:insertProblem", "Problem inserted");
+                Log.d("ESC:insertProblem", result.getId());
             }
         } catch (IOException e) {
 
@@ -69,54 +109,48 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     }
 
     @Override
-    public Problem retrieveProblemById(Integer problemID) {
-        setClient();
-        String query= "{\n" +
-                "  \"query\": {\n" +
-                "    \"match\": {\n" +
-                "      \"problemID\": " + problemID.toString() + "\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
-        Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
-                .addType("problem")
+    public Problem retrieveProblemById(Integer problemId) {
+        String elasticSearchId = getProblemElasticSearchId(problemId);
+        Log.d("ESC:retrieveProblemById", elasticSearchId);
+        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+                .type("problem")
                 .build();
         try {
-            SearchResult result = client.execute(search);
+            JestResult result = client.execute(get);
             if (result.isSucceeded()) {
-                List<Hit<Problem, Void>> problems = result.getHits(Problem.class);
-
-                Log.d("retrieveProblemByID", "Result succeeded");
-
-                if (problems.size() == 0) {
-                    Log.d("retrieveProblemByID", "No results found");
-                    return null;
-                }
-                for (Hit<Problem, Void> hit : problems) {
-                    Problem prob = hit.source;
-                    Log.d("retrieveProblemByID", prob.getDescription());
-                }
+                return result.getSourceAsObject(Problem.class);
             }
             else {
-                Log.d("retrieveProblemByID", "result not succeeded");
+                Log.d("ESC:retrieveProblemById", "result not succeeded");
             }
-
-
         } catch (IOException e) {
-            Log.d("retrieveProblemByID", "IOException");
+            Log.d("ESC:retrieveProblemById", "IOException");
         }
         return null;
     }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemID) {
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemId) {
         return null;
     }
 
     @Override
     public void deleteProblem(Problem problem) {
-
+        String elasticSearchId = getProblemElasticSearchId(problem.getProblemID());
+        if (elasticSearchId == null)
+            return;
+        Delete delete = new Delete.Builder(elasticSearchId)
+                .index("cmput301f18t18")
+                .type("problem")
+                .build();
+        try {
+            DocumentResult result = client.execute(delete);
+            if (result.isSucceeded()) {
+                Log.d("ESC:deleteProblem", "Deleted" + result.getId());
+            }
+        } catch (IOException e) {
+            Log.d("ESC:deleteProblem", "IOException", e);
+        }
     }
 
     @Override

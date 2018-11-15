@@ -124,7 +124,7 @@ public class Problem implements Searchable  {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemId ==  problem.getProblemID());
+        return (this.problemId == problem.getProblemID());
     }
 
     public void setProblemJestId(String id) { this.problemJestId = id; }

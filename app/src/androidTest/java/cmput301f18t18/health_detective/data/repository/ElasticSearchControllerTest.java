@@ -1,6 +1,10 @@
 package cmput301f18t18.health_detective.data.repository;
 
+import android.util.Log;
+
 import org.junit.Test;
+
+import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -16,26 +20,29 @@ public class ElasticSearchControllerTest {
 
     @Test
     public void testInsertRetrieveProblem() {
-        //Problem problem = new Problem(1);
+        Problem problem = new Problem(101, "Test", "Stay", new Date());
 
-        //elasticSearchController.insertProblem(problem);
-        Problem ret = elasticSearchController.retrieveProblemById(7);
+        elasticSearchController.insertProblem(problem);
+        Problem ret = elasticSearchController.retrieveProblemById(101);
 
-        //assertEquals(problem, ret);
+        assertEquals(problem, ret);
+
+        elasticSearchController.deleteProblem(problem);
     }
 
-//    @Test
-//    public void testDeleteProblem() {
-//        // Passes because retrieveProblemById is implemented as return null
-//        // Will fail once retrieveProblemById is implemented
-//        // Basically to remove we must be first able to check if get works
-//
-//        Problem problem = new Problem(2);
-//
-//        elasticSearchController.insertProblem(problem);
-//        elasticSearchController.deleteProblem(problem);
-//        assertNull(elasticSearchController.retrieveProblemById(2));
-//    }
+    @Test
+    public void testDeleteProblem() {
+        // Passes because retrieveProblemById is implemented as return null
+        // Will fail once retrieveProblemById is implemented
+        // Basically to remove we must be first able to check if get works
+
+        Problem problem = new Problem(101, "Test", "Add", new Date());
+
+        elasticSearchController.insertProblem(problem);
+        elasticSearchController.deleteProblem(problem);
+
+        assertNull(elasticSearchController.retrieveProblemById(101));
+    }
 //
 //    @Test
 //    public void testInsertRetrieveRecord() {
