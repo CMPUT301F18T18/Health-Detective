@@ -74,7 +74,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         String query= "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"problemID\": 4\n" +
+                "      \"problemID\": " + problemID.toString() + "\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";

@@ -19,7 +19,7 @@ public class ElasticSearchControllerTest {
         //Problem problem = new Problem(1);
 
         //elasticSearchController.insertProblem(problem);
-        Problem ret = elasticSearchController.retrieveProblemById(1);
+        Problem ret = elasticSearchController.retrieveProblemById(7);
 
         //assertEquals(problem, ret);
     }
