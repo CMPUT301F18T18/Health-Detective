@@ -1,29 +1,29 @@
-//package cmput301f18t18.health_detective.data.repository;
-//
-//import org.junit.Test;
-//
-//import cmput301f18t18.health_detective.domain.model.CareProvider;
-//import cmput301f18t18.health_detective.domain.model.Patient;
-//import cmput301f18t18.health_detective.domain.model.Problem;
-//import cmput301f18t18.health_detective.domain.model.Record;
-//import cmput301f18t18.health_detective.domain.model.User;
-//
-//import static org.junit.Assert.*;
-//
-//public class ElasticSearchControllerTest {
-//
-//    private ElasticSearchController elasticSearchController = ElasticSearchController.getInstance();
-//
-//    @Test
-//    public void testInsertRetrieveProblem() {
-//        Problem problem = new Problem(1);
-//
-//        elasticSearchController.insertProblem(problem);
-//        Problem ret = elasticSearchController.retrieveProblemById(1);
-//
-//        assertEquals(problem, ret);
-//    }
-//
+package cmput301f18t18.health_detective.data.repository;
+
+import org.junit.Test;
+
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.model.User;
+
+import static org.junit.Assert.*;
+
+public class ElasticSearchControllerTest {
+
+    private ElasticSearchController elasticSearchController = ElasticSearchController.getInstance();
+
+    @Test
+    public void testInsertRetrieveProblem() {
+        //Problem problem = new Problem(1);
+
+        //elasticSearchController.insertProblem(problem);
+        Problem ret = elasticSearchController.retrieveProblemById(1);
+
+        //assertEquals(problem, ret);
+    }
+
 //    @Test
 //    public void testDeleteProblem() {
 //        // Passes because retrieveProblemById is implemented as return null
@@ -85,5 +85,5 @@
 //        elasticSearchController.deleteUser(patient);
 //        assertNull(elasticSearchController.retrieveUserById("2"));
 //    }
-//}
+}
 

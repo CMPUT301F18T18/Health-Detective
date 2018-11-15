@@ -68,22 +68,42 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
 
     @Override
     public Problem retrieveProblemById(Integer problemID) {
-//        setClient();
-//        String query= "";
-//        Search search = new Search.Builder(query)
-//                .addIndex("cmput301f18t18")
-//                .addType("problem")
-//                .build();
-//        try {
-//            SearchResult elasticRes = client.execute(search);
-//            List<Hit<Problem, Void>> problems = elasticRes.getHits(Problem.class);
-//
-//            for (Hit<Problem, Void> hit : problems) {
-//                Problem prob = hit.source;
-//                Log.d("retrieveProblemByID", prob.getDescription());
-//            }
-//
-//        } catch (IOException e) { }
+        setClient();
+        String query= "{\n" +
+                "  \"query\": {\n" +
+                "    \"match\": {\n" +
+                "      \"problemID\": 4\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        Search search = new Search.Builder(query)
+                .addIndex("cmput301f18t18")
+                .addType("problem")
+                .build();
+        try {
+            SearchResult result = client.execute(search);
+            if (result.isSucceeded()) {
+                List<Hit<Problem, Void>> problems = result.getHits(Problem.class);
+
+                Log.d("retrieveProblemByID", "Result succeeded");
+
+                if (problems.size() == 0) {
+                    Log.d("retrieveProblemByID", "No results found");
+                    return null;
+                }
+                for (Hit<Problem, Void> hit : problems) {
+                    Problem prob = hit.source;
+                    Log.d("retrieveProblemByID", prob.getDescription());
+                }
+            }
+            else {
+                Log.d("retrieveProblemByID", "result not succeeded");
+            }
+
+
+        } catch (IOException e) {
+            Log.d("retrieveProblemByID", "IOException");
+        }
         return null;
     }
 
