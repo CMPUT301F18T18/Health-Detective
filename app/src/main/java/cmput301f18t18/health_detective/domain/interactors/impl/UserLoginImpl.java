@@ -27,10 +27,12 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
     @Override
     public void run() {
-        final User user;
+        final Patient patient;
+        final CareProvider careProvider;
 
-        if (userId == null || !User.isValidUserId(userId)){
+        if (!User.isValidUserId(userId)){
             this.mainThread.post(new Runnable() {
+
                 @Override
                 public void run() {
                     callback.onLoginInvalidUserId();
@@ -40,49 +42,40 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
             return;
         }
 
-        user = this.userRepo.retrieveUserById(userId);
+        patient = this.userRepo.retrievePatientById(userId);
 
-        if (user == null) {
+        if (patient != null) {
             this.mainThread.post(new Runnable() {
+
                 @Override
                 public void run() {
-                    callback.onLoginUserDoesNotExist();
+                    callback.onLoginPatientSuccess(patient);
                 }
             });
 
             return;
         }
 
-        else if (user instanceof Patient) {
-            // It's a patient we can safely cast to patient
+        careProvider = this.userRepo.retrieveCareProviderById(userId);
+
+        if (careProvider != null) {
             this.mainThread.post(new Runnable() {
+
                 @Override
                 public void run() {
-                    callback.onLoginPatientSuccess((Patient) user);
+                    callback.onLoginCareProviderSuccess(careProvider);
                 }
             });
 
             return;
         }
 
-        else if (user instanceof CareProvider) {
-            // It's a patient we can safely cast to careProvider
-            this.mainThread.post(new Runnable() {
-                @Override
-                public void run() {
-                    callback.onLoginCareProviderSuccess((CareProvider) user);
-                }
-            });
-
-            return;
-        }
-
-        // Could not determine a user type!
+        // Could not find user
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onLoginCouldNotDetemineUserType();
+                callback.onLoginUserDoesNotExist();
             }
         });
     }
