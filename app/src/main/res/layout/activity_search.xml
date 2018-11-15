@@ -6,10 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".presentation.view.activity.SearchActivity">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/signup_border"
+        app:layout_constraintEnd_toStartOf="@+id/geoLocation"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="306dp"
-        android:layout_height="54dp"
+        android:id="@+id/editText2"
+        android:layout_width="295dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -18,39 +31,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
+    <TextView
+        android:id="@+id/geoLocation"
+        android:layout_width="105dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/signup_border"
+        android:text="@string/geo_location"
+        android:textAlignment="center"
+        android:textColor="@color/border_color"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+    <TextView
+        android:id="@+id/keyword"
         android:layout_width="0dp"
-        android:layout_height="482dp"
+        android:layout_height="33dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/signup_border"
+        android:text="@string/keyword"
+        android:textAlignment="center"
+        android:textColor="@color/border_color"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="169dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="92dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="92dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="CheckBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="92dp" />
+        app:layout_constraintStart_toEndOf="@+id/geoLocation"
+        app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
 </android.support.constraint.ConstraintLayout>

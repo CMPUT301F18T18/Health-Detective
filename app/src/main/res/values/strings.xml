@@ -19,6 +19,9 @@
     <string name="blPic">Body Location Pictures</string>
     <string name="mapTitle">Map</string>
     <string name="allPhotos">All Photos</string>
-    <string name="bdoy_part">Body Part</string>
-    <string name="">All Photos</string>
+    <string name="body_part">Body Part</string>
+    <string name="geo_location">Geo Location</string>
+    <string name="search">Search</string>
+    <string name="keyword">Keyword</string>
+
 </resources>
