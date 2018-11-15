@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.CareProvider;
@@ -43,29 +44,52 @@ public class ElasticSearchControllerTest {
 
         assertNull(elasticSearchController.retrieveProblemById(1002));
     }
-//
-//    @Test
-//    public void testInsertRetrieveRecord() {
-//        Record record = new Record(1);
-//
-//        elasticSearchController.insertRecord(record);
-//        Record ret = elasticSearchController.retrieveRecordById(1);
-//
-//        assertEquals(record, ret);
-//    }
-//
-//    @Test
-//    public void testDeleteRecord() {
-//        // Passes because retrieveRecordById is implemented as return null
-//        // Will fail once retrieveRecordById is implemented
-//        // Basically to remove we must be first able to check if get works
-//
-//        Record record = new Record(2);
-//
-//        elasticSearchController.insertRecord(record);
-//        elasticSearchController.deleteRecord(record);
-//        assertNull(elasticSearchController.retrieveRecordById(2));
-//    }
+
+    @Test
+    public void testInsertRetrieveRecord() {
+        Record record = new Record(2001, "TestInsert", "Stay", new Date());
+
+        elasticSearchController.insertRecord(record);
+        Record ret = elasticSearchController.retrieveRecordById(2001);
+
+        assertEquals(record, ret);
+
+        elasticSearchController.deleteRecord(record);
+    }
+
+    @Test
+    public void testDeleteRecord() {
+        // Passes because retrieveRecordById is implemented as return null
+        // Will fail once retrieveRecordById is implemented
+        // Basically to remove we must be first able to check if get works
+
+        Record record = new Record(2002, "TestInsert", "Stay", new Date());
+
+        elasticSearchController.insertRecord(record);
+        elasticSearchController.deleteRecord(record);
+        assertNull(elasticSearchController.retrieveRecordById(2002));
+    }
+
+    @Test
+    public void testRetrieveRecordsById() {
+        Record record;
+        ArrayList<Record> records = new ArrayList<>();
+        ArrayList<Integer> recordIds = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            record = new Record(2003+i,"","",null);
+            recordIds.add(record.getRecordId());
+            records.add(record);
+            elasticSearchController.insertRecord(record);
+        }
+
+        ArrayList<Record> recordsRes = elasticSearchController.retrieveRecordsById(recordIds);
+
+        assertEquals(records, recordsRes);
+
+        for (Record rec : records) {
+            elasticSearchController.deleteRecord(rec);
+        }
+    }
 //
 //    @Test
 //    public void testInsertRetrieveUser() {
