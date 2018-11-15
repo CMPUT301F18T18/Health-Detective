@@ -38,7 +38,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
     @Override
     public void run() {
-        Problem newProblem = new Problem(problemTitle,problemDescription);
+        Problem newProblem = new Problem(problemTitle, problemDescription);
 
         //Add problem to problemRepo and update patient
         problemRepo.insertProblem(newProblem);

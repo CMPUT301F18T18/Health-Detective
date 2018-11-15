@@ -10,8 +10,8 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class UserRepoMock implements UserRepo {
 
-    private HashMap<String, Patient> patients = new HashMap<>();
-    private HashMap<String, CareProvider> careProviders = new HashMap<>();
+    private HashMap < String, Patient> patients = new HashMap<>();
+    private HashMap < String, CareProvider> careProviders = new HashMap<>();
 
 
     @Override
@@ -23,8 +23,7 @@ public class UserRepoMock implements UserRepo {
 
         if (user instanceof Patient) {
             this.patients.put(user.getUserId(), (Patient) user);
-        }
-        else if (user instanceof  CareProvider) {
+        } else if (user instanceof CareProvider) {
             this.careProviders.put(user.getUserId(), (CareProvider) user);
         }
     }
@@ -42,8 +41,7 @@ public class UserRepoMock implements UserRepo {
 
         if (user instanceof Patient) {
             this.patients.remove(user.getUserId());
-        }
-        else if (user instanceof  CareProvider) {
+        } else if (user instanceof CareProvider) {
             this.careProviders.remove(user.getUserId());
         }
     }
@@ -58,11 +56,11 @@ public class UserRepoMock implements UserRepo {
     }
 
     @Override
-    public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
+    public ArrayList < Patient > retrievePatientsById (ArrayList<String> patientIds) {
         ArrayList<Patient> patientList = new ArrayList<>();
 
         if (patientIds == null || patientIds.isEmpty()) {
-            return  patientList;
+            return patientList;
         }
 
         for (Patient patient: this.patients.values()) {
@@ -86,8 +84,7 @@ public class UserRepoMock implements UserRepo {
     public boolean validateUserIdUniqueness(String userId) {
         if (patients.containsKey(userId)) {
             return false;
-        }
-        else  if (careProviders.containsKey(userId)) {
+        } else if (careProviders.containsKey(userId)) {
             return false;
         }
 

@@ -67,7 +67,7 @@ public class Problem implements Searchable  {
         return title;
     }
 
-    private Date getStartDate() {
+    public Date getStartDate() {
         return this.startDate;
     }
 

@@ -18,6 +18,34 @@ public abstract class User {
         return true;
     }
 
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null) {
+            return false;
+        }
+
+        String phoneNumberRegEx = "\\(\\d{3}\\) \\d{3}-\\d{4}";
+
+        if (!phoneNumber.matches(phoneNumberRegEx)) {
+            return  false;
+        }
+
+        return true;
+    }
+
+    public static boolean isValidEmailAddress(String emailAddress) {
+        if (emailAddress == null) {
+            return  false;
+        }
+
+        String emailAddressRegEx = "\\w{1,}([\\.]{1}[\\w-]{1,}){0,}@\\w{1,}([\\.]{1}[\\w-]{1,}){0,}";
+
+        if (!emailAddress.matches(emailAddressRegEx)){
+            return false;
+        }
+
+        return true;
+    }
+
     public User() {
         this.setUserId(null);
         this.setPhoneNumber(null);
