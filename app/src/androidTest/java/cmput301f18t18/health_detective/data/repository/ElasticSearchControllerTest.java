@@ -20,10 +20,10 @@ public class ElasticSearchControllerTest {
 
     @Test
     public void testInsertRetrieveProblem() {
-        Problem problem = new Problem(101, "Test", "Stay", new Date());
+        Problem problem = new Problem(1001, "TestInsert", "Stay", new Date());
 
         elasticSearchController.insertProblem(problem);
-        Problem ret = elasticSearchController.retrieveProblemById(101);
+        Problem ret = elasticSearchController.retrieveProblemById(1001);
 
         assertEquals(problem, ret);
 
@@ -36,12 +36,12 @@ public class ElasticSearchControllerTest {
         // Will fail once retrieveProblemById is implemented
         // Basically to remove we must be first able to check if get works
 
-        Problem problem = new Problem(101, "Test", "Add", new Date());
+        Problem problem = new Problem(1002, "TestDelete", "Add", new Date());
 
         elasticSearchController.insertProblem(problem);
         elasticSearchController.deleteProblem(problem);
 
-        assertNull(elasticSearchController.retrieveProblemById(101));
+        assertNull(elasticSearchController.retrieveProblemById(1002));
     }
 //
 //    @Test
