@@ -30,7 +30,7 @@
                 app:srcCompat="@drawable/delete" />
 
             <TextView
-                android:id="@+id/recordTitle"
+                android:id="@+id/titleView"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_marginEnd="45dp"
@@ -56,14 +56,14 @@
                 app:layout_constraintStart_toEndOf="@+id/recordBL" />
 
             <TextView
-                android:id="@+id/recordUser"
+                android:id="@+id/userIdView"
                 android:layout_width="0dp"
                 android:layout_height="23dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/user_id"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recordTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
             <TextView
                 android:id="@+id/recordDesc"
@@ -77,7 +77,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/recordImg"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recordTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
             <TextView
                 android:id="@+id/recordBL"
@@ -102,7 +102,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/deleteImg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/recordUser"
+                app:layout_constraintStart_toEndOf="@+id/userIdView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/text_border" />

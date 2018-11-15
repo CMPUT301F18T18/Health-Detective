@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +34,10 @@ public class RecordListAdapter extends ArrayAdapter implements View.OnClickListe
         LayoutInflater inflater = LayoutInflater.from(mContext);
         rowView = inflater.inflate(R.layout.ind_record_view, null, true);
 
-        TextView recordTitle = rowView.findViewById(R.id.recordTitle);
+        TextView recordTitle = rowView.findViewById(R.id.titleView);
         recordTitle.setText("Test");
 
-        TextView recordUser = rowView.findViewById(R.id.recordUser);
+        TextView recordUser = rowView.findViewById(R.id.userIdView);
         recordUser.setText("test");
 
         TextView recordDescription = rowView.findViewById(R.id.recordDesc);
