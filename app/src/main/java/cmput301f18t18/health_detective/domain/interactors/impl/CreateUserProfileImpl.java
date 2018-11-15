@@ -4,6 +4,8 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class CreateUserProfileImpl extends AbstractInteractor implements CreateUserProfile {
@@ -30,13 +32,41 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
 
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
-        this.mainThread.post(new Runnable(){
+        //Not a unique UserID
+        if(userRepo.validateUserIdUniqueness(userId) == false){
+            this.mainThread.post(new Runnable() {
 
-            @Override
-            public void run() {
-                callback.onCUPFail();
-            }
-        });
+                @Override
+                public void run() {
+                    callback.onCUPNotUniqueID();
+                }
+            });
+
+            return;
+        }
+
+        //Create new Care Provider profile
+        if (isCareProvider == true) {
+            CareProvider newCP = new CareProvider(userId,phoneNumber,email);
+            userRepo.insertUser(newCP);
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCUPCareProviderSuccess(newCP);
+                }
+            });
+        } else {
+            //Create new Patient profile
+            Patient newPatient = new Patient(userId,phoneNumber,email);
+            userRepo.insertUser(newPatient);
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCUPPatientSuccess(newPatient);
+                }
+            });
+        }
     }
 }

@@ -9,6 +9,7 @@ public interface CreateUserProfile extends Interactor {
     interface Callback {
         void onCUPPatientSuccess(Patient patient);
         void onCUPCareProviderSuccess(CareProvider careProvider);
+        void onCUPNotUniqueID();
         void onCUPFail();
     }
 }

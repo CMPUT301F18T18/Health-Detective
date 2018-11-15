@@ -7,6 +7,7 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateRecord;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
@@ -36,12 +37,17 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
+        Record newRecord = new Record(recordTitle,recordComment);
+
+        //Add record to recordRepo
+        recordRepo.insertRecord(newRecord);
+        problem.addRecord(newRecord);
+        problemRepo.updateProblem(problem);
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onCRFail();
+                callback.onCRSuccess();
             }
         });
     }

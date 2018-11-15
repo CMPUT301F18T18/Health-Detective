@@ -7,6 +7,7 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
@@ -17,7 +18,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     private ProblemRepo problemRepo;
     private Patient patient;
     private String problemTitle;
-    private String problemDescrioption;
+    private String problemDescription;
     private Date startDate;
 
     public CreateProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
@@ -30,19 +31,23 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
         this.patient = patient;
         this.problemRepo = problemRepo;
         this.problemTitle = problemTitle;
-        this.problemDescrioption = problemDescription;
+        this.problemDescription = problemDescription;
         this.startDate = startDate;
     }
 
 
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
+        Problem newProblem = new Problem(problemTitle,problemDescription);
+
+        //Add problem to problemRepo and update patient
+        problemRepo.insertProblem(newProblem);
+        userRepo.updateUser(patient);
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onCPFail();
+                callback.onCPSuccess();
             }
         });
     }
