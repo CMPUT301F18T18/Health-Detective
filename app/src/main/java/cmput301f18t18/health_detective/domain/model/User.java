@@ -7,11 +7,15 @@ public abstract class User {
 
     public static boolean isValidUserId(String userId) {
 
-        if (userId.matches("\\w{8,}")) {
-            return true;
+        if (userId == null) {
+            return false;
         }
 
-        return false;
+        if (!userId.matches("\\w{8,}")) {
+            return false;
+        }
+
+        return true;
     }
 
     public User() {
