@@ -1,7 +1,5 @@
 package cmput301f18t18.health_detective.data.repository;
 
-import android.util.Log;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.model.User;
 
 import static org.junit.Assert.*;
 
@@ -90,31 +87,38 @@ public class ElasticSearchControllerTest {
             elasticSearchController.deleteRecord(rec);
         }
     }
-//
-//    @Test
-//    public void testInsertRetrieveUser() {
-//        CareProvider careProvider = new CareProvider();
-//        careProvider.setUserID("1");
-//
-//        elasticSearchController.insertUser(careProvider);
-//        User ret = elasticSearchController.retrieveUserById("1");
-//
-//        assertEquals(careProvider, ret);
-//    }
-//
-//
-//    @Test
-//    public void testDeleteUser() {
-//        // Passes because retrieveRecordById is implemented as return null
-//        // Will fail once retrieveRecordById is implemented
-//        // Basically to remove we must be first able to check if get works
-//
-//        Patient patient = new Patient();
-//        patient.setUserID("2");
-//
-//        elasticSearchController.insertUser(patient);
-//        elasticSearchController.deleteUser(patient);
-//        assertNull(elasticSearchController.retrieveUserById("2"));
-//    }
+
+    @Test
+    public void testInsertRetrieveUser() {
+        CareProvider careProvider = new CareProvider("care1");
+        Patient patient = new Patient("pat1");
+        elasticSearchController.insertUser(careProvider);
+        elasticSearchController.insertUser(patient);
+        Patient retPatient = elasticSearchController.retrievePatientById("pat1");
+        CareProvider retCare = elasticSearchController.retrieveCareProviderById("care1");
+
+        assertTrue(careProvider.equals(retCare) && patient.equals(retPatient));
+
+        elasticSearchController.deleteUser(careProvider);
+        elasticSearchController.deleteUser(patient);
+    }
+
+    @Test
+    public void testDeleteUser() {
+        // Passes because retrieveRecordById is implemented as return null
+        // Will fail once retrieveRecordById is implemented
+        // Basically to remove we must be first able to check if get works
+
+        Patient patient = new Patient("pat1");
+        CareProvider careProvider = new CareProvider("care1");
+
+        elasticSearchController.insertUser(careProvider);
+        elasticSearchController.deleteUser(careProvider);
+
+        elasticSearchController.insertUser(patient);
+        elasticSearchController.deleteUser(patient);
+        assertTrue((elasticSearchController.retrievePatientById("pat1") == null)
+                && (elasticSearchController.retrieveCareProviderById("care1") == null));
+    }
 }
 

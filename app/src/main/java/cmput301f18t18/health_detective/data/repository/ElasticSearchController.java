@@ -61,7 +61,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
                 .addIndex("cmput301f18t18")
-                .addType("problem")
+                .addType("Problem")
                 .build();
         try {
             SearchResult result = client.execute(search);
@@ -74,7 +74,6 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 return null;
             }
             for (Hit<Problem, Void> hit : problems) {
-                Problem prob = hit.source;
                 Log.d("ESC:getProblemElasticSearchId", hit.id);
             }
             return problems.get(0).id;
@@ -87,7 +86,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     public void insertProblem(Problem problem) {
         Index index = new Index.Builder(problem)
                 .index("cmput301f18t18")
-                .type("problem")
+                .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
         try {
@@ -110,7 +109,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     public Problem retrieveProblemById(Integer problemId) {
         String elasticSearchId = getProblemElasticSearchId(problemId);
         Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
-                .type("problem")
+                .type("Problem")
                 .build();
         try {
             JestResult result = client.execute(get);
@@ -144,7 +143,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
                 .index("cmput301f18t18")
-                .type("problem")
+                .type(problem.getClass().getSimpleName())
                 .build();
         try {
             DocumentResult result = client.execute(delete);
@@ -167,7 +166,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         Log.d("ESC:getRecordElasticSearchId", query);
         Search search = new Search.Builder(query)
                 .addIndex("cmput301f18t18")
-                .addType("record")
+                .addType("Record")
                 .build();
         try {
             SearchResult result = client.execute(search);
@@ -180,7 +179,6 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 return null;
             }
             for (Hit<Record, Void> hit : records) {
-                Record rec = hit.source;
                 Log.d("ESC:getRecordElasticSearchId", hit.id);
             }
             return records.get(0).id;
@@ -195,7 +193,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     public void insertRecord(Record record) {
         Index index = new Index.Builder(record)
                 .index("cmput301f18t18")
-                .type(record.getClass().getSimpleName().toLowerCase())
+                .type(record.getClass().getSimpleName())
                 .refresh(true)
                 .build();
         try {
@@ -218,7 +216,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     public Record retrieveRecordById(Integer recordID) {
         String elasticSearchId = getRecordElasticSearchId(recordID);
         Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
-                .type("record")
+                .type("Record")
                 .build();
         try {
             JestResult result = client.execute(get);
@@ -252,7 +250,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
                 .index("cmput301f18t18")
-                .type(record.getClass().getSimpleName().toLowerCase())
+                .type(record.getClass().getSimpleName())
                 .build();
         try {
             DocumentResult result = client.execute(delete);
@@ -264,9 +262,56 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    private String getUserElasticSearchId(String userId, String type) {
+        String query = "{\n" +
+                "  \"query\": {\n" +
+                "    \"match\": {\n" +
+                "      \"userId\": " + "\"" + userId +  "\"" + "\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        Log.d("ESC:getUserElasticSearchId", query);
+        Log.d("ESC:getUserElasticSearchId", type);
+        Search search = new Search.Builder(query)
+                .addIndex("cmput301f18t18")
+                .addType(type)
+                .build();
+        try {
+            SearchResult result = client.execute(search);
+            List<Hit<User, Void>> users = result.getHits(User.class);
+
+            Log.d("ESC:getUserElasticSearchId", "User succeeded");
+
+            if (users.size() == 0) {
+                Log.d("ESC:getUserElasticSearchId", "No results found");
+                return null;
+            }
+            for (Hit<User, Void> hit : users) {
+                Log.d("ESC:getUserElasticSearchId", hit.id);
+            }
+            return users.get(0).id;
+        } catch (IOException e) {
+            Log.d("ESC:getUserElasticSearchId", "IOEception", e);
+        }
+        return null;
+    }
+
     @Override
     public void insertUser(User user) {
-
+        Index index = new Index.Builder(user)
+                .index("cmput301f18t18")
+                .type(user.getClass().getSimpleName())
+                .refresh(true)
+                .build();
+        try {
+            DocumentResult result = client.execute(index);
+            if (result.isSucceeded()) {
+                Log.d("ESC:insertUser", "User inserted");
+                Log.d("ESC:insertUser", result.getId());
+            }
+        } catch (IOException e) {
+            Log.d("ESC:insertUser", "IOException", e);
+        }
     }
 
     @Override
@@ -276,21 +321,72 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
 
     @Override
     public void deleteUser(User user) {
-
+        String elasticSearchId = getUserElasticSearchId(user.getUserId(),
+                user.getClass().getSimpleName());
+        if (elasticSearchId == null)
+            return;
+        Delete delete = new Delete.Builder(elasticSearchId)
+                .index("cmput301f18t18")
+                .type(user.getClass().getSimpleName())
+                .build();
+        try {
+            DocumentResult result = client.execute(delete);
+            if (result.isSucceeded()) {
+                Log.d("ESC:deleteUser", "Deleted" + result.getId());
+            }
+        } catch (IOException e) {
+            Log.d("ESC:deleteUser", "IOException", e);
+        }
     }
 
     @Override
     public Patient retrievePatientById(String patientId) {
+        String elasticSearchId = getUserElasticSearchId(patientId, "Patient");
+        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+                .type("Patient")
+                .build();
+        try {
+            JestResult result = client.execute(get);
+            if (result.isSucceeded()) {
+                return result.getSourceAsObject(Patient.class);
+            }
+            else {
+                Log.d("ESC:retrieveRecordById", "result not succeeded");
+            }
+        } catch (IOException e) {
+            Log.d("ESC:retrieveRecordById", "IOException", e);
+        }
         return null;
     }
 
     @Override
     public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
-        return null;
+        ArrayList<Patient> patients = new ArrayList<>();
+
+        for (String id : patientIds) {
+            patients.add(retrievePatientById(id));
+        }
+
+        return patients;
     }
 
     @Override
     public CareProvider retrieveCareProviderById(String careProviderId) {
+        String elasticSearchId = getUserElasticSearchId(careProviderId, "CareProvider");
+        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+                .type("CareProvider")
+                .build();
+        try {
+            JestResult result = client.execute(get);
+            if (result.isSucceeded()) {
+                return result.getSourceAsObject(CareProvider.class);
+            }
+            else {
+                Log.d("ESC:retrieveRecordById", "result not succeeded");
+            }
+        } catch (IOException e) {
+            Log.d("ESC:retrieveRecordById", "IOException", e);
+        }
         return null;
     }
 
