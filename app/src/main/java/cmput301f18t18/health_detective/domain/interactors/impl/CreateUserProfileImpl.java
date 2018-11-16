@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class CreateUserProfileImpl extends AbstractInteractor implements CreateUserProfile {
@@ -32,13 +33,39 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
 
     @Override
     public void run() {
-        //Not a unique UserID
-        if(userRepo.validateUserIdUniqueness(userId) == false){
+        //Not a valid ID
+        if (!User.isValidUserId(userId) || !userRepo.validateUserIdUniqueness(userId)){
             this.mainThread.post(new Runnable() {
 
                 @Override
                 public void run() {
-                    callback.onCUPNotUniqueID();
+                    callback.onCUPInvalidID();
+                }
+            });
+
+            return;
+        }
+
+        //Not a valid Email address
+        if (!User.isValidEmailAddress(this.email)){
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCUPInvalidEmail();
+                }
+            });
+
+            return;
+        }
+
+        //Not a valid Phone number
+        if (!User.isValidPhoneNumber(this.phoneNumber)){
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCUPInvalidPhoneNumber();
                 }
             });
 

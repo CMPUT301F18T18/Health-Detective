@@ -37,6 +37,20 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
     @Override
     public void run() {
+        if(recordTitle == null){
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCRNullTitle();
+                }
+            });
+
+            return;
+        }
+
+        if(recordComment == null) recordComment = "";
+
         Record newRecord = new Record(recordTitle,recordComment);
 
         //Add record to recordRepo

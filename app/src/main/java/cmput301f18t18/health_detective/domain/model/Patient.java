@@ -22,6 +22,12 @@ public class Patient extends User {
         this.problemIds = new HashSet<>();
     }
 
+    public void addProblem(Problem problem) {
+        problemIds.add(problem.getProblemID());
+    }
+
+    public void addProblem(Integer problemID) { problemIds.add(problemID); }
+
     public boolean isProblemsEmpty() {
         return problemIds.isEmpty();
     }

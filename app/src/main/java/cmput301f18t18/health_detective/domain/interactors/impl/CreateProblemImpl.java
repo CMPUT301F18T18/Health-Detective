@@ -38,10 +38,25 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
     @Override
     public void run() {
-        Problem newProblem = new Problem(problemTitle, problemDescription);
+        if(problemTitle == null){
+            this.mainThread.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    callback.onCPNullTitle();
+                }
+            });
+
+            return;
+        }
+
+        if(problemDescription == null) problemDescription = "";
+
+        Problem newProblem = new Problem(problemTitle,problemDescription);
 
         //Add problem to problemRepo and update patient
         problemRepo.insertProblem(newProblem);
+        patient.addProblem(newProblem);
         userRepo.updateUser(patient);
         this.mainThread.post(new Runnable(){
 
