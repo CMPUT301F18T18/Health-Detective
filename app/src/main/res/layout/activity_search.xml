@@ -14,25 +14,25 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/signup_border"
-        app:layout_constraintEnd_toStartOf="@+id/geoLocation"
+        app:layout_constraintEnd_toStartOf="@+id/geoLocationBtn"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/keywordText"
         android:layout_width="295dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="@string/keyword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/geoLocation"
+        android:id="@+id/geoLocationBtn"
         android:layout_width="105dp"
         android:layout_height="33dp"
         android:layout_marginTop="28dp"
@@ -43,10 +43,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <TextView
-        android:id="@+id/keyword"
+        android:id="@+id/keywordBtn"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginEnd="16dp"
@@ -58,8 +58,8 @@
         android:textColor="@color/border_color"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/geoLocation"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintStart_toEndOf="@+id/geoLocationBtn"
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <ListView
         android:id="@+id/searchList"

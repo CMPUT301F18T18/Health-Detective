@@ -30,18 +30,18 @@ public class BodyPartCheckBoxAdapter extends BaseAdapter {
     }
 
     private Context context;
-    private Set<String> selected_items;
+    private Set<String> selectedBodyParts;
     private List<SpinnerItem<String>> all_items;
     private String headerText;
 
     BodyPartCheckBoxAdapter(Context context,
                     String headerText,
                     List<SpinnerItem<String>> all_items,
-                    Set<String> selected_items) {
+                    Set<String> selectedBodyParts) {
         this.context = context;
         this.headerText = headerText;
         this.all_items = all_items;
-        this.selected_items = selected_items;
+        this.selectedBodyParts = selectedBodyParts;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BodyPartCheckBoxAdapter extends BaseAdapter {
             holder.mTextView.setText(all_items.get(listPos).txt);
 
             final String item = all_items.get(listPos).item;
-            boolean isSel = selected_items.contains(item);
+            boolean isSel = selectedBodyParts.contains(item);
 
             holder.mCheckBox.setOnCheckedChangeListener(null);
             holder.mCheckBox.setChecked(isSel);
@@ -102,10 +102,10 @@ public class BodyPartCheckBoxAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if( isChecked ) {
-                        selected_items.add(item);
+                        selectedBodyParts.add(item);
                     }
                     else {
-                        selected_items.remove(item);
+                        selectedBodyParts.remove(item);
                     }
                 }
             });
