@@ -3,6 +3,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import cmput301f18t18.health_detective.R;
 
-public class ProblemListAdapter extends ArrayAdapter{
+public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFragment.onDialogFragmentClickListener{
 
     private Context mContext;
     private List<String> testList = new ArrayList<>();
@@ -51,20 +52,33 @@ public class ProblemListAdapter extends ArrayAdapter{
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
-                toast.show();
+//                Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
+//                toast.show();
             }
+
         });
 
         editImg.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(mContext, "Edit"+ testList.get(postition), Toast.LENGTH_SHORT);
-                toast.show();
+//                Toast toast = Toast.makeText(mContext, "Edit"+ testList.get(postition), Toast.LENGTH_SHORT);
+//                toast.show();
             }
         }));
 
         return rowView;
 
+    }
+
+    @Override
+    public void onPosBtnClicked(Boolean userClick) {
+        Toast toast = Toast.makeText(mContext, "Edit", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    public void onNegBtnClicked(Boolean userClick) {
+        Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
 
-        Button addRecordBtn = findViewById(R.id.addRecordBtn);
+        ImageView addRecordBtn = findViewById(R.id.addRecordBtn);
         addRecordBtn.setOnClickListener(this);
 
         final Context context = PatientRecordsActivity.this;

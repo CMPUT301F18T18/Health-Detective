@@ -10,64 +10,64 @@
         android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="33dp"
-        android:layout_marginEnd="26dp"
+        android:layout_marginEnd="51dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/signup_border"
-        app:layout_constraintEnd_toStartOf="@+id/geoLocation"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/geoLocationBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/keywordText"
         android:layout_width="295dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="@string/keyword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/geoLocation"
-        android:layout_width="105dp"
+        android:id="@+id/geoLocationBtn"
+        android:layout_width="146dp"
         android:layout_height="33dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="28dp"
         android:background="@drawable/signup_border"
         android:text="@string/geo_location"
-        android:textAlignment="center"
-        android:textColor="@color/border_color"
+        android:textAlignment="gravity"
+        android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <TextView
-        android:id="@+id/keyword"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
+        android:id="@+id/keywordBtn"
+        android:layout_width="82dp"
+        android:layout_height="25dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="84dp"
         android:background="@drawable/signup_border"
-        android:text="@string/keyword"
+        android:text="@string/search"
         android:textAlignment="center"
         android:textColor="@color/border_color"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/geoLocation"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/geoLocationBtn"
+        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
 
     <ListView
         android:id="@+id/searchList"
         android:layout_width="395dp"
-        android:layout_height="511dp"
+        android:layout_height="467dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />

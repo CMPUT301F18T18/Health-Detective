@@ -1,16 +1,22 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-public class Problem implements Searchable  {
+import io.searchbox.annotations.JestId;
 
+public class Problem implements Searchable, Serializable {
+    private static final long serialVersionUID = 1L;
     private int problemId;
     private String title;
     private Date startDate;
     private String description;
-    private HashSet<Record> records;
+    private HashSet<Integer> records;
+
+    @JestId
+    private String problemJestId;
 
     public Problem() {
         records = new HashSet<>();
@@ -39,9 +45,9 @@ public class Problem implements Searchable  {
     }
 
     public void setDescription(String description) {
-        description = description;
+        this.description = description;
     }
-
+  
     public void setTitle(String title) {
         this.title = title;
     }
@@ -62,12 +68,42 @@ public class Problem implements Searchable  {
         return title;
     }
 
-    private Date getStartDate() {
+    public Date getStartDate() {
         return this.startDate;
     }
 
     public void addRecord(Record record) {
-        records.add(record);
+        records.add(record.getRecordId());
+    }
+
+    public void addRecord(Integer recordId) {
+        records.add(recordId);
+    }
+
+    public void removeRecord(Record record) {
+        records.remove(record.getRecordId());
+    }
+
+    public void removeRecord(Integer recordId) {
+        records.remove(recordId);
+    }
+
+    public boolean isRecordsEmpty() {
+        return records.isEmpty();
+    }
+
+    public ArrayList<Integer> getRecordIds() {
+        ArrayList<Integer> recordIds = new ArrayList<>();
+
+        if (this.isRecordsEmpty()) {
+            return recordIds;
+        }
+
+        for (Integer recordId: this.records) {
+            recordIds.add(recordId);
+        }
+
+        return  recordIds;
     }
 
     @Override
@@ -89,6 +125,10 @@ public class Problem implements Searchable  {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemId ==  problem.getProblemID());
+        return (this.problemId == problem.getProblemID());
     }
+
+    public void setProblemJestId(String id) { this.problemJestId = id; }
+
+    public String getProblemJestId() { return this.problemJestId; }
 }

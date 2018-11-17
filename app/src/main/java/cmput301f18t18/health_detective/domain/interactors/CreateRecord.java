@@ -9,6 +9,7 @@ import cmput301f18t18.health_detective.domain.model.Record;
 public interface CreateRecord extends Interactor {
     interface Callback {
         void onCRSuccess();
+        void onCRNullTitle();
         void onCRFail();
     }
 }

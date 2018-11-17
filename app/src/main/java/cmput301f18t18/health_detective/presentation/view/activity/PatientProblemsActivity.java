@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         //actionBar.setHomeButtonEnabled(true);
         //actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Button addProblem = (Button)findViewById(R.id.addProbBtn);
+        ImageView addProblem = (ImageView)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
 

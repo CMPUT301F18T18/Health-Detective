@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 //import cmput301f18t18.health_detective.domain.interactors.CreateUserProfileContract;
@@ -11,6 +12,8 @@ import cmput301f18t18.health_detective.domain.interactors.impl.mock.CreateUserPr
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 
 public class SignUpPresenter implements CreateUserProfile.Callback {
@@ -57,7 +60,24 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
     }
 
     @Override
+    public void onCUPInvalidID() {
+
+    }
+
+    @Override
+    public void onCUPInvalidEmail() {
+
+    }
+
+    @Override
+    public void onCUPInvalidPhoneNumber() {
+
+    }
+
+    @Override
     public void onCUPFail() {
 
     }
+
+
 }

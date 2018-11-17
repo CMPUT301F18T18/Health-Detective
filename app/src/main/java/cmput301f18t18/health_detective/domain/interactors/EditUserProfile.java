@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.model.User;
 public interface EditUserProfile extends Interactor {
     interface Callback {
         void onEUPSuccess(User userProfile);
-        void onEUPFail();
+        void onEUPInvalidEmail();
+        void onEUPInvaildPhoneNumber();
     }
 }

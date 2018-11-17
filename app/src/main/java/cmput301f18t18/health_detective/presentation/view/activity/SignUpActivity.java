@@ -13,6 +13,7 @@ import android.widget.TextView;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
@@ -76,13 +77,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.cancelButton:
                 Intent intentReturn = new Intent(this,MainActivity.class);
-                changeActivity(intentReturn);
+                //changeActivity(intentReturn);
                 break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP
                 // call presenter method createNewUser
                 Boolean type = false;
-                Intent intent = new Intent(this,PatientProblemsActivity.class);
                 if (careCheck.isChecked()){
                     type = true;
                 }
@@ -90,12 +90,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
                 signUpPresenter.createNewUser(user,email,phone);
-                changeActivity(intent);
+
+
+                //changeActivity();
         }
 
     }
 
-    public void changeActivity(Intent intent){
+    public void changeActivity(Patient patient){
+        Intent intent = new Intent(this,PatientProblemsActivity.class);
+        intent.putExtra("patient", patient);
         startActivity(intent);
     }
 }
