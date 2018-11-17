@@ -31,7 +31,7 @@ public class PatientRecordViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient_record_view);
 
         //stuff for all photos section
-        GridViewAdapter adapter = new GridViewAdapter(this, 4);
+        GridViewAdapter adapter = new GridViewAdapter(this, 10);
         GridView gridView = (GridView) findViewById(R.id.allPhotosView);
 
         gridView.setAdapter(adapter);
@@ -56,6 +56,7 @@ public class PatientRecordViewActivity extends AppCompatActivity {
             toast.show();
             }
         });
+        test();
         test();
         test();
         test();
