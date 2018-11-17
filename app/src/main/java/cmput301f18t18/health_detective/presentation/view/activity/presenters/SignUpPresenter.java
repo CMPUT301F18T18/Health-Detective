@@ -57,7 +57,7 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
     }
 
     @Override
-    public void onCUPFail() {
+    public void onCUPFail(Patient patient) {
 
     }
 }
