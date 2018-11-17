@@ -60,8 +60,24 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
     }
 
     @Override
+    public void onCUPInvalidID() {
+
+    }
+
+    @Override
+    public void onCUPInvalidEmail() {
+
+    }
+
+    @Override
+    public void onCUPInvalidPhoneNumber() {
+
+    }
+
+    @Override
     public void onCUPFail() {
 
     }
+
 
 }

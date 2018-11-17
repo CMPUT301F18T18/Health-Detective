@@ -30,12 +30,37 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
 
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
+
+        // Check if new email is valid
+        if (!User.isValidEmailAddress(this.email)) {
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onEUPInvalidEmail();
+                }
+            });
+        }
+
+        // Check if new phone number is valid
+        if (!User.isValidPhoneNumber(this.phoneNumber)) {
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onEUPInvaildPhoneNumber();
+                }
+            });
+        }
+
+        // Entered information is correct
+        this.userToEdit.setEmailAddress(this.email);
+        this.userToEdit.setPhoneNumber(this.phoneNumber);
+        this.userRepo.updateUser(userToEdit);
+
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onEUPFail();
+                callback.onEUPSuccess(userToEdit);
             }
         });
     }

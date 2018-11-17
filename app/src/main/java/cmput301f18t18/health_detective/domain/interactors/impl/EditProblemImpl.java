@@ -31,15 +31,66 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.startDate = startDate;
     }
 
+    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                           EditProblem.Callback callback, ProblemRepo problemRepo,
+                           Problem problemToEdit, String title, String description)
+    {
+        super(threadExecutor, mainThread);
+        this.callback = callback;
+        this.problemRepo = problemRepo;
+        this.problemToEdit = problemToEdit;
+        this.description = description;
+        this.title = title;
+        this.startDate = problemToEdit.getStartDate();
+    }
+
+    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                           EditProblem.Callback callback, ProblemRepo problemRepo,
+                           Problem problemToEdit, String description)
+    {
+        super(threadExecutor, mainThread);
+        this.callback = callback;
+        this.problemRepo = problemRepo;
+        this.problemToEdit = problemToEdit;
+        this.description = description;
+        this.title = problemToEdit.getTitle();
+        this.startDate = problemToEdit.getStartDate();
+
+    }
+
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
-        this.mainThread.post(new Runnable(){
+        if (this.title == null || this.title.isEmpty()) {
+            this.mainThread.post(new Runnable() {
 
-            @Override
-            public void run() {
-                callback.onEPFail();
-            }
-        });
+                @Override
+                public void run() {
+                    callback.onEPEmptyTitle();
+                }
+            });
+
+            return;
+        }
+
+        if (this.startDate == null) {
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onEPNoStartDateProvided();
+                }
+            });
+
+            return;
+        }
+
+        if (this.description == null) {
+            this.description = "";
+        }
+
+        this.problemToEdit.setTitle(this.title);
+        this.problemToEdit.setDescription(this.description);
+        this.problemToEdit.setStartDate(this.startDate);
+
+        this.problemRepo.updateProblem(this.problemToEdit);
     }
 }

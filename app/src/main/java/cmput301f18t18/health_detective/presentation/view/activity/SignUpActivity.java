@@ -77,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.cancelButton:
                 Intent intentReturn = new Intent(this,MainActivity.class);
-                changeActivity(intentReturn);
+                //changeActivity(intentReturn);
                 break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP

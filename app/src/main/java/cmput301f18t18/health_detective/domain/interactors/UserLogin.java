@@ -8,6 +8,8 @@ public interface UserLogin extends Interactor {
     interface Callback {
         void onLoginPatientSuccess(Patient patient);
         void onLoginCareProviderSuccess(CareProvider careProvider);
-        void onLoginFail();
+        void onLoginInvalidUserId();
+        void onLoginUserDoesNotExist();
+        void onLoginCouldNotDetemineUserType();
     }
 }

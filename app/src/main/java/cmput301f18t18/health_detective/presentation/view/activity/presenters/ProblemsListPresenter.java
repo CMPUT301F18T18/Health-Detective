@@ -34,7 +34,7 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
     }
 
     @Override
-    public void onGPFail() {
+    public void onGPNoProblems() {
 
     }
 }

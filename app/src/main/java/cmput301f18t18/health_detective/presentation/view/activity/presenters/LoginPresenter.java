@@ -25,7 +25,18 @@ public class LoginPresenter implements UserLogin.Callback {
     }
 
     @Override
-    public void onLoginFail() {
+    public void onLoginInvalidUserId() {
 
     }
+
+    @Override
+    public void onLoginUserDoesNotExist() {
+
+    }
+
+    @Override
+    public void onLoginCouldNotDetemineUserType() {
+
+    }
+
 }
