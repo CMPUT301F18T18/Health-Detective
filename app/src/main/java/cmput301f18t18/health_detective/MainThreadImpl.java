@@ -3,15 +3,15 @@ package cmput301f18t18.health_detective;
 import android.os.Handler;
 import android.os.Looper;
 
-import cmput301f18t18.health_detective.domain.executor.MainThreadContract;
+import cmput301f18t18.health_detective.domain.executor.MainThread;
 
-public class MainThreadImpl implements MainThreadContract {
+public class MainThreadImpl implements MainThread {
 
-    private static MainThreadContract mainThread = null;
+    private static MainThread mainThread = null;
 
     private Handler handler;
 
-    public static MainThreadContract getInstance() {
+    public static MainThread getInstance() {
         if (mainThread == null) {
             mainThread = new MainThreadImpl();
         }

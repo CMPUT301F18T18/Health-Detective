@@ -2,38 +2,107 @@ package cmput301f18t18.health_detective.domain.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+
+import io.searchbox.annotations.JestId;
 
 public class Problem implements Searchable  {
-    // problemID needs to be unique across all patients
-    private int problemID;
+
+    private int problemId;
     private String title;
     private Date startDate;
     private String description;
-    private ArrayList<Record> records;
+    private HashSet<Integer> records;
+
+    @JestId
+    private String problemJestId;
 
     public Problem() {
-        records = new ArrayList<>();
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = createDate.hashCode();
+        this.setTitle(null);
+        this.setDescription(null);
+        this.setStartDate(createDate);
     }
 
-    public Problem(int PUID) {
-        this();
-        this.problemID = PUID;
+    public Problem(String title, String description) {
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = createDate.hashCode();
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(createDate);
     }
 
-    public int getproblemID() {
-        return problemID;
+    public Problem(int problemId, String title, String description, Date startDate) {
+        records = new HashSet<>();
+        this.problemId = problemId;
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(startDate);
     }
 
-    public void setdescription(String description) {
-        description = description;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+  
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getdescription() {
+    public void setStartDate(Date date) {
+        this.startDate = date;
+    }
+
+    public String getDescription() {
         return description;
     }
 
+    public int getProblemID() {
+        return problemId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
     public void addRecord(Record record) {
-        records.add(record);
+        records.add(record.getRecordId());
+    }
+
+    public void addRecord(Integer recordId) {
+        records.add(recordId);
+    }
+
+    public void removeRecord(Record record) {
+        records.remove(record.getRecordId());
+    }
+
+    public void removeRecord(Integer recordId) {
+        records.remove(recordId);
+    }
+
+    public boolean isRecordsEmpty() {
+        return records.isEmpty();
+    }
+
+    public ArrayList<Integer> getRecordIds() {
+        ArrayList<Integer> recordIds = new ArrayList<>();
+
+        if (this.isRecordsEmpty()) {
+            return recordIds;
+        }
+
+        for (Integer recordId: this.records) {
+            recordIds.add(recordId);
+        }
+
+        return  recordIds;
     }
 
     @Override
@@ -55,6 +124,10 @@ public class Problem implements Searchable  {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemID ==  problem.getproblemID());
+        return (this.problemId ==  problem.getProblemID());
     }
+
+    public void setProblemJestId(String id) { this.problemJestId = id; }
+
+    public String getProblemJestId() { return this.problemJestId; }
 }
