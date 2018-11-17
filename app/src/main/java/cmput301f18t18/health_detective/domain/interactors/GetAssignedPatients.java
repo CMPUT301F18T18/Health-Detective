@@ -8,6 +8,6 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 public interface GetAssignedPatients extends Interactor {
     interface Callback {
         void onGAPSuccess(ArrayList<Patient> assignedPatients);
-        void onGAPFail();
+        void onGAPNoPatients();
     }
 }
