@@ -1,12 +1,13 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Record implements Searchable {
-
+public class Record implements Searchable, Serializable {
+    private static final long serialVersionUID = 2L;
     public int recordId;
     private String title;
     private String comment;

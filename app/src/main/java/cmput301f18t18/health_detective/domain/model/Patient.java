@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Patient extends User {
+    private static final long serialVersionUID = 4L;
 
     private HashSet<Integer> problemIds;
 

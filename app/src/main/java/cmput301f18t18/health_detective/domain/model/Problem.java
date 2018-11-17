@@ -1,13 +1,14 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
 import io.searchbox.annotations.JestId;
 
-public class Problem implements Searchable  {
-
+public class Problem implements Searchable, Serializable {
+    private static final long serialVersionUID = 1L;
     private int problemId;
     private String title;
     private Date startDate;
