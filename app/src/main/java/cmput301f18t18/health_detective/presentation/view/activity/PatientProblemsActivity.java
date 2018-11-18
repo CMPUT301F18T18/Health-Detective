@@ -14,7 +14,18 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
+import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
+import cmput301f18t18.health_detective.domain.repository.UserRepo;
+import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
+import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
@@ -22,8 +33,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     ListView listView;
     ProblemListAdapter adapter;
-    ArrayList<String> testList = new ArrayList<>();
+    ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
+    Patient patientContext;
 
 
     @Override
@@ -31,19 +43,41 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_problems);
 
-        if (problemsListPresenter == null){
-            problemsListPresenter = new ProblemsListPresenter();
-        }
+        Intent intent = this.getIntent();
+        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
 
-        ImageView addProblem = (ImageView)findViewById(R.id.addProbBtn);
+        //Testing
+        Problem problem1 = new Problem(
+                "Problem 1",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. "
+        );
+
+        this.patientContext.addProblem(problem1);
+
+        ProblemRepo problems = new ProblemRepoMock();
+        UserRepo userRepo = new UserRepoMock();
+
+        userRepo.insertUser(patientContext);
+        problems.insertProblem(problem1);
+
+
+        this.problemsListPresenter = new ProblemsListPresenter(
+                this,
+                this,
+                ThreadExecutorImpl.getInstance(),
+                MainThreadImpl.getInstance(),
+                problems,
+                userRepo
+        );
+
+        ImageView addProblem = (ImageView) findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
 
         listView = findViewById(R.id.problemListView);
-        testList.add("test");
-        testList.add("test2");
 
-        adapter = new ProblemListAdapter(this, testList);
+
+        adapter = new ProblemListAdapter(this, this.problemList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,7 +88,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             }
         });
 
-
+        this.problemsListPresenter.getProblems(this.patientContext);
     }
 
     @Override
@@ -97,7 +131,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         if (v.getId() == R.id.addProbBtn){
             Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
-            testList.add("test3");
             adapter.notifyDataSetChanged();
             changeActivity(problemsIntent);
         }
@@ -105,5 +138,11 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     public void changeActivity(Intent intent){
         startActivity(intent);
+    }
+
+    public void setProblemList(ArrayList<Problem> problemList) {
+        this.problemList.clear();
+        this.problemList.addAll(problemList);
+        this.adapter.notifyDataSetChanged();
     }
 }

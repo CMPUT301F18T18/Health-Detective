@@ -16,17 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Problem;
 
 public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFragment.onDialogFragmentClickListener{
 
     private Context mContext;
-    private List<String> testList = new ArrayList<>();
+    private List<Problem> problemList = new ArrayList<>();
 
 
-    public ProblemListAdapter(@NonNull Activity context, ArrayList<String> list) {
+    public ProblemListAdapter(@NonNull Activity context, ArrayList<Problem> list) {
         super(context, R.layout.ind_problem_view, list);
         mContext = context;
-        testList = list;
+        problemList = list;
     }
 
     @Override
@@ -38,15 +39,14 @@ public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFra
         deleteImg.setImageResource(R.drawable.delete);
 
         ImageView editImg = (ImageView) rowView.findViewById(R.id.editImg);
+        TextView titleText = rowView.findViewById(R.id.probTitle);
+        TextView descText = rowView.findViewById(R.id.descText);
         editImg.setImageResource(R.drawable.editpencil);
 
-        TextView titleText = rowView.findViewById(R.id.probTitle);
 
-        String data = testList.get(postition);
-        titleText.setText(data);
-
-        TextView descText = rowView.findViewById(R.id.descText);
-        descText.setText(data);
+        Problem data = problemList.get(postition);
+        titleText.setText(data.getTitle());
+        descText.setText(data.getDescription());
 
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,6 @@ public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFra
         }));
 
         return rowView;
-
     }
 
     @Override

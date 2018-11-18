@@ -9,13 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
@@ -32,15 +31,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
 
-
         signUpPresenter = new SignUpPresenter(
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                new UserRepoMock()
+                ElasticSearchController.getInstance()
         );
-
-
-
 
         Button signUp = findViewById(R.id.signUpBtn);
         Button cancel = findViewById(R.id.cancelButton);
