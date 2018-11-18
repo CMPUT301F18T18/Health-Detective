@@ -31,16 +31,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_problems);
 
-        //Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //setSupportActionBar(myToolbar);
         if (problemsListPresenter == null){
             problemsListPresenter = new ProblemsListPresenter();
         }
-
-        // commented out as just adding the parent activity enables back arrow
-        //android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        //actionBar.setHomeButtonEnabled(true);
-        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         ImageView addProblem = (ImageView)findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
