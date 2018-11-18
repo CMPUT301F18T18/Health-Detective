@@ -65,22 +65,22 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
     @Override
     public void onCUPInvalidID() {
-        //Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPInvalidEmail() {
-        //Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPInvalidPhoneNumber() {
-        //Toast.makeText(context, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPFail() {
-        //Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
     }
 
 }
