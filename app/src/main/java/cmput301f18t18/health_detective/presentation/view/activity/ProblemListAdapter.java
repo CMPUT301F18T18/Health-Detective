@@ -41,13 +41,13 @@ public class ProblemListAdapter extends ArrayAdapter {
         View rowView = view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         rowView = inflater.inflate(R.layout.ind_problem_view, null, true);
-        ImageView deleteImg = (ImageView) rowView.findViewById(R.id.deleteImg);
-        deleteImg.setImageResource(R.drawable.delete);
+        ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
+        deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
 
-        ImageView editImg = (ImageView) rowView.findViewById(R.id.editImg);
+        ImageView editImg = rowView.findViewById(R.id.editImg);
         TextView titleText = rowView.findViewById(R.id.probTitle);
         TextView descText = rowView.findViewById(R.id.descText);
-        editImg.setImageResource(R.drawable.editpencil);
+        editImg.setImageResource(R.drawable.baseline_create_black_48);
 
 
         Problem data = problemList.get(postition);

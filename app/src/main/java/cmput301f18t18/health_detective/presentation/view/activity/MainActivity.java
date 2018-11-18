@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signUp.setOnClickListener(this);
 
         ImageView userLoginIcon = findViewById(R.id.user_login_icon);
-        userLoginIcon.setImageResource(R.drawable.ic_launcher_background);
+        userLoginIcon.setImageResource(R.drawable.baseline_account_circle_black_48);
         ImageView logo = findViewById(R.id.logo);
-        logo.setImageResource(R.drawable.ic_launcher_background);
+        logo.setImageResource(R.drawable.logo_transparent_background);
 
     }
 
