@@ -13,6 +13,7 @@ import android.widget.TextView;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
@@ -82,15 +83,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 // if sign up completed set type to false if patient, true if CP
                 // call presenter method createNewUser
                 Boolean type = false;
-                Intent intent = new Intent(this,PatientProblemsActivity.class);
+
                 if (careCheck.isChecked()){
                     type = true;
                 }
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(user,email,phone);
-                changeActivity(intent);
+                signUpPresenter.createNewUser(getApplicationContext(),user,email,phone);
         }
 
     }

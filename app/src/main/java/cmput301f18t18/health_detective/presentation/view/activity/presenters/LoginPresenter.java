@@ -6,7 +6,6 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 
 public class LoginPresenter implements UserLogin.Callback {
 
-
     String userId;
 
     public void tryLogin(String userId){
@@ -25,7 +24,17 @@ public class LoginPresenter implements UserLogin.Callback {
     }
 
     @Override
-    public void onLoginFail() {
+    public void onLoginInvalidUserId() {
+
+    }
+
+    @Override
+    public void onLoginUserDoesNotExist() {
+
+    }
+
+    @Override
+    public void onLoginCouldNotDetemineUserType() {
 
     }
 }
