@@ -3,11 +3,14 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.interactors.GetProblems;
+import cmput301f18t18.health_detective.domain.interactors.impl.CreateProblemImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetProblemsImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -16,13 +19,14 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
-public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback {
+public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback{
 
     private View view;
     private ThreadExecutor threadExecutor;
     private MainThread mainThread;
     private ProblemRepo problemRepo;
     private UserRepo userRepo;
+
 
     public interface View {
         void onProblemListUpdate(ArrayList<Problem> problemList);
@@ -64,6 +68,21 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         command.execute();
     }
 
+//    public void createProblems(Patient patient, String problemTitle, String problemDescription, Date startDate){
+//        CreateProblem createProblem = new CreateProblemImpl(
+//                this.threadExecutor,
+//                this.mainThread,
+//                this,
+//                this.userRepo,
+//                this.problemRepo,
+//                patient,
+//                problemTitle,
+//                problemDescription,
+//                startDate
+//        );
+//        createProblem.execute();
+//    }
+
     @Override
     public void onDPSuccess(Problem problem) {
         this.view.onProblemDeleted(problem);
@@ -89,4 +108,5 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
     public void onGPNoProblems() {
         this.view.onProblemListUpdate(new ArrayList<Problem>());
     }
+
 }
