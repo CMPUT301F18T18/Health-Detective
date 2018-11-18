@@ -29,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().hide();
 
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
@@ -42,14 +43,35 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         );
 
         Button signUp = findViewById(R.id.signUpBtn);
-        Button cancel = findViewById(R.id.cancelButton);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
-        cancel.setOnClickListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Set back ground to null so memory is not being hogged
+        View window = getWindow().getDecorView();
+        if (window.getBackground() != null) {
+            window.setBackground(null);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Restore background
+        View window = getWindow().getDecorView();
+        if (window.getBackground() == null) {
+            window.getBackground().setCallback(null);
+            window.setBackground(getDrawable(R.drawable.login_background));
+        }
     }
 
     @Override
@@ -71,10 +93,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.PcheckBox:
                 careCheck.setChecked(false);
-                break;
-            case R.id.cancelButton:
-                Intent intentReturn = new Intent(this,MainActivity.class);
-                startActivity(intentReturn);
                 break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP

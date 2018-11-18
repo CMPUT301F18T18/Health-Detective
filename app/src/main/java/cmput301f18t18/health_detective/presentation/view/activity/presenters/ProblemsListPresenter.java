@@ -8,6 +8,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.interactors.GetProblems;
+import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetProblemsImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
@@ -22,7 +23,6 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
     private MainThread mainThread;
     private ProblemRepo problemRepo;
     private UserRepo userRepo;
-    private PatientProblemsActivity activity;
 
     public interface View {
         void onProblemListUpdate(ArrayList<Problem> problemList);
@@ -38,8 +38,18 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         this.userRepo = userRepo;
     }
 
-    public void deleteProblem(Problem problem){
+    public void deleteProblem(Patient patientContext, Problem problem){
+        DeleteProblem command = new DeleteProblemImpl(
+                this.threadExecutor,
+                this.mainThread,
+                this,
+                this.userRepo,
+                this.problemRepo,
+                patientContext,
+                problem
+        );
 
+        command.execute();
     }
 
     public void getProblems(Patient patient){
@@ -56,6 +66,11 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
 
     @Override
     public void onDPSuccess(Problem problem) {
+        this.view.onProblemDeleted(problem);
+    }
+
+    @Override
+    public void onDPNotFound() {
 
     }
 
