@@ -20,10 +20,11 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     private String recordTitle;
     private String recordComment;
     private Date date;
+    private String authorId;
 
     public CreateRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                             CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
-                            Problem problem, String recordTitle, String recordComment, Date date)
+                            Problem problem, String recordTitle, String recordComment, Date date, String authorId)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
@@ -33,6 +34,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         this.recordTitle = recordTitle;
         this.recordComment = recordComment;
         this.date = date;
+        this.authorId = authorId;
     }
 
     @Override
