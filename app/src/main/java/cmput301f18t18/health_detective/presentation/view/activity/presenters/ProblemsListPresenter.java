@@ -26,6 +26,7 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
 
     public interface View {
         void onProblemListUpdate(ArrayList<Problem> problemList);
+        void onProblemDeleted(Problem problem);
     }
 
     public ProblemsListPresenter (View view, ThreadExecutor threadExecutor, MainThread mainThread,

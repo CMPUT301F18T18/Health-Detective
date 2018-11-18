@@ -200,4 +200,10 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         this.adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onProblemDeleted(Problem problem) {
+        this.problemList.remove(problem);
+        this.adapter.notifyDataSetChanged();
+    }
+
 }
