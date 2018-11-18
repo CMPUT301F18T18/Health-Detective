@@ -92,6 +92,5 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String email = emailText.getText().toString();
                 signUpPresenter.createNewUser(this,user,email,phone);
         }
-
     }
 }

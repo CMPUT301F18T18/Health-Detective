@@ -52,9 +52,9 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
     @Override
     public void onCUPPatientSuccess(Patient patient) {
         // Not sure what you do with this information but here it is
-        Intent intent = new Intent(this.context ,PatientProblemsActivity.class);
+        Intent intent = new Intent(context, PatientProblemsActivity.class);
         intent.putExtra("PATIENT", patient);
-        Toast.makeText(context, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
         context.startActivity(intent);
     }
 
@@ -65,22 +65,22 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
     @Override
     public void onCUPInvalidID() {
-        Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPInvalidEmail() {
-        Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPInvalidPhoneNumber() {
-        Toast.makeText(context, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onCUPFail() {
-        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
     }
 
 }
