@@ -9,7 +9,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 //TODO: Make the all photo section increase with each photo addition
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 
 public class PatientRecordViewActivity extends AppCompatActivity {
 
@@ -61,6 +65,40 @@ public class PatientRecordViewActivity extends AppCompatActivity {
         test();
         test();
         test();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // being able to use the menu at the top of the app
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_title:
+                return true;
+            case R.id.edit_date:
+                return true;
+            case R.id.edit_desc:
+                return true;
+            case R.id.edit_photo:
+                return true;
+
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    public void changeActivity(Intent intent){
+        startActivity(intent);
     }
 
     public void test(){
