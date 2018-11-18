@@ -40,9 +40,6 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
             return;
         }
 
-        //Delete problem
-        this.problemRepo.deleteProblem(problem);
-        this.patient.removeProblem(problem);
         this.mainThread.post(new Runnable(){
 
             @Override
@@ -50,5 +47,9 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
                 callback.onDPSuccess(problem);
             }
         });
+
+        //Delete problem
+        this.problemRepo.deleteProblem(problem);
+        this.patient.removeProblem(problem);
     }
 }

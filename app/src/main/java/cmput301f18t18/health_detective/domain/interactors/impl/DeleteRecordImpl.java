@@ -40,9 +40,6 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
             return;
         }
 
-        //Delete Record
-        this.recordRepo.deleteRecord(record);
-        this.problem.removeRecord(record);
         this.mainThread.post(new Runnable(){
 
             @Override
@@ -50,6 +47,10 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
                 callback.onDRSuccess(record);
             }
         });
+
+        //Delete Record
+        this.recordRepo.deleteRecord(record);
+        this.problem.removeRecord(record);
     }
 
 }
