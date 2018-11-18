@@ -41,19 +41,20 @@ public class ProblemListAdapter extends ArrayAdapter {
         View rowView = view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         rowView = inflater.inflate(R.layout.ind_problem_view, null, true);
-        ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
-        deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
 
+
+        ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView editImg = rowView.findViewById(R.id.editImg);
         TextView titleText = rowView.findViewById(R.id.probTitle);
         TextView descText = rowView.findViewById(R.id.descText);
-        editImg.setImageResource(R.drawable.baseline_create_black_48);
+        TextView recordBut = rowView.findViewById(R.id.recordsBut);
 
+        editImg.setImageResource(R.drawable.baseline_create_black_48);
+        deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
 
         Problem data = problemList.get(postition);
         titleText.setText(data.getTitle());
         descText.setText(data.getDescription());
-
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +70,13 @@ public class ProblemListAdapter extends ArrayAdapter {
                 listener.onEditClicked(problemList.get(postition));
             }
         }));
+
+        recordBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onRecordsClicked(problemList.get(postition));
+            }
+        });
 
         return rowView;
     }

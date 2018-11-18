@@ -40,7 +40,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
     Patient patientContext;
-    ProblemOnClickListener listener;
 
 
     @Override
@@ -61,7 +60,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 ElasticSearchController.getInstance()
         );
 
-        ImageView addProblem = (ImageView) findViewById(R.id.addProbBtn);
+        ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
 
@@ -70,25 +69,17 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
         adapter = new ProblemListAdapter(this, this.problemList, this);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(PatientProblemsActivity.this, "CLick", Toast.LENGTH_SHORT);
-                toast.show();
-                Intent recordsIntent = new Intent(PatientProblemsActivity.this, PatientRecordsActivity.class);
-                recordsIntent.putExtra("PROBLEM", problemList.get(position));
-                startActivity(recordsIntent);
-            }
-        });
-
-        this.problemsListPresenter.getProblems(this.patientContext);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.adapter.notifyDataSetChanged();
         this.problemsListPresenter.getProblems(this.patientContext);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Logout button works don't remove
     }
 
     @Override
@@ -132,7 +123,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
             problemsIntent.putExtra("PATIENT", this.patientContext);
             startActivity(problemsIntent);
-            //this.problemsListPresenter.createProblems(patientContext, "test", "test", new Date());
         }
     }
 
@@ -156,6 +146,13 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onEditClicked(Problem problem) {
+    }
+
+    @Override
+    public void onRecordsClicked(Problem problem) {
+        Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
+        recordsIntent.putExtra("PROBLEM", problem);
+        startActivity(recordsIntent);
     }
 
 }
