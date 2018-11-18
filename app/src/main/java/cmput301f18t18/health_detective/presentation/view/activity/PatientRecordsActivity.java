@@ -94,7 +94,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordBtn){
-            recordListPresenter.createUserRecord(this, problemContext, "test", "test", new Date());
+            recordListPresenter.createUserRecord(this, problemContext, "test", "test", new Date(), "test");
             adapter.notifyDataSetChanged();
         }
     }

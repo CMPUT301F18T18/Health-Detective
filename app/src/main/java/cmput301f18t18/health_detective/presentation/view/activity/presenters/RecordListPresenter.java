@@ -59,7 +59,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     }
 
-    public void createUserRecord(Context context, Problem problem, String recordTitle, String recordComment, Date recordDate){
+    public void createUserRecord(Context context, Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
         this.context = context;
 
         CreateRecord createRecord = new CreateRecordImpl(
@@ -71,7 +71,8 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
                 problem,
                 recordTitle,
                 recordComment,
-                recordDate
+                recordDate,
+                userId
         );
 
         createRecord.execute();

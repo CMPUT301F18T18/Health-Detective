@@ -1,70 +1,61 @@
 package cmput301f18t18.health_detective.domain.interactors.impl;
 
-import java.util.Date;
-
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.interactors.DeleteRecord;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.CreateRecord;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
-public class CreateRecordImpl extends AbstractInteractor implements CreateRecord {
+public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord {
 
-    private CreateRecord.Callback callback;
+    private DeleteRecord.Callback callback;
     private ProblemRepo problemRepo;
     private RecordRepo recordRepo;
+    private Record record;
     private Problem problem;
-    private String recordTitle;
-    private String recordComment;
-    private Date date;
-    private String authorId;
 
-    public CreateRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                            CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
-                            Problem problem, String recordTitle, String recordComment, Date date, String authorId)
+    public DeleteRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
+                            DeleteRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
+                            Problem problem, Record record)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
         this.problemRepo = problemRepo;
         this.recordRepo = recordRepo;
+        this.record = record;
         this.problem = problem;
-        this.recordTitle = recordTitle;
-        this.recordComment = recordComment;
-        this.date = date;
-        this.authorId = authorId;
     }
 
     @Override
     public void run() {
-        if(recordTitle == null){
+        // Need check for problem
+        //Record cannot be found
+        if(recordRepo.retrieveRecordById(record.recordId) == null){
             this.mainThread.post(new Runnable() {
-
                 @Override
                 public void run() {
-                    callback.onCRNullTitle();
+                    callback.onDRNotFound();
                 }
             });
 
             return;
         }
 
-        if(recordComment == null) recordComment = "";
-
-        Record newRecord = new Record(recordTitle,recordComment);
-
-        //Add record to recordRepo
-        recordRepo.insertRecord(newRecord);
-        problem.addRecord(newRecord);
-        problemRepo.updateProblem(problem);
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onCRSuccess();
+                callback.onDRSuccess(record);
             }
         });
+
+        //Delete Record
+        this.recordRepo.deleteRecord(record);
+        this.problem.removeRecord(record);
+        this.problemRepo.updateProblem(problem);
     }
+
 }

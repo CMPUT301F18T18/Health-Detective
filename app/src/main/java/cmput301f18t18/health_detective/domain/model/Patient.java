@@ -29,6 +29,12 @@ public class Patient extends User {
 
     public void addProblem(Integer problemID) { problemIds.add(problemID); }
 
+    public void removeProblem(Problem problem) {
+        problemIds.remove(problem.getProblemID());
+    }
+
+    public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
+
     public boolean isProblemsEmpty() {
         return problemIds.isEmpty();
     }

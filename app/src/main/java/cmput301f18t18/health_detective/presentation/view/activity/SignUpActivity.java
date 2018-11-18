@@ -1,6 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,17 +9,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignUpPresenter.View {
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
@@ -27,33 +31,51 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().hide();
 
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
-
+        ImageView image = findViewById(R.id.imageView2);
+        image.setImageResource(R.drawable.ic_launcher_background);
 
         signUpPresenter = new SignUpPresenter(
+                this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                new UserRepoMock()
+                ElasticSearchController.getInstance()
         );
 
-
-
-
         Button signUp = findViewById(R.id.signUpBtn);
-        Button cancel = findViewById(R.id.cancelButton);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
-        cancel.setOnClickListener(this);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        // Set back ground to null so memory is not being hogged
+        View window = getWindow().getDecorView();
+        if (window.getBackground() != null) {
+            window.setBackground(null);
+        }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Restore background
+        View window = getWindow().getDecorView();
+        if (window.getBackground() == null) {
+            window.getBackground().setCallback(null);
+            window.setBackground(getDrawable(R.drawable.login_background));
+        }
     }
 
     @Override
@@ -76,10 +98,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.PcheckBox:
                 careCheck.setChecked(false);
                 break;
-            case R.id.cancelButton:
-                Intent intentReturn = new Intent(this,MainActivity.class);
-                //changeActivity(intentReturn);
-                break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP
                 // call presenter method createNewUser
@@ -90,7 +108,35 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(this,user,email,phone);
+                signUpPresenter.createNewUser(user,email,phone);
         }
+    }
+
+    @Override
+    public void onCreatePatient(Patient patient) {
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        intent.putExtra("PATIENT", patient);
+        Toast.makeText(this, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void onCreateCareProvider(CareProvider careProvider) {
+
+    }
+
+    @Override
+    public void onInvalidId() {
+        Toast.makeText(this, "Invalid Id", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInvalidEmail() {
+        Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInvalidPhoneNumber() {
+        Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
     }
 }

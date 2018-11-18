@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 public interface DeleteProblem extends Interactor {
     interface Callback {
         void onDPSuccess(Problem problem);
+        void onDPNotFound();
         void onDPFail();
     }
 }

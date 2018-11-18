@@ -19,17 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
 
 public class ProblemListAdapter extends ArrayAdapter {
 
     private Context mContext;
-    private List<String> testList = new ArrayList<>();
+    private List<Problem> problemList = new ArrayList<>();
+    private ProblemOnClickListener listener;
 
 
-    public ProblemListAdapter(@NonNull Activity context, ArrayList<String> list) {
+    public ProblemListAdapter(@NonNull Activity context, ArrayList<Problem> list, ProblemOnClickListener listener) {
         super(context, R.layout.ind_problem_view, list);
-        mContext = context;
-        testList = list;
+        this.mContext = context;
+        this.problemList = list;
+        this.listener = listener;
     }
 
     @Override
@@ -41,23 +45,20 @@ public class ProblemListAdapter extends ArrayAdapter {
         deleteImg.setImageResource(R.drawable.delete);
 
         ImageView editImg = (ImageView) rowView.findViewById(R.id.editImg);
+        TextView titleText = rowView.findViewById(R.id.probTitle);
+        TextView descText = rowView.findViewById(R.id.descText);
         editImg.setImageResource(R.drawable.editpencil);
 
-        TextView titleText = rowView.findViewById(R.id.probTitle);
 
-        String data = testList.get(postition);
-        titleText.setText(data);
-
-        TextView descText = rowView.findViewById(R.id.descText);
-        descText.setText(data);
+        Problem data = problemList.get(postition);
+        titleText.setText(data.getTitle());
+        descText.setText(data.getDescription());
 
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
-//                toast.show();
-                //test();
+                listener.onDeleteClicked(problemList.get(postition));
             }
 
         });
@@ -65,13 +66,11 @@ public class ProblemListAdapter extends ArrayAdapter {
         editImg.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast toast = Toast.makeText(mContext, "Edit"+ testList.get(postition), Toast.LENGTH_SHORT);
-//                toast.show();
+                listener.onEditClicked(problemList.get(postition));
             }
         }));
 
         return rowView;
-
     }
 
 
