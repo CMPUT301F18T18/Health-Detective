@@ -17,17 +17,20 @@ import cmput301f18t18.health_detective.presentation.view.activity.PatientProblem
 
 public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback {
 
-    private Context context;
+    private View view;
     private ThreadExecutor threadExecutor;
     private MainThread mainThread;
     private ProblemRepo problemRepo;
     private UserRepo userRepo;
     private PatientProblemsActivity activity;
 
-    public ProblemsListPresenter (PatientProblemsActivity activity, Context context, ThreadExecutor threadExecutor, MainThread mainThread,
+    public interface View {
+        void onProblemListUpdate(ArrayList<Problem> problemList);
+    }
+
+    public ProblemsListPresenter (View view, ThreadExecutor threadExecutor, MainThread mainThread,
                                   ProblemRepo problemRepo, UserRepo userRepo) {
-        this.activity = activity;
-        this.context = context;
+        this.view = view;
         this.threadExecutor = threadExecutor;
         this.mainThread = mainThread;
         this.problemRepo = problemRepo;
@@ -63,11 +66,11 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
 
     @Override
     public void onGPSuccess(ArrayList<Problem> patientProblems) {
-        this.activity.setProblemList(patientProblems);
+        this.view.onProblemListUpdate(patientProblems);
     }
 
     @Override
     public void onGPNoProblems() {
-
+        this.view.onProblemListUpdate(new ArrayList<Problem>());
     }
 }

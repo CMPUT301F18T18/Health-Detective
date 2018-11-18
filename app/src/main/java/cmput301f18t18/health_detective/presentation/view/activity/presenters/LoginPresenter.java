@@ -16,21 +16,28 @@ import cmput301f18t18.health_detective.presentation.view.activity.PatientProblem
 
 public class LoginPresenter implements UserLogin.Callback {
 
+    private View view;
     private ThreadExecutor threadExecutor;
     private MainThread mainThread;
     private UserRepo userRepo;
-    private Context context;
 
-    public LoginPresenter(ThreadExecutor threadExecutor, MainThread mainThread,
+    public interface View {
+        void onLoginPatient(Patient patient);
+        void onLoginCareProvider(CareProvider careProvider);
+        void onInvalidUserId();
+        void onUserDoesNotExist();
+    }
+
+    public LoginPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
                            UserRepo userRepo)
     {
+        this.view = view;
         this.threadExecutor = threadExecutor;
         this.mainThread = mainThread;
         this.userRepo = userRepo;
     }
 
-    public void tryLogin(Context context, String userId){
-        this.context = context;
+    public void tryLogin(String userId){
 
         UserLogin command = new UserLoginImpl(
                 this.threadExecutor,
@@ -45,26 +52,22 @@ public class LoginPresenter implements UserLogin.Callback {
 
     @Override
     public void onLoginPatientSuccess(Patient patient) {
-        // Not sure what you do with this information but here it is
-        Intent intent = new Intent(context, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
-        Toast.makeText(context, "Logging in", Toast.LENGTH_SHORT).show();
-        context.startActivity(intent);
+        this.view.onLoginPatient(patient);
     }
 
     @Override
     public void onLoginCareProviderSuccess(CareProvider careProvider) {
-
+        this.view.onLoginCareProvider(careProvider);
     }
 
     @Override
     public void onLoginInvalidUserId() {
-        Toast.makeText(context, "Invalid UserId", Toast.LENGTH_SHORT).show();
+        this.view.onInvalidUserId();
     }
 
     @Override
     public void onLoginUserDoesNotExist() {
-        Toast.makeText(context, "User does not exist", Toast.LENGTH_SHORT).show();
+        this.view.onUserDoesNotExist();
     }
 
     @Override

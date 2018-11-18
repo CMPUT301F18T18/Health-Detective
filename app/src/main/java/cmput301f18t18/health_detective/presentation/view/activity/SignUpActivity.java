@@ -9,15 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignUpPresenter.View {
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
@@ -32,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         emailText = findViewById(R.id.emailEdit);
 
         signUpPresenter = new SignUpPresenter(
+                this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
                 ElasticSearchController.getInstance()
@@ -46,9 +50,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
         cancel.setOnClickListener(this);
-
-
-
     }
 
     @Override
@@ -73,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.cancelButton:
                 Intent intentReturn = new Intent(this,MainActivity.class);
-                //changeActivity(intentReturn);
+                startActivity(intentReturn);
                 break;
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP
@@ -85,7 +86,35 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(this,user,email,phone);
+                signUpPresenter.createNewUser(user,email,phone);
         }
+    }
+
+    @Override
+    public void onCreatePatient(Patient patient) {
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        intent.putExtra("PATIENT", patient);
+        Toast.makeText(this, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void onCreateCareProvider(CareProvider careProvider) {
+
+    }
+
+    @Override
+    public void onInvalidId() {
+        Toast.makeText(this, "Invalid Id", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInvalidEmail() {
+        Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInvalidPhoneNumber() {
+        Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
     }
 }

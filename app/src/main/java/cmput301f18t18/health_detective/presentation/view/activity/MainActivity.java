@@ -7,15 +7,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+                                                                LoginPresenter.View {
     private TextView signUp;
     private EditText userIdField;
     LoginPresenter loginPresenter;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         this.loginPresenter = new LoginPresenter(
+                this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
                 ElasticSearchController.getInstance()
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.loginButton:
                 String userId = userIdField.getText().toString().trim();
-                loginPresenter.tryLogin(this, userId);
+                loginPresenter.tryLogin(userId);
                 break;
             case R.id.signUpText:
                 Intent signUpIntent = new Intent(this,SignUpActivity.class);
@@ -58,5 +63,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void changeActivity(Intent intent){
         startActivity(intent);
+    }
+
+    @Override
+    public void onLoginPatient(Patient patient) {
+        // Not sure what you do with this information but here it is
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        intent.putExtra("PATIENT", patient);
+        Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show();
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void onLoginCareProvider(CareProvider careProvider) {
+
+    }
+
+    @Override
+    public void onInvalidUserId() {
+        Toast.makeText(this, "Invalid UserId", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserDoesNotExist() {
+        Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
     }
 }

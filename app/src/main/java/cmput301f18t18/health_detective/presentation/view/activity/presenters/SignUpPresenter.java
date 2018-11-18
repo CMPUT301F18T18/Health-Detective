@@ -16,23 +16,30 @@ import cmput301f18t18.health_detective.presentation.view.activity.PatientProblem
 
 public class SignUpPresenter implements CreateUserProfile.Callback {
 
+    private View view;
     private ThreadExecutor threadExecutor;
     private MainThread mainThread;
     private UserRepo userRepo;
-    private Context context;
 
-    public SignUpPresenter(ThreadExecutor threadExecutor, MainThread mainThread,
+    public interface View {
+        void onCreatePatient(Patient patient);
+        void onCreateCareProvider(CareProvider careProvider);
+        void onInvalidId();
+        void onInvalidEmail();
+        void onInvalidPhoneNumber();
+    }
+
+    public SignUpPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
                            UserRepo userRepo)
     {
+        this.view = view;
         this.threadExecutor = threadExecutor;
         this.mainThread = mainThread;
         this.userRepo = userRepo;
     }
 
 
-    public void createNewUser(Context context, String userName, String userEmail, String userPhoneNum){
-        this.context = context;
-
+    public void createNewUser(String userName, String userEmail, String userPhoneNum){
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
                 this.threadExecutor,
@@ -51,36 +58,33 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
     @Override
     public void onCUPPatientSuccess(Patient patient) {
-        // Not sure what you do with this information but here it is
-        Intent intent = new Intent(context, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
-        //Toast.makeText(context, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
-        context.startActivity(intent);
+        this.view.onCreatePatient(patient);
     }
 
     @Override
     public void onCUPCareProviderSuccess(CareProvider careProvider) {
         // Not sure what you do with this information but here it is
+
     }
 
     @Override
     public void onCUPInvalidID() {
-        Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
+        this.view.onInvalidId();
     }
 
     @Override
     public void onCUPInvalidEmail() {
-        Toast.makeText(context, "Invalid Email", Toast.LENGTH_SHORT).show();
+        this.view.onInvalidEmail();
+
     }
 
     @Override
     public void onCUPInvalidPhoneNumber() {
-        Toast.makeText(context, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+        this.view.onInvalidPhoneNumber();
     }
 
     @Override
     public void onCUPFail() {
-        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
     }
 
 }
