@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
     Patient patientContext;
+    ProblemOnClickListener listener;
 
 
     @Override
@@ -71,8 +73,11 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent problemsIntent = new Intent(PatientProblemsActivity.this, PatientRecordsActivity.class);
-                startActivity(problemsIntent);
+                Toast toast = Toast.makeText(PatientProblemsActivity.this, "CLick", Toast.LENGTH_SHORT);
+                toast.show();
+                Intent recordsIntent = new Intent(PatientProblemsActivity.this, PatientRecordsActivity.class);
+                recordsIntent.putExtra("PROBLEM", problemList.get(position));
+                startActivity(recordsIntent);
             }
         });
 
@@ -152,4 +157,5 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void onEditClicked(Problem problem) {
     }
+
 }

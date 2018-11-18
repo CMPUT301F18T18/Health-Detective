@@ -42,6 +42,8 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     public interface View {
         void onRecordListUpdate(ArrayList<Record> recordList);
         void onRecordDeleted(Record record);
+        void onCreateRecord();
+        void onCreateRecordFail();
     }
 
     public RecordListPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
@@ -67,24 +69,23 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     }
 
-//    public void createUserRecord(Context context, Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
-//        this.context = context;
-//
-//        CreateRecord createRecord = new CreateRecordImpl(
-//                this.threadExecutor,
-//                this.mainThread,
-//                this,
-//                this.problemRepo,
-//                this.recordRepo,
-//                problem,
-//                recordTitle,
-//                recordComment,
-//                recordDate,
-//                userId
-//        );
-//
-//        createRecord.execute();
-//    }
+    public void createUserRecord(Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
+
+        CreateRecord createRecord = new CreateRecordImpl(
+                this.threadExecutor,
+                this.mainThread,
+                this,
+                this.problemRepo,
+                this.recordRepo,
+                problem,
+                recordTitle,
+                recordComment,
+                recordDate,
+                userId
+        );
+
+        createRecord.execute();
+    }
 
     public void deleteUserRecords(Problem problem, Record record){
         DeleteRecord deleteRecord = new DeleteRecordImpl(
@@ -114,22 +115,18 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     @Override
     public void onCRSuccess() {
-        //Intent intent = new Intent(context, PatientRecordViewActivity.class);
-        //intent.putExtra("RECORD", record);
-        Toast.makeText(context, "New Record Added", Toast.LENGTH_SHORT).show();
-        //context.startActivity(intent);
+        this.view.onCreateRecord();
     }
 
     @Override
     public void onCRNullTitle() {
-        Toast.makeText(context, "not added", Toast.LENGTH_SHORT).show();
 
     }
 
 
     @Override
     public void onCRFail() {
-        Toast.makeText(context, "record not added", Toast.LENGTH_SHORT).show();
+        this.view.onCreateRecordFail();
 
     }
 

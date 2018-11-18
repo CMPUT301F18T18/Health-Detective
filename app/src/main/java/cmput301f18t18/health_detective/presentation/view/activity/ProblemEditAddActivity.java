@@ -39,15 +39,12 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         Intent intent = getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
 
-        UserRepo userRepo = new UserRepoMock();
-        userRepo.insertUser(patientContext);
-
         problemAddEditPresenter = new ProblemAddEditPresenter(
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
                 ElasticSearchController.getInstance(),
-                userRepo
+                ElasticSearchController.getInstance()
         );
 
         problemTitle = findViewById(R.id.problemTitle);
@@ -70,7 +67,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                 String probDesc = problemDesc.getText().toString();
 
                 problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, new Date());
-
                 break;
             case R.id.cancelBtn:
                 finish();
