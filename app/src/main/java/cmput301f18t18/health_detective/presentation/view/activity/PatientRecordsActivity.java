@@ -13,14 +13,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
+import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
+import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
 public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener{
 
     ListView listView;
     RecordListAdapter adapter;
-    ArrayList<String> testList = new ArrayList<>();
+    ArrayList<Record> recordList = new ArrayList<>();
+    RecordListPresenter recordListPresenter;
+    Problem problemContext;
 
 
 //    TextView recTitleView = findViewById(R.id.recordTitle);
@@ -35,16 +46,37 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
 
-        ImageView addRecordBtn = findViewById(R.id.addRecordBtn);
-        addRecordBtn.setOnClickListener(this);
+        Intent newIntent = this.getIntent();
+        this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
+
+        //testing stuff
+        ProblemRepo problemRepo = new ProblemRepoMock();
+        problemContext = new Problem();
+        problemRepo.insertProblem(this.problemContext);
+
+        adapter = new RecordListAdapter(this, recordList);
+
+        recordListPresenter = new RecordListPresenter(
+                ThreadExecutorImpl.getInstance(),
+                MainThreadImpl.getInstance(),
+                problemRepo,
+                new RecordRepoMock(),
+                adapter,
+                PatientRecordsActivity.this
+        );
+
+        Button addRecBtn = findViewById(R.id.addRecordBtn);
+        addRecBtn.setOnClickListener(PatientRecordsActivity.this);
 
         final Context context = PatientRecordsActivity.this;
         listView = findViewById(R.id.recordListView);
-        testList.add("test");
-        testList.add("test2");
+        //recordList.add("test");
+        //recordList.add(new Record());
 
+        recordListPresenter.getUserRecords(problemContext);
 
-        adapter = new RecordListAdapter(this, testList);
+        //adapter = new RecordListAdapter(this, recordList);
+        adapter = recordListPresenter.getAdapter();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,7 +94,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordBtn){
-
+            recordListPresenter.createUserRecord(this, problemContext, "test", "test", new Date());
+            adapter.notifyDataSetChanged();
         }
     }
 

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.loginButton:
                 Intent problemsIntent = new Intent(this,PatientProblemsActivity.class);
                 String userId = signUp.getText().toString();
-                loginPresenter.tryLogin(userId);
+                loginPresenter.tryLogin(this, userId);
 
                 changeActivity(problemsIntent);
                 break;

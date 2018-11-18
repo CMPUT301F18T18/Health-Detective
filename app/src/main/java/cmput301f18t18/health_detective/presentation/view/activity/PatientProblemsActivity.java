@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -105,5 +104,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     public void changeActivity(Intent intent){
         startActivity(intent);
+    }
+
+    public android.app.FragmentManager test(){
+        return this.getFragmentManager();
     }
 }

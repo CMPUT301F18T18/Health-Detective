@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import cmput301f18t18.health_detective.R;
 
-public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFragment.onDialogFragmentClickListener{
+public class ProblemListAdapter extends ArrayAdapter {
 
     private Context mContext;
     private List<String> testList = new ArrayList<>();
@@ -73,23 +74,5 @@ public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFra
 
     }
 
-    @Override
-    public void onPosBtnClicked(Boolean userClick) {
-        Toast toast = Toast.makeText(mContext, "Edit", Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    @Override
-    public void onNegBtnClicked(Boolean userClick) {
-        Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    protected void test(){
-        DialogFragment newFrag = GeneralDialogFragment.newInstance("test", "test", "test");
-        FragmentManager test = newFrag.getFragmentManager();
-        newFrag.show(test, "dialog");
-
-    }
 
 }
