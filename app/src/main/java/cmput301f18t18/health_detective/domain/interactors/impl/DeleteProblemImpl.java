@@ -7,20 +7,23 @@ import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
+import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class DeleteProblemImpl extends AbstractInteractor implements DeleteProblem {
 
     private DeleteProblem.Callback callback;
+    private UserRepo userRepo;
     private ProblemRepo problemRepo;
     private Patient patient;
     private Problem problem;
 
     public DeleteProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                             DeleteProblem.Callback callback, ProblemRepo problemRepo,
+                             DeleteProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
                              Patient patient, Problem problem)
     {
         super(threadExecutor, mainThread);
         this.callback = callback;
+        this.userRepo = userRepo;
         this.problemRepo = problemRepo;
         this.patient = patient;
         this.problem = problem;
@@ -28,7 +31,8 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
 
     @Override
     public void run() {
-        //Problem cannot be found
+        // Need check for patient
+        // Problem cannot be found
         if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
@@ -51,5 +55,6 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
         //Delete problem
         this.problemRepo.deleteProblem(problem);
         this.patient.removeProblem(problem);
+        this.userRepo.updateUser(patient);
     }
 }
