@@ -6,7 +6,6 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 
 public class LoginPresenter implements UserLogin.Callback {
 
-
     String userId;
 
     public void tryLogin(String userId){
