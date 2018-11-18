@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
@@ -89,14 +90,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(getApplicationContext(),user,email,phone);
+                signUpPresenter.createNewUser(this,user,email,phone);
         }
 
-    }
-
-    public void changeActivity(Patient patient){
-        Intent intent = new Intent(this,PatientProblemsActivity.class);
-        intent.putExtra("patient", patient);
-        startActivity(intent);
     }
 }

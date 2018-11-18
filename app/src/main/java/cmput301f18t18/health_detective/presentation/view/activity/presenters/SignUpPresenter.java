@@ -31,6 +31,8 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
 
     public void createNewUser(Context context, String userName, String userEmail, String userPhoneNum){
+        this.context = context;
+
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
                 this.threadExecutor,
