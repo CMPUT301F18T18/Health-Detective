@@ -63,7 +63,7 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
     @Override
     public void onCUPInvalidID() {
-        //Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Invalid Id", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -3,7 +3,9 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,7 @@ public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFra
             public void onClick(View v) {
 //                Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
 //                toast.show();
+                //test();
             }
 
         });
@@ -81,4 +84,12 @@ public class ProblemListAdapter extends ArrayAdapter implements GeneralDialogFra
         Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    protected void test(){
+        DialogFragment newFrag = GeneralDialogFragment.newInstance("test", "test", "test");
+        FragmentManager test = newFrag.getFragmentManager();
+        newFrag.show(test, "dialog");
+
+    }
+
 }
