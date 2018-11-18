@@ -37,4 +37,5 @@ public class LoginPresenter implements UserLogin.Callback {
     public void onLoginCouldNotDetemineUserType() {
 
     }
+
 }

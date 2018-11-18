@@ -29,10 +29,12 @@
             android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
         <activity android:name=".presentation.view.activity.PatientRecordViewActivity"
             android:parentActivityName=".presentation.view.activity.PatientRecordsActivity"/>
-        <activity android:name=".presentation.view.activity.PhotoViewActivity"></activity>
+        <activity android:name=".presentation.view.activity.PhotoViewActivity"/>
+        <activity android:name=".presentation.view.activity.presenters.MapActivity"></activity>
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
     </application>
 
 </manifest>

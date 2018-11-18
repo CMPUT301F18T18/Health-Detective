@@ -15,6 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
 public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener{
@@ -66,7 +67,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -79,6 +80,16 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             case R.id.app_bar_search:
                 Intent searchIntent = new Intent(this,SearchActivity.class);
                 changeActivity(searchIntent);
+                return true;
+
+            case R.id.Map_option:
+                Intent mapIntent = new Intent(this,MapActivity.class);
+                changeActivity(mapIntent);
+                return true;
+
+            case R.id.Logout_option:
+                Intent logoutIntent = new Intent(this,MainActivity.class);
+                changeActivity(logoutIntent);
                 return true;
 
             default:
