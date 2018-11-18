@@ -21,11 +21,13 @@ import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
+import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
+import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener{
 
     ListView listView;
     RecordListAdapter adapter;
@@ -33,12 +35,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     RecordListPresenter recordListPresenter;
     Problem problemContext;
 
-
-//    TextView recTitleView = findViewById(R.id.recordTitle);
-//    TextView recUserView = findViewById(R.id.recordUser);
-//    TextView recDescView = findViewById(R.id.recordDesc);
-//    TextView recBLView = findViewById(R.id.recordBL);
-//    TextView recDateView = findViewById(R.id.recordDate);
 
 
     @Override
@@ -48,21 +44,76 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
+        ProblemRepo problemRepo = new ProblemRepoMock();
 
         //testing stuff
-        ProblemRepo problemRepo = new ProblemRepoMock();
-        problemContext = new Problem();
+       problemContext = new Problem(
+                1,
+                "Help I broke my shit",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
+                new Date());
+
         problemRepo.insertProblem(this.problemContext);
 
-        adapter = new RecordListAdapter(this, recordList);
+        Record record1 = new Record(
+                1,
+                "Killer Whale",
+                "The killer whale or orca is a toothed whale belonging to the oceanic dolphin family, " +
+                        "of which it is the largest member. Killer whales have a diverse diet, although individual " +
+                        "populations often specialize in particular types of prey.",
+                new Date());
+        Record record2 = new Record(
+                2,
+                "Sperm Whale",
+                "The sperm whale or cachalot is the largest of the toothed whales and the largest toothed predator." +
+                        " It is the only living member of genus Physeter and one of three extant species in the sperm whale " +
+                        "family, along with the pygmy sperm whale and dwarf sperm whale of the genus Kogia.",
+                new Date());
+        Record record3 = new Record(
+                3,
+                "Beluga Whale",
+                "The beluga whale or white whale is an Arctic and sub-Arctic cetacean. " +
+                        "It is 1 of 2 members of the family Monodontidae, along with the narwhal, " +
+                        "and the only member of the genus Delphinapterus",
+                new Date());
+        Record record4 = new Record(
+                4,
+                "Narwhal",
+                "The narwhal, or narwhale, is a medium-sized toothed whale that possesses a " +
+                        "large \"tusk\" from a protruding canine tooth. It lives year-round in the Arctic" +
+                        " waters around Greenland, Canada, and Russia",
+                new Date());
+        Record record5 = new Record(
+                "Humpback Whale",
+                "The humpback whale is a species of baleen whale. One of the larger rorqual " +
+                        "species, adults range in length from 12–16 m and weigh around 25–30 metric tons." +
+                        " The humpback has a distinctive body shape, with long pectoral fins and a knobbly head"
+        );
 
-        recordListPresenter = new RecordListPresenter(
+        RecordRepo recordRepo = new RecordRepoMock();
+
+        this.problemContext.addRecord(record1);
+        this.problemContext.addRecord(record2);
+        this.problemContext.addRecord(record3);
+        this.problemContext.addRecord(record5);
+        this.problemContext.addRecord(record4);
+
+
+        recordRepo.insertRecord(record1);
+        recordRepo.insertRecord(record2);
+        recordRepo.insertRecord(record3);
+        recordRepo.insertRecord(record4);
+
+
+
+        adapter = new RecordListAdapter(this, recordList, this);
+
+        this.recordListPresenter = new RecordListPresenter(
+                this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
                 problemRepo,
-                new RecordRepoMock(),
-                adapter,
-                PatientRecordsActivity.this
+                recordRepo
         );
 
         Button addRecBtn = findViewById(R.id.addRecordBtn);
@@ -76,7 +127,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         recordListPresenter.getUserRecords(problemContext);
 
         //adapter = new RecordListAdapter(this, recordList);
-        adapter = recordListPresenter.getAdapter();
+        adapter = new RecordListAdapter(this, this.recordList, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,17 +140,50 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             }
         });
 
+        this.recordListPresenter.getUserRecords(this.problemContext);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.recordListPresenter.getUserRecords(this.problemContext);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordBtn){
-            recordListPresenter.createUserRecord(this, problemContext, "test", "test", new Date(), "test");
+            //recordListPresenter.createUserRecord(this, problemContext, "test", "test", new Date(), "test");
             adapter.notifyDataSetChanged();
         }
     }
 
     public void changeActivity(Intent intent){
         startActivity(intent);
+    }
+
+    @Override
+    public void onDeleteClicked(Record record) {
+        //Toast toast = Toast.makeText(this, "Delete", Toast.LENGTH_SHORT);
+        //toast.show();
+        this.recordListPresenter.deleteUserRecords(problemContext, record);
+    }
+
+    @Override
+    public void onRecordListUpdate(ArrayList<Record> recordList) {
+        this.recordList.clear();
+        this.recordList.addAll(recordList);
+        this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRecordDeleted(Record record) {
+        this.recordList.remove(record);
+        this.adapter.notifyDataSetChanged();
     }
 }

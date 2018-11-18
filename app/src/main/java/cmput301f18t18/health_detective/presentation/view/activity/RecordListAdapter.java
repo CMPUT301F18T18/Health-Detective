@@ -16,17 +16,20 @@ import java.util.List;
 
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 
-public class RecordListAdapter extends ArrayAdapter implements View.OnClickListener{
+public class RecordListAdapter extends ArrayAdapter{
 
     private Context mContext;
     private List<Record> recordList = new ArrayList<>();
+    private RecordOnClickListener listener;
 
 
-    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list) {
+    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener) {
         super(context, R.layout.ind_record_view, list);
         mContext = context;
         recordList = list;
+        this.listener = listener;
     }
 
     @Override
@@ -54,19 +57,20 @@ public class RecordListAdapter extends ArrayAdapter implements View.OnClickListe
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         deleteImg.setImageResource(R.drawable.delete);
-        deleteImg.setOnClickListener(this);
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
 
+        deleteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDeleteClicked(recordList.get(postition));
+            }
+
+        });
+
         return rowView;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.deleteImg){
-            Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
+
 }
