@@ -25,12 +25,25 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
 
     @Override
     public void run() {
-        // Logic is unimplemented, so post failed
+        //Problem cannot be found
+        if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onDPNotFound();
+                }
+            });
+
+            return;
+        }
+
+        //Delete problem
+        this.problemRepo.deleteProblem(problem);
         this.mainThread.post(new Runnable(){
 
             @Override
             public void run() {
-                callback.onDPFail();
+                callback.onDPSuccess(problem);
             }
         });
     }
