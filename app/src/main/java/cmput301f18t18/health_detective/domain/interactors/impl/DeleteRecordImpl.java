@@ -31,13 +31,23 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
 
     @Override
     public void run() {
-        // Need check for problem
+        // Problem cannot be found
+        if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onDRProblemNotFound();
+                }
+            });
+
+            return;
+        }
         //Record cannot be found
         if(recordRepo.retrieveRecordById(record.recordId) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onDRNotFound();
+                    callback.onDRRecordNotFound();
                 }
             });
 
