@@ -3,8 +3,6 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -114,7 +112,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCreateProblem() {
+    public void onCreateProblem(Problem problem) {
             Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
             problemListIntent.putExtra("PATIENT", patientContext);
             this.startActivity(problemListIntent);

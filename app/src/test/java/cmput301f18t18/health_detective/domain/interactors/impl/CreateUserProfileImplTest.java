@@ -8,7 +8,6 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.mock.MainThreadMock;
 import cmput301f18t18.health_detective.domain.executor.mock.ThreadExecutorMock;
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
-import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;

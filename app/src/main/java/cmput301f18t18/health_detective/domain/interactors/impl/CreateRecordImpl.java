@@ -63,7 +63,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
             @Override
             public void run() {
-                callback.onCRSuccess();
+                callback.onCRSuccess(newRecord);
             }
         });
     }

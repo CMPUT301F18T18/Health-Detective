@@ -62,7 +62,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
             @Override
             public void run() {
-                callback.onCPSuccess();
+                callback.onCPSuccess(newProblem);
             }
         });
     }
