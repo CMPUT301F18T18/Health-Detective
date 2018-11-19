@@ -191,9 +191,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
 
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
-
-
-
     }
 
     @Override
