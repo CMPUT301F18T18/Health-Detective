@@ -126,7 +126,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_date:
-                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
+                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
