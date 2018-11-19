@@ -1,12 +1,15 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +18,8 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.EditDialog;
@@ -25,7 +30,7 @@ import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener{
+public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener{
 
     LinearLayout bodyPhotoScroll;
     Record record;
@@ -118,7 +123,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 return true;
             case R.id.edit_date:
                 String promptDate = "Edit Date";
-                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(),"date picker");
+                //recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
                 String promptDesc = "Edit Description";
@@ -171,4 +178,14 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
     }
 
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        Date currentDate = c.getTime();
+        recordViewPresenter.editUserRecord(record, record.getTitle(), record.getComment(),currentDate );
+
+    }
 }
