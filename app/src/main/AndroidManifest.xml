@@ -18,19 +18,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.view.activity.SignUpActivity"/>
-        <activity android:name=".presentation.view.activity.PatientProblemsActivity"
-            android:parentActivityName=".presentation.view.activity.MainActivity"/>
-        <activity android:name=".presentation.view.activity.ProblemEditAddActivity"
-            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
-        <activity android:name=".presentation.view.activity.SearchActivity"
-            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
-        <activity android:name=".presentation.view.activity.PatientRecordsActivity"
-            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity"/>
-        <activity android:name=".presentation.view.activity.PatientRecordViewActivity"
-            android:parentActivityName=".presentation.view.activity.PatientRecordsActivity"/>
-        <activity android:name=".presentation.view.activity.PhotoViewActivity"/>
-        <activity android:name=".presentation.view.activity.presenters.MapActivity"></activity>
+        <activity android:name=".presentation.view.activity.SignUpActivity" />
+        <activity
+            android:name=".presentation.view.activity.PatientProblemsActivity"
+            android:parentActivityName=".presentation.view.activity.MainActivity" />
+        <activity
+            android:name=".presentation.view.activity.ProblemEditAddActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity" />
+        <activity
+            android:name=".presentation.view.activity.SearchActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity" />
+        <activity
+            android:name=".presentation.view.activity.PatientRecordsActivity"
+            android:parentActivityName=".presentation.view.activity.PatientProblemsActivity" />
+        <activity
+            android:name=".presentation.view.activity.PatientRecordViewActivity"
+            android:parentActivityName=".presentation.view.activity.PatientRecordsActivity" />
+        <activity android:name=".presentation.view.activity.PhotoViewActivity" />
+        <activity android:name=".presentation.view.activity.presenters.MapActivity" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
