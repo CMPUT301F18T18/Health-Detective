@@ -41,7 +41,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     public interface View {
         void onRecordListUpdate(ArrayList<Record> recordList);
         void onRecordDeleted(Record record);
-        void onCreateRecord();
+        void onCreateRecord(Record record);
         void onCreateRecordFail();
     }
 
@@ -113,8 +113,8 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     }
 
     @Override
-    public void onCRSuccess() {
-        this.view.onCreateRecord();
+    public void onCRSuccess(Record record) {
+        this.view.onCreateRecord(record);
     }
 
     @Override

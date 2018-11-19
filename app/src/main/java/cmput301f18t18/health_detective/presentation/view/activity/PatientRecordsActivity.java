@@ -206,7 +206,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCreateRecord() {
+    public void onCreateRecord(Record record) {
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
         intent.putExtra("PROBLEM", problemContext);
         this.startActivity(intent);

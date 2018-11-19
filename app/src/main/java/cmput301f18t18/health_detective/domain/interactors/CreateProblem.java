@@ -5,7 +5,7 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 
 public interface CreateProblem extends Interactor {
     interface Callback {
-        void onCPSuccess();
+        void onCPSuccess(Problem problem);
         void onCPNullTitle();
         void onCPFail();
     }
