@@ -112,7 +112,7 @@ public class CreateProblemImplTest {
 class CreateProblemMockPresenter implements CreateProblem.Callback {
 
     private boolean CPSuccessProblem = false;
-    private boolean emptyTitle = false;
+    private boolean nullTitle = false;
     private Problem createdProblem = null;
 
     public boolean isCPSuccessProblem() {
@@ -120,7 +120,7 @@ class CreateProblemMockPresenter implements CreateProblem.Callback {
     }
 
     public boolean isCPNullTitle() {
-        return emptyTitle;
+        return nullTitle;
     }
 
     public Problem getCreatedProblem() {
@@ -135,7 +135,7 @@ class CreateProblemMockPresenter implements CreateProblem.Callback {
 
     @Override
     public void onCPNullTitle() {
-        this.emptyTitle = true;
+        this.nullTitle = true;
     }
 
     @Override
