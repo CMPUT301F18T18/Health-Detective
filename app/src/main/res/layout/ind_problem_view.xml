@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/probTitle"
+                android:id="@+id/titleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -62,7 +62,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
-                android:id="@+id/descText"
+                android:id="@+id/descView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -86,10 +86,10 @@
                 android:background="?android:attr/listDivider"
                 android:backgroundTint="@color/divider"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/descText"
+                app:layout_constraintBottom_toTopOf="@+id/descView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/probTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
             <View
                 android:id="@+id/divider2"
@@ -104,7 +104,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descText" />
+                app:layout_constraintTop_toBottomOf="@+id/descView" />
 
             <TextView
                 android:id="@+id/recordsBut"
