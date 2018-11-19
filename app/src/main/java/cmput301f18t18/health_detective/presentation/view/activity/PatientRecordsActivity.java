@@ -178,7 +178,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordsBtn){
-            recordListPresenter.createUserRecord(problemContext, "test", "test", new Date(), "test");
+            recordListPresenter.createUserRecord(problemContext, "test",
+                    "The humpback whale is a species of baleen whale. " +
+                            "One of the larger rorqual. species, adults range in length from 12–16 m and weigh around 25–30 metric tons.",
+                    new Date(), "test");
         }
     }
 

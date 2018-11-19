@@ -52,9 +52,6 @@ public class RecordListAdapter extends ArrayAdapter{
         TextView recordDate = rowView.findViewById(R.id.recordDate);
         recordDate.setText(record.getDate().toString());
 
-        TextView recordBL = rowView.findViewById(R.id.recordBL);
-        recordBL.setText("Body Part");
-
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         deleteImg.setImageResource(R.drawable.delete);
 
