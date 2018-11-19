@@ -15,7 +15,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 
 import static org.junit.Assert.*;
 
-public class CreateUserProfileTest {
+public class CreateUserProfileImplTest {
 
     private MainThread mainThread;
     private ThreadExecutor threadExecutor;
