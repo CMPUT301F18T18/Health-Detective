@@ -127,6 +127,8 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onEditProblem() {
+        Toast toast = Toast.makeText(this, "Problem Edited", Toast.LENGTH_SHORT);
+        toast.show();
         finish();
     }
 
