@@ -18,21 +18,39 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 
 public class PatientRecordViewActivity extends AppCompatActivity {
 
     LinearLayout bodyPhotoScroll;
+    Record record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
+
+        Intent newIntent = this.getIntent();
+        this.record = (Record) newIntent.getSerializableExtra("RECORD");
+
+        TextView recordTitle = findViewById(R.id.recTitle);
+        recordTitle.setText(record.getTitle());
+
+        TextView recordDate = findViewById(R.id.recordDate);
+        recordDate.setText(record.getDate().toString());
+
+        TextView recordDesc = findViewById(R.id.commentView);
+        recordDesc.setText(record.getComment());
+
+
 
         //stuff for all photos section
         GridViewAdapter adapter = new GridViewAdapter(this, 10);

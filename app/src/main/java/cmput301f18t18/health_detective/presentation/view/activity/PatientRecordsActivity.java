@@ -139,11 +139,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(context, "Record Click", Toast.LENGTH_SHORT);
-                toast.show();
-                Intent problemsIntent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
-                changeActivity(problemsIntent);
-
+                Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
+                intent.putExtra("RECORD", recordList.get(position));
+                changeActivity(intent);
             }
         });
 
@@ -165,8 +163,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordsBtn){
-            Toast toast = Toast.makeText(this, "Delete", Toast.LENGTH_SHORT);
-            toast.show();
             recordListPresenter.createUserRecord(problemContext, "test", "test", new Date(), "test");
         }
     }
@@ -177,15 +173,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onDeleteClicked(Record record) {
-        //Toast toast = Toast.makeText(this, "Delete", Toast.LENGTH_SHORT);
-        //toast.show();
+
         this.recordListPresenter.deleteUserRecords(problemContext, record);
     }
 
     @Override
     public void onRecordListUpdate(ArrayList<Record> recordList) {
-        Toast toast = Toast.makeText(this, "Delete", Toast.LENGTH_SHORT);
-        toast.show();
         this.recordList.clear();
         this.recordList.addAll(recordList);
         this.adapter.notifyDataSetChanged();

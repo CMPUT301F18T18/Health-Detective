@@ -34,7 +34,6 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     private MainThread mainThread;
     private ProblemRepo problemRepo;
     private RecordRepo recordRepo;
-    private Context context;
     private View view;
 
     //private RecordListAdapter adapter;

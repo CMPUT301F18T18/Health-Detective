@@ -30,6 +30,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     Problem problemContext;
     private TextView problemTitle, problemDate, problemDesc;
     ProblemAddEditPresenter problemAddEditPresenter;
+    Boolean type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,25 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
         Intent intent = getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
+        problemContext = (Problem) intent.getSerializableExtra("PROBLEM");
+
+        //true if editing problem, flase if creating new problem
+        if (patientContext == null){
+            type = true;
+        } else {
+            type = false;
+        }
+
+        problemTitle = findViewById(R.id.problemTitle);
+        problemDate = findViewById(R.id.problemDate);
+        problemDesc = findViewById(R.id.problemDesc);
+        if (type){
+            problemTitle.setText(problemContext.getTitle());
+            problemDate.setText(problemContext.getStartDate().toString());
+            problemDesc.setText(problemContext.getDescription());
+        }
+        //problemTitle.setText(problemContext.getTitle());
+
 
         problemAddEditPresenter = new ProblemAddEditPresenter(
                 this,
@@ -46,10 +66,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                 ElasticSearchController.getInstance(),
                 ElasticSearchController.getInstance()
         );
-
-        problemTitle = findViewById(R.id.problemTitle);
-        problemDate = findViewById(R.id.problemDate);
-        problemDesc = findViewById(R.id.problemDesc);
 
         Button cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);
@@ -65,8 +81,12 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             case R.id.saveBtn:
                 String probTitle = problemTitle.getText().toString();
                 String probDesc = problemDesc.getText().toString();
-
-                problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, new Date());
+                if (type){
+                    problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, new Date());
+                }
+                else {
+                    problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, new Date());
+                }
                 break;
             case R.id.cancelBtn:
                 finish();
@@ -76,9 +96,20 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateProblem() {
-        Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
-        problemListIntent.putExtra("PATIENT", patientContext);
-        this.startActivity(problemListIntent);
+        if (!type) {
+            Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
+            problemListIntent.putExtra("PATIENT", patientContext);
+            this.startActivity(problemListIntent);
+        } else {
+            Toast.makeText(this, "edit record", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    @Override
+    public void onEditProblem() {
+        Toast.makeText(this, "edit record", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
 }
