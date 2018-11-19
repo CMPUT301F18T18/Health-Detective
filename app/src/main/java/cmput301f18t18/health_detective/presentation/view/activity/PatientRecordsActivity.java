@@ -1,7 +1,9 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -195,8 +197,23 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onDeleteClicked(Record record) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setCancelable(true)
+                .setTitle("Are you sure you want to delete?")
+                .setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-        this.recordListPresenter.deleteUserRecords(problemContext, record);
+                    }
+                })
+                .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        recordListPresenter.deleteUserRecords(problemContext, record);
+                    }
+                });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
     @Override
