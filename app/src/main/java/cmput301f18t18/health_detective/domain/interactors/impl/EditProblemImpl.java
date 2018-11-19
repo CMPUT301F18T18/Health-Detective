@@ -60,6 +60,7 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     @Override
     public void run() {
+        // Missing title
         if (this.title == null || this.title.isEmpty()) {
             this.mainThread.post(new Runnable() {
 
@@ -71,7 +72,7 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
             return;
         }
-
+        // Missing Date
         if (this.startDate == null) {
             this.mainThread.post(new Runnable() {
                 @Override
@@ -92,5 +93,14 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.problemToEdit.setStartDate(this.startDate);
 
         this.problemRepo.updateProblem(this.problemToEdit);
+
+        // Problem added
+        this.mainThread.post(new Runnable(){
+
+            @Override
+            public void run() {
+                callback.onEPSuccess(problemToEdit);
+            }
+        });
     }
 }
