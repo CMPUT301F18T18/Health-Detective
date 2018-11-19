@@ -30,7 +30,7 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
 
 
     public interface AddView {
-        void onCreateProblem();
+        void onCreateProblem(Problem problem);
         void onEditProblem();
     }
 
@@ -79,8 +79,8 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     }
 
     @Override
-    public void onCPSuccess() {
-        this.addView.onCreateProblem();
+    public void onCPSuccess(Problem problem) {
+        this.addView.onCreateProblem(problem);
 
     }
 

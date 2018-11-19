@@ -99,6 +99,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             case R.id.Logout_option:
                 Intent logoutIntent = new Intent(this,MainActivity.class);
                 startActivity(logoutIntent);
+            case R.id.userId:
+                Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                startActivity(userIdIntent);
                 return true;
 
             default:
@@ -132,7 +135,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     }
 
     @Override
-    public void onDeleteClicked(Problem problem) {
+    public void onDeleteClicked(final Problem problem) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setCancelable(true)
                 .setTitle("Are you sure you want to delete?")
@@ -163,6 +166,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void onRecordsClicked(Problem problem) {
         Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
+        recordsIntent.putExtra("USER", patientContext);
         recordsIntent.putExtra("PROBLEM", problem);
         startActivity(recordsIntent);
     }
