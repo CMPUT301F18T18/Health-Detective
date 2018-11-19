@@ -60,10 +60,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 ElasticSearchController.getInstance()
         );
 
-
-
-
-
         //stuff for all photos section
         GridViewAdapter adapter = new GridViewAdapter(this, 10);
         GridView gridView = (GridView) findViewById(R.id.allPhotosView);
@@ -101,8 +97,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
-
-
         return true;
     }
 

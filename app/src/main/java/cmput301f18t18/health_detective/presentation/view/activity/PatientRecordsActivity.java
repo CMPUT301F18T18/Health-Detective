@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -99,6 +100,15 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // being able to use the menu at the top of the app
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
+
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -127,7 +137,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onDeleteClicked(Record record) {
+    public void onDeleteClicked(final Record record) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setCancelable(true)
                 .setTitle("Are you sure you want to delete?")
