@@ -123,7 +123,6 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     }
 
-
     @Override
     public void onCRFail() {
         this.view.onCreateRecordFail();
