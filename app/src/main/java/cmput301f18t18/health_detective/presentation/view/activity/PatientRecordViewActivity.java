@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.Date;
 
+import cmput301f18t18.health_detective.ExampleDialog;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
@@ -123,12 +124,15 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 this.onBackPressed();
                 return true;
             case R.id.edit_title:
+                openDialog();
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_date:
+                openDialog();
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_desc:
+                openDialog();
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_photo:
@@ -159,5 +163,11 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         recordTitle.setText(record.getTitle());
         recordDate.setText(record.getDate().toString());
         recordDesc.setText(record.getComment());
+    }
+
+    private void openDialog(){
+        ExampleDialog exampleDialog = new ExampleDialog();
+        exampleDialog.show(getSupportFragmentManager(), "Edit Dialog");
+
     }
 }

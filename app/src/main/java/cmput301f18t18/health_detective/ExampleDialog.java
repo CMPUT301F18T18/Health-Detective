@@ -12,7 +12,7 @@ import android.widget.EditText;
 import cmput301f18t18.health_detective.R;
 
 public class ExampleDialog extends AppCompatDialogFragment {
-    private EditText editTextTitle;
+    private EditText editText;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -31,11 +31,16 @@ public class ExampleDialog extends AppCompatDialogFragment {
                 .setPositiveButton("save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        String editTextString  = editText.getText().toString();
                     }
                 });
-        editTextTitle = view.findViewById(R.id.edit_title_dialog);
+        editText = view.findViewById(R.id.edit_title_dialog);
 
         return builder.create();
+    }
+
+    public interface ExampleDialogListener{
+        void applyEdit(String editedText);
+
     }
 }
