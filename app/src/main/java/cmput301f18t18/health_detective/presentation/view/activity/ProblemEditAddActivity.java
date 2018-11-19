@@ -68,7 +68,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                 ElasticSearchController.getInstance()
         );
 
-        Button cancelBtn = findViewById(R.id.cancelBtn);
+        TextView cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);
 
         cancelBtn.setOnClickListener(this);
