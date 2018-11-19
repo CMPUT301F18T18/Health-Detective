@@ -12,6 +12,5 @@ public interface CreateUserProfile extends Interactor {
         void onCUPInvalidID();
         void onCUPInvalidEmail();
         void onCUPInvalidPhoneNumber();
-        void onCUPFail();
     }
 }
