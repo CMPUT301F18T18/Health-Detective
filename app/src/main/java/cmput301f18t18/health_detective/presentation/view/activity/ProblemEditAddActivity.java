@@ -42,7 +42,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
         problemContext = (Problem) intent.getSerializableExtra("PROBLEM");
 
-        //true if editing problem, flase if creating new problem
+        //true if editing problem, false if creating new problem
         if (patientContext == null){
             type = true;
         } else {
@@ -115,19 +115,14 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateProblem() {
-        if (!type) {
             Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
             problemListIntent.putExtra("PATIENT", patientContext);
             this.startActivity(problemListIntent);
-        } else {
-            Toast.makeText(this, "edit record", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+
     }
 
     @Override
     public void onEditProblem() {
-        Toast.makeText(this, "edit record", Toast.LENGTH_SHORT).show();
         finish();
     }
 

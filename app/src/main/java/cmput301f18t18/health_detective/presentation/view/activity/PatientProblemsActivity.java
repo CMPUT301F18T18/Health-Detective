@@ -150,7 +150,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
         problemsIntent.putExtra("PROBLEM", problem);
         startActivity(problemsIntent);
-
     }
 
     @Override
