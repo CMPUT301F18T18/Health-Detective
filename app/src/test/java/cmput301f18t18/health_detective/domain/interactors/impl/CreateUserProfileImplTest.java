@@ -31,6 +31,7 @@ public class CreateUserProfileImplTest {
 
     }
 
+    // Testing patient is correctly created
     @Test
     public void testCUPPatient(){
         String goodId = "GoodIdGuy";
@@ -65,6 +66,7 @@ public class CreateUserProfileImplTest {
         assertEquals(users.retrievePatientById("GoodIdGuy").getUserId(), goodId);
     }
 
+    // Testing care provider is correctly created
     @Test
     public void testCUPCareProvider() {
         String goodId = "GoodIdGirl";
