@@ -23,15 +23,24 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import java.util.Date;
+
+import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
+import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity {
+public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View{
 
     LinearLayout bodyPhotoScroll;
     Record record;
+    RecordViewPresenter recordViewPresenter;
+    TextView recordTitle, recordDate, recordDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +50,19 @@ public class PatientRecordViewActivity extends AppCompatActivity {
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
 
-        TextView recordTitle = findViewById(R.id.recTitle);
-        recordTitle.setText(record.getTitle());
+        recordTitle = findViewById(R.id.recTitle);
+        recordDate = findViewById(R.id.recordDate);
+        recordDesc = findViewById(R.id.commentView);
+        setTextViews();
 
-        TextView recordDate = findViewById(R.id.recordDate);
-        recordDate.setText(record.getDate().toString());
+        recordViewPresenter = new RecordViewPresenter(
+                this,
+                ThreadExecutorImpl.getInstance(),
+                MainThreadImpl.getInstance(),
+                ElasticSearchController.getInstance()
+        );
 
-        TextView recordDesc = findViewById(R.id.commentView);
-        recordDesc.setText(record.getComment());
+
 
 
 
@@ -109,10 +123,13 @@ public class PatientRecordViewActivity extends AppCompatActivity {
                 this.onBackPressed();
                 return true;
             case R.id.edit_title:
+                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_date:
+                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_desc:
+                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
                 return true;
             case R.id.edit_photo:
                 return true;
@@ -131,4 +148,16 @@ public class PatientRecordViewActivity extends AppCompatActivity {
         bodyPhotoScroll.invalidate();
     }
 
+    @Override
+    public void onEditRecord(Record record) {
+        setTextViews();
+        Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Record is edited", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void setTextViews(){
+        recordTitle.setText(record.getTitle());
+        recordDate.setText(record.getDate().toString());
+        recordDesc.setText(record.getComment());
+    }
 }
