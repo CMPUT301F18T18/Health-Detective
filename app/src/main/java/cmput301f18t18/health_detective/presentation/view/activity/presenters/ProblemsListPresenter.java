@@ -89,7 +89,12 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
     }
 
     @Override
-    public void onDPNotFound() {
+    public void onDPPatientNotFound() {
+
+    }
+
+    @Override
+    public void onDPProblemNotFound() {
 
     }
 
@@ -97,7 +102,6 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
     public void onDPFail() {
 
     }
-
 
     @Override
     public void onGPSuccess(ArrayList<Problem> patientProblems) {

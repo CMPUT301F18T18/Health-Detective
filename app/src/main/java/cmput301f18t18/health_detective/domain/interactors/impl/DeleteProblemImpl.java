@@ -31,13 +31,23 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
 
     @Override
     public void run() {
-        // Need check for patient
+        // Patient cannot be found
+        if(userRepo.retrievePatientById(patient.getUserId()) == null){
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onDPPatientNotFound();
+                }
+            });
+
+            return;
+        }
         // Problem cannot be found
         if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onDPNotFound();
+                    callback.onDPProblemNotFound();
                 }
             });
 

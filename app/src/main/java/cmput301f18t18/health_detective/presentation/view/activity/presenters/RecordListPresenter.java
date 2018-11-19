@@ -135,7 +135,12 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     }
 
     @Override
-    public void onDRNotFound() {
+    public void onDRProblemNotFound() {
+
+    }
+
+    @Override
+    public void onDRRecordNotFound() {
 
     }
 
