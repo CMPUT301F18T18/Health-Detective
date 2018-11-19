@@ -170,11 +170,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onCreateRecord() {
-        Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
-        intent.putExtra("RECORD", recordList.get(currentPosition));
-        changeActivity(intent);
+    public void onCreateRecord(Record record) {
+        Intent intent = new Intent(this, PatientRecordViewActivity.class);
+        intent.putExtra("RECORD", record);
+        this.startActivity(intent);
+        //recordListPresenter.getUserRecords(problemContext);
     }
 
     @Override

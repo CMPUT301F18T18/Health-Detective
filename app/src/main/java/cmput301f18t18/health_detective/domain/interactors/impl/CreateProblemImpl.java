@@ -51,8 +51,11 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
         }
 
         if (problemDescription == null) problemDescription = "";
-
         Problem newProblem = new Problem(problemTitle,problemDescription);
+
+        if(this.startDate != null){
+            newProblem.setStartDate(this.startDate);
+        }
 
         //Add problem to problemRepo and update patient
         problemRepo.insertProblem(newProblem);
@@ -62,7 +65,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
             @Override
             public void run() {
-                callback.onCPSuccess();
+                callback.onCPSuccess(newProblem);
             }
         });
     }
