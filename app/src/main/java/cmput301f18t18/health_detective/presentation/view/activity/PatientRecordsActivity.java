@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cmput301f18t18.health_detective.AddDialog;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
@@ -29,7 +30,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener{
 
     ListView listView;
     RecordListAdapter adapter;
@@ -180,11 +181,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordsBtn){
-            recordListPresenter.createUserRecord(problemContext, "test",
-                    "The humpback whale is a species of baleen whale. " +
-                            "One of the larger rorqual. species, adults range in length from 12–16 m and weigh around 25–30 metric tons.",
-                    new Date(), "test");
+            openDialog();
         }
+    }
+    private void openDialog(){
+        AddDialog exampleDialog = new AddDialog();
+        exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
     public void changeActivity(Intent intent){
@@ -226,5 +228,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         Toast toast = Toast.makeText(this, "Record Not Added", Toast.LENGTH_SHORT);
         toast.show();
 
+    }
+
+    @Override
+    public void applyEdit(String title, String comment) {
+        recordListPresenter.createUserRecord(problemContext, title, comment, new Date(), "test");
     }
 }
