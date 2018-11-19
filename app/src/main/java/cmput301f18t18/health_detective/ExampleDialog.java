@@ -34,7 +34,7 @@ public class ExampleDialog extends AppCompatDialogFragment {
                         String editTextString  = editText.getText().toString();
                     }
                 });
-        editText = view.findViewById(R.id.edit_title_dialog);
+        editText = view.findViewById(R.id.edit_dialog);
 
         return builder.create();
     }

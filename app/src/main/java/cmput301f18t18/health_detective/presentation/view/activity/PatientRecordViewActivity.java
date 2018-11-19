@@ -129,7 +129,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 return true;
             case R.id.edit_date:
                 openDialog();
-                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
+                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
                 openDialog();
