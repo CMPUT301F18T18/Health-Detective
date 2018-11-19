@@ -68,20 +68,6 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         command.execute();
     }
 
-//    public void createProblems(Patient patient, String problemTitle, String problemDescription, Date startDate){
-//        CreateProblem createProblem = new CreateProblemImpl(
-//                this.threadExecutor,
-//                this.mainThread,
-//                this,
-//                this.userRepo,
-//                this.problemRepo,
-//                patient,
-//                problemTitle,
-//                problemDescription,
-//                startDate
-//        );
-//        createProblem.execute();
-//    }
 
     @Override
     public void onDPSuccess(Problem problem) {

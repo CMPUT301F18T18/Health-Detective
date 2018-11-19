@@ -47,12 +47,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         );
 
         Button signUp = findViewById(R.id.signUpBtn);
+        TextView cancelBtn = findViewById(R.id.cancelBtn);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
         signUp.setOnClickListener(this);
+        cancelBtn.setOnClickListener(this);
     }
 
     @Override
@@ -85,13 +87,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 // if sign up completed set type to false if patient, true if CP
                 // call presenter method createNewUser
                 Boolean type = false;
-                if (careCheck.isChecked()){
+                if (careCheck.isChecked()) {
                     type = true;
                 }
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(user,email,phone);
+                signUpPresenter.createNewUser(user, email, phone);
+            case R.id.cancelBtn:
+                finish();
         }
     }
 

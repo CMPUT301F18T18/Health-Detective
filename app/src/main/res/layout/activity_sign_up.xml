@@ -150,4 +150,15 @@
         app:layout_constraintTop_toTopOf="@+id/phoneNumEdit"
         app:srcCompat="@drawable/baseline_phone_black_48" />
 
+    <TextView
+        android:id="@+id/cancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/cancelBtn"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintBottom_toBottomOf="@+id/signUpBtn"
+        app:layout_constraintEnd_toStartOf="@+id/signUpBtn"
+        app:layout_constraintTop_toTopOf="@+id/signUpBtn" />
+
 </android.support.constraint.ConstraintLayout>

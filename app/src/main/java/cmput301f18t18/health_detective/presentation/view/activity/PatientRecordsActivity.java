@@ -36,6 +36,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
     Problem problemContext;
+    int currentPosition;
 
 
 
@@ -140,6 +141,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                currentPosition = position;
                 Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
                 intent.putExtra("RECORD", recordList.get(position));
                 changeActivity(intent);
@@ -210,9 +212,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        intent.putExtra("PROBLEM", problemContext);
-        this.startActivity(intent);
+//        Intent intent = new Intent(this, PatientRecordViewActivity.class);
+//        intent.putExtra("PROBLEM", problemContext);
+//        this.startActivity(intent);
+        Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
+        intent.putExtra("RECORD", recordList.get(currentPosition));
+        changeActivity(intent);
         //recordListPresenter.getUserRecords(problemContext);
     }
 

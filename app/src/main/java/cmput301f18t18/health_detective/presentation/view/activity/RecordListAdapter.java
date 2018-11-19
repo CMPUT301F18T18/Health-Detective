@@ -53,7 +53,6 @@ public class RecordListAdapter extends ArrayAdapter{
         recordDate.setText(record.getDate().toString());
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
-        deleteImg.setImageResource(R.drawable.delete);
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);

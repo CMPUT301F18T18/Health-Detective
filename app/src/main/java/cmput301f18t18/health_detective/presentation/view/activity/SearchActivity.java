@@ -63,15 +63,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         listView = findViewById(R.id.searchList);
         testList.add("test");
         testList.add("test2");
+        testList.add("test2");
+        testList.add("test2");
+        testList.add("test2");
         searchAdapter = new SearchListAdapter(this, testList);
         listView.setAdapter(searchAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(SearchActivity.this, "Task Click", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast toast = Toast.makeText(SearchActivity.this, "Task Click", Toast.LENGTH_SHORT);
+//                toast.show();
+//            }
+//        });
 
     }
 
