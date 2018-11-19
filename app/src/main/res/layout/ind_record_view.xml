@@ -7,10 +7,10 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp">
 
         <android.support.constraint.ConstraintLayout
@@ -37,12 +37,14 @@
                 android:id="@+id/titleView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/recTitle"
                 android:textColor="@color/primary_text"
                 android:textSize="25dp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/recordImg"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,27 +89,22 @@
                 android:id="@+id/recordImg"
                 android:layout_width="76dp"
                 android:layout_height="74dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/deleteImg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/text_border" />
 
             <View
                 android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider"
                 android:backgroundTint="@color/divider"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/deleteImg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

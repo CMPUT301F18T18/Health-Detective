@@ -57,8 +57,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             problemDate.setText(problemContext.getStartDate().toString());
             problemDesc.setText(problemContext.getDescription());
         }
-        //problemTitle.setText(problemContext.getTitle());
-
 
         problemAddEditPresenter = new ProblemAddEditPresenter(
                 this,

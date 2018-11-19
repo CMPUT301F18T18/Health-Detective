@@ -43,6 +43,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
         void onRecordDeleted(Record record);
         void onCreateRecord();
         void onCreateRecordFail();
+        void onDeleteRecordFail();
     }
 
     public RecordListPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
@@ -146,6 +147,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     @Override
     public void onDRFail() {
+        this.view.onDeleteRecordFail();
 
     }
 }
