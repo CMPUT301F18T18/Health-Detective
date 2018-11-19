@@ -59,7 +59,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     @Override
     public void run() {
-
+        // Missing title
         if (this.title == null || this.title.isEmpty()) {
             this.mainThread.post(new Runnable() {
 
@@ -71,7 +71,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
             return;
         }
-
+        // Missing date
         if (this.date == null) {
             this.mainThread.post(new Runnable() {
                 @Override
@@ -93,7 +93,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
         this.recordRepo.updateRecord(this.recordtoEdit);
 
-        // Logic is unimplemented, so post failed
+        // Record added
         this.mainThread.post(new Runnable(){
 
             @Override
