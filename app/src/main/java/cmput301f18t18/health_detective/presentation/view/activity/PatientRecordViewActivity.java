@@ -1,16 +1,8 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,18 +17,15 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-import cmput301f18t18.health_detective.ExampleDialog;
+import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View{
+public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener{
 
     LinearLayout bodyPhotoScroll;
     Record record;
@@ -124,16 +113,16 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 this.onBackPressed();
                 return true;
             case R.id.edit_title:
-                openDialog();
-                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
+                String promptTitle = "Edit Title";
+                openDialog(promptTitle,0,record.getTitle());
                 return true;
             case R.id.edit_date:
-                openDialog();
+                String promptDate = "Edit Date";
                 recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
-                openDialog();
-                recordViewPresenter.editUserRecord(record, "Whale Test", "whales are great", new Date());
+                String promptDesc = "Edit Description";
+                openDialog(promptDesc,2,record.getComment());
                 return true;
             case R.id.edit_photo:
                 return true;
@@ -165,9 +154,21 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         recordDesc.setText(record.getComment());
     }
 
-    private void openDialog(){
-        ExampleDialog exampleDialog = new ExampleDialog();
+    private void openDialog(String prompt,int type,String recordInfo){
+        EditDialog exampleDialog = new EditDialog(prompt,type,recordInfo);
         exampleDialog.show(getSupportFragmentManager(), "Edit Dialog");
 
     }
+
+    @Override
+    public void applyEditTitle(String editedText) {
+        recordViewPresenter.editUserRecord(record, editedText, record.getComment(), record.getDate());
+    }
+
+    @Override
+    public void applyEditDesc(String editedComment) {
+        recordViewPresenter.editUserRecord(record, record.getTitle(), editedComment, record.getDate());
+    }
+
+
 }
