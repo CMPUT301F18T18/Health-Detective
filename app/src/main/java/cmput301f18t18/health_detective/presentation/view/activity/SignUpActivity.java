@@ -37,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
         ImageView image = findViewById(R.id.imageView2);
-        image.setImageResource(R.drawable.ic_launcher_background);
+        image.setImageResource(R.drawable.logo_transparent_background);
 
         signUpPresenter = new SignUpPresenter(
                 this,
@@ -56,26 +56,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        // Set back ground to null so memory is not being hogged
-        View window = getWindow().getDecorView();
-        if (window.getBackground() != null) {
-            window.setBackground(null);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Restore background
-        View window = getWindow().getDecorView();
-        if (window.getBackground() == null) {
-            window.getBackground().setCallback(null);
-            window.setBackground(getDrawable(R.drawable.login_background));
-        }
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        this.startActivity(intent);
     }
 
     @Override

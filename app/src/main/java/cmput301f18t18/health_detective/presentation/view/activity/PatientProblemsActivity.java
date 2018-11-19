@@ -40,7 +40,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
     Patient patientContext;
-    ProblemOnClickListener listener;
 
 
     @Override
@@ -53,70 +52,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
 
-        //Testing
-//        Problem problem1 = new Problem(
-//                "Problem 1",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. "
-//        );
-//
-//        Problem problem2 = new Problem(
-//                1,
-//                "Help I broke my shit",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-//
-//        Problem problem3 = new Problem(
-//                2,
-//                "Bush did 911",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-//
-//        Problem problem4 = new Problem(
-//                3,
-//                "What is love",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-//
-//        Problem problem5 = new Problem(
-//                4,
-//                "Baby don't hurt me",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-//
-//        Problem problem6 = new Problem(
-//                5,
-//                "Don't hurt me",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-//
-//        Problem problem7 = new Problem(
-//                6,
-//                "No more",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere nisl blandit mi bibendum porta. Etiam laoreet enim libero, at gravida enim aliquet in. Pellentesque efficitur id orci at accumsan. Donec fringilla sem vitae lacinia tincidunt. Etiam nec lectus sed lorem interdum ultrices. Vivamus euismod cursus dapibus. In quis pulvinar lorem. Nullam facilisis orci sit amet lorem suscipit, a laoreet lorem vehicula. Nulla quis tristique nibh. Nunc ipsum neque, imperdiet non sapien ut, varius condimentum velit. Vivamus in magna ut lectus finibus maximus eu a est. Integer fringilla ultrices elit, et tincidunt lacus laoreet ac. Fusce sit amet ligula massa. Etiam convallis faucibus turpis, vitae vehicula eros vehicula eget. ",
-//                new Date());
-
-
-//        this.patientContext.addProblem(problem1);
-//        this.patientContext.addProblem(problem2);
-//        this.patientContext.addProblem(problem3);
-//        this.patientContext.addProblem(problem4);
-//        this.patientContext.addProblem(problem5);
-//        this.patientContext.addProblem(problem6);
-//        this.patientContext.addProblem(problem7);
-
-        ProblemRepo problems = new ProblemRepoMock();
-        UserRepo userRepo = new UserRepoMock();
-
-        //userRepo.insertUser(patientContext);
-//        problems.insertProblem(problem1);
-//        problems.insertProblem(problem2);
-//        problems.insertProblem(problem3);
-//        problems.insertProblem(problem4);
-//        problems.insertProblem(problem5);
-//        problems.insertProblem(problem6);
-//        problems.insertProblem(problem7);
-
-
         this.problemsListPresenter = new ProblemsListPresenter(
                 this,
                 ThreadExecutorImpl.getInstance(),
@@ -125,7 +60,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 ElasticSearchController.getInstance()
         );
 
-        ImageView addProblem = (ImageView) findViewById(R.id.addProbBtn);
+        ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
 
@@ -134,25 +69,18 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
         adapter = new ProblemListAdapter(this, this.problemList, this);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(PatientProblemsActivity.this, "CLick", Toast.LENGTH_SHORT);
-                toast.show();
-                Intent recordsIntent = new Intent(PatientProblemsActivity.this, PatientRecordsActivity.class);
-                recordsIntent.putExtra("PROBLEM", problemList.get(position));
-                startActivity(recordsIntent);
-            }
-        });
 
-        this.problemsListPresenter.getProblems(this.patientContext);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.adapter.notifyDataSetChanged();
         this.problemsListPresenter.getProblems(this.patientContext);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Logout button works don't remove
     }
 
     @Override
@@ -196,7 +124,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
             problemsIntent.putExtra("PATIENT", this.patientContext);
             startActivity(problemsIntent);
-            //this.problemsListPresenter.createProblems(patientContext, "test", "test", new Date());
         }
     }
 
@@ -224,6 +151,13 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         problemsIntent.putExtra("PROBLEM", problem);
         startActivity(problemsIntent);
 
+    }
+
+    @Override
+    public void onRecordsClicked(Problem problem) {
+        Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
+        recordsIntent.putExtra("PROBLEM", problem);
+        startActivity(recordsIntent);
     }
 
 }
