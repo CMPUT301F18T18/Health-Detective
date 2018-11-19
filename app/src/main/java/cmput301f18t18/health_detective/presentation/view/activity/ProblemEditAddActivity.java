@@ -70,9 +70,11 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
         TextView cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);
+        Button addDateBtn = findViewById(R.id.addDateBtn);
 
         cancelBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
+        addDateBtn.setOnClickListener(this);
     }
 
     @Override
@@ -110,6 +112,8 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             case R.id.cancelBtn:
                 finish();
                 break;
+            case R.id.addDateBtn:
+                //TODO: Add in date picker, then set the dateTextField to the date picker string
         }
     }
 

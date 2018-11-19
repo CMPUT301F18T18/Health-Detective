@@ -25,5 +25,6 @@
     <string name="keyword">Keyword</string>
     <string name="list">List</string>
     <string name="logout">Logout</string>
+    <string name="add_date">Add Date</string>
 
 </resources>

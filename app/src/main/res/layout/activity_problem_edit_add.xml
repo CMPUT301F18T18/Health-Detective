@@ -9,54 +9,16 @@
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="143dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="44dp"
         android:text="@string/problemTitle"
         android:textColor="@color/primary_text"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/problemTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/problemTitle"
-        android:layout_width="302dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="56dp"
-        android:background="@drawable/signup_border"
-        android:ems="10"
-        android:hint="@string/problemTitle"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="@+id/dateText"
-        app:layout_constraintStart_toStartOf="@+id/titleText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/problemDate"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="1dp"
-        android:background="@drawable/signup_border"
-        android:ems="10"
-        android:hint="@string/problemDate"
-        android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/descText"
-        app:layout_constraintEnd_toEndOf="@+id/problemDesc"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/descText" />
-
-    <TextView
-        android:id="@+id/dateText"
-        android:layout_width="159dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,57 +28,51 @@
         android:id="@+id/problemTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="43dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:ems="10"
         android:hint="@string/problemTitle"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="@color/primary_text"
-        app:layout_constraintBottom_toTopOf="@+id/dateText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
     <TextView
         android:id="@+id/dateText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
         android:text="@string/problemDate"
         android:textColor="@color/primary_text"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/problemDate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
 
     <EditText
         android:id="@+id/problemDate"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:ems="10"
         android:hint="@string/problemDate"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="@color/primary_text"
-        app:layout_constraintBottom_toTopOf="@+id/descView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateText"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintTop_toBottomOf="@+id/dateText" />
 
 
     <TextView
@@ -179,5 +135,23 @@
         app:layout_constraintEnd_toStartOf="@+id/saveBtn"
         app:layout_constraintTop_toTopOf="@+id/saveBtn"
         app:layout_constraintVertical_bias="0.69" />
+
+    <Button
+        android:id="@+id/addDateBtn"
+        android:layout_width="132dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="51dp"
+        android:text="@string/add_date"
+        android:textColor="@color/icons"
+        android:theme="@style/Widget.MaterialComponents.Button"
+        app:layout_constraintBottom_toTopOf="@+id/problemDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/dateText"
+        app:layout_constraintTop_toBottomOf="@+id/problemTitle"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
