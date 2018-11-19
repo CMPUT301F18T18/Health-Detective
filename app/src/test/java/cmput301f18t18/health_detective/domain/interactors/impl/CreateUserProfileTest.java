@@ -31,6 +31,62 @@ public class CreateUserProfileTest {
 
     }
 
+    @Test
+    public void testCreatePatient(){
+        String goodId = "GoodIdGuy";
+        String goodNumber = "(780) 222-4444";
+        String goodEmail = "detective@ualberta.ca";
+
+        CreateUserProfile command = new CreateUserProfileImpl(
+                threadExecutor,
+                mainThread,
+                callback,
+                users,
+                goodId,
+                goodEmail,
+                goodNumber,
+                false
+        );
+        command.execute();
+
+        assertTrue(callback.isCUPSuccessPatient());
+
+        Patient patient = callback.getCreatedPatient();
+
+        assertNotNull(patient);
+        assertEquals("GoodIdGuy", patient.getUserId());
+        assertEquals("(780) 222-4444", patient.getPhoneNumber());
+        assertEquals("detective@ualberta.ca", patient.getEmailAddress());
+        assertFalse(callback.isCUPSuccessCareProvider());
+    }
+    @Test
+    public void testCreateCareProvider(){
+        String goodId = "GoodIdGirl";
+        String goodNumber = "(780) 333-7777";
+        String goodEmail = "health@ualberta.ca";
+
+        CreateUserProfile command = new CreateUserProfileImpl(
+                threadExecutor,
+                mainThread,
+                callback,
+                users,
+                goodId,
+                goodEmail,
+                goodNumber,
+                true
+        );
+        command.execute();
+
+        assertTrue(callback.isCUPSuccessCareProvider());
+
+        CareProvider careProvider = callback.getCreatedCareProvider();
+
+        assertNotNull(careProvider);
+        assertEquals("GoodIdGirl", careProvider.getUserId());
+        assertEquals("(780) 333-7777", careProvider.getPhoneNumber());
+        assertEquals("health@ualberta.ca", careProvider.getEmailAddress());
+        assertFalse(callback.isCUPSuccessPatient());
+    }
 
 }
 
@@ -64,11 +120,11 @@ class CreateUserProfileMockPresenter implements CreateUserProfile.Callback {
         return invalidPhoneNumber;
     }
 
-    public Patient getLoggedInPatient() {
+    public Patient getCreatedPatient() {
         return createdPatient;
     }
 
-    public CareProvider getLoggedInCareProvider() {
+    public CareProvider getCreatedCareProvider() {
         return createdCareProvider;
     }
 
@@ -100,4 +156,7 @@ class CreateUserProfileMockPresenter implements CreateUserProfile.Callback {
         this.invalidPhoneNumber = true;
     }
 
+    @Override
+    public void onCUPFail() {
+    }
 }
