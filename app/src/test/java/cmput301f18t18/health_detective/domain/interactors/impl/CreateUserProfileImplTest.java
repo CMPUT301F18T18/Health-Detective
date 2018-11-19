@@ -130,8 +130,8 @@ public class CreateUserProfileImplTest {
                 callback,
                 users,
                 goodId,
-                emptyNumber,
                 goodEmail,
+                emptyNumber,
                 false
         );
         command.execute();
