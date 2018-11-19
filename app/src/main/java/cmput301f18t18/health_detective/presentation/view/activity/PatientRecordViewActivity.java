@@ -1,6 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,23 +15,25 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener{
+public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     LinearLayout bodyPhotoScroll;
     Record record;
@@ -122,7 +125,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 openDialog(promptTitle,0,record.getTitle());
                 return true;
             case R.id.edit_date:
-                String promptDate = "Edit Date";
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
                 //recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
@@ -186,6 +188,23 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         Date currentDate = c.getTime();
         recordViewPresenter.editUserRecord(record, record.getTitle(), record.getComment(),currentDate );
+
+        DialogFragment timePicker = new TimePickerFragment();
+        timePicker.show(getSupportFragmentManager(), "time picker");
+
+
+
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Date ourDate = record.getDate();
+        Calendar c = Calendar.getInstance();
+        c.setTime(ourDate);
+        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        c.set(Calendar.MINUTE,minute);
+        Date currentDate = c.getTime();
+        recordViewPresenter.editUserRecord(record,record.getTitle(),record.getComment(), currentDate);
 
     }
 }
