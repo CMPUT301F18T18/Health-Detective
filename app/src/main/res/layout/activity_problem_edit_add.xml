@@ -11,24 +11,19 @@
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="44dp"
         android:text="@string/problemTitle"
         android:textColor="@color/primary_text"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/problemTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/problemTitle"
+        app:layout_constraintStart_toStartOf="@+id/problemTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/problemTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorPrimaryDark"
@@ -38,120 +33,104 @@
         android:singleLine="true"
         android:textColor="@color/primary_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
     <TextView
         android:id="@+id/dateText"
         android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="41dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
         android:text="@string/problemDate"
         android:textColor="@color/primary_text"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/problemDate"
+        app:layout_constraintBottom_toBottomOf="@+id/addDateBtn"
+        app:layout_constraintEnd_toStartOf="@+id/addDateBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
+        app:layout_constraintTop_toTopOf="@+id/addDateBtn" />
 
     <EditText
         android:id="@+id/problemDate"
-        android:layout_width="0dp"
+        android:layout_width="336dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="208dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:ems="10"
         android:hint="@string/problemDate"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="@color/primary_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/descView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
         android:text="@string/problemDesc"
         android:textColor="@color/primary_text"
-        android:textSize="24sp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/problemDate"
+        app:layout_constraintStart_toStartOf="@+id/problemDate"
+        app:layout_constraintTop_toBottomOf="@+id/problemDate" />
 
     <EditText
         android:id="@+id/problemDesc"
         android:layout_width="0dp"
-        android:layout_height="198dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="54dp"
+        android:layout_marginTop="48dp"
         android:background="@drawable/signup_border"
         android:ems="10"
         android:gravity="top"
         android:hint="@string/problemDesc"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/saveBtn"
+        app:layout_constraintStart_toStartOf="@+id/descView"
+        app:layout_constraintTop_toTopOf="@+id/descView" />
 
 
     <Button
         android:id="@+id/saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="32dp"
         android:text="@string/saveBtn"
         android:textColor="@color/icons"
         android:theme="@style/Widget.MaterialComponents.Button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cancelBtn"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/cancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="7dp"
         android:layout_marginTop="8dp"
         android:text="@string/cancelBtn"
         android:textColor="@color/secondary_text"
-        app:layout_constraintBottom_toBottomOf="@+id/saveBtn"
         app:layout_constraintEnd_toStartOf="@+id/saveBtn"
-        app:layout_constraintTop_toTopOf="@+id/saveBtn"
-        app:layout_constraintVertical_bias="0.69" />
+        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
 
     <Button
         android:id="@+id/addDateBtn"
-        android:layout_width="132dp"
+        android:layout_width="0dp"
         android:layout_height="33dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="51dp"
+        android:layout_marginBottom="69dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginTop="73dp"
         android:text="@string/add_date"
         android:textColor="@color/icons"
         android:theme="@style/Widget.MaterialComponents.Button"
-        app:layout_constraintBottom_toTopOf="@+id/problemDate"
+        app:layout_constraintBottom_toTopOf="@+id/descView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/dateText"
-        app:layout_constraintTop_toBottomOf="@+id/problemTitle"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/problemTitle" />
 
 </android.support.constraint.ConstraintLayout>

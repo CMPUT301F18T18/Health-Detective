@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.presentation.view.activity;
+package cmput301f18t18.health_detective;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
