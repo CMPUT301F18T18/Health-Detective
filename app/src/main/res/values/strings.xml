@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Health-Detective</string>
+    <string name="user_id">User id</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">Email</string>
+    <string name="user_phoneNum">Phone Number</string>
+    <string name="patient">Patient</string>
+    <string name="careProvider">Care Provider</string>
+    <string name="problemTitle">Problem Title</string>
+    <string name="problemDate">Problem Date</string>
+    <string name="problemDesc">Description</string>
+    <string name="cancelBtn">Cancel</string>
+    <string name="saveBtn">Save</string>
+    <string name="recTitle">Record Title</string>
+    <string name="recLoc">Location</string>
+    <string name="recDate">Date</string>
+    <string name="blPic">Body Location Pictures</string>
+    <string name="mapTitle">Map</string>
+    <string name="allPhotos">All Photos</string>
+    <string name="body_part">Body Part</string>
+    <string name="geo_location">Geo Location</string>
+    <string name="search">Search</string>
+    <string name="keyword">Keyword</string>
+    <string name="list">List</string>
+    <string name="logout">Logout</string>
+
 </resources>

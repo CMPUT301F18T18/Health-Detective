@@ -42,7 +42,7 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
         }
 
         ArrayList<Integer> recordIds = problem.getRecordIds();
-        ArrayList<Record> records = this.recordRepo.retrieveRecordsById(recordIds);
+        final ArrayList<Record> records = this.recordRepo.retrieveRecordsById(recordIds);
 
         this.mainThread.post(new Runnable(){
 

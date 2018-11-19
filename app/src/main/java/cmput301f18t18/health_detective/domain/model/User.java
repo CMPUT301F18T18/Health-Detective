@@ -1,6 +1,9 @@
 package cmput301f18t18.health_detective.domain.model;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
+    private static final long serialVersionUID = 3L;
     private String userId;
     private String phoneNumber;
     private String emailAddress;

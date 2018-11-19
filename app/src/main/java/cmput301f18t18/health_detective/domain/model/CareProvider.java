@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class CareProvider extends User {
+    private static final long serialVersionUID = 5L;
     public HashSet<String> patients;
 
     public CareProvider() {

@@ -38,7 +38,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
     @Override
     public void run() {
-        if(problemTitle == null){
+        if(problemTitle == null) {
             this.mainThread.post(new Runnable() {
 
                 @Override
@@ -50,7 +50,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
             return;
         }
 
-        if(problemDescription == null) problemDescription = "";
+        if (problemDescription == null) problemDescription = "";
 
         Problem newProblem = new Problem(problemTitle,problemDescription);
 
