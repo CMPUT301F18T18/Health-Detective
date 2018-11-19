@@ -1,6 +1,8 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -131,7 +133,24 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onDeleteClicked(Problem problem) {
-        this.problemsListPresenter.deleteProblem(patientContext, problem);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setCancelable(true)
+                .setTitle("Are you sure you want to delete?")
+                .setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        problemsListPresenter.deleteProblem(patientContext, problem);
+                    }
+                });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+
     }
 
     @Override
