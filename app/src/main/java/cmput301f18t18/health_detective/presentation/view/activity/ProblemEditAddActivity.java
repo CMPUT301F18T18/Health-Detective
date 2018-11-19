@@ -42,6 +42,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     private TextView problemTitle, problemDate, problemDesc;
     ProblemAddEditPresenter problemAddEditPresenter;
     Boolean type;
+    Date problemDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +68,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             problemDate.setText(problemContext.getStartDate().toString());
             problemDesc.setText(problemContext.getDescription());
         }
-        //problemTitle.setText(problemContext.getTitle());
-
 
         problemAddEditPresenter = new ProblemAddEditPresenter(
                 this,
@@ -112,11 +111,15 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             case R.id.saveBtn:
                 String probTitle = problemTitle.getText().toString();
                 String probDesc = problemDesc.getText().toString();
+                String probDate = problemDate.getText().toString();
+                if (probDate == null){
+                    problemDateTime = new Date();
+                }
                 if (type){
-                    problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, new Date());
+                    problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, problemDateTime);
                 }
                 else {
-                    problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, new Date());
+                    problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, problemDateTime);
                 }
                 break;
             case R.id.cancelBtn:
@@ -126,9 +129,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                 //TODO: Add in date picker, then set the dateTextField to the date picker string
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
-
-
-
 
         }
     }
@@ -155,6 +155,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         Date currentDate = c.getTime();
+        problemDateTime = currentDate;
         problemDate.setText((CharSequence) currentDate.toString());
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
@@ -174,6 +175,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
         Date currentDate = c.getTime();
+        problemDateTime = currentDate;
         problemDate.setText((CharSequence) currentDate.toString());
 
     }

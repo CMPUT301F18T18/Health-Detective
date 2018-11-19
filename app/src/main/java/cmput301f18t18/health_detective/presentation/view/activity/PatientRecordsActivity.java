@@ -214,20 +214,21 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-//        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-//        intent.putExtra("PROBLEM", problemContext);
-//        this.startActivity(intent);
         Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
         intent.putExtra("RECORD", recordList.get(currentPosition));
         changeActivity(intent);
-        //recordListPresenter.getUserRecords(problemContext);
     }
 
     @Override
     public void onCreateRecordFail() {
         Toast toast = Toast.makeText(this, "Record Not Added", Toast.LENGTH_SHORT);
         toast.show();
+    }
 
+    @Override
+    public void onDeleteRecordFail() {
+        Toast toast = Toast.makeText(this, "Record Not Deleted", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

@@ -43,6 +43,7 @@ public class ProblemListAdapter extends ArrayAdapter {
         TextView titleText = rowView.findViewById(R.id.titleView);
         TextView descText = rowView.findViewById(R.id.descView);
         TextView recordBut = rowView.findViewById(R.id.recordsBut);
+        TextView dateText = rowView.findViewById(R.id.problemDate);
 
         editImg.setImageResource(R.drawable.baseline_create_black_48);
         deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
@@ -50,6 +51,7 @@ public class ProblemListAdapter extends ArrayAdapter {
         Problem data = problemList.get(postition);
         titleText.setText(data.getTitle());
         descText.setText(data.getDescription());
+        dateText.setText(data.getStartDate().toString());
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
