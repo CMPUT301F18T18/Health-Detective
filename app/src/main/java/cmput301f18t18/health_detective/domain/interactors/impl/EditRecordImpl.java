@@ -18,6 +18,14 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     private String comment;
     private Date date;
 
+    /**
+     * First constructor for EditRecordImpl
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param title the title of the record that is being edited
+     * @param comment the description of the record being edited
+     * @param date the date assigned to the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String title, String comment, Date date)
@@ -31,6 +39,13 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = date;
     }
 
+    /**
+     * Second constructor for EditRecordImpl
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param title the title of the record that is being edited
+     * @param comment the description of the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String title, String comment)
@@ -44,6 +59,12 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = recordToEdit.getDate();
     }
 
+    /**
+     * Third constructor for EditRecordImpl
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param comment the description of the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String comment)
@@ -57,6 +78,12 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = recordToEdit.getDate();
     }
 
+    /**
+     * Main run method for EditRecordImpl. This method contains all the specific
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the title for the record is not missing as well as the date, and
+     * then to correctly set the comment and edit the record.
+     */
     @Override
     public void run() {
         // Missing title

@@ -18,7 +18,7 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
     private Problem problem;
 
     /**
-     * Constructor for CreateProblemImpl
+     * Constructor for DeleteProblemImpl
      * @param userRepo the repository where users are stored
      * @param problemRepo the repository where problems are stored
      * @param patient the patient the problem being deleted belonged to
@@ -38,8 +38,9 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
 
     /**
      * Main run method for DeleteProblemImpl. This method contains all the specific
-     * business logic needed for the interactor.
-     *
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the patient that owns the problem exists, to make sure the problem
+     * that is going to be deleted exists, and then to delete the problem correctly.
      */
     @Override
     public void run() {

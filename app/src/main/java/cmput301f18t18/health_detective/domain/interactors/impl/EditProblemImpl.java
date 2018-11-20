@@ -18,6 +18,14 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
     private String description;
     private Date startDate;
 
+    /**
+     * First constructor for EditProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param title the title of the problem that is being edited
+     * @param description the description of the problem being edited
+     * @param startDate the date assigned to the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String title, String description, Date startDate)
@@ -31,6 +39,13 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.startDate = startDate;
     }
 
+    /**
+     * Second constructor for EditProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param title the title of the problem that is being edited
+     * @param description the description of the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String title, String description)
@@ -44,6 +59,12 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.startDate = problemToEdit.getStartDate();
     }
 
+    /**
+     * Third constructor for EditProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param description the description of the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String description)
@@ -58,6 +79,12 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     }
 
+    /**
+     * Main run method for EditProblemImpl. This method contains all the specific
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the title for the problem is not missing as well as the date, and
+     * then to correctly set the description and edit the problem.
+     */
     @Override
     public void run() {
         // Missing title

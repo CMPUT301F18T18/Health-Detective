@@ -15,6 +15,13 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
     private String email;
     private String phoneNumber;
 
+    /**
+     * Constructor for EditUserProfileImpl
+     * @param userRepo the repository where users are stored
+     * @param userToEdit the user profile that is being edited
+     * @param email the email of the user profile that is being edited
+     * @param phoneNumber the phone number of the user profile being edited
+     */
     public EditUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                EditUserProfile.Callback callback, UserRepo userRepo,
                                User userToEdit, String email, String phoneNumber)
@@ -27,7 +34,12 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
         this.phoneNumber = phoneNumber;
     }
 
-
+    /**
+     * Main run method for EditUserProfileImpl. This method contains all the specific
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the email for the user profile is valid as well as the phone number,
+     * and then to correctly edit the user profile with this information.
+     */
     @Override
     public void run() {
 

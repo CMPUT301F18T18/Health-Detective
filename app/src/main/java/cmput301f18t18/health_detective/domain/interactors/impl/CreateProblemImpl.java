@@ -50,8 +50,10 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
     /**
      * Main run method for CreateProblemImpl. This method contains all the specific
-     * business logic needed for the interactor.
-     *
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the problem title is not empty, make sure to description is properly
+     * set, to set date for the record if one has not been already, and then of course
+     * to create the problem.
      */
     @Override
     public void run() {

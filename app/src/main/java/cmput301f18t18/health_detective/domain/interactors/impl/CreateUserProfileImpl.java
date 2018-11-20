@@ -19,7 +19,7 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
     private boolean isCareProvider;
 
     /**
-     * Constructor for CreateProblemImpl
+     * Constructor for CreateUserProfileImpl
      * @param userRepo the repository where users are stored
      * @param userId the Id that the user has chosen to use
      * @param email the email that the user has chosen to use
@@ -41,8 +41,10 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
 
     /**
      * Main run method for CreateUserProfileImpl. This method contains all the specific
-     * business logic needed for the interactor.
-     *
+     * business logic needed for the interactor. The main jobs of this method are to
+     * make sure the userId is valid, the email address provided is valid, the phone
+     * number is valid, and then create the correct user as either a patient or a
+     * care provider.
      */
     @Override
     public void run() {
