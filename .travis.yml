@@ -2,8 +2,11 @@ language: java
 jdk:
   - oraclejdk8
   
-install: 
-  - gradle assemble
+sudo: enabled
+
+install:
+  - sudo chmod +x ./gradlew 
+  - ./gradlew assemble
 
 script:
-  - gradle check
+  - ./gradlew check
