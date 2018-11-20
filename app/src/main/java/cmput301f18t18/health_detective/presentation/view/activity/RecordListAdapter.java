@@ -15,17 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 
-public class RecordListAdapter extends ArrayAdapter implements View.OnClickListener{
+public class RecordListAdapter extends ArrayAdapter{
 
     private Context mContext;
-    private List<String> testList = new ArrayList<>();
+    private List<Record> recordList = new ArrayList<>();
+    private RecordOnClickListener listener;
 
 
-    public RecordListAdapter(@NonNull Activity context, ArrayList<String> list) {
+    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener) {
         super(context, R.layout.ind_record_view, list);
         mContext = context;
-        testList = list;
+        recordList = list;
+        this.listener = listener;
     }
 
     @Override
@@ -34,38 +38,39 @@ public class RecordListAdapter extends ArrayAdapter implements View.OnClickListe
         LayoutInflater inflater = LayoutInflater.from(mContext);
         rowView = inflater.inflate(R.layout.ind_record_view, null, true);
 
+        Record record = recordList.get(postition);
+
         TextView recordTitle = rowView.findViewById(R.id.titleView);
-        recordTitle.setText("Test");
+        recordTitle.setText(record.getTitle());
 
         TextView recordUser = rowView.findViewById(R.id.userIdView);
-        recordUser.setText("test");
+        recordUser.setText("Test");
 
         TextView recordDescription = rowView.findViewById(R.id.recordDesc);
-        recordDescription.setText("test");
+        recordDescription.setText(record.getComment());
 
         TextView recordDate = rowView.findViewById(R.id.recordDate);
-        recordDate.setText("test");
+        recordDate.setText(record.getDate().toString());
 
         TextView recordBL = rowView.findViewById(R.id.recordBL);
-        recordBL.setText("test");
+        recordBL.setText("Body Part");
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         deleteImg.setImageResource(R.drawable.delete);
-        deleteImg.setOnClickListener(this);
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
 
+        deleteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onDeleteClicked(recordList.get(postition));
+            }
 
+        });
 
         return rowView;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.deleteImg){
-            Toast toast = Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
+
 }

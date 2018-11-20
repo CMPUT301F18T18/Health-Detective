@@ -61,7 +61,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Problem")
                 .build();
         try {
@@ -87,7 +87,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public void insertProblem(Problem problem) {
         Index index = new Index.Builder(problem)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -111,7 +111,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public Problem retrieveProblemById(Integer problemId) {
         String elasticSearchId = getProblemElasticSearchId(problemId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Problem")
                 .build();
         try {
@@ -145,7 +145,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
@@ -168,7 +168,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getRecordElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Record")
                 .build();
         try {
@@ -195,7 +195,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public void insertRecord(Record record) {
         Index index = new Index.Builder(record)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(record.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -219,7 +219,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public Record retrieveRecordById(Integer recordID) {
         String elasticSearchId = getRecordElasticSearchId(recordID);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Record")
                 .build();
         try {
@@ -253,7 +253,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(record.getClass().getSimpleName())
                 .build();
         try {
@@ -276,7 +276,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getUserElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Patient")
                 .addType("CareProvider")
                 .build();
@@ -303,7 +303,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public void insertUser(User user) {
         Index index = new Index.Builder(user)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(user.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -330,7 +330,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(user.getClass().getSimpleName())
                 .build();
         try {
@@ -346,7 +346,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public Patient retrievePatientById(String patientId) {
         String elasticSearchId = getUserElasticSearchId(patientId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Patient")
                 .build();
         try {
@@ -377,7 +377,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     @Override
     public CareProvider retrieveCareProviderById(String careProviderId) {
         String elasticSearchId = getUserElasticSearchId(careProviderId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("CareProvider")
                 .build();
         try {

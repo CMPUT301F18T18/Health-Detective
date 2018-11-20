@@ -4,16 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.view.activity.ProblemEditAdd">
+    tools:context=".presentation.view.activity.ProblemEditAddActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="143dp"
+        android:layout_width="355dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="53dp"
+        android:layout_marginEnd="220dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
         android:text="@string/problemTitle"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/problemTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,91 +26,108 @@
         android:id="@+id/problemTitle"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="43dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="22dp"
         android:background="@drawable/signup_border"
         android:ems="10"
-        android:hint="@string/problemTitle"
         android:inputType="textPersonName"
+        android:hint="@string/problemTitle"
+        app:layout_constraintBottom_toTopOf="@+id/dateText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText" />
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="362dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="249dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/problemDate"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
 
     <EditText
         android:id="@+id/problemDate"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginBottom="54dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/signup_border"
         android:ems="10"
+        android:inputType="textPersonName"
         android:hint="@string/problemDate"
-        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/descText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateText" />
+        app:layout_constraintTop_toBottomOf="@+id/dateText"
+        app:layout_constraintVertical_bias="0.115" />
 
     <TextView
-        android:id="@+id/dateText"
-        android:layout_width="146dp"
+        android:id="@+id/descText"
+        android:layout_width="349dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="54dp"
-        android:text="@string/problemDate"
+        android:layout_marginEnd="272dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/problemDesc"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
     <EditText
         android:id="@+id/problemDesc"
         android:layout_width="0dp"
-        android:layout_height="174dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="1dp"
+        android:layout_height="196dp"
+        android:layout_marginBottom="87dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="11dp"
         android:background="@drawable/signup_border"
         android:ems="10"
+        android:gravity="top"
+        android:hint="@string/problemDesc"
         android:inputType="textPersonName"
-        android:text="@string/problemDesc"
+        app:layout_constraintBottom_toTopOf="@+id/cancelBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descText" />
-
-    <TextView
-        android:id="@+id/descText"
-        android:layout_width="123dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="75dp"
-        android:text="@string/problemDesc"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/problemDate" />
+        app:layout_constraintTop_toBottomOf="@+id/descText"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/cancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginStart="179dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="126dp"
+        android:layout_marginStart="16dp"
         android:text="@string/cancelBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/saveBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/saveBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="84dp"
         android:text="@string/saveBtn"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
+        app:layout_constraintStart_toEndOf="@+id/cancelBtn" />
+
 </android.support.constraint.ConstraintLayout>

@@ -9,26 +9,48 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.MapActivity;
 
 public class PatientRecordViewActivity extends AppCompatActivity {
 
     LinearLayout bodyPhotoScroll;
+    Record record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
+
+        Intent newIntent = this.getIntent();
+        this.record = (Record) newIntent.getSerializableExtra("RECORD");
+
+        TextView recordTitle = findViewById(R.id.recTitle);
+        recordTitle.setText(record.getTitle());
+
+        TextView recordDate = findViewById(R.id.recordDate);
+        recordDate.setText(record.getDate().toString());
+
+        TextView recordDesc = findViewById(R.id.commentView);
+        recordDesc.setText(record.getComment());
+
+
 
         //stuff for all photos section
         GridViewAdapter adapter = new GridViewAdapter(this, 10);
@@ -61,6 +83,45 @@ public class PatientRecordViewActivity extends AppCompatActivity {
         test();
         test();
         test();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // being able to use the menu at the top of the app
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
+
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // this takes the user 'back', as if they pressed the left-facing triangle icon on the main android toolbar.
+                // if this doesn't work as desired, another possibility is to call `finish()` here.
+                this.onBackPressed();
+                return true;
+            case R.id.edit_title:
+                return true;
+            case R.id.edit_date:
+                return true;
+            case R.id.edit_desc:
+                return true;
+            case R.id.edit_photo:
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public void test(){

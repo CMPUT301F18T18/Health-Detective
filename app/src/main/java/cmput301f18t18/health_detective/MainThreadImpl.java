@@ -20,6 +20,7 @@ public class MainThreadImpl implements MainThread {
     }
 
     private MainThreadImpl() {
+
         this.handler = new Handler(Looper.getMainLooper());
     }
 

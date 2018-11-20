@@ -23,5 +23,7 @@
     <string name="geo_location">Geo Location</string>
     <string name="search">Search</string>
     <string name="keyword">Keyword</string>
+    <string name="list">List</string>
+    <string name="logout">Logout</string>
 
 </resources>
