@@ -66,7 +66,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         }
 
         if(recordComment == null) recordComment = "";
-        Record newRecord = new Record(recordTitle,recordComment);
+            Record newRecord = new Record(recordTitle,recordComment);
 
         if(this.date != null){
             newRecord.setDate(this.date);

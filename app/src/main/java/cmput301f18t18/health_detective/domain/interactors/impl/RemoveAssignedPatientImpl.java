@@ -15,6 +15,15 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
     private CareProvider careProvider;
     private Patient patient;
 
+    /**
+     * Creates a new RemoveAssignedPatient object from the provided parameters
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param userRepo
+     * @param careProvider
+     * @param patient
+     */
     public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                      RemoveAssignedPatient.Callback callback, UserRepo userRepo,
                                      CareProvider careProvider, Patient patient) 
@@ -26,6 +35,17 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
         this.patient = patient;
     }
 
+    /**
+     * Removes the patient from the careproviders list of assigned patients and then updates both
+     * in the database
+     *
+     * Callbacks:
+     *      -Calls onRAPPatientNotAssigned()
+     *          if patient is not assigned to the careprovider
+     *
+     *      -Calls onRAPSuccess(Patient patient)
+     *          if the removal was successful, passing the removed patient for context
+     */
     @Override
     public void run() {
 

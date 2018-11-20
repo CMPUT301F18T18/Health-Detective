@@ -28,6 +28,16 @@ public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAs
         this.careProvider = careProvider;
     }
 
+    /**
+     * Queries the database for the provided careprovider's patients, not sorted
+     *
+     * Callbacks:
+     *      - onGAPNoPatients()
+     *          If careprovider has no records
+     *
+     *      - onGAPSuccess(ArrayList<Patient> patients)
+     *          If query was successful, passing the problems patients as an argument
+     */
     @Override
     public void run() {
 

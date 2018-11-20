@@ -27,6 +27,16 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
         this.patient = patient;
     }
 
+    /**
+     * Queries the database for the provided patient's problems, sorted by date
+     *
+     * Callbacks:
+     *      - onGPNoProblems()
+     *          If patient has no records
+     *
+     *      - onGPSuccess(ArrayList<Problems> problems)
+     *          If query was successful, passing the problems records as an argument
+     */
     @Override
     public void run() {
 

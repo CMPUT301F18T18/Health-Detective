@@ -34,7 +34,16 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
     }
 
     /**
+     * Using the userId string the command queries the database for a user with the same userId
+     * returning it via the callbacks methods based on the type of user
+     *      onLoginPatientSuccess(Patient patient)
+     *      onLoginCareProviderSuccess(CareProvider careProvider)
      *
+     * If the userId is an invalid format the command calls the callbacks
+     *      onLoginInvalidUserId() method
+     *
+     * If the userId is not found  the command calls its callbacks
+     *      onLoginUserDoesNotExist() method
      */
     @Override
     public void run() {
