@@ -126,7 +126,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
             case R.id.edit_date:
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
-                //recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
                 String promptDesc = "Edit Description";

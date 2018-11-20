@@ -158,7 +158,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = new Intent(this, PatientProblemsActivity.class);
         intent.putExtra("PATIENT", patient);
         startActivity(intent);
-        //Toast.makeText(this, patient.getPhoneNumber().toString(), Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, "Edited", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
     }
 }
