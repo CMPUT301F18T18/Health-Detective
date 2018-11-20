@@ -39,15 +39,13 @@
 
     <TextView
         android:id="@+id/dateText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/problemDate"
         android:textColor="@color/primary_text"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/addDateBtn"
-        app:layout_constraintEnd_toStartOf="@+id/addDateBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/addDateBtn" />
 
@@ -83,15 +81,15 @@
         android:id="@+id/problemDesc"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="54dp"
         android:layout_marginTop="48dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/signup_border"
         android:ems="10"
         android:gravity="top"
         android:hint="@string/problemDesc"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName|textMultiLine"
         android:maxLength="300"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/saveBtn"
         app:layout_constraintEnd_toEndOf="@+id/saveBtn"
         app:layout_constraintStart_toStartOf="@+id/descView"
         app:layout_constraintTop_toTopOf="@+id/descView" />
@@ -102,36 +100,36 @@
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/saveBtn"
         android:textColor="@color/icons"
         android:theme="@style/Widget.MaterialComponents.Button"
-        app:layout_constraintBaseline_toBaselineOf="@+id/cancelBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/cancelBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/cancelBtn"
         android:textColor="@color/secondary_text"
+        app:layout_constraintBottom_toBottomOf="@+id/saveBtn"
         app:layout_constraintEnd_toStartOf="@+id/saveBtn"
-        app:layout_constraintTop_toBottomOf="@+id/problemDesc" />
+        app:layout_constraintTop_toTopOf="@+id/saveBtn" />
 
     <Button
         android:id="@+id/addDateBtn"
-        android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:layout_marginBottom="69dp"
-        android:layout_marginEnd="49dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="73dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="69dp"
         android:text="@string/add_date"
         android:textColor="@color/icons"
         android:theme="@style/Widget.MaterialComponents.Button"
         app:layout_constraintBottom_toTopOf="@+id/descView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dateText"
         app:layout_constraintTop_toTopOf="@+id/problemTitle" />
 
 </android.support.constraint.ConstraintLayout>

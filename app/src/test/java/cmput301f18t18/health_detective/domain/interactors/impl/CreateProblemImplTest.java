@@ -100,8 +100,6 @@ public class CreateProblemImplTest {
         );
         command.execute();
 
-        Problem problem = callback.getCreatedProblem();
-
         assertTrue(callback.isCPNullTitle());
     }
 

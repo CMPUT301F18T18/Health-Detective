@@ -1,27 +1,38 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.AddDialog;
+import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -34,8 +45,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener,
-        RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
 
     ListView listView;
     RecordListAdapter adapter;
@@ -44,6 +54,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     Problem problemContext;
     Patient patientContext;
     int currentPosition;
+    private String title, desc;
+    private Date date;
 
 
 
@@ -182,6 +194,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.adapter.notifyDataSetChanged();
     }
 
+    @Override
     public void onCreateRecord(Record record) {
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
         intent.putExtra("USER", patientContext);
@@ -202,7 +215,34 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void applyEdit(String title, String comment) {
-        recordListPresenter.createUserRecord(problemContext, title, comment, new Date(), "test");
+    public void applyEdit(String newTitle, String newComment) {
+        this.title = newTitle;
+        this.desc = newComment;
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(),"date picker");
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        date = c.getTime();
+        DialogFragment timePicker = new TimePickerFragment();
+        timePicker.show(getSupportFragmentManager(), "time picker");
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        c.set(Calendar.MINUTE,minute);
+        date = c.getTime();
+        Log.d("abcdefgh", date.toString());
+        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test");
+
     }
 }

@@ -80,6 +80,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
+        if (activityType) {
+            finish();
+            return;
+        }
+
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
     }
