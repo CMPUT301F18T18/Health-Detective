@@ -72,6 +72,7 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
             return;
         }
+
         // Missing Date
         if (this.startDate == null) {
             this.mainThread.post(new Runnable() {
