@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The EditRecordImpl class is a class intended to handle the editing of records
+ * on the back end.
+ */
 public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     private EditRecord.Callback callback;
@@ -20,6 +24,9 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     /**
      * First constructor for EditRecordImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param recordRepo the repository where records are stored
      * @param recordToEdit the record that is being edited
      * @param title the title of the record that is being edited
@@ -79,10 +86,17 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     }
 
     /**
-     * Main run method for EditRecordImpl. This method contains all the specific
-     * business logic needed for the interactor. The main jobs of this method are to
-     * make sure the title for the record is not missing as well as the date, and
-     * then to correctly set the comment and edit the record.
+     * Edits the information contained in a record and updates the database.
+     *
+     * Callbacks:
+     *      -Calls onEREmptyTitle()
+     *          if title is empty (enforcing title)
+     *
+     *      -Calls onERNoDateProvided()
+     *          assigns date if one is not provided
+     *
+     *      -Calls onERSuccess(recordtoEdit)
+     *          if editing record is successful, updates everything containing record
      */
     @Override
     public void run() {

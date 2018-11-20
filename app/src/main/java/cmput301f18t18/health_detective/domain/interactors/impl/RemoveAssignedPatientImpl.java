@@ -8,6 +8,10 @@ import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The RemoveAssignedPatientImpl class is a class intended to handle the removal of
+ * patients from a care provider on the back end.
+ */
 public class RemoveAssignedPatientImpl extends AbstractInteractor implements RemoveAssignedPatient {
 
     private RemoveAssignedPatient.Callback callback;
@@ -20,9 +24,9 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
      * @param threadExecutor
      * @param mainThread
      * @param callback
-     * @param userRepo
-     * @param careProvider
-     * @param patient
+     * @param userRepo the repository where users are stored
+     * @param careProvider the care provider who is having a pateint removed
+     * @param patient the patient being removed from the care provider
      */
     public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                      RemoveAssignedPatient.Callback callback, UserRepo userRepo,

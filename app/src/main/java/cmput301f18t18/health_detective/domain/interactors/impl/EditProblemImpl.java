@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.interactors.EditProblem;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
+/**
+ * The EditProblemImpl class is a class intended to handle the editing of problems
+ * on the back end.
+ */
 public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     private EditProblem.Callback callback;
@@ -20,6 +24,9 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     /**
      * First constructor for EditProblemImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param problemRepo the repository where problems are stored
      * @param problemToEdit the problem that is being edited
      * @param title the title of the problem that is being edited
@@ -80,10 +87,17 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
     }
 
     /**
-     * Main run method for EditProblemImpl. This method contains all the specific
-     * business logic needed for the interactor. The main jobs of this method are to
-     * make sure the title for the problem is not missing as well as the date, and
-     * then to correctly set the description and edit the problem.
+     * Edits the information contained in a problem and updates the database.
+     *
+     * Callbacks:
+     *      -Calls onEPEmptyTitle()
+     *          if title is empty (enforcing title)
+     *
+     *      -Calls onEPNoStartDateProvided()
+     *          assigns date if one is not provided
+     *
+     *      -Calls onEPSuccess(problemToEdit)
+     *          if editing problem is successful, updates everything containing problem
      */
     @Override
     public void run() {

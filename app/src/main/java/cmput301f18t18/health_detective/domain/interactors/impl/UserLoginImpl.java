@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The UserLoginImpl class is a class intended to handle the logging in
+ * of users into the app
+ */
 public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
     private UserLogin.Callback callback;
@@ -20,8 +24,8 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
      * @param threadExecutor
      * @param mainThread
      * @param callback
-     * @param userRepo
-     * @param userId
+     * @param userRepo the repository where users are stored
+     * @param userId the Id of the user attempting to log in
      */
     public UserLoginImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                          UserLogin.Callback callback, UserRepo userRepo,

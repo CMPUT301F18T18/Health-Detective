@@ -12,12 +12,24 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The GetAssignedPatientImpl class is a class intended to handle the retrieval of
+ * a care provider's patient list.
+ */
 public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAssignedPatients {
 
     private GetAssignedPatients.Callback callback;
     private UserRepo userRepo;
     private CareProvider careProvider;
 
+    /**
+     * Constructor for GetAssignedPatientImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param userRepo the repository where users are stored
+     * @param careProvider the care provider who's list of patient's are retrieved
+     */
     public GetAssignedPatientsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                    GetAssignedPatients.Callback callback, UserRepo userRepo,
                                    CareProvider careProvider)

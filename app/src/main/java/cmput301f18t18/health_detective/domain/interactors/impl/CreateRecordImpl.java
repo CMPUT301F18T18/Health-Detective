@@ -11,6 +11,10 @@ import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The CreateRecordImpl class is a class intended to handle the creation of records
+ * on the back end.
+ */
 public class CreateRecordImpl extends AbstractInteractor implements CreateRecord {
 
     private CreateRecord.Callback callback;
@@ -24,6 +28,9 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
     /**
      * Constructor for CreateRecordImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param problemRepo the repository where problems are stored
      * @param recordRepo the repository where records are stored
      * @param problem the problem the created record is getting added to
@@ -48,11 +55,14 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     }
 
     /**
-     * Main run method for CreateRecordImpl. This method contains all the specific
-     * business logic needed for the interactor. The main jobs of this method are to
-     * make sure the record title is not empty, make sure to description is properly
-     * set, to set date for the record if one has not been already, and then of course
-     * to create the record.
+     * Creates a record and adds it to the database
+     *
+     * Callbacks:
+     *      -Calls onCRNullTitle()
+     *          title entered for record creation is not valid
+     *
+     *      -Calls onCRSuccess(newRecord)
+     *          record created successfully and added to database as well as a problem
      */
     @Override
     public void run() {

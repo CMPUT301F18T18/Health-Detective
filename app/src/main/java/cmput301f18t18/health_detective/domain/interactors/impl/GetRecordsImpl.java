@@ -11,12 +11,24 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The GetRecordImpl class is a class intended to handle the retrieval of
+ * a problem's record list.
+ */
 public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
 
     private GetRecords.Callback callback;
     private RecordRepo recordRepo;
     private Problem problem;
 
+    /**
+     * Constructor for GetRecordsImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param recordRepo the repository where records are stored
+     * @param problem the problem who's list of records is retrieved
+     */
     public GetRecordsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           GetRecords.Callback callback, RecordRepo recordRepo,
                           Problem problem)

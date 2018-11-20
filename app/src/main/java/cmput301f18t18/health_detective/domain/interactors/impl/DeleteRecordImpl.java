@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The DeleteRecordImpl class is a class intended to handle the deletion of records
+ * on the back end.
+ */
 public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord {
 
     private DeleteRecord.Callback callback;
@@ -19,6 +23,9 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
 
     /**
      * Constructor for DeleteRecordImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param problemRepo the repository where problems are stored
      * @param recordRepo the repository where the records are stored
      * @param problem the problem that the record being deleted belongs to
@@ -37,10 +44,17 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
     }
 
     /**
-     * Main run method for DeleteRecordImpl. This method contains all the specific
-     * business logic needed for the interactor. The main jobs of this method are to
-     * make sure the problem that owns the record exists, to make sure the record
-     * that is going to be deleted exists, and then to delete the record correctly.
+     * Deletes a record from a problem and the database
+     *
+     * Callbacks:
+     *      -Calls onDRProblemNotFound()
+     *          problem owning the record does not exist
+     *
+     *      -Calls onDRRecordNotFound()
+     *          record attempting to be deleted does not exist
+     *
+     *      -Calls onDRSuccess(record)
+     *          if deleting record is successful, updates everything containing record
      */
     @Override
     public void run() {

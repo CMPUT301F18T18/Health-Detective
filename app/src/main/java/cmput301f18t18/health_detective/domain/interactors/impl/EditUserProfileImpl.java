@@ -7,6 +7,10 @@ import cmput301f18t18.health_detective.domain.interactors.EditUserProfile;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The EditUserProfileImpl class is a class intended to handle the editing of user
+ * profiles on the back end.
+ */
 public class EditUserProfileImpl extends AbstractInteractor implements EditUserProfile {
 
     private EditUserProfile.Callback callback;
@@ -17,6 +21,9 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
 
     /**
      * Constructor for EditUserProfileImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param userRepo the repository where users are stored
      * @param userToEdit the user profile that is being edited
      * @param email the email of the user profile that is being edited
@@ -35,10 +42,17 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
     }
 
     /**
-     * Main run method for EditUserProfileImpl. This method contains all the specific
-     * business logic needed for the interactor. The main jobs of this method are to
-     * make sure the email for the user profile is valid as well as the phone number,
-     * and then to correctly edit the user profile with this information.
+     * Edits the information contained in a user profile and updates the database.
+     *
+     * Callbacks:
+     *      -Calls onEUPInvalidEmail()
+     *          if email is invalid
+     *
+     *      -Calls onEUPInvaildPhoneNumber()
+     *          if phone number is invalid
+     *
+     *      -Calls onEUPSuccess(userToEdit)
+     *          if editing user is successful, updates everything containing user
      */
     @Override
     public void run() {
