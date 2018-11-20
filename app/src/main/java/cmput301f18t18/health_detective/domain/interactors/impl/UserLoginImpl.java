@@ -15,6 +15,14 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
     private UserRepo userRepo;
     private String userId;
 
+    /**
+     * Creates a new UserLoginImpl object from the provided parameters
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param userRepo
+     * @param userId
+     */
     public UserLoginImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                          UserLogin.Callback callback, UserRepo userRepo,
                          String userId)
@@ -25,6 +33,9 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         this.userId = userId;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         final Patient patient;
