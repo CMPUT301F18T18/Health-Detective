@@ -45,9 +45,9 @@ public class EditRecordImplTest {
         problems.insertProblem(problem1);
     }
 
-    // Testing record is correctly created
+    // Testing record is correctly edited
     @Test
-    public void testCRRecord() {
+    public void testERRecord() {
         
         Record recordBefore = new Record();
         records.insertRecord(recordBefore);
@@ -70,7 +70,7 @@ public class EditRecordImplTest {
         );
         command.execute();
 
-        // Check to make sure record is created
+        // Check to make sure record is edited
         assertTrue(callback.isERSuccessRecord());
 
         Record record = callback.getEditedRecord();
@@ -108,7 +108,7 @@ public class EditRecordImplTest {
         );
         command.execute();
 
-        // Check to make sure record is created
+        // Check to make sure record is edited
         assertTrue(callback.isERSuccessRecord());
 
         Record record = callback.getEditedRecord();
@@ -124,7 +124,7 @@ public class EditRecordImplTest {
 
     // Testing null title
     @Test
-    public void testCRNullTitle(){
+    public void testERNullTitle(){
         Record recordBefore = new Record();
 
         String title = null;
