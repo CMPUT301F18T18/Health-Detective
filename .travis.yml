@@ -14,4 +14,4 @@ android:
     
 script:
     - sudo chmod +x ./gradlew
-    - ./gradlew check
+    - ./gradlew check -x lint
