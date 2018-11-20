@@ -6,70 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".presentation.view.activity.SearchActivity">
 
-    <Spinner
-        android:id="@+id/spinner"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="156dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="154dp">>
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="51dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/search_border"
+                app:layout_constraintEnd_toStartOf="@+id/geoLocationBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/keywordText" />
+
+            <EditText
+                android:id="@+id/keywordText"
+                android:layout_width="295dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/keyword"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/geoLocationBtn"
+                android:layout_width="120dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="51dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/search_border"
+                android:text="@string/geo_location"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/spinner"
+                app:layout_constraintTop_toBottomOf="@+id/keywordText" />
+
+            <TextView
+                android:id="@+id/keywordBtn"
+                android:layout_width="82dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/search_border"
+                android:text="@string/search"
+                android:textAlignment="center"
+                android:textColor="@color/border_color"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/geoLocationBtn" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="33dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/signup_border"
-        app:layout_constraintEnd_toStartOf="@+id/geoLocationBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
-
-    <EditText
-        android:id="@+id/keywordText"
-        android:layout_width="295dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/keyword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/geoLocationBtn"
-        android:layout_width="146dp"
-        android:layout_height="33dp"
+        android:layout_height="1dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/signup_border"
-        android:text="@string/geo_location"
-        android:textAlignment="gravity"
-        android:textColor="#000000"
-        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/border_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
-
-    <TextView
-        android:id="@+id/keywordBtn"
-        android:layout_width="82dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="84dp"
-        android:background="@drawable/signup_border"
-        android:text="@string/search"
-        android:textAlignment="center"
-        android:textColor="@color/border_color"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/geoLocationBtn"
-        app:layout_constraintTop_toBottomOf="@+id/keywordText" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <ListView
         android:id="@+id/searchList"
         android:layout_width="395dp"
-        android:layout_height="467dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_height="488dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
 </android.support.constraint.ConstraintLayout>

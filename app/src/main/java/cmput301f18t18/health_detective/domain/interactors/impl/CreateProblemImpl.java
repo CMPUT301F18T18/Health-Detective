@@ -11,6 +11,10 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The CreateProblemImpl class is a class intended to handle to creation of problems
+ * on the back end.
+ */
 public class CreateProblemImpl extends AbstractInteractor implements CreateProblem {
 
     private CreateProblem.Callback callback;
@@ -21,6 +25,15 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     private String problemDescription;
     private Date startDate;
 
+    /**
+     * Constructor for CreateProblemImpl
+     * @param userRepo the repository where users are stored
+     * @param problemRepo the repository where problems are stored
+     * @param patient the patient the problem is intended to be added to
+     * @param problemTitle the title of the created problem
+     * @param problemDescription the description of the created problem
+     * @param startDate the date chosen for the created problem
+     */
     public CreateProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                              CreateProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
                              Patient patient, String problemTitle, String problemDescription, Date startDate)

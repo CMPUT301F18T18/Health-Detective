@@ -43,6 +43,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
         void onRecordDeleted(Record record);
         void onCreateRecord(Record record);
         void onCreateRecordFail();
+        void onDeleteRecordFail();
     }
 
     public RecordListPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
@@ -55,6 +56,10 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
         this.recordRepo = recordRepo;
     }
 
+    /**
+     * Methdd that calls on the interactor that gets all the records for the current user problem
+     * @param problem problem that user wants to see all records for
+     */
     public void getUserRecords(Problem problem){
         GetRecords getRecords = new GetRecordsImpl(
                 this.threadExecutor,
@@ -68,6 +73,14 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     }
 
+    /**
+     * Method that calls on interactor that creates a new record
+     * @param problem current problem that record is being added to
+     * @param recordTitle record title
+     * @param recordComment record comment
+     * @param recordDate record date
+     * @param userId current user that is adding the new record
+     */
     public void createUserRecord(Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
 
         CreateRecord createRecord = new CreateRecordImpl(
@@ -86,6 +99,11 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
         createRecord.execute();
     }
 
+    /**
+     * Method that calls on interactor that will delete the chosen record
+     * @param problem current problem that record is attached too
+     * @param record current record that is being deleted
+     */
     public void deleteUserRecords(Problem problem, Record record){
         DeleteRecord deleteRecord = new DeleteRecordImpl(
                 this.threadExecutor,
@@ -122,7 +140,6 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     }
 
-
     @Override
     public void onCRFail() {
         this.view.onCreateRecordFail();
@@ -146,6 +163,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
 
     @Override
     public void onDRFail() {
+        this.view.onDeleteRecordFail();
 
     }
 }

@@ -36,6 +36,10 @@ public class LoginPresenter implements UserLogin.Callback {
         this.userRepo = userRepo;
     }
 
+    /**
+     * Method that calls on interactor that will try to login in the user
+     * @param userId userid that user enters, must exits if user wants to login
+     */
     public void tryLogin(String userId){
         UserLogin command = new UserLoginImpl(
                 this.threadExecutor,

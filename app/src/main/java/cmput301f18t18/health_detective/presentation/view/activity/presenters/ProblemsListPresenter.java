@@ -42,6 +42,11 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         this.userRepo = userRepo;
     }
 
+    /**
+     * Method that calls on interactor that will delete problem
+     * @param patientContext current user that is deleting the problem
+     * @param problem current problem getting deleted
+     */
     public void deleteProblem(Patient patientContext, Problem problem){
         DeleteProblem command = new DeleteProblemImpl(
                 this.threadExecutor,
@@ -56,6 +61,10 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         command.execute();
     }
 
+    /**
+     * Method that calls on the interactor that gets all the problems for the current user
+     * @param patient current user (patitent)
+     */
     public void getProblems(Patient patient){
         GetProblems command = new GetProblemsImpl(
                 this.threadExecutor,
@@ -68,20 +77,6 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         command.execute();
     }
 
-//    public void createProblems(Patient patient, String problemTitle, String problemDescription, Date startDate){
-//        CreateProblem createProblem = new CreateProblemImpl(
-//                this.threadExecutor,
-//                this.mainThread,
-//                this,
-//                this.userRepo,
-//                this.problemRepo,
-//                patient,
-//                problemTitle,
-//                problemDescription,
-//                startDate
-//        );
-//        createProblem.execute();
-//    }
 
     @Override
     public void onDPSuccess(Problem problem) {

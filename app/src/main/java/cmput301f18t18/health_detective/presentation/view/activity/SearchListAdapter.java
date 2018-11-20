@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,14 +35,9 @@ public class SearchListAdapter extends ArrayAdapter{
         LayoutInflater inflater = LayoutInflater.from(mContext);
         rowView = inflater.inflate(R.layout.ind_search_view, null, true);
 
-        // Setting delete image
+//        // Setting images
         ImageView deleteImg = (ImageView) rowView.findViewById(R.id.deleteImg);
-        deleteImg.setImageResource(R.drawable.delete);
-
-        // Setting edit image
         ImageView editImg = (ImageView) rowView.findViewById(R.id.editImg);
-        editImg.setImageResource(R.drawable.editpencil);
-
         String data = testList.get(postition);
         TextView titleText = rowView.findViewById(R.id.titleView);
         titleText.setText(data);
@@ -52,6 +48,15 @@ public class SearchListAdapter extends ArrayAdapter{
         TextView descText = rowView.findViewById(R.id.descView);
         descText.setText(data);
 
+        TextView activityBtn = rowView.findViewById(R.id.activityBtn);
+
+        activityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(mContext, "Change Activity", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override

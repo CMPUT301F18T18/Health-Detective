@@ -28,7 +28,9 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     private ProblemAddEditPresenter.AddView addView;
 
 
-
+    /**
+     * Interface that updates the view inside the activity
+     */
     public interface AddView {
         void onCreateProblem(Problem problem);
         void onEditProblem();
@@ -39,6 +41,14 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
 
     }
 
+    /**
+     * This is the presenter constructor that is created when the new ProblemAddEditPresenter is made
+     * @param view the view that the presenter is updating
+     * @param threadExecutor the thread it runs on
+     * @param mainThread
+     * @param problemRepo
+     * @param userRepo
+     */
     public ProblemAddEditPresenter (ProblemAddEditPresenter.AddView view, ThreadExecutor threadExecutor, MainThread mainThread,
                                     ProblemRepo problemRepo, UserRepo userRepo) {
         this.addView = view;
@@ -48,7 +58,13 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
         this.userRepo = userRepo;
     }
 
-
+    /**
+     * This method calls on the interactor that will create a new problem
+     * @param patient the current user that is creating the problem
+     * @param problemTitle the problem title the user enters
+     * @param problemDescription the problem description the user enters
+     * @param startDate the start date the user enters
+     */
     public void createNewProblem(Patient patient, String problemTitle, String problemDescription, Date startDate){
         CreateProblem createProblem = new CreateProblemImpl(
                 this.threadExecutor,
@@ -64,6 +80,13 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
         createProblem.execute();
     }
 
+    /**
+     * This method calls on the editProblem interactor to edit the selected problem
+     * @param problem this is the current problem the user is editing
+     * @param problemTitle this is the new problem title
+     * @param problemDescription this is the new problem description
+     * @param startDate this is the new problem start date
+     */
     public void editUserProblem(Problem problem, String problemTitle, String problemDescription, Date startDate){
         EditProblem editProblem = new EditProblemImpl(
                 this.threadExecutor,
@@ -78,6 +101,10 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
         editProblem.execute();
     }
 
+    /**
+     * This override method is a call back when the new problem is created successfully
+     * @param problem current problem created
+     */
     @Override
     public void onCPSuccess(Problem problem) {
         this.addView.onCreateProblem(problem);

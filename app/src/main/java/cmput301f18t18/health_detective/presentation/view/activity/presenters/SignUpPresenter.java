@@ -4,22 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import cmput301f18t18.health_detective.domain.interactors.EditUserProfile;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateUserProfileImpl;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
+import cmput301f18t18.health_detective.domain.interactors.impl.EditUserProfileImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
 
-public class SignUpPresenter implements CreateUserProfile.Callback {
+public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProfile.Callback {
 
     private View view;
     private ThreadExecutor threadExecutor;
     private MainThread mainThread;
     private UserRepo userRepo;
+
 
     public interface View {
         void onCreatePatient(Patient patient);
@@ -27,6 +31,7 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
         void onInvalidId();
         void onInvalidEmail();
         void onInvalidPhoneNumber();
+        void onEditUserSuccess(Patient patient);
     }
 
     public SignUpPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
@@ -38,7 +43,12 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
         this.userRepo = userRepo;
     }
 
-
+    /**
+     * Method that calls on interactor that will create a new user
+     * @param userName new user name
+     * @param userEmail new user email
+     * @param userPhoneNum new user phone number
+     */
     public void createNewUser(String userName, String userEmail, String userPhoneNum){
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
@@ -53,6 +63,25 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
         );
 
         createUserProfile.execute();
+    }
+
+    /**
+     * Method that calls on interactor that will edit the current user info
+     * @param userToEdit current user
+     * @param email new user email
+     * @param phoneNumber new user phonenumber
+     */
+    public void editUserInfo(User userToEdit, String email, String phoneNumber){
+        EditUserProfile editUserProfile = new EditUserProfileImpl(
+                this.threadExecutor,
+                this.mainThread,
+                this,
+                this.userRepo,
+                userToEdit,
+                email,
+                phoneNumber
+        );
+        editUserProfile.execute();
     }
 
 
@@ -85,6 +114,21 @@ public class SignUpPresenter implements CreateUserProfile.Callback {
 
     @Override
     public void onCUPFail() {
+    }
+
+    @Override
+    public void onEUPSuccess(User userProfile) {
+        this.view.onEditUserSuccess((Patient) userProfile);
+    }
+
+    @Override
+    public void onEUPInvalidEmail() {
+
+    }
+
+    @Override
+    public void onEUPInvaildPhoneNumber() {
+
     }
 
 }
