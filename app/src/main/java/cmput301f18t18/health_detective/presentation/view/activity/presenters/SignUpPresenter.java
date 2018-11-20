@@ -43,7 +43,12 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
         this.userRepo = userRepo;
     }
 
-
+    /**
+     * Method that calls on interactor that will create a new user
+     * @param userName new user name
+     * @param userEmail new user email
+     * @param userPhoneNum new user phone number
+     */
     public void createNewUser(String userName, String userEmail, String userPhoneNum){
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
@@ -60,6 +65,12 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
         createUserProfile.execute();
     }
 
+    /**
+     * Method that calls on interactor that will edit the current user info
+     * @param userToEdit current user
+     * @param email new user email
+     * @param phoneNumber new user phonenumber
+     */
     public void editUserInfo(User userToEdit, String email, String phoneNumber){
         EditUserProfile editUserProfile = new EditUserProfileImpl(
                 this.threadExecutor,

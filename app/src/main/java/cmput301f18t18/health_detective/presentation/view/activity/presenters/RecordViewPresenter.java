@@ -31,7 +31,13 @@ public class RecordViewPresenter implements EditRecord.Callback{
         this.recordRepo = recordRepo;
     }
 
-
+    /**
+     * Method that calls on interactor that edits the chosen record
+     * @param record record being edited
+     * @param recordTitle new record title
+     * @param recordComment new record comment
+     * @param recordDate new record date
+     */
     public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate){
         EditRecord editRecord = new EditRecordImpl(
                 this.threadExecutor,
