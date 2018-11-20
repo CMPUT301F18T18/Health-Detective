@@ -30,6 +30,7 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
@@ -39,6 +40,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
     Record record;
     RecordViewPresenter recordViewPresenter;
     TextView recordTitle, recordDate, recordDesc;
+    Patient patientContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
 
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
+        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
 
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
@@ -97,6 +100,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
+        MenuItem userIdMenu = menu.findItem(R.id.userId);
+        userIdMenu.setTitle(patientContext.getUserId());
         return true;
     }
 
@@ -121,13 +126,17 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
             case R.id.edit_date:
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
-                //recordViewPresenter.editUserRecord(record, "Whale Test", "whales are AMAZING", new Date());
                 return true;
             case R.id.edit_desc:
                 String promptDesc = "Edit Description";
                 openDialog(promptDesc,2,record.getComment());
                 return true;
             case R.id.edit_photo:
+                return true;
+            case R.id.userId:
+                Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("PATIENT", patientContext);
+                startActivity(userIdIntent);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

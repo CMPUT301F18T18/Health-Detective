@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        MenuItem userIdMenu = menu.findItem(R.id.userId);
+        userIdMenu.setTitle(patientContext.getUserId());
+
         return true;
     }
 
@@ -99,8 +103,11 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             case R.id.Logout_option:
                 Intent logoutIntent = new Intent(this,MainActivity.class);
                 startActivity(logoutIntent);
+                return true;
+
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
 
