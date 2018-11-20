@@ -17,6 +17,13 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
     private Patient patient;
     private Problem problem;
 
+    /**
+     * Constructor for CreateProblemImpl
+     * @param userRepo the repository where users are stored
+     * @param problemRepo the repository where problems are stored
+     * @param patient the patient the problem being deleted belonged to
+     * @param problem the problem being deleted
+     */
     public DeleteProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                              DeleteProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
                              Patient patient, Problem problem)
@@ -29,6 +36,11 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
         this.problem = problem;
     }
 
+    /**
+     * Main run method for DeleteProblemImpl. This method contains all the specific
+     * business logic needed for the interactor.
+     *
+     */
     @Override
     public void run() {
         // Patient cannot be found
