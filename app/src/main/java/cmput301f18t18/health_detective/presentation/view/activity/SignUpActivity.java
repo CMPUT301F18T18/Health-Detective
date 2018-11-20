@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
-    private User userContext;
+    private Patient patientContext;
+    private Boolean activityType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,27 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().hide();
 
         Intent intent = this.getIntent();
-        this.userContext = (Patient) intent.getSerializableExtra("PATIENT");
+        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
+        //true if editing problem, false if creating new problem
+        if (patientContext == null){
+            activityType = false;
+        } else {
+            activityType = true;
+        }
 
+        Button signUp = findViewById(R.id.signUpBtn);
+        TextView cancelBtn = findViewById(R.id.cancelBtn);
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
+
+        if (activityType){
+            userText.setText(patientContext.getUserId());
+            userText.setFocusable(false);
+            phoneText.setText(patientContext.getPhoneNumber());
+            emailText.setText(patientContext.getEmailAddress());
+            signUp.setText("Save");
+        }
         ImageView image = findViewById(R.id.imageView2);
         image.setImageResource(R.drawable.logo_transparent_background);
 
@@ -51,8 +69,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 ElasticSearchController.getInstance()
         );
 
-        Button signUp = findViewById(R.id.signUpBtn);
-        TextView cancelBtn = findViewById(R.id.cancelBtn);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
@@ -98,7 +114,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String user = userText.getText().toString();
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
-                signUpPresenter.createNewUser(user, email, phone);
+                if (activityType){
+                    signUpPresenter.editUserInfo(patientContext, email, phone);
+                } else {
+                    signUpPresenter.createNewUser(user, email, phone);
+                }
+                break;
             case R.id.cancelBtn:
                 finish();
         }
@@ -130,5 +151,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onInvalidPhoneNumber() {
         Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onEditUserSuccess(Patient patient) {
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        intent.putExtra("PATIENT", patient);
+        startActivity(intent);
+        //Toast.makeText(this, patient.getPhoneNumber().toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Edited", Toast.LENGTH_SHORT).show();
     }
 }

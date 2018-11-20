@@ -24,6 +24,7 @@ import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
@@ -33,13 +34,15 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener,
+        RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener{
 
     ListView listView;
     RecordListAdapter adapter;
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
     Problem problemContext;
+    Patient patientContext;
     int currentPosition;
 
 
@@ -51,6 +54,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
+        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
 
         this.recordListPresenter = new RecordListPresenter(
                 this,
@@ -61,7 +65,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         );
 
 
-        adapter = new RecordListAdapter(this, recordList, this);
+        adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);
 
 
         ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
@@ -71,7 +75,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView = findViewById(R.id.recordListView);
 
 
-        adapter = new RecordListAdapter(this, this.recordList, this);
+        adapter = new RecordListAdapter(this, this.recordList, patientContext.getUserId(), this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,6 +83,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 currentPosition = position;
                 Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
                 intent.putExtra("RECORD", recordList.get(position));
+                intent.putExtra("USER", patientContext);
                 changeActivity(intent);
             }
         });
@@ -103,6 +108,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
+        MenuItem userIdMenu = menu.findItem(R.id.userId);
+        userIdMenu.setTitle(patientContext.getUserId());
 
 
         return true;
@@ -115,6 +122,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 // this takes the user 'back', as if they pressed the left-facing triangle icon on the main android toolbar.
                 // if this doesn't work as desired, another possibility is to call `finish()` here.
                 this.onBackPressed();
+                return true;
+            case R.id.userId:
+                Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("PATIENT", patientContext);
+                startActivity(userIdIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,9 +184,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public void onCreateRecord(Record record) {
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
+        intent.putExtra("USER", patientContext);
         intent.putExtra("RECORD", record);
         this.startActivity(intent);
-        //recordListPresenter.getUserRecords(problemContext);
     }
 
     @Override

@@ -61,6 +61,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         problemTitle = findViewById(R.id.problemTitle);
         problemDate = findViewById(R.id.problemDate);
         problemDesc = findViewById(R.id.problemDesc);
+        problemDate.setFocusable(false);
         if (type){
             problemTitle.setText(problemContext.getTitle());
             problemDate.setText(problemContext.getStartDate().toString());
@@ -124,7 +125,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                 finish();
                 break;
             case R.id.addDateBtn:
-                //TODO: Add in date picker, then set the dateTextField to the date picker string
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
 
