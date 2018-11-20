@@ -15,7 +15,15 @@ import java.util.Set;
 
 import cmput301f18t18.health_detective.R;
 
-//https://stackoverflow.com/questions/38417984/android-spinner-dropdown-checkbox
+
+/*
+    Author: Tyler V
+    Title: android spinner dropdown checkbox
+    Source: https://stackoverflow.com/questions/38417984/android-spinner-dropdown-checkbox
+
+    This was taken for a simple Adapter for the drop down menu on search. Will eventually be used as
+    a guideline when changing it to fit with Health-Detective design
+ */
 
 public class BodyPartCheckBoxAdapter extends BaseAdapter {
 
