@@ -3,6 +3,9 @@ package cmput301f18t18.health_detective.domain.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Class to store info specific to patients, extending all info that is in user.
+ */
 public class Patient extends User {
     private static final long serialVersionUID = 4L;
 

@@ -7,6 +7,9 @@ import java.util.HashSet;
 
 import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
 
+/**
+ *
+ */
 public class Problem implements Searchable, Serializable {
     private static final long serialVersionUID = 1L;
     private int problemId;
@@ -121,11 +124,25 @@ public class Problem implements Searchable, Serializable {
         return  recordIds;
     }
 
+    /**
+     * Method from searchable to find problems related to bodypart
+     * Needs to search records for this.
+     *
+     * @param bodyPart The bodypart to search for
+     * @return         True if problem relates to bodypart
+     */
     @Override
     public boolean containsBodyPart(BodyPart bodyPart) {
         return false;
     }
 
+    /**
+     * Method from searchable to find problems related to keywords
+     * Needs to search records for this.
+     *
+     * @param keywords The list of keywords to search for
+     * @return         True if problem relates to keywords
+     */
     @Override
     public boolean containsKeyword(ArrayList<String> keywords) {
         return false;
