@@ -113,6 +113,70 @@ public class UserTest {
 
     @Test
     public void isValidEmailAddress() {
-        assertTrue(false);
+        String email = "test.test@test.test";
+
+        assertTrue(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void isValidEmailAddress2() {
+        String email = "test@test.test";
+
+        assertTrue(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void isValidEmailAddress3() {
+        String email = "test.test.test.test.test.test.test.test.test.test@test.test.test.test.est.test.test";
+
+        assertTrue(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_StartingDot() {
+        String email = ".test@test.test";
+
+
+        assertFalse(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_DoubleDot() {
+        String email = "test..test@test.test";
+
+
+        assertFalse(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_DoubleDot2() {
+        String email = "test.test@test..test";
+
+
+        assertFalse(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_NoAt() {
+        String email = "test.testtest.test";
+
+
+        assertFalse(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_Null() {
+        String email = null;
+
+
+        assertFalse(User.isValidEmailAddress(email));
+    }
+
+    @Test
+    public void InvalidEmailAddress_EmptyString() {
+        String email = "";
+
+
+        assertFalse(User.isValidEmailAddress(email));
     }
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import io.searchbox.annotations.JestId;
+import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
 
 public class Problem implements Searchable, Serializable {
     private static final long serialVersionUID = 1L;
@@ -24,6 +24,15 @@ public class Problem implements Searchable, Serializable {
         this.setStartDate(createDate);
     }
 
+    public Problem(int problemId, String title, String description) {
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = problemId;
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(createDate);
+    }
+
     public Problem(String title, String description) {
         records = new HashSet<>();
         Date createDate = new Date();
@@ -31,6 +40,15 @@ public class Problem implements Searchable, Serializable {
         this.setTitle(title);
         this.setDescription(description);
         this.setStartDate(createDate);
+    }
+
+    public Problem(String title, String description, Date startDate) {
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = createDate.hashCode();
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(startDate);
     }
 
     public Problem(int problemId, String title, String description, Date startDate) {
