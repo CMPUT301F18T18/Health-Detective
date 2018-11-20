@@ -22,6 +22,15 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     private Date date;
     private String authorId;
 
+    /**
+     * Constructor for CreateProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param userRepo the repository where users are stored
+     * @param patient the patient the problem is intended to be added to
+     * @param problemTitle the title of the created problem
+     * @param problemDescription the description of the created problem
+     * @param startDate the date chosen for the created problem
+     */
     public CreateRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                             CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
                             Problem problem, String recordTitle, String recordComment, Date date, String authorId)
@@ -37,6 +46,11 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         this.authorId = authorId;
     }
 
+    /**
+     * Main run method for CreateRecordImpl. This method contains all the specific
+     * business logic needed for the interactor.
+     *
+     */
     @Override
     public void run() {
         if(recordTitle == null){
@@ -52,7 +66,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         }
 
         if(recordComment == null) recordComment = "";
-        Record newRecord = new Record(recordTitle,recordComment);
+            Record newRecord = new Record(recordTitle,recordComment);
 
         if(this.date != null){
             newRecord.setDate(this.date);

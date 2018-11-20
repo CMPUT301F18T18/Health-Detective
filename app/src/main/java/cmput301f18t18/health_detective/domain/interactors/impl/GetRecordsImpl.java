@@ -27,6 +27,16 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
         this.problem = problem;
     }
 
+    /**
+     * Queries the database for the provided problems records, sorted by date
+     *
+     * Callbacks:
+     *      - onGRNoRecords()
+     *          If problem has no records
+     *
+     *      - onGRSuccess(ArrayList<Records> problems)
+     *          If query was successful, passing the problems records as an argument
+     */
     @Override
     public void run() {
 

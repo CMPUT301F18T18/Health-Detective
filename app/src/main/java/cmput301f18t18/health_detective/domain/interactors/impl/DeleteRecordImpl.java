@@ -17,6 +17,13 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
     private Record record;
     private Problem problem;
 
+    /**
+     * Constructor for CreateProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param recordRepo the repository where the records are stored
+     * @param problem the problem that the record being deleted belongs to
+     * @param record the record being deleted
+     */
     public DeleteRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                             DeleteRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
                             Problem problem, Record record)
@@ -29,6 +36,11 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
         this.problem = problem;
     }
 
+    /**
+     * Main run method for DeleteRecordImpl. This method contains all the specific
+     * business logic needed for the interactor.
+     *
+     */
     @Override
     public void run() {
         // Problem cannot be found
