@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Class to store info and methods specific to CareProviders taking data from User
+ */
 public class CareProvider extends User {
     private static final long serialVersionUID = 5L;
     public HashSet<String> patients;
