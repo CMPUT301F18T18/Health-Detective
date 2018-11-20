@@ -33,7 +33,7 @@ public class AddDialog extends AppCompatDialogFragment{
         View view = inflater.inflate(R.layout.layout_add_record_dialog,null);
 
         builder.setView(view)
-                .setTitle("Add Test")
+                .setTitle("Add Record")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
