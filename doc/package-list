@@ -1,0 +1,15 @@
+cmput301f18t18.health_detective
+cmput301f18t18.health_detective.data.repository
+cmput301f18t18.health_detective.domain.executor
+cmput301f18t18.health_detective.domain.executor.impl
+cmput301f18t18.health_detective.domain.executor.mock
+cmput301f18t18.health_detective.domain.interactors
+cmput301f18t18.health_detective.domain.interactors.base
+cmput301f18t18.health_detective.domain.interactors.impl
+cmput301f18t18.health_detective.domain.interactors.impl.mock
+cmput301f18t18.health_detective.domain.model
+cmput301f18t18.health_detective.domain.repository
+cmput301f18t18.health_detective.domain.repository.mock
+cmput301f18t18.health_detective.presentation.view.activity
+cmput301f18t18.health_detective.presentation.view.activity.listeners
+cmput301f18t18.health_detective.presentation.view.activity.presenters
