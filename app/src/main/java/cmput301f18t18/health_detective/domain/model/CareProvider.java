@@ -24,19 +24,24 @@ public class CareProvider extends User {
     }
 
     public void addPatient(Patient patient) {
-        patients.add(patient.getUserId());
-    }
+        String patientUserId;
 
-    public void addPatient(String patientId) {
-        patients.add(patientId);
+        if (patient == null)
+            return;
+
+        patientUserId = patient.getUserId();
+
+        if (patientUserId == null || patientUserId =="")
+            return;
+
+        patients.add(patientUserId);
     }
 
     public void removePatient(Patient patient) {
-        patients.remove(patient.getUserId());
-    }
+        if (patient == null)
+            return;
 
-    public void removePatient(String patientId) {
-        patients.remove(patientId);
+        patients.remove(patient.getUserId());
     }
 
     public boolean isPatientsEmpty() {

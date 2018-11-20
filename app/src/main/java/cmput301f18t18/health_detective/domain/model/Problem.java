@@ -15,9 +15,6 @@ public class Problem implements Searchable, Serializable {
     private String description;
     private HashSet<Integer> records;
 
-    @JestId
-    private String problemJestId;
-
     public Problem() {
         records = new HashSet<>();
         Date createDate = new Date();
@@ -127,8 +124,4 @@ public class Problem implements Searchable, Serializable {
         Problem problem = (Problem) o;
         return (this.problemId == problem.getProblemID());
     }
-
-    public void setProblemJestId(String id) { this.problemJestId = id; }
-
-    public String getProblemJestId() { return this.problemJestId; }
 }

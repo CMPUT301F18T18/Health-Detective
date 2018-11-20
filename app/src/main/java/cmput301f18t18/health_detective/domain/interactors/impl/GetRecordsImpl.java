@@ -9,7 +9,6 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.GetRecords;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
