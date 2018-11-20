@@ -8,6 +8,7 @@ cmput301f18t18.health_detective.domain.interactors.base
 cmput301f18t18.health_detective.domain.interactors.impl
 cmput301f18t18.health_detective.domain.interactors.impl.mock
 cmput301f18t18.health_detective.domain.model
+cmput301f18t18.health_detective.domain.model.Interfaces
 cmput301f18t18.health_detective.domain.repository
 cmput301f18t18.health_detective.domain.repository.mock
 cmput301f18t18.health_detective.presentation.view.activity
