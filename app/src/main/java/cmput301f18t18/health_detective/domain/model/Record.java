@@ -3,8 +3,8 @@ package cmput301f18t18.health_detective.domain.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
+import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
 
 public class Record implements Searchable, Serializable {
     private static final long serialVersionUID = 2L;
@@ -30,6 +30,21 @@ public class Record implements Searchable, Serializable {
         this.setTitle(title);
         this.setComment(comment);
         this.setDate(createDate);
+    }
+
+    public Record(int recordId, String title, String comment) {
+        this.recordId = recordId;
+        this.setTitle(title);
+        this.setComment(comment);
+        this.setDate(new Date());
+    }
+
+    public Record(String title, String comment, Date date) {
+        Date createDate = new Date();
+        this.recordId = createDate.hashCode();
+        this.setTitle(title);
+        this.setComment(comment);
+        this.setDate(date);
     }
 
     public Record(int recordId, String title, String comment, Date date) {

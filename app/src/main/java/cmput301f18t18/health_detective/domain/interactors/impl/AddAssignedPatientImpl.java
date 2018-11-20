@@ -32,7 +32,7 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
         Patient patientToAdd;
 
         // UserId invalid
-        if (User.isValidUserId(patientId)) {
+        if (!User.isValidUserId(patientId)) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {

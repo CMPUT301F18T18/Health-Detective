@@ -48,7 +48,11 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
         this.startDate = startDate;
     }
 
-
+    /**
+     * Main run method for CreateProblemImpl. This method contains all the specific
+     * business logic needed for the interactor.
+     *
+     */
     @Override
     public void run() {
         if(problemTitle == null) {
