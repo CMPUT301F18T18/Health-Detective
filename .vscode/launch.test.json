@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "app",
+                "projectName": "app",
+                "workingDirectory": "/home/nilad/Documents/Code/School/Health-Detective/app",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "app",
+                "projectName": "app",
+                "workingDirectory": "/home/nilad/Documents/Code/School/Health-Detective/app",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
