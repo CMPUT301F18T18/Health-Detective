@@ -115,6 +115,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                     problemDateTime = new Date();
                 }
                 if (type){
+                    problemDateTime = problemContext.getStartDate();
                     problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, problemDateTime);
                 }
                 else {
