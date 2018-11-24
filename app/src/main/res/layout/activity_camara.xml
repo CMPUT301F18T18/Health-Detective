@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/TakeAPhoto"
-        android:layout_width="95dp"
-        android:layout_height="55dp"
+        android:layout_width="123dp"
+        android:layout_height="76dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="0.64"
         app:layout_constraintBottom_toBottomOf="parent"

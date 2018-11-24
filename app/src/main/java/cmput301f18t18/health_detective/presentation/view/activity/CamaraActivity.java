@@ -10,9 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -23,6 +21,7 @@ import static cmput301f18t18.health_detective.presentation.view.activity.Permiss
 public class CamaraActivity extends AppCompatActivity {
 
     Uri imageFileUri;
+    int angle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +80,22 @@ public class CamaraActivity extends AppCompatActivity {
 //            TextView tv = (TextView) findViewById(R.id.status);
 //            if (resultCode == RESULT_OK) {
 //                tv.setText("Photo OK!");
+
+            //https://stackoverflow.com/questions/8981845/android-rotate-image-in-imageview-by-an-angle
                 ImageView button = (ImageView) findViewById(R.id.photoPlacer);
                 button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+                //int angle = 0;
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        angle = angle + 90;
+                        button.setRotation(angle);
+                    }
+                });
+//                PhotoViewAttacher pAttacher;
+//                pAttacher = new PhotoViewAttacher(Your_Image_View);
+//                pAttacher.update();
+
 //            } else if (resultCode == RESULT_CANCELED) {
 //                tv.setText("Photo canceled");
 //            } else {
