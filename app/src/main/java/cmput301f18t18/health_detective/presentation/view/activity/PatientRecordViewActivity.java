@@ -132,6 +132,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 openDialog(promptDesc,2,record.getComment());
                 return true;
             case R.id.edit_photo:
+                Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                startActivity(camaraIntent);
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
