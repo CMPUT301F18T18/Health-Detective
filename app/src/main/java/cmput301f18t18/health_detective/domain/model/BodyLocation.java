@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.File;
 import java.util.Set;
 
 /**
@@ -7,15 +8,9 @@ import java.util.Set;
  */
 public class BodyLocation {
 
-    private BodyPart location;
-    private Set<BodyPhoto> bodyPhotos;
-
-    public BodyPart getLocation() {
-        return location;
-    }
-
-    public void setLocation(BodyPart location) {
-        location = location;
-    }
+    private String label = null;
+    private Integer xPos = null;
+    private Integer yPos = null;
+    private File photo = null;
 
 }
