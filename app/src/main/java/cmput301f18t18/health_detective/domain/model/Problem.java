@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
+import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
 
 /**
  *

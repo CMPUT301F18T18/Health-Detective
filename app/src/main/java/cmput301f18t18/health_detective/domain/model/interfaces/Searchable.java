@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.domain.model.Interfaces;
+package cmput301f18t18.health_detective.domain.model.interfaces;
 
 import java.util.ArrayList;
 
