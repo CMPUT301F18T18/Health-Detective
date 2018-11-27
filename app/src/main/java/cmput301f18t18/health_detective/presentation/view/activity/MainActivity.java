@@ -17,6 +17,8 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
@@ -30,12 +32,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        UserRepoMock mockUser = new UserRepoMock();
+        mockUser.insertUser(new Patient("12345678", "(250) 575-9089", "a@a.a"));
 
         this.loginPresenter = new LoginPresenter(
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
+                //ElasticSearchController.getInstance()
+                mockUser
         );
 
         Button loginButton = findViewById(R.id.loginButton);

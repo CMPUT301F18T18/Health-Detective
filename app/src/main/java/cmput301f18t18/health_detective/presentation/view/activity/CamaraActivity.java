@@ -1,6 +1,16 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -8,29 +18,91 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-
+import android.widget.Toast;
+import android.view.View.OnTouchListener;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Photo;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
+
 import static cmput301f18t18.health_detective.presentation.view.activity.PermissionRequest.verifyPermission;
 
-public class CamaraActivity extends AppCompatActivity {
+public class CamaraActivity extends AppCompatActivity implements OnTouchListener, View.OnClickListener{
 
     Uri imageFileUri;
     int angle = 0;
+    ImageView takenPhoto;
+    private int FROM_GALLERY = 2;
+    private static final String TAG = "Touch";
+    String base;
+    byte[] temp;
+    @SuppressWarnings("unused")
+    private static final float MIN_ZOOM = 1f,MAX_ZOOM = 1f;
+
+    // These matrices will be used to scale points of the image
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
+
+    // The 3 states (events) which the user is trying to perform
+    static final int NONE = 0;
+    static final int DRAG = 1;
+    static final int ZOOM = 2;
+    int mode = NONE;
+
+    // these PointF objects are used to record the point(s) the user is touching
+    PointF start = new PointF();
+    PointF mid = new PointF();
+    float oldDist = 1f;
+
+    private int fieldImgXY[] = new int[2];
+
+    Bitmap bitmap;
+    Canvas canvas;
+    Paint paint;
+    Paint pDot  = new Paint();
+    float downx=0,downy=0,upx=30,upy=50;
+    int cols = 5;
+    int rows = 6;
+    Record record;
+    Patient patientContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camara);
 
+        Intent newIntent = this.getIntent();
+        this.record = (Record) newIntent.getSerializableExtra("RECORD");
+        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+
+
+
+        takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
+
+
+        Button saveBtn = findViewById(R.id.saveBtn);
+        saveBtn.setOnClickListener(this);
+
+
+
+        takenPhoto.setOnTouchListener(this);
+
         ImageView button = (ImageView) findViewById(R.id.TakeAPhoto);
         View.OnClickListener listener = new View.OnClickListener() {
-            public void onClick(View v){
+            public void onClick(View v) {
                 takeAPhoto();
             }
         };
@@ -39,8 +111,23 @@ public class CamaraActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.camera_menu, menu);
+        MenuItem rotatePhoto = menu.findItem(R.id.rotate);
+
         return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.rotate:
+                //https://stackoverflow.com/questions/8981845/android-rotate-image-in-imageview-by-an-angle
+                //angle = angle + 90;
+                //takenPhoto.setRotation(angle);
+                //toGallery();
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -68,39 +155,62 @@ public class CamaraActivity extends AppCompatActivity {
 
         String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
 
-        File imageFile = new File(folder,"imagetest.jpg");
+        File imageFile = new File(folder, "imagetest.jpg");
         imageFileUri = Uri.fromFile(imageFile);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
+    private void toGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, FROM_GALLERY);
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            TextView tv = (TextView) findViewById(R.id.status);
-//            if (resultCode == RESULT_OK) {
-//                tv.setText("Photo OK!");
+            if (resultCode == RESULT_OK) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
+                    Photo photo = new Photo();
+                    temp =  photo.toBase64String(bitmap);
+                    base = photo.byteArrayToString(temp);
+                    Bitmap bitmap1 = photo.toBitmap(base);
+                    takenPhoto.setImageBitmap(bitmap1);
 
-            //https://stackoverflow.com/questions/8981845/android-rotate-image-in-imageview-by-an-angle
-                ImageView button = (ImageView) findViewById(R.id.photoPlacer);
-                button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
-                //int angle = 0;
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        angle = angle + 90;
-                        button.setRotation(angle);
-                    }
-                });
-//                PhotoViewAttacher pAttacher;
-//                pAttacher = new PhotoViewAttacher(Your_Image_View);
-//                pAttacher.update();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //takenPhoto.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+            }
+        }
+    }
 
-//            } else if (resultCode == RESULT_CANCELED) {
-//                tv.setText("Photo canceled");
-//            } else {
-//                tv.setText("Not sure what happened!" + resultCode);
-//            }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // MotionEvent object holds X-Y values
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            String text = "You click at x = " + event.getX() + " and y = " + event.getY();
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.saveBtn){
+            Intent intent = new Intent(this, PatientRecordViewActivity.class);
+            intent.putExtra("RECORD", record);
+            intent.putExtra("USER", patientContext);
+            intent.putExtra("PHOTO", temp);
+            startActivity(intent);
         }
     }
 }

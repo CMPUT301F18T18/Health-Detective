@@ -67,13 +67,19 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+        RecordRepoMock mockRecord = new RecordRepoMock();
+        mockRecord.insertRecord(new Record("test", "test", new Date()));
+        ProblemRepoMock mockProblem = new ProblemRepoMock();
+        mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
         this.recordListPresenter = new RecordListPresenter(
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
+                //ElasticSearchController.getInstance(),
+                mockProblem,
+                //ElasticSearchController.getInstance()
+                mockRecord
         );
 
 

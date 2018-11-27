@@ -32,6 +32,7 @@ import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
 public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -41,6 +42,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
     RecordViewPresenter recordViewPresenter;
     TextView recordTitle, recordDate, recordDesc;
     Patient patientContext;
+    byte[] image;
+    int testImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +53,30 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+        this.image = (byte[]) newIntent.getSerializableExtra("PHOTO");
+        if (image == null){
+            testImages = 0;
+        } else {
+            testImages = 1;
+        }
 
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
         setTextViews();
+        RecordRepoMock mockRecord = new RecordRepoMock();
+        mockRecord.insertRecord(new Record("test", "test", new Date()));
 
         recordViewPresenter = new RecordViewPresenter(
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
+                //ElasticSearchController.getInstance()
+                mockRecord
         );
 
         //stuff for all photos section
-        GridViewAdapter adapter = new GridViewAdapter(this, 10);
+        GridViewAdapter adapter = new GridViewAdapter(this, testImages);
         GridView gridView = (GridView) findViewById(R.id.allPhotosView);
 
         gridView.setAdapter(adapter);
@@ -133,6 +145,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 return true;
             case R.id.edit_photo:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                camaraIntent.putExtra("USER", patientContext);
+                camaraIntent.putExtra("RECORD", record);
                 startActivity(camaraIntent);
                 return true;
             case R.id.userId:
@@ -153,6 +167,10 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         testImg.setImageResource(R.drawable.ic_launcher_background);
         bodyPhotoScroll.addView(testImg);
         bodyPhotoScroll.invalidate();
+    }
+
+    public void test2(){
+
     }
 
     @Override
