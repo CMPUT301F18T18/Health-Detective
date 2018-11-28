@@ -38,8 +38,7 @@ public class DomainImageImpl implements DomainImage {
         this.imageId = imageId;
     }
 
-    @Override
-    public void setImage(byte[] image) {
+    private void setImage(byte[] image) {
         this.image = image;
     }
 

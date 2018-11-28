@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.model.context.tree.base.ContextTree;
+import cmput301f18t18.health_detective.domain.repository.BodyImageRepo;
 import cmput301f18t18.health_detective.domain.repository.BodyLocationRepo;
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
@@ -21,6 +22,7 @@ public class DomainContext {
     private ProblemRepo problemRepo = null;
     private RecordRepo recordRepo = null;
     private BodyLocationRepo bodyLocationRepo = null;
+    private BodyImageRepo bodyImageRepo = null;
     private ImageRepo imageRepo = null;
 
     private ContextTree contextTree;
@@ -37,7 +39,7 @@ public class DomainContext {
 
     public static void init_ONLY_CALL_START(ThreadExecutor threadExecutor, MainThread mainThread,
                                      UserRepo userRepo, ProblemRepo problemRepo, RecordRepo recordRepo,
-                                     BodyLocationRepo bodyLocationRepo, ImageRepo imageRepo) {
+                                     BodyLocationRepo bodyLocationRepo, BodyImageRepo bodyImageRepo, ImageRepo imageRepo) {
         // If already initilized return
         if (ourInstance != null) {
             return;
@@ -58,6 +60,7 @@ public class DomainContext {
         context.problemRepo = problemRepo;
         context.recordRepo = recordRepo;
         context.bodyLocationRepo = bodyLocationRepo;
+        context.bodyImageRepo = bodyImageRepo;
         context.imageRepo = imageRepo;
     }
 

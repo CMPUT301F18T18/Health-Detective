@@ -46,4 +46,10 @@ public class RecordImage {
     public void setImage(DomainImage image) {
         this.image = image;
     }
+
+    public byte[] getImage() {
+        byte[] image = this.image.getImage();
+
+        return image;
+    }
 }

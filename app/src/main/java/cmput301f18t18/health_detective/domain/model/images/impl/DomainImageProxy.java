@@ -1,9 +1,12 @@
 package cmput301f18t18.health_detective.domain.model.images.impl;
 
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 
 public class DomainImageProxy implements DomainImage {
+
     private String imageId;
+    private DomainImage image;
 
     public DomainImageProxy(String imageId) {
         this.setImageId(imageId);
@@ -15,16 +18,16 @@ public class DomainImageProxy implements DomainImage {
 
     @Override
     public String getImageId() {
-        return null;
+        return imageId;
     }
 
     @Override
     public byte[] getImage() {
-        return new byte[0];
-    }
+        if (this.image != null) {
+            return this.image.getImage();
+        }
 
-    @Override
-    public void setImage(byte[] image) {
-
+        DomainContext context = DomainContext.getInstance();
+        context.get
     }
 }
