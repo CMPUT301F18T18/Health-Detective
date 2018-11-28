@@ -21,7 +21,7 @@ public class CreateUserProfileMockSuccess extends AbstractInteractor implements 
                                         CreateUserProfile.Callback callback, UserRepo userRepo,
                                         String userId, String email, String phoneNumber, boolean isCareProvider)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.userId = userId;

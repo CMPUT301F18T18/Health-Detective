@@ -22,7 +22,7 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
                                   EditRecord.Callback callback, RecordRepo recordRepo,
                                   Record recordToEdit, String title, String comment, Date date)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.recordRepo = recordRepo;
         this.recordtoEdit = recordToEdit;

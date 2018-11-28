@@ -16,7 +16,6 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     private EditRecord.Callback callback;
-    private RecordRepo recordRepo;
     private Record recordtoEdit;
     private String title;
     private String comment;
@@ -24,22 +23,17 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     /**
      * First constructor for EditRecordImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param recordRepo the repository where records are stored
      * @param recordToEdit the record that is being edited
      * @param title the title of the record that is being edited
      * @param comment the description of the record being edited
      * @param date the date assigned to the record being edited
      */
-    public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                          EditRecord.Callback callback, RecordRepo recordRepo,
+    public EditRecordImpl(EditRecord.Callback callback,
                           Record recordToEdit, String title, String comment, Date date)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.recordRepo = recordRepo;
         this.recordtoEdit = recordToEdit;
         this.title = title;
         this.comment = comment;
@@ -48,18 +42,15 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     /**
      * Second constructor for EditRecordImpl
-     * @param recordRepo the repository where records are stored
      * @param recordToEdit the record that is being edited
      * @param title the title of the record that is being edited
      * @param comment the description of the record being edited
      */
-    public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                          EditRecord.Callback callback, RecordRepo recordRepo,
+    public EditRecordImpl(EditRecord.Callback callback,
                           Record recordToEdit, String title, String comment)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.recordRepo = recordRepo;
         this.recordtoEdit = recordToEdit;
         this.title = title;
         this.comment = comment;
@@ -68,17 +59,14 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     /**
      * Third constructor for EditRecordImpl
-     * @param recordRepo the repository where records are stored
      * @param recordToEdit the record that is being edited
      * @param comment the description of the record being edited
      */
-    public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                          EditRecord.Callback callback, RecordRepo recordRepo,
+    public EditRecordImpl(EditRecord.Callback callback,
                           Record recordToEdit, String comment)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.recordRepo = recordRepo;
         this.recordtoEdit = recordToEdit;
         this.title = recordToEdit.getTitle();
         this.comment = comment;
@@ -100,6 +88,8 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
      */
     @Override
     public void run() {
+        final RecordRepo recordRepo = this.context.getRecordRepo();
+
         // Missing title
         if (this.title == null || this.title.isEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -132,7 +122,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.recordtoEdit.setComment(this.comment);
         this.recordtoEdit.setDate(this.date);
 
-        this.recordRepo.updateRecord(this.recordtoEdit);
+        recordRepo.updateRecord(this.recordtoEdit);
 
         // Record added
         this.mainThread.post(new Runnable(){

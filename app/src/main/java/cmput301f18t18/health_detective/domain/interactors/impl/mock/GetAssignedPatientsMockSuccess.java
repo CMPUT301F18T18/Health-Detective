@@ -21,7 +21,7 @@ public class GetAssignedPatientsMockSuccess extends AbstractInteractor implement
                                           GetAssignedPatients.Callback callback, UserRepo userRepo,
                                           CareProvider careProvider)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.careProvider = careProvider;

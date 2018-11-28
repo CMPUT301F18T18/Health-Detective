@@ -35,6 +35,8 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.interactors.ContextChange;
+import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnBack;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
@@ -68,13 +70,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
 
-        this.recordListPresenter = new RecordListPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        this.recordListPresenter = new RecordListPresenter(this);
 
 
         adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);

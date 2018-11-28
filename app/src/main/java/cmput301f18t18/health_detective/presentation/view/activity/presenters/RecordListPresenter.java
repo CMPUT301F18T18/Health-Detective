@@ -30,10 +30,6 @@ import cmput301f18t18.health_detective.presentation.view.activity.RecordListAdap
 
 public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Callback, DeleteRecord.Callback {
 
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private ProblemRepo problemRepo;
-    private RecordRepo recordRepo;
     private View view;
 
     //private RecordListAdapter adapter;
@@ -46,14 +42,9 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
         void onDeleteRecordFail();
     }
 
-    public RecordListPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                               ProblemRepo problemRepo, RecordRepo recordRepo)
+    public RecordListPresenter(View view)
     {
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.problemRepo = problemRepo;
-        this.recordRepo = recordRepo;
     }
 
     /**
@@ -62,12 +53,8 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
      */
     public void getUserRecords(Problem problem){
         GetRecords getRecords = new GetRecordsImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.recordRepo,
-                problem
-        );
+                problem);
 
         getRecords.execute();
 
@@ -84,11 +71,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
     public void createUserRecord(Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
 
         CreateRecord createRecord = new CreateRecordImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.problemRepo,
-                this.recordRepo,
                 problem,
                 recordTitle,
                 recordComment,
@@ -106,11 +89,7 @@ public class RecordListPresenter implements GetRecords.Callback, CreateRecord.Ca
      */
     public void deleteUserRecords(Problem problem, Record record){
         DeleteRecord deleteRecord = new DeleteRecordImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.problemRepo,
-                this.recordRepo,
                 problem,
                 record
         );

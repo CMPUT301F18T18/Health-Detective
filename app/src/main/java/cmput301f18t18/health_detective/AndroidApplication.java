@@ -1,11 +1,10 @@
 package cmput301f18t18.health_detective;
 
 import android.app.Application;
-import android.util.Log;
 
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.model.DomainContext;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 
 public class AndroidApplication extends Application {
     @Override

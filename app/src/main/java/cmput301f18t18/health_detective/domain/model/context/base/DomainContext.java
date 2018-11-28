@@ -1,10 +1,11 @@
-package cmput301f18t18.health_detective.domain.model;
+package cmput301f18t18.health_detective.domain.model.context.base;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
+import cmput301f18t18.health_detective.domain.model.context.tree.base.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.BodyLocationRepo;
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
@@ -21,6 +22,8 @@ public class DomainContext {
     private RecordRepo recordRepo = null;
     private BodyLocationRepo bodyLocationRepo = null;
     private ImageRepo imageRepo = null;
+
+    private ContextTree contextTree;
 
     public static DomainContext getInstance() {
         if (ourInstance == null) {
@@ -41,6 +44,7 @@ public class DomainContext {
         }
 
         DomainContext context = DomainContext.getInstance();
+        context.contextTree = new ContextTree();
 
         try {
             context.secureRandom = SecureRandom.getInstance("SHA1PRNG");
@@ -87,5 +91,9 @@ public class DomainContext {
 
     public ImageRepo getImageRepo() {
         return imageRepo;
+    }
+
+    public ContextTree getContextTree() {
+        return contextTree;
     }
 }

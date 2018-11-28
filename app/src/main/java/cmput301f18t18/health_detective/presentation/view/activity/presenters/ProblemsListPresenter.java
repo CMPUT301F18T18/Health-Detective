@@ -22,10 +22,6 @@ import cmput301f18t18.health_detective.presentation.view.activity.PatientProblem
 public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback{
 
     private View view;
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private ProblemRepo problemRepo;
-    private UserRepo userRepo;
 
 
     public interface View {
@@ -33,13 +29,8 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         void onProblemDeleted(Problem problem);
     }
 
-    public ProblemsListPresenter (View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                                  ProblemRepo problemRepo, UserRepo userRepo) {
+    public ProblemsListPresenter (View view) {
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.problemRepo = problemRepo;
-        this.userRepo = userRepo;
     }
 
     /**
@@ -49,11 +40,7 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
      */
     public void deleteProblem(Patient patientContext, Problem problem){
         DeleteProblem command = new DeleteProblemImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
-                this.problemRepo,
                 patientContext,
                 problem
         );
@@ -67,12 +54,8 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
      */
     public void getProblems(Patient patient){
         GetProblems command = new GetProblemsImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.problemRepo,
-                patient
-        );
+                patient);
 
         command.execute();
     }

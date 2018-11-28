@@ -18,24 +18,17 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
 
     private GetProblems.Callback callback;
-    private ProblemRepo problemRepo;
     private Patient patient;
 
     /**
      * Constructor for GetProblemImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param problemRepo the repository where problems are stored
      * @param patient the patient who's list of problems is retrieved
      */
-    public GetProblemsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                           GetProblems.Callback callback, ProblemRepo problemRepo,
-                           Patient patient)
+    public GetProblemsImpl(GetProblems.Callback callback, Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
         this.patient = patient;
     }
 
@@ -51,6 +44,7 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
      */
     @Override
     public void run() {
+        final ProblemRepo problemRepo = this.context.getProblemRepo();
 
         if (patient.isProblemsEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -65,7 +59,7 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
         }
 
         ArrayList<Integer> problemIds = patient.getProblemIds();
-        ArrayList<Problem> problems = this.problemRepo.retrieveProblemsById(problemIds);
+        ArrayList<Problem> problems = problemRepo.retrieveProblemsById(problemIds);
 
         problems.sort(new Comparator<Problem>() {
             @Override

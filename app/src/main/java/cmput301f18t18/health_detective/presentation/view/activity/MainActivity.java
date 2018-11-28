@@ -15,6 +15,8 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.interactors.ContextChange;
+import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnInto;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;
@@ -31,12 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        this.loginPresenter = new LoginPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        this.loginPresenter = new LoginPresenter(this);
 
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUpText);

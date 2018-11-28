@@ -2,7 +2,7 @@ package cmput301f18t18.health_detective.domain.interactors.base;
 
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.model.DomainContext;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 
 public abstract class AbstractInteractor implements Interactor {
     protected volatile boolean isExecuting = false;

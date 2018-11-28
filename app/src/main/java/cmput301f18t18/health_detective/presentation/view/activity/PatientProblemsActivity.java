@@ -19,6 +19,9 @@ import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.interactors.ContextChange;
+import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnBack;
+import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnInto;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
@@ -44,13 +47,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
 
-        this.problemsListPresenter = new ProblemsListPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        this.problemsListPresenter = new ProblemsListPresenter(this);
 
         ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);

@@ -21,7 +21,7 @@ public class GetProblemsMockSuccess extends AbstractInteractor implements GetPro
                                   GetProblems.Callback callback, ProblemRepo problemRepo,
                                   Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.problemRepo = problemRepo;
         this.patient = patient;

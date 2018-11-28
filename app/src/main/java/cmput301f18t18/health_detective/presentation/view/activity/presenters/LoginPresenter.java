@@ -15,10 +15,8 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
 public class LoginPresenter implements UserLogin.Callback {
+
     private View view;
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private UserRepo userRepo;
 
     public interface View {
         void onLoginPatient(Patient patient);
@@ -27,13 +25,9 @@ public class LoginPresenter implements UserLogin.Callback {
         void onUserDoesNotExist();
     }
 
-    public LoginPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                           UserRepo userRepo)
+    public LoginPresenter(View view)
     {
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.userRepo = userRepo;
     }
 
     /**
@@ -42,12 +36,8 @@ public class LoginPresenter implements UserLogin.Callback {
      */
     public void tryLogin(String userId){
         UserLogin command = new UserLoginImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
-                userId
-        );
+                userId);
 
         command.execute();
     }

@@ -19,7 +19,7 @@ public class RemoveAssignedPatientMockSuccess extends AbstractInteractor impleme
                                             RemoveAssignedPatient.Callback callback, UserRepo userRepo,
                                             CareProvider careProvider, Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.careProvider = careProvider;

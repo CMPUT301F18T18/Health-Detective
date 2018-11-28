@@ -16,7 +16,6 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class CreateUserProfileImpl extends AbstractInteractor implements CreateUserProfile {
 
     private CreateUserProfile.Callback callback;
-    private UserRepo userRepo;
     private String userId;
     private String email;
     private String phoneNumber;
@@ -24,22 +23,17 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
 
     /**
      * Constructor for CreateUserProfileImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param userId the Id that the user has chosen to use
      * @param email the email that the user has chosen to use
      * @param phoneNumber the phone number that the user has chosen to use
      * @param isCareProvider check to see whethere you are a patient or care provider
      */
-    public CreateUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                 CreateUserProfile.Callback callback, UserRepo userRepo,
+    public CreateUserProfileImpl(CreateUserProfile.Callback callback,
                                  String userId, String email, String phoneNumber, boolean isCareProvider)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.userId = userId;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -68,6 +62,8 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
+
         //Not a valid ID
         if (!User.isValidUserId(userId) || !userRepo.validateUserIdUniqueness(userId)){
             this.mainThread.post(new Runnable() {

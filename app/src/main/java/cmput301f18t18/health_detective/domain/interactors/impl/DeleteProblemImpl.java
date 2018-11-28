@@ -16,29 +16,19 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class DeleteProblemImpl extends AbstractInteractor implements DeleteProblem {
 
     private DeleteProblem.Callback callback;
-    private UserRepo userRepo;
-    private ProblemRepo problemRepo;
     private Patient patient;
     private Problem problem;
 
     /**
      * Constructor for DeleteProblemImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
-     * @param problemRepo the repository where problems are stored
      * @param patient the patient the problem being deleted belonged to
      * @param problem the problem being deleted
      */
-    public DeleteProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                             DeleteProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
-                             Patient patient, Problem problem)
+    public DeleteProblemImpl(DeleteProblem.Callback callback, Patient patient, Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
-        this.problemRepo = problemRepo;
         this.patient = patient;
         this.problem = problem;
     }
@@ -58,6 +48,9 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
+        final ProblemRepo problemRepo = this.context.getProblemRepo();
+
         // Patient cannot be found
         if(userRepo.retrievePatientById(patient.getUserId()) == null){
             this.mainThread.post(new Runnable() {
@@ -90,8 +83,8 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
         });
 
         //Delete problem
-        this.problemRepo.deleteProblem(problem);
+        problemRepo.deleteProblem(problem);
         this.patient.removeProblem(problem);
-        this.userRepo.updateUser(patient);
+        userRepo.updateUser(patient);
     }
 }

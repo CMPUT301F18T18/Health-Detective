@@ -1,11 +1,8 @@
 package cmput301f18t18.health_detective.domain.interactors.impl;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
-import cmput301f18t18.health_detective.domain.model.DomainContext;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
@@ -21,15 +18,10 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
     /**
      * Creates a new UserLoginImpl object from the provided parameters
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param userId the Id of the user attempting to log in
      */
-    public UserLoginImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                         UserLogin.Callback callback, UserRepo userRepo,
-                         String userId)
+    public UserLoginImpl(UserLogin.Callback callback, String userId)
     {
         super();
         this.callback = callback;

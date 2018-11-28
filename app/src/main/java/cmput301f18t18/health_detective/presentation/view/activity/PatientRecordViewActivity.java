@@ -56,12 +56,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         recordDesc = findViewById(R.id.commentView);
         setTextViews();
 
-        recordViewPresenter = new RecordViewPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        recordViewPresenter = new RecordViewPresenter(this);
 
         //stuff for all photos section
         GridViewAdapter adapter = new GridViewAdapter(this, 10);

@@ -15,24 +15,20 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class RemoveAssignedPatientImpl extends AbstractInteractor implements RemoveAssignedPatient {
 
     private RemoveAssignedPatient.Callback callback;
-    private UserRepo userRepo;
     private CareProvider careProvider;
     private Patient patient;
 
     /**
      * Creates a new RemoveAssignedPatient object from the provided parameters
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param careProvider the care provider who is having a pateint removed
      * @param patient the patient being removed from the care provider
      */
-    public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                     RemoveAssignedPatient.Callback callback, UserRepo userRepo,
+    public RemoveAssignedPatientImpl(RemoveAssignedPatient.Callback callback,
                                      CareProvider careProvider, Patient patient)
     {
         super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.careProvider = careProvider;
         this.patient = patient;
     }
@@ -50,6 +46,8 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
      */
     @Override
     public void run() {
+
+        final UserRepo userRepo = this.context.getUserRepo();
 
         if (!careProvider.hasPatient(patient)) {
             this.mainThread.post(new Runnable() {

@@ -16,7 +16,6 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     private EditProblem.Callback callback;
-    private ProblemRepo problemRepo;
     private Problem problemToEdit;
     private String title;
     private String description;
@@ -24,22 +23,17 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     /**
      * First constructor for EditProblemImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param problemRepo the repository where problems are stored
      * @param problemToEdit the problem that is being edited
      * @param title the title of the problem that is being edited
      * @param description the description of the problem being edited
      * @param startDate the date assigned to the problem being edited
      */
-    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                           EditProblem.Callback callback, ProblemRepo problemRepo,
+    public EditProblemImpl(EditProblem.Callback callback,
                            Problem problemToEdit, String title, String description, Date startDate)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
         this.problemToEdit = problemToEdit;
         this.title = title;
         this.description = description;
@@ -48,18 +42,15 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     /**
      * Second constructor for EditProblemImpl
-     * @param problemRepo the repository where problems are stored
      * @param problemToEdit the problem that is being edited
      * @param title the title of the problem that is being edited
      * @param description the description of the problem being edited
      */
-    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                           EditProblem.Callback callback, ProblemRepo problemRepo,
+    public EditProblemImpl(EditProblem.Callback callback,
                            Problem problemToEdit, String title, String description)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
         this.problemToEdit = problemToEdit;
         this.description = description;
         this.title = title;
@@ -68,17 +59,14 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     /**
      * Third constructor for EditProblemImpl
-     * @param problemRepo the repository where problems are stored
      * @param problemToEdit the problem that is being edited
      * @param description the description of the problem being edited
      */
-    public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                           EditProblem.Callback callback, ProblemRepo problemRepo,
+    public EditProblemImpl(EditProblem.Callback callback,
                            Problem problemToEdit, String description)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
         this.problemToEdit = problemToEdit;
         this.description = description;
         this.title = problemToEdit.getTitle();
@@ -101,6 +89,8 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
      */
     @Override
     public void run() {
+        final ProblemRepo problemRepo = this.context.getProblemRepo();
+
         // Missing title
         if (this.title == null || this.title.isEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -134,7 +124,7 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.problemToEdit.setDescription(this.description);
         this.problemToEdit.setStartDate(this.startDate);
 
-        this.problemRepo.updateProblem(this.problemToEdit);
+        problemRepo.updateProblem(this.problemToEdit);
 
         // Problem added
         this.mainThread.post(new Runnable(){

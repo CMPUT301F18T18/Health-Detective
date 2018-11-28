@@ -21,7 +21,7 @@ public class GetRecordsMockSuccess extends AbstractInteractor implements GetReco
                                  GetRecords.Callback callback, RecordRepo recordRepo,
                                  Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.recordRepo = recordRepo;
         this.problem = problem;

@@ -18,8 +18,6 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class CreateRecordImpl extends AbstractInteractor implements CreateRecord {
 
     private CreateRecord.Callback callback;
-    private ProblemRepo problemRepo;
-    private RecordRepo recordRepo;
     private Problem problem;
     private String recordTitle;
     private String recordComment;
@@ -28,25 +26,18 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
     /**
      * Constructor for CreateRecordImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param problemRepo the repository where problems are stored
-     * @param recordRepo the repository where records are stored
      * @param problem the problem the created record is getting added to
      * @param recordTitle the title of the created record
      * @param recordComment the description of the created record
      * @param date the date chosen for the created record
      * @param authorId the author that created the record
      */
-    public CreateRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                            CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
+    public CreateRecordImpl(CreateRecord.Callback callback,
                             Problem problem, String recordTitle, String recordComment, Date date, String authorId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
-        this.recordRepo = recordRepo;
         this.problem = problem;
         this.recordTitle = recordTitle;
         this.recordComment = recordComment;
@@ -66,6 +57,9 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
      */
     @Override
     public void run() {
+        final ProblemRepo problemRepo = this.context.getProblemRepo();
+        final RecordRepo recordRepo = this.context.getRecordRepo();
+
         if(recordTitle == null){
             this.mainThread.post(new Runnable() {
 

@@ -14,28 +14,22 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class EditUserProfileImpl extends AbstractInteractor implements EditUserProfile {
 
     private EditUserProfile.Callback callback;
-    private UserRepo userRepo;
     private User userToEdit;
     private String email;
     private String phoneNumber;
 
     /**
      * Constructor for EditUserProfileImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param userToEdit the user profile that is being edited
      * @param email the email of the user profile that is being edited
      * @param phoneNumber the phone number of the user profile being edited
      */
-    public EditUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                               EditUserProfile.Callback callback, UserRepo userRepo,
+    public EditUserProfileImpl(EditUserProfile.Callback callback,
                                User userToEdit, String email, String phoneNumber)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.userToEdit = userToEdit;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -56,6 +50,7 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
 
         // Check if new email is valid
         if (!User.isValidEmailAddress(this.email)) {
@@ -80,7 +75,7 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
         // Entered information is correct
         this.userToEdit.setEmailAddress(this.email);
         this.userToEdit.setPhoneNumber(this.phoneNumber);
-        this.userRepo.updateUser(userToEdit);
+        userRepo.updateUser(userToEdit);
 
         this.mainThread.post(new Runnable(){
 

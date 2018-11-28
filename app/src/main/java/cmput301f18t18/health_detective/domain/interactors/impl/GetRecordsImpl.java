@@ -18,24 +18,17 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
 
     private GetRecords.Callback callback;
-    private RecordRepo recordRepo;
     private Problem problem;
 
     /**
      * Constructor for GetRecordsImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param recordRepo the repository where records are stored
      * @param problem the problem who's list of records is retrieved
      */
-    public GetRecordsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                          GetRecords.Callback callback, RecordRepo recordRepo,
-                          Problem problem)
+    public GetRecordsImpl(GetRecords.Callback callback, Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.recordRepo = recordRepo;
         this.problem = problem;
     }
 
@@ -52,6 +45,8 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
     @Override
     public void run() {
 
+        final RecordRepo recordRepo = this.context.getRecordRepo();
+
         if (problem.isRecordsEmpty()) {
             this.mainThread.post(new Runnable() {
                 @Override
@@ -64,7 +59,7 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
         }
 
         ArrayList<Integer> recordIds = problem.getRecordIds();
-        ArrayList<Record> records = this.recordRepo.retrieveRecordsById(recordIds);
+        ArrayList<Record> records = recordRepo.retrieveRecordsById(recordIds);
 
         records.sort(new Comparator<Record>() {
             @Override
