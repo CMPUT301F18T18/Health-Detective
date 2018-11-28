@@ -2,13 +2,15 @@ package cmput301f18t18.health_detective.domain.model.images;
 
 import cmput301f18t18.health_detective.domain.model.BodyLocation;
 import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
+import cmput301f18t18.health_detective.domain.model.images.impl.DomainImageImpl;
 
 /**
  * Class to store photo data. Need to be remade.
  */
-public class RecordImage extends DomainImage {
+public class RecordImage {
 
     private BodyLocation bodyLocation;
+    private DomainImage image;
 
     public RecordImage() {
         super();
@@ -17,8 +19,14 @@ public class RecordImage extends DomainImage {
     }
 
     public RecordImage(byte[] image) {
-        super(image);
 
+        this.setImage(image);
+        this.setBodyLocation(null);
+    }
+
+    public RecordImage(DomainImage image) {
+
+        this.setImage(image);
         this.setBodyLocation(null);
     }
 
@@ -29,5 +37,13 @@ public class RecordImage extends DomainImage {
 
     public void setBodyLocation(BodyLocation bodyLocation) {
         this.bodyLocation = bodyLocation;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = new DomainImageImpl(image);
+    }
+
+    public void setImage(DomainImage image) {
+        this.image = image;
     }
 }

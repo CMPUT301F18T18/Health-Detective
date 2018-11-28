@@ -21,8 +21,6 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
 
     /**
      * Creates a new RemoveAssignedPatient object from the provided parameters
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
      * @param userRepo the repository where users are stored
      * @param careProvider the care provider who is having a pateint removed
@@ -30,9 +28,9 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
      */
     public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                      RemoveAssignedPatient.Callback callback, UserRepo userRepo,
-                                     CareProvider careProvider, Patient patient) 
+                                     CareProvider careProvider, Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.careProvider = careProvider;

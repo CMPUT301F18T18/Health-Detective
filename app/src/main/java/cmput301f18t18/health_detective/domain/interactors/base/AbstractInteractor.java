@@ -2,16 +2,19 @@ package cmput301f18t18.health_detective.domain.interactors.base;
 
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
+import cmput301f18t18.health_detective.domain.model.DomainContext;
 
 public abstract class AbstractInteractor implements Interactor {
     protected volatile boolean isExecuting = false;
     protected volatile boolean isStoped = false;
+    protected DomainContext context;
     protected ThreadExecutor threadExecutor;
     protected MainThread mainThread;
 
-    public AbstractInteractor(ThreadExecutor threadExecutor, MainThread mainThread) {
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
+    public AbstractInteractor() {
+        this.context = DomainContext.getInstance();
+        this.threadExecutor = this.context.getThreadExecutor();
+        this.mainThread = this.context.getMainThread();
     }
 
     /**

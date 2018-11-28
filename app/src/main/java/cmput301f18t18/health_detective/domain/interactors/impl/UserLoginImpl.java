@@ -5,6 +5,7 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.DomainContext;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
@@ -16,7 +17,6 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
     private UserLogin.Callback callback;
-    private UserRepo userRepo;
     private String userId;
 
     /**
@@ -31,9 +31,8 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
                          UserLogin.Callback callback, UserRepo userRepo,
                          String userId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.userId = userId;
     }
 
@@ -53,6 +52,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
     public void run() {
         final Patient patient;
         final CareProvider careProvider;
+        final UserRepo userRepo = context.getUserRepo();
 
         if (!User.isValidUserId(userId)){
             this.mainThread.post(new Runnable() {
@@ -66,7 +66,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
             return;
         }
 
-        patient = this.userRepo.retrievePatientById(userId);
+        patient = userRepo.retrievePatientById(userId);
 
         if (patient != null) {
             this.mainThread.post(new Runnable() {
@@ -80,7 +80,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
             return;
         }
 
-        careProvider = this.userRepo.retrieveCareProviderById(userId);
+        careProvider = userRepo.retrieveCareProviderById(userId);
 
         if (careProvider != null) {
             this.mainThread.post(new Runnable() {
