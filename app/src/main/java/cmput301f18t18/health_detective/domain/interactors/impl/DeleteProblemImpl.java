@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The DeleteProblemImpl class is a class intended to handle the deletion of problems
+ * on the back end.
+ */
 public class DeleteProblemImpl extends AbstractInteractor implements DeleteProblem {
 
     private DeleteProblem.Callback callback;
@@ -18,7 +22,10 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
     private Problem problem;
 
     /**
-     * Constructor for CreateProblemImpl
+     * Constructor for DeleteProblemImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param userRepo the repository where users are stored
      * @param problemRepo the repository where problems are stored
      * @param patient the patient the problem being deleted belonged to
@@ -37,9 +44,17 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
     }
 
     /**
-     * Main run method for DeleteProblemImpl. This method contains all the specific
-     * business logic needed for the interactor.
+     * Deletes a problem from a patient and the database
      *
+     * Callbacks:
+     *      -Calls onDPPatientNotFound()
+     *          patient owning the problem does not exist
+     *
+     *      -Calls onDPProblemNotFound()
+     *          problem attempting to be deleted does not exist
+     *
+     *      -Calls onDPSuccess(problem)
+     *          if deleting problem is successful, updates everything containing problem
      */
     @Override
     public void run() {

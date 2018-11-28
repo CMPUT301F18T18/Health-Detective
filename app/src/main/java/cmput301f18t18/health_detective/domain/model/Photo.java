@@ -7,6 +7,9 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+/**
+ * Class to store photo data. Need to be remade.
+ */
 public class Photo extends BodyPhoto {
     private int photoID;
     private File photoFile;

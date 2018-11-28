@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The CreateUserProfileImpl class is a class intended to handle the creation of user profiles
+ * on the back end.
+ */
 public class CreateUserProfileImpl extends AbstractInteractor implements CreateUserProfile {
 
     private CreateUserProfile.Callback callback;
@@ -19,7 +23,10 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
     private boolean isCareProvider;
 
     /**
-     * Constructor for CreateProblemImpl
+     * Constructor for CreateUserProfileImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param userRepo the repository where users are stored
      * @param userId the Id that the user has chosen to use
      * @param email the email that the user has chosen to use
@@ -40,9 +47,24 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
     }
 
     /**
-     * Main run method for CreateUserProfileImpl. This method contains all the specific
-     * business logic needed for the interactor.
+     * Creates a user profile and adds it to the database
      *
+     * Callbacks:
+     *      -Calls onCUPInvalidID()
+     *          Id entered for creation is not valid
+     *
+     *      -Calls onCUPInvalidEmail()
+     *          email entered for creation is not valid
+     *
+     *      -Calls onCUPInvalidPhoneNumber()
+     *          phone number entered for creation is not valid
+     *
+     *      -Calls onCUPCareProviderSuccess(newCP)
+     *          user profile was created successfully as a care provider and added to
+     *          the database
+     *
+     *      -Calls onCUPPatientSuccess(newPatient)
+     *          user profile was created successfuly as patient and added to the database
      */
     @Override
     public void run() {

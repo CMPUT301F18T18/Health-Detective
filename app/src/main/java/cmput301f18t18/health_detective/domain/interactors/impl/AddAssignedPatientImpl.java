@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+/**
+ * The AddAssignedPatientImpl class is a class intended to handle the adding of
+ * patients to a care provider on the back end.
+ */
 public class AddAssignedPatientImpl extends AbstractInteractor implements AddAssignedPatient {
 
     private AddAssignedPatient.Callback callback;
@@ -16,6 +20,15 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
     private CareProvider careProvider;
     private String patientId;
 
+    /**
+     * Constructor for AddAssignedPatientImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param userRepo the repository where users are stored
+     * @param careProvider the care provider that the patient is being assigned to
+     * @param patientId the Id of the patient being assigned
+     */
     public AddAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                                   AddAssignedPatient.Callback callback, UserRepo userRepo,
                                   CareProvider careProvider, String patientId)
@@ -27,6 +40,23 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
         this.patientId = patientId;
     }
 
+    /**
+     * Adds the patient to the careprovider's list of assigned patients and then updates both
+     * in the database
+     *
+     * Callbacks:
+     *      -Calls onAAPNotValidUserId()
+     *          if Id of patient being added is not valid
+     *
+     *      -Calls onAAPPatientAlreadyAssigned()
+     *          if patient has already been assigned to the care provider
+     *
+     *      -Calls onAAPPatientDoesNotExist()
+     *          if patient that wants to be added does not exist
+     *
+     *      -Calls onAAPSuccess()
+     *          if the addition was successful, passing the added patient for context
+     */
     @Override
     public void run() {
         Patient patientToAdd;

@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.interactors.EditProblem;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
+/**
+ * The EditProblemImpl class is a class intended to handle the editing of problems
+ * on the back end.
+ */
 public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     private EditProblem.Callback callback;
@@ -18,6 +22,17 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
     private String description;
     private Date startDate;
 
+    /**
+     * First constructor for EditProblemImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param title the title of the problem that is being edited
+     * @param description the description of the problem being edited
+     * @param startDate the date assigned to the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String title, String description, Date startDate)
@@ -31,6 +46,13 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.startDate = startDate;
     }
 
+    /**
+     * Second constructor for EditProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param title the title of the problem that is being edited
+     * @param description the description of the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String title, String description)
@@ -44,6 +66,12 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         this.startDate = problemToEdit.getStartDate();
     }
 
+    /**
+     * Third constructor for EditProblemImpl
+     * @param problemRepo the repository where problems are stored
+     * @param problemToEdit the problem that is being edited
+     * @param description the description of the problem being edited
+     */
     public EditProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                            EditProblem.Callback callback, ProblemRepo problemRepo,
                            Problem problemToEdit, String description)
@@ -58,6 +86,19 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     }
 
+    /**
+     * Edits the information contained in a problem and updates the database.
+     *
+     * Callbacks:
+     *      -Calls onEPEmptyTitle()
+     *          if title is empty (enforcing title)
+     *
+     *      -Calls onEPNoStartDateProvided()
+     *          assigns date if one is not provided
+     *
+     *      -Calls onEPSuccess(problemToEdit)
+     *          if editing problem is successful, updates everything containing problem
+     */
     @Override
     public void run() {
         // Missing title

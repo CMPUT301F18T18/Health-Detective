@@ -9,6 +9,10 @@ import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The EditRecordImpl class is a class intended to handle the editing of records
+ * on the back end.
+ */
 public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     private EditRecord.Callback callback;
@@ -18,6 +22,17 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     private String comment;
     private Date date;
 
+    /**
+     * First constructor for EditRecordImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param title the title of the record that is being edited
+     * @param comment the description of the record being edited
+     * @param date the date assigned to the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String title, String comment, Date date)
@@ -31,6 +46,13 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = date;
     }
 
+    /**
+     * Second constructor for EditRecordImpl
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param title the title of the record that is being edited
+     * @param comment the description of the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String title, String comment)
@@ -44,6 +66,12 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = recordToEdit.getDate();
     }
 
+    /**
+     * Third constructor for EditRecordImpl
+     * @param recordRepo the repository where records are stored
+     * @param recordToEdit the record that is being edited
+     * @param comment the description of the record being edited
+     */
     public EditRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                           EditRecord.Callback callback, RecordRepo recordRepo,
                           Record recordToEdit, String comment)
@@ -57,6 +85,19 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.date = recordToEdit.getDate();
     }
 
+    /**
+     * Edits the information contained in a record and updates the database.
+     *
+     * Callbacks:
+     *      -Calls onEREmptyTitle()
+     *          if title is empty (enforcing title)
+     *
+     *      -Calls onERNoDateProvided()
+     *          assigns date if one is not provided
+     *
+     *      -Calls onERSuccess(recordtoEdit)
+     *          if editing record is successful, updates everything containing record
+     */
     @Override
     public void run() {
         // Missing title

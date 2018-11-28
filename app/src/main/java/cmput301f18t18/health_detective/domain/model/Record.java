@@ -6,6 +6,9 @@ import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
 
+/**
+ * The class to store data and methods related to individual records.
+ */
 public class Record implements Searchable, Serializable {
     private static final long serialVersionUID = 2L;
     public int recordId;

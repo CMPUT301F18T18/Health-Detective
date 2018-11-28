@@ -12,7 +12,7 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
- * The CreateProblemImpl class is a class intended to handle to creation of problems
+ * The CreateProblemImpl class is a class intended to handle the creation of problems
  * on the back end.
  */
 public class CreateProblemImpl extends AbstractInteractor implements CreateProblem {
@@ -27,6 +27,9 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
 
     /**
      * Constructor for CreateProblemImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param userRepo the repository where users are stored
      * @param problemRepo the repository where problems are stored
      * @param patient the patient the problem is intended to be added to
@@ -49,9 +52,14 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     }
 
     /**
-     * Main run method for CreateProblemImpl. This method contains all the specific
-     * business logic needed for the interactor.
+     * Creates a problem and adds it to the database
      *
+     * Callbacks:
+     *      -Calls onCPNullTitle()
+     *          title entered for problem creation is not valid
+     *
+     *      -Calls onCPSuccess(newProblem)
+     *          problem created successfully and added to database as well as a patient
      */
     @Override
     public void run() {

@@ -11,6 +11,10 @@ import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
+/**
+ * The CreateRecordImpl class is a class intended to handle the creation of records
+ * on the back end.
+ */
 public class CreateRecordImpl extends AbstractInteractor implements CreateRecord {
 
     private CreateRecord.Callback callback;
@@ -23,13 +27,17 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     private String authorId;
 
     /**
-     * Constructor for CreateProblemImpl
+     * Constructor for CreateRecordImpl
+     * @param threadExecutor
+     * @param mainThread
+     * @param callback
      * @param problemRepo the repository where problems are stored
-     * @param userRepo the repository where users are stored
-     * @param patient the patient the problem is intended to be added to
-     * @param problemTitle the title of the created problem
-     * @param problemDescription the description of the created problem
-     * @param startDate the date chosen for the created problem
+     * @param recordRepo the repository where records are stored
+     * @param problem the problem the created record is getting added to
+     * @param recordTitle the title of the created record
+     * @param recordComment the description of the created record
+     * @param date the date chosen for the created record
+     * @param authorId the author that created the record
      */
     public CreateRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
                             CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
@@ -47,9 +55,14 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     }
 
     /**
-     * Main run method for CreateRecordImpl. This method contains all the specific
-     * business logic needed for the interactor.
+     * Creates a record and adds it to the database
      *
+     * Callbacks:
+     *      -Calls onCRNullTitle()
+     *          title entered for record creation is not valid
+     *
+     *      -Calls onCRSuccess(newRecord)
+     *          record created successfully and added to database as well as a problem
      */
     @Override
     public void run() {
@@ -66,7 +79,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         }
 
         if(recordComment == null) recordComment = "";
-        Record newRecord = new Record(recordTitle,recordComment);
+            Record newRecord = new Record(recordTitle,recordComment);
 
         if(this.date != null){
             newRecord.setDate(this.date);
