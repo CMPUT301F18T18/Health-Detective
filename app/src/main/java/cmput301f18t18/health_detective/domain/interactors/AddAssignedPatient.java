@@ -9,6 +9,5 @@ public interface AddAssignedPatient extends Interactor {
         void onAAPNotValidUserId();
         void onAAPPatientAlreadyAssigned();
         void onAAPPatientDoesNotExist();
-        void onAAPFail();
     }
 }

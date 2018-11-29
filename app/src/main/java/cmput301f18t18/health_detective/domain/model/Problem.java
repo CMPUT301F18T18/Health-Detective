@@ -1,21 +1,22 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
-import io.searchbox.annotations.JestId;
+import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
 
-public class Problem implements Searchable  {
-
+/**
+ *
+ */
+public class Problem implements Searchable, Serializable {
+    private static final long serialVersionUID = 1L;
     private int problemId;
     private String title;
     private Date startDate;
     private String description;
     private HashSet<Integer> records;
-
-    @JestId
-    private String problemJestId;
 
     public Problem() {
         records = new HashSet<>();
@@ -26,6 +27,15 @@ public class Problem implements Searchable  {
         this.setStartDate(createDate);
     }
 
+    public Problem(int problemId, String title, String description) {
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = problemId;
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(createDate);
+    }
+
     public Problem(String title, String description) {
         records = new HashSet<>();
         Date createDate = new Date();
@@ -33,6 +43,15 @@ public class Problem implements Searchable  {
         this.setTitle(title);
         this.setDescription(description);
         this.setStartDate(createDate);
+    }
+
+    public Problem(String title, String description, Date startDate) {
+        records = new HashSet<>();
+        Date createDate = new Date();
+        this.problemId = createDate.hashCode();
+        this.setTitle(title);
+        this.setDescription(description);
+        this.setStartDate(startDate);
     }
 
     public Problem(int problemId, String title, String description, Date startDate) {
@@ -67,7 +86,7 @@ public class Problem implements Searchable  {
         return title;
     }
 
-    private Date getStartDate() {
+    public Date getStartDate() {
         return this.startDate;
     }
 
@@ -105,11 +124,25 @@ public class Problem implements Searchable  {
         return  recordIds;
     }
 
+    /**
+     * Method from searchable to find problems related to bodypart
+     * Needs to search records for this.
+     *
+     * @param bodyPart The bodypart to search for
+     * @return         True if problem relates to bodypart
+     */
     @Override
     public boolean containsBodyPart(BodyPart bodyPart) {
         return false;
     }
 
+    /**
+     * Method from searchable to find problems related to keywords
+     * Needs to search records for this.
+     *
+     * @param keywords The list of keywords to search for
+     * @return         True if problem relates to keywords
+     */
     @Override
     public boolean containsKeyword(ArrayList<String> keywords) {
         return false;
@@ -126,8 +159,4 @@ public class Problem implements Searchable  {
         Problem problem = (Problem) o;
         return (this.problemId == problem.getProblemID());
     }
-
-    public void setProblemJestId(String id) { this.problemJestId = id; }
-
-    public String getProblemJestId() { return this.problemJestId; }
 }

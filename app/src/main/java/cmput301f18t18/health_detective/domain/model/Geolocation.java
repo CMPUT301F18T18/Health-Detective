@@ -1,5 +1,8 @@
 package cmput301f18t18.health_detective.domain.model;
 
+/**
+ * Class to store info and methods relating to geolocations
+ */
 public class Geolocation {
     private double latitude;
     private double longitude;

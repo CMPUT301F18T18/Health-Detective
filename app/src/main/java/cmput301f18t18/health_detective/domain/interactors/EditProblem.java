@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 public interface EditProblem extends Interactor {
     interface Callback {
         void onEPSuccess(Problem problem);
-        void onEPFail();
+        void onEPEmptyTitle();
+        void onEPNoStartDateProvided();
     }
 }

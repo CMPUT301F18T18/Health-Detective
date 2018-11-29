@@ -3,7 +3,11 @@ package cmput301f18t18.health_detective.domain.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Class to store info specific to patients, extending all info that is in user.
+ */
 public class Patient extends User {
+    private static final long serialVersionUID = 4L;
 
     private HashSet<Integer> problemIds;
 
@@ -21,6 +25,18 @@ public class Patient extends User {
         super(userId, phoneNumber, emailAddress);
         this.problemIds = new HashSet<>();
     }
+
+    public void addProblem(Problem problem) {
+        problemIds.add(problem.getProblemID());
+    }
+
+    public void addProblem(Integer problemID) { problemIds.add(problemID); }
+
+    public void removeProblem(Problem problem) {
+        problemIds.remove(problem.getProblemID());
+    }
+
+    public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
 
     public boolean isProblemsEmpty() {
         return problemIds.isEmpty();

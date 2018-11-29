@@ -27,11 +27,19 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
 
+/**
+ * Singleton that holds the information and methods for interfacing with elastic search
+ */
 public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRepo {
     private static final ElasticSearchController ourInstance = new ElasticSearchController();
 
     static private JestDroidClient client = null;
 
+    /**
+     * Allows other classes to get a reference to the singleton
+     *
+     * @return reference to this object
+     */
     public static ElasticSearchController getInstance() {
         setClient();
         return ourInstance;
@@ -40,6 +48,10 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
     private ElasticSearchController() {
     }
 
+    /**
+     * Runs whenever another class gets a reference to this object.
+     * Sets the JestDroidClient parameters and info
+     */
     private static void setClient() {
         if (client == null) {
             DroidClientConfig config = new DroidClientConfig
@@ -51,6 +63,13 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Returns a problem's unique _ID out of elastic search based on a problem ID.
+     * Used in deletion.
+     *
+     * @param problemID A unique integer to a specific problem that we can to get
+     * @return          The problem's _ID from elasticsearch
+     */
     private String getProblemElasticSearchId(Integer problemID) {
         String query = "{\n" +
                 "  \"query\": {\n" +
@@ -61,7 +80,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Problem")
                 .build();
         try {
@@ -84,10 +103,15 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Function to push a problem into elastic search.
+     *
+     * @param problem The problem to add to elastic search
+     */
     @Override
     public void insertProblem(Problem problem) {
         Index index = new Index.Builder(problem)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -102,16 +126,28 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Used to update the old info for a problem in elasticsearch with new info.
+     * Currently done by deleting then re-inserting problem.
+     *
+     * @param problem The problem to update
+     */
     @Override
     public void updateProblem(Problem problem) {
         deleteProblem(problem);
         insertProblem(problem);
     }
 
+    /**
+     * Used to return a problem from elasticsearch based on its problemId
+     *
+     * @param problemId The problems designated ID
+     * @return          The problem associated with problemId
+     */
     @Override
     public Problem retrieveProblemById(Integer problemId) {
         String elasticSearchId = getProblemElasticSearchId(problemId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Problem")
                 .build();
         try {
@@ -128,6 +164,12 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Gets a list of problems from a list of problem IDs
+     *
+     * @param problemId The list of problem ids to find
+     * @return          A list of associated problem ids
+     */
     @Override
     public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemId) {
         ArrayList<Problem> problems = new ArrayList<>();
@@ -139,13 +181,18 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return problems;
     }
 
+    /**
+     * Used to remove a problem from elasticsearch
+     *
+     * @param problem The problem object to remove
+     */
     @Override
     public void deleteProblem(Problem problem) {
         String elasticSearchId = getProblemElasticSearchId(problem.getProblemID());
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
@@ -158,6 +205,13 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Returns a records's unique _ID out of elastic search based on a record ID.
+     * Used in deletion.
+     *
+     * @param recordID A unique integer to a specific problem that we can to get
+     * @return          The record's _ID from elasticsearch
+     */
     private String getRecordElasticSearchId(Integer recordID) {
         String query = "{\n" +
                 "  \"query\": {\n" +
@@ -168,7 +222,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getRecordElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Record")
                 .build();
         try {
@@ -192,10 +246,15 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Function to push a record into elastic search.
+     *
+     * @param record The record to add to elastic search
+     */
     @Override
     public void insertRecord(Record record) {
         Index index = new Index.Builder(record)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(record.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -210,16 +269,28 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Used to update the old info for a record in elasticsearch with new info.
+     * Currently done by deleting then re-inserting record.
+     *
+     * @param record The record to update
+     */
     @Override
     public void updateRecord(Record record) {
         deleteRecord(record);
         insertRecord(record);
     }
 
+    /**
+     * Used to return a record from elasticsearch based on its recordID
+     *
+     * @param recordID The record's designated ID
+     * @return          The record associated with recordID
+     */
     @Override
     public Record retrieveRecordById(Integer recordID) {
         String elasticSearchId = getRecordElasticSearchId(recordID);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Record")
                 .build();
         try {
@@ -236,6 +307,12 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Gets a list of records from a list of record IDs
+     *
+     * @param recordID The list of record ids to find
+     * @return          A list of associated record ids
+     */
     @Override
     public ArrayList<Record> retrieveRecordsById(ArrayList<Integer> recordID) {
         ArrayList<Record> records = new ArrayList<>();
@@ -247,13 +324,18 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return records;
     }
 
+    /**
+     * Used to remove a record from elasticsearch
+     *
+     * @param record The record object to remove
+     */
     @Override
     public void deleteRecord(Record record) {
         String elasticSearchId = getRecordElasticSearchId(record.getRecordId());
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(record.getClass().getSimpleName())
                 .build();
         try {
@@ -266,6 +348,14 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+
+    /**
+     * Returns a users's unique _ID out of elastic search based on a user ID.
+     * Used in deletion.
+     *
+     * @param userId A unique integer to a specific user that we can to get
+     * @return          The user's _ID from elasticsearch
+     */
     private String getUserElasticSearchId(String userId) {
         String query = "{\n" +
                 "  \"query\": {\n" +
@@ -276,7 +366,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
                 "}";
         Log.d("ESC:getUserElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18")
+                .addIndex("cmput301f18t18test")
                 .addType("Patient")
                 .addType("CareProvider")
                 .build();
@@ -300,10 +390,15 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Function to push a user into elastic search.
+     *
+     * @param user The user to add to elastic search
+     */
     @Override
     public void insertUser(User user) {
         Index index = new Index.Builder(user)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(user.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -318,19 +413,30 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Used to update the old info for a user in elasticsearch with new info.
+     * Currently done by deleting then re-inserting user.
+     *
+     * @param user The user to update
+     */
     @Override
     public void updateUser(User user) {
         deleteUser(user);
         insertUser(user);
     }
 
+    /**
+     * Used to remove a user from elasticsearch
+     *
+     * @param user The user object to remove
+     */
     @Override
     public void deleteUser(User user) {
         String elasticSearchId = getUserElasticSearchId(user.getUserId());
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18")
+                .index("cmput301f18t18test")
                 .type(user.getClass().getSimpleName())
                 .build();
         try {
@@ -343,10 +449,16 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         }
     }
 
+    /**
+     * Used to return a patient from elasticsearch based on its patientId
+     *
+     * @param patientId The patient's designated ID
+     * @return          The patient associated with patientId
+     */
     @Override
     public Patient retrievePatientById(String patientId) {
         String elasticSearchId = getUserElasticSearchId(patientId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Patient")
                 .build();
         try {
@@ -363,6 +475,12 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Gets a list of patients from a list of patient IDs
+     *
+     * @param patientIds The list of patient ids to find
+     * @return          A list of associated patient ids
+     */
     @Override
     public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
         ArrayList<Patient> patients = new ArrayList<>();
@@ -374,10 +492,16 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return patients;
     }
 
+    /**
+     * Used to return a CareProvider from elasticsearch based on its careProviderId
+     *
+     * @param careProviderId The careprovider's designated ID
+     * @return          The careprovider associated with careproviderId
+     */
     @Override
     public CareProvider retrieveCareProviderById(String careProviderId) {
         String elasticSearchId = getUserElasticSearchId(careProviderId);
-        Get get = new Get.Builder("cmput301f18t18", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("CareProvider")
                 .build();
         try {
@@ -394,6 +518,12 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
         return null;
     }
 
+    /**
+     * Checks whether a usedId is unique within elasticsearch
+     *
+     * @param userId userId to check uniqueness
+     * @return True if userId does not exist in elastic search
+     */
     @Override
     public boolean validateUserIdUniqueness(String userId) {
         return getUserElasticSearchId(userId) == null;

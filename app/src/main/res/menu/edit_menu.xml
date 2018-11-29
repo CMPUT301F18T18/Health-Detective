@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:application="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/edit_title"
+        android:title="Edit Title"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/edit_date"
+        android:title="Edit Date"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/edit_desc"
+        android:title="Edit Description"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/edit_photo"
+        android:title="Edit Photo"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/userId"
+        android:title="@string/user_id"
+        app:showAsAction="always"></item>
+
+
+</menu>

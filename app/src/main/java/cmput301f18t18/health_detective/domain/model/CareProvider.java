@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Class to store info and methods specific to CareProviders taking data from User
+ */
 public class CareProvider extends User {
+    private static final long serialVersionUID = 5L;
     public HashSet<String> patients;
 
     public CareProvider() {
@@ -23,19 +27,24 @@ public class CareProvider extends User {
     }
 
     public void addPatient(Patient patient) {
-        patients.add(patient.getUserId());
-    }
+        String patientUserId;
 
-    public void addPatient(String patientId) {
-        patients.add(patientId);
+        if (patient == null)
+            return;
+
+        patientUserId = patient.getUserId();
+
+        if (patientUserId == null || patientUserId =="")
+            return;
+
+        patients.add(patientUserId);
     }
 
     public void removePatient(Patient patient) {
-        patients.remove(patient.getUserId());
-    }
+        if (patient == null)
+            return;
 
-    public void removePatient(String patientId) {
-        patients.remove(patientId);
+        patients.remove(patient.getUserId());
     }
 
     public boolean isPatientsEmpty() {
