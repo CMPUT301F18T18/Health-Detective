@@ -1,12 +1,18 @@
 package cmput301f18t18.health_detective.domain.model.context.tree;
 
 import cmput301f18t18.health_detective.domain.model.BodyLocation;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.model.context.component.ContextTreeComponent;
+import cmput301f18t18.health_detective.domain.model.context.component.impl.BodyImageContext;
+import cmput301f18t18.health_detective.domain.model.context.component.impl.BodyLocationContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.CareProviderContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.PatientContext;
+import cmput301f18t18.health_detective.domain.model.context.component.impl.ProblemContext;
+import cmput301f18t18.health_detective.domain.model.context.component.impl.RecordContext;
 import cmput301f18t18.health_detective.domain.model.images.BodyImage;
 
 public class ContextTreeParser {
@@ -36,24 +42,84 @@ public class ContextTreeParser {
         }
     }
 
-    public User getCurrentUserContext() {
+    public Patient getCurrentPatientContext() {
+        // Start at the head
+        ContextTreeComponent treeComponent = tree.getHead();
 
-        return null;
+        // Step through until first User is found
+        while (true) {
+            if (treeComponent == null)
+                return null;
+
+            else if (treeComponent instanceof PatientContext) {
+                return ((PatientContext) treeComponent).getPatient();
+            }
+
+            treeComponent = treeComponent.stepBackward();
+        }
     }
 
     public Problem getCurrentProblemContext() {
-        return null;
+        // Start at the head
+        ContextTreeComponent treeComponent = tree.getHead();
+
+        // Step through until first User is found
+        while (true) {
+            if (treeComponent == null)
+                return null;
+            else if (treeComponent instanceof ProblemContext) {
+                return ((ProblemContext) treeComponent).getProblem();
+            }
+
+            treeComponent = treeComponent.stepBackward();
+        }
     }
 
     public Record getCurrentRecordContext() {
-        return null;
+        // Start at the head
+        ContextTreeComponent treeComponent = tree.getHead();
+
+        // Step through until first User is found
+        while (true) {
+            if (treeComponent == null)
+                return null;
+            else if (treeComponent instanceof ProblemContext) {
+                return ((RecordContext) treeComponent).getRecord();
+            }
+
+            treeComponent = treeComponent.stepBackward();
+        }
     }
 
     public BodyLocation getCurrentBodyLocation() {
-        return null;
+        // Start at the head
+        ContextTreeComponent treeComponent = tree.getHead();
+
+        // Step through until first User is found
+        while (true) {
+            if (treeComponent == null)
+                return null;
+            else if (treeComponent instanceof ProblemContext) {
+                return ((BodyLocationContext) treeComponent).getBodyLocation();
+            }
+
+            treeComponent = treeComponent.stepBackward();
+        }
     }
 
     public BodyImage getCurrentBodyPhoto() {
-        return null;
+        // Start at the head
+        ContextTreeComponent treeComponent = tree.getHead();
+
+        // Step through until first User is found
+        while (true) {
+            if (treeComponent == null)
+                return null;
+            else if (treeComponent instanceof ProblemContext) {
+                return ((BodyImageContext) treeComponent).getBodyImage();
+            }
+
+            treeComponent = treeComponent.stepBackward();
+        }
     }
 }

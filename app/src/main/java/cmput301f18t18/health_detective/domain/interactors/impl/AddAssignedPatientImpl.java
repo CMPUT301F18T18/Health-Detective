@@ -7,6 +7,7 @@ import cmput301f18t18.health_detective.domain.interactors.AddAssignedPatient;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -16,7 +17,6 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class AddAssignedPatientImpl extends AbstractInteractor implements AddAssignedPatient {
 
     private AddAssignedPatient.Callback callback;
-    private CareProvider careProvider;
     private String patientId;
 
     /**
@@ -30,7 +30,6 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
     {
         super();
         this.callback = callback;
-        this.careProvider = careProvider;
         this.patientId = patientId;
     }
 
@@ -54,7 +53,25 @@ public class AddAssignedPatientImpl extends AbstractInteractor implements AddAss
     @Override
     public void run() {
         final UserRepo userRepo = this.context.getUserRepo();
+        final CareProvider careProvider;
         Patient patientToAdd;
+
+        // Get the CareProvider to add the patient to (Should be the logged in user)
+        ContextTreeParser contextTreeParser = new ContextTreeParser(this.context.getContextTree());
+        User loggedInUser = contextTreeParser.getLoggedInUser();
+
+        if (loggedInUser instanceof CareProvider)
+            careProvider = (CareProvider)loggedInUser;
+        else {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onAAPLoggedInUserNotACareProvider();
+                }
+            });
+
+            return;
+        }
 
         // UserId invalid
         if (!User.isValidUserId(patientId)) {
