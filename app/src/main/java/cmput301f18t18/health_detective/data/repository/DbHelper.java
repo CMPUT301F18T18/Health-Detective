@@ -8,7 +8,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //TODO: Add other tables and formats
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_NAME = "test.db";
 
@@ -17,10 +17,11 @@ public class DbHelper extends SQLiteOpenHelper {
                 "problemId TEXT PRIMARY KEY, " +
                 "title TEXT, " +
                 "description TEXT, " +
-                "startDate TEXT" +
+                "startDate TEXT, " +
+                "recordIds TEXT " +
             ")";
 
-    public DbHelper(Context context) {
+    DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -31,6 +32,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS Problems");
+
+        onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Problems");
 
         onCreate(db);

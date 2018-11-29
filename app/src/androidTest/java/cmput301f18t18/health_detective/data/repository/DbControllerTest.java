@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +26,9 @@ public class DbControllerTest {
     @Test
     public void testInsertRetrieveProblem() {
         Problem problem = new Problem(1001, "TestInsert", "Stay", new Date());
+        problem.addRecord(new Record(1, "a", "b"));
+        problem.addRecord(new Record(2, "c", "d"));
+        problem.addRecord(new Record(3, "e", "f"));
         dbController.insertProblem(problem);
         Problem ret = dbController.retrieveProblemById(1001);
 
