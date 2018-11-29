@@ -5,21 +5,20 @@ import java.util.ArrayList;
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.GetAssignedPatients;
+import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class GetAssignedPatientsMockSuccess extends AbstractInteractor implements GetAssignedPatients {
+public class ViewCareProviderMockSuccess extends AbstractInteractor implements ViewCareProvider {
 
-    private GetAssignedPatients.Callback callback;
+    private ViewCareProvider.Callback callback;
     private UserRepo userRepo;
     private CareProvider careProvider;
 
-    public GetAssignedPatientsMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
-                                          GetAssignedPatients.Callback callback, UserRepo userRepo,
-                                          CareProvider careProvider)
+    public ViewCareProviderMockSuccess(ThreadExecutor threadExecutor, MainThread mainThread,
+                                       ViewCareProvider.Callback callback, UserRepo userRepo,
+                                       CareProvider careProvider)
     {
         super();
         this.callback = callback;

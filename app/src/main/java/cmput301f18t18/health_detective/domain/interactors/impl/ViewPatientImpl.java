@@ -3,10 +3,8 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.GetProblems;
+import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
@@ -15,9 +13,9 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
  * The GetProblemImpl class is a class intended to handle the retrieval of
  * a patient's problems.
  */
-public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
+public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
 
-    private GetProblems.Callback callback;
+    private ViewPatient.Callback callback;
     private Patient patient;
 
     /**
@@ -25,7 +23,7 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
      * @param callback
      * @param patient the patient who's list of problems is retrieved
      */
-    public GetProblemsImpl(GetProblems.Callback callback, Patient patient)
+    public ViewPatientImpl(ViewPatient.Callback callback, Patient patient)
     {
         super();
         this.callback = callback;

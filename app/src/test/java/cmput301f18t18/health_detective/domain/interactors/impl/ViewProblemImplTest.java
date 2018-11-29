@@ -11,19 +11,17 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.mock.MainThreadMock;
 import cmput301f18t18.health_detective.domain.executor.mock.ThreadExecutorMock;
-import cmput301f18t18.health_detective.domain.interactors.GetRecords;
+import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 
 import static org.junit.Assert.*;
 
-public class GetRecordsImplTest {
+public class ViewProblemImplTest {
 
     private MainThread mainThread;
     private ThreadExecutor threadExecutor;
@@ -61,11 +59,8 @@ public class GetRecordsImplTest {
         records.insertRecord(testRecord1);
         records.insertRecord(testRecord2);
 
-        GetRecords interactor = new GetRecordsImpl(
-                threadExecutor,
-                mainThread,
+        ViewProblem interactor = new ViewProblemImpl(
                 callback,
-                records,
                 testProblem
         );
 
@@ -90,11 +85,8 @@ public class GetRecordsImplTest {
         Problem testProblem = new Problem();
         problems.insertProblem(testProblem);
 
-        GetRecords interactor = new GetRecordsImpl(
-                threadExecutor,
-                mainThread,
+        ViewProblem interactor = new ViewProblemImpl(
                 callback,
-                records,
                 testProblem
         );
 
@@ -106,7 +98,7 @@ public class GetRecordsImplTest {
 
 }
 
-class GetRecordsMockPresenter implements GetRecords.Callback {
+class GetRecordsMockPresenter implements ViewProblem.Callback {
 
     private boolean isSuccess = false;
     private  boolean isNoRecords = false;

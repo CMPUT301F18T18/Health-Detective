@@ -3,9 +3,8 @@ package cmput301f18t18.health_detective.domain.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 
-import cmput301f18t18.health_detective.domain.model.images.RecordImage;
+import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
 
 /**
@@ -17,7 +16,7 @@ public class Record implements Searchable, Serializable {
     private String title;
     private String comment;
     private Date date;
-    private ArrayList<RecordImage> photos;
+    private ArrayList<DomainImage> photos;
     private Geolocation geolocation;
 
     public Record() {
