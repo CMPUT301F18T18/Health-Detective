@@ -68,11 +68,7 @@ public class DeleteRecordImplTest {
     public void testDRRecord() {
 
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
                 problems.retrieveProblemById(1234),
                 records.retrieveRecordById(1111)
         );
@@ -111,11 +107,7 @@ public class DeleteRecordImplTest {
                 date
         );
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
                 problem,
                 records.retrieveRecordById(1111)
         );
@@ -136,11 +128,7 @@ public class DeleteRecordImplTest {
                 date
         );
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
                 problems.retrieveProblemById(1234),
                 record
         );

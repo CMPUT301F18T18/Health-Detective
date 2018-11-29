@@ -11,17 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.interactors.ContextChange;
-import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnBack;
-import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnInto;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;

@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.model.context.tree.base.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.BodyImageRepo;
 import cmput301f18t18.health_detective.domain.repository.BodyLocationRepo;
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;

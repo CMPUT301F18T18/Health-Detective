@@ -10,13 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.interactors.ContextChange;
-import cmput301f18t18.health_detective.domain.interactors.impl.ContextOnInto;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;

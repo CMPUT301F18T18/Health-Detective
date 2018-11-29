@@ -52,11 +52,7 @@ public class CreateProblemImplTest {
         Date date = new Date();
 
         CreateProblem command = new CreateProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
                 users.retrievePatientById("Patient1"),
                 title,
                 description,
@@ -88,11 +84,7 @@ public class CreateProblemImplTest {
         String description = "description";
         Date date = new Date();
         CreateProblem command = new CreateProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
                 users.retrievePatientById("Patient1"),
                 title,
                 description,
