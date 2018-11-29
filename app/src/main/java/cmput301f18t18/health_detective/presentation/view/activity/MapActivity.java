@@ -11,9 +11,12 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,6 +39,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
 
@@ -43,7 +51,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.menu_tab, menu);
-
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         return true;
@@ -91,11 +98,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         LatLng home = new LatLng(53.526973, -113.527114);
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, INITIAL_ZOOM));
-
-        setMapLongClick(myMap);
+    }}
+        /*setMapLongClick(myMap);
         setPoiClick(myMap);
 
-    }
 
     private void setMapLongClick(final GoogleMap map) {
 
@@ -117,6 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
     }
+
     private void setPoiClick(final GoogleMap map){
         map.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
             @Override
@@ -141,4 +148,4 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     REQUEST_LOCATION_PERMISSION);
         }
     }
-    }
+    }*/
