@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                //ElasticSearchController.getInstance()
-                mockUser
+                ElasticSearchController.getInstance()
+                //mockUser
         );
 
         Button loginButton = findViewById(R.id.loginButton);

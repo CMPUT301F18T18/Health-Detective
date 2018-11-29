@@ -76,10 +76,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                //ElasticSearchController.getInstance(),
-                mockProblem,
-                //ElasticSearchController.getInstance()
-                mockRecord
+                ElasticSearchController.getInstance(),
+                //mockProblem,
+                ElasticSearchController.getInstance()
+                //mockRecord
         );
 
 

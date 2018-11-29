@@ -55,10 +55,10 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                mockProblem,
-                //ElasticSearchController.getInstance(),
-                mockUser
-                //ElasticSearchController.getInstance()
+                //mockProblem,
+                ElasticSearchController.getInstance(),
+                //mockUser
+                ElasticSearchController.getInstance()
         );
 
         ImageView addProblem = findViewById(R.id.addProbBtn);

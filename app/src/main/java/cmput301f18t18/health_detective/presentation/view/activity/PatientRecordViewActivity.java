@@ -71,12 +71,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
                 this,
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
-                //ElasticSearchController.getInstance()
-                mockRecord
+                ElasticSearchController.getInstance()
+                //mockRecord
         );
 
         //stuff for all photos section
-        GridViewAdapter adapter = new GridViewAdapter(this, testImages);
+        GridViewAdapter adapter = new GridViewAdapter(this, 1);
         GridView gridView = (GridView) findViewById(R.id.allPhotosView);
 
         gridView.setAdapter(adapter);
@@ -85,6 +85,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
                 toast.show();
+                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
             }
         });
 
