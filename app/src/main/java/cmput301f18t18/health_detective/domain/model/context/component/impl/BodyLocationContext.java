@@ -8,8 +8,8 @@ public class BodyLocationContext extends AbstractContextTreeComponent {
 
     private final BodyLocation bodyLocation;
 
-    public BodyLocationContext(Class<? extends AbstractInteractor> commandContext, BodyLocation bodyLocation) {
-        super(commandContext);
+    public BodyLocationContext(BodyLocation bodyLocation) {
+        super();
         this.bodyLocation = bodyLocation;
     }
 

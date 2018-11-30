@@ -1,7 +1,7 @@
 package cmput301f18t18.health_detective.domain.model;
 
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
-import cmput301f18t18.health_detective.domain.model.images.BodyImage;
+import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 import cmput301f18t18.health_detective.domain.util.Id;
 
 /**
@@ -10,24 +10,25 @@ import cmput301f18t18.health_detective.domain.util.Id;
 public class BodyLocation {
 
     private String id;
+    private String user;
     private String label;
-    private Integer xPos;
-    private Integer yPos;
-    private BodyImage bodyImage;
+    private DomainImage frontImage;
+    private DomainImage backImage;
 
 
-    public BodyLocation(String label, BodyImage bodyImage, Integer xPos, Integer yPos) {
+    public BodyLocation(String user, String label, DomainImage frontImage, DomainImage backImage) {
         DomainContext context = DomainContext.getInstance();
         String newId = Id.genUniqueId(context.getSecureRandom());
 
+        this.user = user;
         this.setId(newId);
         this.setLabel(label);
-        this.setBodyImage(bodyImage);
-        this.setMarkerPos(xPos, yPos);
+        this.setFrontImage(frontImage);
+        this.setBackImage(backImage);
     }
 
-    public BodyLocation(String id, String label, BodyImage bodyImage, Integer xPos, Integer yPos) {
-        this(label, bodyImage, xPos, yPos);
+    public BodyLocation(String user, String id, String label, DomainImage frontImage, DomainImage backImage) {
+        this(user, label, frontImage, backImage);
 
         this.setId(id);
     }
@@ -52,31 +53,27 @@ public class BodyLocation {
         this.label = label;
     }
 
-    public Integer getMarkerXPos() {
-        return xPos;
+    public byte[] getFrontImage() {
+        byte[] image = this.frontImage.getImage();
+
+        return image;
     }
 
-    public Integer getMarkerYPos() {
-        return yPos;
+    public byte[] getBackImage() {
+        byte[] image = this.backImage.getImage();
+
+        return image;
     }
 
-    public void setMarkerPos(Integer xPos, Integer yPos) {
-        if (xPos < 0) {
-            xPos = 0;
-        }
-        else if (yPos < 0) {
-            yPos = 0;
-        }
-
-        this.xPos = xPos;
-        this.yPos = yPos;
+    public void setFrontImage(DomainImage frontImage) {
+        this.frontImage = frontImage;
     }
 
-    public BodyImage getBodyImage() {
-        return bodyImage;
+    public void setBackImage(DomainImage backImage) {
+        this.backImage = backImage;
     }
 
-    public void setBodyImage(BodyImage bodyImage) {
-        this.bodyImage = bodyImage;
+    public String getUser() {
+        return user;
     }
 }

@@ -131,4 +131,9 @@ class CreateProblemMockPresenter implements CreateProblem.Callback {
     @Override
     public void onCPFail() {
     }
+
+    @Override
+    public void onCPNoPatientInScope() {
+
+    }
 }

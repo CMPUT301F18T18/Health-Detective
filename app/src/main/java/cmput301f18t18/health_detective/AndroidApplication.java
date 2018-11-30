@@ -18,7 +18,6 @@ public class AndroidApplication extends Application {
                 ElasticSearchController.getInstance(),
                 ElasticSearchController.getInstance(),
                 null,
-                null,
                 null);
     }
 }

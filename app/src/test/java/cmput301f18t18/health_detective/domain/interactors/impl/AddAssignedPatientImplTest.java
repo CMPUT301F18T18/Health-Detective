@@ -163,6 +163,11 @@ class AddAssignedPatientCallbackMockPresenter implements AddAssignedPatient.Call
         this.isAAPPatientDNE = true;
     }
 
+    @Override
+    public void onAAPLoggedInUserNotACareProvider() {
+
+    }
+
     public boolean isAAPSuccess() {
         return isAAPSuccess;
     }

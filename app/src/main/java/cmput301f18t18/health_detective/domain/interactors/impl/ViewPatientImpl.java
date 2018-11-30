@@ -7,6 +7,8 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
 /**
@@ -42,7 +44,9 @@ public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
      */
     @Override
     public void run() {
-        final ProblemRepo problemRepo = this.context.getProblemRepo();
+        ProblemRepo problemRepo = this.context.getProblemRepo();
+        ContextTree tree = this.context.getContextTree();
+        tree.push(ContextTreeComponentFactory.getContextComponent(patient));
 
         if (patient.isProblemsEmpty()) {
             this.mainThread.post(new Runnable() {

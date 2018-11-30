@@ -7,8 +7,8 @@ import cmput301f18t18.health_detective.domain.model.context.component.base.Abstr
 public class PatientContext extends AbstractContextTreeComponent {
     private final Patient patient;
 
-    public PatientContext(Class<? extends AbstractInteractor> commandContext, Patient patient) {
-        super(commandContext);
+    public PatientContext(Patient patient) {
+        super();
         this.patient = patient;
     }
 

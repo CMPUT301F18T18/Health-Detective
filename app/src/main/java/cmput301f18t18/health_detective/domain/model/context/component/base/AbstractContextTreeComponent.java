@@ -5,15 +5,14 @@ import cmput301f18t18.health_detective.domain.model.context.component.ContextTre
 
 public class AbstractContextTreeComponent implements ContextTreeComponent, Cloneable{
 
-    private final Class<? extends AbstractInteractor> commandType;
+    private Class<? extends AbstractInteractor> commandType;
     private ContextTreeComponent child;
     private ContextTreeComponent parent;
 
 
-    public AbstractContextTreeComponent(Class<? extends AbstractInteractor> commandContext) {
+    public AbstractContextTreeComponent() {
         this.parent = null;
         this.child = null;
-        this.commandType = commandContext;
     }
 
     @Override
@@ -39,5 +38,9 @@ public class AbstractContextTreeComponent implements ContextTreeComponent, Clone
     @Override
     public Class<? extends AbstractInteractor> getCommandContext() {
         return commandType;
+    }
+
+    public void setCommandType(Class<? extends AbstractInteractor> commandType) {
+        this.commandType = commandType;
     }
 }

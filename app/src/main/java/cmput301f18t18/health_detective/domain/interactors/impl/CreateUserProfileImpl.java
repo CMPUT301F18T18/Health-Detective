@@ -106,6 +106,7 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
         //Create new Care Provider profile
         if (isCareProvider == true) {
             CareProvider newCP = new CareProvider(userId,phoneNumber,email);
+
             userRepo.insertUser(newCP);
             this.mainThread.post(new Runnable() {
 
@@ -117,7 +118,9 @@ public class CreateUserProfileImpl extends AbstractInteractor implements CreateU
         } else {
             //Create new Patient profile
             Patient newPatient = new Patient(userId,phoneNumber,email);
+
             userRepo.insertUser(newPatient);
+
             this.mainThread.post(new Runnable() {
 
                 @Override

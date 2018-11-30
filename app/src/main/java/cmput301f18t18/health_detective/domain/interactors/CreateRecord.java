@@ -7,6 +7,7 @@ public interface CreateRecord extends Interactor {
     interface Callback {
         void onCRSuccess(Record record);
         void onCRNullTitle();
+        void onCRInvalidPermissions();
         void onCRFail();
     }
 }

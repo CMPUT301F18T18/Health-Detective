@@ -8,8 +8,8 @@ public class RecordContext extends AbstractContextTreeComponent {
 
     private final Record record;
 
-    public RecordContext(Class<? extends AbstractInteractor> commandContext, Record record) {
-        super(commandContext);
+    public RecordContext(Record record) {
+        super();
         this.record = record;
     }
 

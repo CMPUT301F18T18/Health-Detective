@@ -6,6 +6,10 @@ import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -15,7 +19,6 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class RemoveAssignedPatientImpl extends AbstractInteractor implements RemoveAssignedPatient {
 
     private RemoveAssignedPatient.Callback callback;
-    private CareProvider careProvider;
     private Patient patient;
 
     /**
@@ -29,7 +32,6 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
     {
         super();
         this.callback = callback;
-        this.careProvider = careProvider;
         this.patient = patient;
     }
 
@@ -48,6 +50,22 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
     public void run() {
 
         final UserRepo userRepo = this.context.getUserRepo();
+        final CareProvider careProvider;
+
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        User userContext = treeParser.getCurrentUserContext();
+
+        if (!(userContext instanceof CareProvider)) {
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onRAPInvalidPermissions();
+                }
+            });
+        }
+
+        careProvider = (CareProvider) userContext;
 
         if (!careProvider.hasPatient(patient)) {
             this.mainThread.post(new Runnable() {

@@ -118,4 +118,9 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
 
     }
 
+    @Override
+    public void onEUPInvalidPermissions() {
+
+    }
+
 }

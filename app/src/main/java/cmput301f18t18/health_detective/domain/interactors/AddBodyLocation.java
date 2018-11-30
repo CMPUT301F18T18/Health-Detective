@@ -9,5 +9,6 @@ public interface AddBodyLocation extends Interactor {
         void onABLInvalidCoordinate();
         void onABLEmptyLabel();
         void onABLSuccess(BodyLocation bodyLocation);
+        void onABLInvalidPermissions();
     }
 }

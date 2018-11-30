@@ -101,6 +101,11 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     }
 
     @Override
+    public void onCPNoPatientInScope() {
+
+    }
+
+    @Override
     public void onEPSuccess(Problem problem) {
         this.addView.onEditProblem();
     }

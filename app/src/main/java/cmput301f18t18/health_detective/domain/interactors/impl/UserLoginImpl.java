@@ -5,6 +5,8 @@ import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -61,6 +63,10 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         patient = userRepo.retrievePatientById(userId);
 
         if (patient != null) {
+
+            ContextTree tree = this.context.getContextTree();
+            tree.push(ContextTreeComponentFactory.getContextComponent(patient));
+
             this.mainThread.post(new Runnable() {
 
                 @Override
@@ -75,6 +81,10 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         careProvider = userRepo.retrieveCareProviderById(userId);
 
         if (careProvider != null) {
+
+            ContextTree tree = this.context.getContextTree();
+            tree.push(ContextTreeComponentFactory.getContextComponent(careProvider));
+
             this.mainThread.post(new Runnable() {
 
                 @Override

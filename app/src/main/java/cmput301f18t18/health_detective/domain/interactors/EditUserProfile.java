@@ -8,5 +8,6 @@ public interface EditUserProfile extends Interactor {
         void onEUPSuccess(User userProfile);
         void onEUPInvalidEmail();
         void onEUPInvaildPhoneNumber();
+        void onEUPInvalidPermissions();
     }
 }

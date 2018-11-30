@@ -104,6 +104,11 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     }
 
     @Override
+    public void onCRInvalidPermissions() {
+
+    }
+
+    @Override
     public void onCRFail() {
         this.view.onCreateRecordFail();
 

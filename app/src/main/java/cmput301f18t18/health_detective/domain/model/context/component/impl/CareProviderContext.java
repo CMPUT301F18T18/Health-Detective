@@ -7,8 +7,8 @@ import cmput301f18t18.health_detective.domain.model.context.component.base.Abstr
 public class CareProviderContext extends AbstractContextTreeComponent {
     private final CareProvider careProvider;
 
-    public CareProviderContext(Class<? extends AbstractInteractor> commandContext, CareProvider careProvider) {
-        super(commandContext);
+    public CareProviderContext(CareProvider careProvider) {
+        super();
         this.careProvider = careProvider;
     }
 

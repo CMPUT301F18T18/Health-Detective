@@ -8,8 +8,8 @@ public class ProblemContext extends AbstractContextTreeComponent {
 
     private final Problem problem;
 
-    public ProblemContext(Class<? extends AbstractInteractor> commandContext, Problem problem) {
-        super(commandContext);
+    public ProblemContext(Problem problem) {
+        super();
         this.problem = problem;
     }
 
