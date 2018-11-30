@@ -21,10 +21,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
+/**
+/  This class creates a Add Record Dialog box that gets user inputted Title and Description
+/
+*/
 public class AddDialog extends AppCompatDialogFragment{
     private AddDialogListener listener;
     private EditText addTitle, addDesc;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -53,6 +57,7 @@ public class AddDialog extends AppCompatDialogFragment{
 
         return builder.create();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -63,6 +68,10 @@ public class AddDialog extends AppCompatDialogFragment{
             throw new ClassCastException(context.toString() + "must implement ExampleDialogListener");
         }
     }
+
+    /**
+     * AddDialogListener is an interface that our activity implements, and then they define applyEdit
+     */
     public interface AddDialogListener{
         void applyEdit(String title, String comment);
 
