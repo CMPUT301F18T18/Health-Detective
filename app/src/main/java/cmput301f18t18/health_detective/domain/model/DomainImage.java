@@ -7,12 +7,11 @@ public class DomainImage {
 
     private String imageId;
     private String label;
-    private String user;
     private Integer xPos;
     private Integer yPos;
     private byte[] image;
 
-    public DomainImage(String user) {
+    public DomainImage() {
         DomainContext context = DomainContext.getInstance();
         String newId = Id.genUniqueId(context.getSecureRandom());
 
@@ -25,14 +24,12 @@ public class DomainImage {
         this.setImage(new byte[]{});
     }
 
-    public DomainImage(String user, byte[] image) {
-        this(user);
-
+    public DomainImage(byte[] image) {
         this.setImage(image);
     }
 
-    public DomainImage(String id, String user, byte[] image) {
-        this(user, image);
+    public DomainImage(String id, byte[] image) {
+        this(image);
 
         this.setImageId(id);
     }
@@ -57,10 +54,6 @@ public class DomainImage {
         return label;
     }
 
-    public String getUser() {
-        return user;
-    }
-
     public void setPos(Integer xPos, Integer yPos) {
         if (xPos < 0) {
             xPos = 0;
@@ -83,9 +76,5 @@ public class DomainImage {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
     }
 }

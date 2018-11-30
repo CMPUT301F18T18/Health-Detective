@@ -9,6 +9,7 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -27,8 +28,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     private String title;
     private String comment;
     private Date date;
-    private ArrayList<DomainImage> imagesToInsert = new ArrayList<>();
-    private ArrayList<DomainImage> imagesToDelete = new ArrayList<>();
+    private Geolocation geolocation;
 
 
     /**
@@ -40,7 +40,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
      * @param date the date assigned to the record being edited
      */
     public EditRecordImpl(EditRecord.Callback callback,
-                          Record recordToEdit, String title, String comment, Date date)
+                          Record recordToEdit, String title, String comment, Date date, Geolocation geolocation)
     {
         super();
         this.callback = callback;
@@ -48,39 +48,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.title = title;
         this.comment = comment;
         this.date = date;
-    }
-
-    /**
-     * Second constructor for EditRecordImpl
-     * @param recordToEdit the record that is being edited
-     * @param title the title of the record that is being edited
-     * @param comment the description of the record being edited
-     */
-    public EditRecordImpl(EditRecord.Callback callback,
-                          Record recordToEdit, String title, String comment)
-    {
-        super();
-        this.callback = callback;
-        this.recordtoEdit = recordToEdit;
-        this.title = title;
-        this.comment = comment;
-        this.date = recordToEdit.getDate();
-    }
-
-    /**
-     * Third constructor for EditRecordImpl
-     * @param recordToEdit the record that is being edited
-     * @param comment the description of the record being edited
-     */
-    public EditRecordImpl(EditRecord.Callback callback,
-                          Record recordToEdit, String comment)
-    {
-        super();
-        this.callback = callback;
-        this.recordtoEdit = recordToEdit;
-        this.title = recordToEdit.getTitle();
-        this.comment = comment;
-        this.date = recordToEdit.getDate();
+        this.geolocation = geolocation;
     }
 
     /**
@@ -137,6 +105,16 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
             return;
         }
 
+        // Missing geolocation
+        if (this.geolocation == null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onERNoGeolocationProvided();
+                }
+            });
+        }
+
         if (this.comment == null) {
             this.comment = "";
         }
@@ -144,14 +122,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.recordtoEdit.setTitle(this.title);
         this.recordtoEdit.setComment(this.comment);
         this.recordtoEdit.setDate(this.date);
-
-        for (DomainImage image: imagesToInsert) {
-            recordtoEdit.insertPhoto(image);
-        }
-
-        for (DomainImage image: imagesToDelete) {
-            recordtoEdit.deletePhoto(image);
-        }
+        this.recordtoEdit.setGeolocation(geolocation);
 
         recordRepo.updateRecord(this.recordtoEdit);
 
@@ -164,17 +135,4 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
             }
         });
     }
-
-
-    @Override
-    public void insertPhoto(DomainImage image) {
-        imagesToInsert.add(image);
-    }
-
-    @Override
-    public void deletePhoto(DomainImage image) {
-        imagesToDelete.add(image);
-    }
-
-
 }
