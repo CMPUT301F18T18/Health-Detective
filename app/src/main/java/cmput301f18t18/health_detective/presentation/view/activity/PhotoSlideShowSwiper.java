@@ -44,10 +44,15 @@ public class PhotoSlideShowSwiper implements View.OnTouchListener {
             }
             return result;
         }
+        @Override
+        public boolean onSingleTapUp(MotionEvent e){
+            return super.onSingleTapUp(e);
+        }
     }
 
     public void onSwipeRight(){}
     public void onSwipeLeft(){}
+    public void onTapOnce(){}
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {

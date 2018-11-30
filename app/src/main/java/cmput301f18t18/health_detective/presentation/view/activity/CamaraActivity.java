@@ -10,6 +10,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,33 +51,19 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
     private static final String TAG = "Touch";
     String base;
     byte[] temp;
-    @SuppressWarnings("unused")
-    private static final float MIN_ZOOM = 1f,MAX_ZOOM = 1f;
+    Bitmap bitmap;
+
+    // adding in trying to draw a goddamn circle
+    private Paint pTouch;
+    public int x;
+    public int y;
+    int radius = 5;
+    Canvas canvas;
+
 
     // These matrices will be used to scale points of the image
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
-
-    // The 3 states (events) which the user is trying to perform
-    static final int NONE = 0;
-    static final int DRAG = 1;
-    static final int ZOOM = 2;
-    int mode = NONE;
-
-    // these PointF objects are used to record the point(s) the user is touching
-    PointF start = new PointF();
-    PointF mid = new PointF();
-    float oldDist = 1f;
-
-    private int fieldImgXY[] = new int[2];
-
-    Bitmap bitmap;
-    Canvas canvas;
-    Paint paint;
-    Paint pDot  = new Paint();
-    float downx=0,downy=0,upx=30,upy=50;
-    int cols = 5;
-    int rows = 6;
     Record record;
     Patient patientContext;
 
@@ -96,6 +84,14 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         Button saveBtn = findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(this);
 
+        //adding circule shit
+        pTouch = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // pTouch.setXfermode(new PorterDuffXfermode(Mode.SRC_OUT));
+        pTouch.setColor(Color.RED);
+        pTouch.setStyle(Paint.Style.STROKE);
+
+        pTouch.setStrokeWidth(5);
+
 
 
         takenPhoto.setOnTouchListener(this);
@@ -108,6 +104,7 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         };
         button.setOnClickListener(listener);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,7 +168,7 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
                     Photo photo = new Photo();
                     temp =  photo.toBase64String(bitmap);
                     base = photo.byteArrayToString(temp);
@@ -200,6 +197,39 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            String text = "You click at x = " + event.getX() + " and y = " + event.getY();
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+            Drawable drawable = takenPhoto.getDrawable();
+            Rect imageBounds = drawable.getBounds();
+
+
+            DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+            int width = metrics.widthPixels;
+            int height = metrics.heightPixels;
+
+
+
+            Rect frameToDraw = new Rect(0, 0, width, height);
+            RectF whereToDraw = new RectF(0, 0, width, height - 300);
+
+            canvas.drawBitmap(bitmap,frameToDraw,whereToDraw, null);
+
+
+
+//            Canvas canvas = new Canvas(bitmap);
+//            Paint paint = new Paint();
+//            paint.setStyle(Paint.Style.FILL);
+//            paint.setColor(Color.RED);
+//            paint.setAntiAlias(true);
+//            canvas.drawCircle(
+//                    canvas.getWidth() / 2, // cx
+//                    canvas.getHeight() / 2, // cy
+//                    5, // Radius
+//                    paint // Paint
+//            );
+//            takenPhoto.setImageBitmap(bitmap);
+        }
         return true;
     }
 
@@ -209,7 +239,7 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             Intent intent = new Intent(this, PatientRecordViewActivity.class);
             intent.putExtra("RECORD", record);
             intent.putExtra("USER", patientContext);
-            intent.putExtra("PHOTO", temp);
+            //intent.putExtra("PHOTO", temp);
             startActivity(intent);
         }
     }
