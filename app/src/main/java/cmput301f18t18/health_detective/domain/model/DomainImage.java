@@ -1,10 +1,9 @@
-package cmput301f18t18.health_detective.domain.model.images.impl;
+package cmput301f18t18.health_detective.domain.model;
 
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
-import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 import cmput301f18t18.health_detective.domain.util.Id;
 
-public class DomainImageImpl implements DomainImage {
+public class DomainImage {
 
     private String imageId;
     private String label;
@@ -13,7 +12,7 @@ public class DomainImageImpl implements DomainImage {
     private Integer yPos;
     private byte[] image;
 
-    public DomainImageImpl(String user) {
+    public DomainImage(String user) {
         DomainContext context = DomainContext.getInstance();
         String newId = Id.genUniqueId(context.getSecureRandom());
 
@@ -26,13 +25,13 @@ public class DomainImageImpl implements DomainImage {
         this.setImage(new byte[]{});
     }
 
-    public DomainImageImpl(String user, byte[] image) {
+    public DomainImage(String user, byte[] image) {
         this(user);
 
         this.setImage(image);
     }
 
-    public DomainImageImpl(String id, String user, byte[] image) {
+    public DomainImage(String id, String user, byte[] image) {
         this(user, image);
 
         this.setImageId(id);
@@ -46,12 +45,10 @@ public class DomainImageImpl implements DomainImage {
         this.image = image;
     }
 
-    @Override
     public String getImageId() {
         return  this.imageId;
     }
 
-    @Override
     public byte[] getImage() {
         return this.image;
     }

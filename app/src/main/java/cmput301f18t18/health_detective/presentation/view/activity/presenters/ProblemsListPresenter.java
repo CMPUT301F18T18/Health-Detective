@@ -31,7 +31,6 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
     public void deleteProblem(Patient patientContext, Problem problem){
         DeleteProblem command = new DeleteProblemImpl(
                 this,
-                patientContext,
                 problem
         );
 

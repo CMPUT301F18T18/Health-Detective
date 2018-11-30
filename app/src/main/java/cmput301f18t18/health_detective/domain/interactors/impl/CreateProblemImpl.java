@@ -28,13 +28,12 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     /**
      * Constructor for CreateProblemImpl
      * @param callback
-     * @param patient the patient the problem is intended to be added to
      * @param problemTitle the title of the created problem
      * @param problemDescription the description of the created problem
      * @param startDate the date chosen for the created problem
      */
     public CreateProblemImpl(CreateProblem.Callback callback,
-                             Patient patient, String problemTitle, String problemDescription, Date startDate)
+                             String problemTitle, String problemDescription, Date startDate)
     {
         super();
         this.callback = callback;

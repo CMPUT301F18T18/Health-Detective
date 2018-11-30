@@ -6,6 +6,8 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
@@ -16,20 +18,17 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class DeleteProblemImpl extends AbstractInteractor implements DeleteProblem {
 
     private DeleteProblem.Callback callback;
-    private Patient patient;
     private Problem problem;
 
     /**
      * Constructor for DeleteProblemImpl
      * @param callback
-     * @param patient the patient the problem being deleted belonged to
      * @param problem the problem being deleted
      */
-    public DeleteProblemImpl(DeleteProblem.Callback callback, Patient patient, Problem problem)
+    public DeleteProblemImpl(DeleteProblem.Callback callback, Problem problem)
     {
         super();
         this.callback = callback;
-        this.patient = patient;
         this.problem = problem;
     }
 
@@ -50,6 +49,12 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
     public void run() {
         final UserRepo userRepo = this.context.getUserRepo();
         final ProblemRepo problemRepo = this.context.getProblemRepo();
+        final Patient patient;
+
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+
+        patient = treeParser.getCurrentPatientContext();
 
         // Patient cannot be found
         if(userRepo.retrievePatientById(patient.getUserId()) == null){
@@ -84,7 +89,7 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
 
         //Delete problem
         problemRepo.deleteProblem(problem);
-        this.patient.removeProblem(problem);
+        patient.removeProblem(problem);
         userRepo.updateUser(patient);
     }
 }

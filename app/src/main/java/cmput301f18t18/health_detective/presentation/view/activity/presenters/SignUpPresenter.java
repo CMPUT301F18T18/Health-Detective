@@ -64,7 +64,6 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
     public void editUserInfo(User userToEdit, String email, String phoneNumber){
         EditUserProfile editUserProfile = new EditUserProfileImpl(
                 this,
-                userToEdit,
                 email,
                 phoneNumber
         );

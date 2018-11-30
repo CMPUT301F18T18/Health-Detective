@@ -1,7 +1,6 @@
 package cmput301f18t18.health_detective.domain.model;
 
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
-import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 import cmput301f18t18.health_detective.domain.util.Id;
 
 /**

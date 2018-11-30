@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
 import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
 
 /**
@@ -16,7 +15,7 @@ public class Record implements Searchable, Serializable {
     private String title;
     private String comment;
     private Date date;
-    private ArrayList<DomainImage> photos;
+    private ArrayList<String> photos;
     private Geolocation geolocation;
 
     public Record() {
@@ -106,5 +105,21 @@ public class Record implements Searchable, Serializable {
 
         Record record = (Record) o;
         return (this.recordId ==  record.getRecordId());
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
+    }
+
+    public Geolocation getGeolocation() {
+        return geolocation;
+    }
+
+    public void setGeolocation(Geolocation geolocation) {
+        this.geolocation = geolocation;
     }
 }

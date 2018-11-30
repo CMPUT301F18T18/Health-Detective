@@ -26,7 +26,7 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
      * @param phoneNumber the phone number of the user profile being edited
      */
     public EditUserProfileImpl(EditUserProfile.Callback callback,
-                               User userToEdit, String email, String phoneNumber)
+                               String email, String phoneNumber)
     {
         super();
         this.callback = callback;

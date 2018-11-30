@@ -2,7 +2,7 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import cmput301f18t18.health_detective.domain.interactors.DeleteRecordPhoto;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 
 class DeletePhotoImpl extends AbstractInteractor implements DeleteRecordPhoto {
 

@@ -7,7 +7,7 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
-import cmput301f18t18.health_detective.domain.model.images.base.DomainImage;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.repository.BodyLocationRepo;
 
 class AddBodyLocationImpl extends AbstractInteractor implements AddBodyLocation {
@@ -21,7 +21,8 @@ class AddBodyLocationImpl extends AbstractInteractor implements AddBodyLocation 
                                String label, DomainImage frontImage, DomainImage backImage) {
         this.callback = callback;
         this.label = label;
-        this.frontImage = backImage;
+        this.frontImage = frontImage;
+        this.backImage = backImage;
     }
 
     @Override
@@ -60,6 +61,7 @@ class AddBodyLocationImpl extends AbstractInteractor implements AddBodyLocation 
         patient = treeParser.getCurrentPatientContext();
         User loggedInUser = treeParser.getLoggedInUser();
 
+        // If patient context is not the logged in user or patient context is null command invalid
         if (!patient.equals(loggedInUser) || patient == null) {
             mainThread.post(new Runnable() {
                 @Override

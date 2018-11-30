@@ -56,7 +56,6 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
 
         CreateRecord createRecord = new CreateRecordImpl(
                 this,
-                problem,
                 recordTitle,
                 recordComment,
                 recordDate,
@@ -74,7 +73,6 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     public void deleteUserRecords(Problem problem, Record record){
         DeleteRecord deleteRecord = new DeleteRecordImpl(
                 this,
-                problem,
                 record
         );
 

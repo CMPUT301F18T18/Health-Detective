@@ -54,7 +54,6 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     public void createNewProblem(Patient patient, String problemTitle, String problemDescription, Date startDate){
         CreateProblem createProblem = new CreateProblemImpl(
                 this,
-                patient,
                 problemTitle,
                 problemDescription,
                 startDate

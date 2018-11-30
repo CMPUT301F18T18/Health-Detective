@@ -27,14 +27,13 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     /**
      * Constructor for CreateRecordImpl
      * @param callback
-     * @param problem the problem the created record is getting added to
      * @param recordTitle the title of the created record
      * @param recordComment the description of the created record
      * @param date the date chosen for the created record
      * @param authorId the author that created the record
      */
     public CreateRecordImpl(CreateRecord.Callback callback,
-                            Problem problem, String recordTitle, String recordComment, Date date, String authorId)
+                            String recordTitle, String recordComment, Date date, String authorId)
     {
         super();
         this.callback = callback;

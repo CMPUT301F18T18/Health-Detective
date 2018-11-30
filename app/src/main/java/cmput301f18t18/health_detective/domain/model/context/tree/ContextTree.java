@@ -17,7 +17,7 @@ public class ContextTree {
         return tail;
     }
 
-    public void push(ContextTreeComponent context) {
+    public synchronized void push(ContextTreeComponent context) {
         ContextTreeComponent parent;
 
         if (context == null)
@@ -41,7 +41,7 @@ public class ContextTree {
         context.setChild(null);
     }
 
-    public ContextTreeComponent pop() {
+    public synchronized ContextTreeComponent pop() {
         ContextTreeComponent poppedComponent;
 
         // Tree Empty
