@@ -5,17 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
-public class ProblemQueryBuilder implements QueryBuilder {
-
-
-    // TODO: Rename to cursor builder, SQLiteDatabases can but don't often use actual SQL strings
-
+public class ProblemCursorBuilder implements QueryBuilder {
 
     private static final String TABLE_NAME = "Problems";
 
     SQLiteDatabase db;
 
-    ProblemQueryBuilder(SQLiteDatabase db) {
+    ProblemCursorBuilder(SQLiteDatabase db) {
         this.db = db;
     }
 

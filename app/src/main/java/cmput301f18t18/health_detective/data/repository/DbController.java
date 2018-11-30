@@ -54,11 +54,34 @@ public class DbController implements ProblemRepo {
     }
 
     @Override
-    public void updateProblem(Problem problem) { }
+    public void updateProblem(Problem problem) {
+        ContentValues values = new ContentValues();
+        values.put("problemId", problem.getProblemID());
+        values.put("title", problem.getTitle());
+        values.put("description", problem.getDescription());
+        values.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(problem.getStartDate()));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer id : problem.getRecordIds()) {
+            stringBuilder.append(id.toString()).append(",");
+        }
+
+        String recordIds = stringBuilder.toString();
+        if (stringBuilder.length() > 2) { // Trim trailing ","
+            recordIds = recordIds.substring(0, recordIds.length()-1);
+        }
+
+        values.put("recordIds", recordIds);
+
+        db.update("Problems",
+                values,
+                "problemId = ?",
+                new String[] {Integer.toString(problem.getProblemID())});
+    }
 
     @Override
     public Problem retrieveProblemById(Integer problemID) {
-        Cursor cursor = new ProblemQueryBuilder(db).retrieveQuery(Integer.toString(problemID));
+        Cursor cursor = new ProblemCursorBuilder(db).retrieveQuery(Integer.toString(problemID));
         cursor.moveToNext();
         Problem ret;
         try {
@@ -91,7 +114,7 @@ public class DbController implements ProblemRepo {
 
         ArrayList<Problem> retArray = new ArrayList<>();
 
-        Cursor cursor = new ProblemQueryBuilder(db).retrieveListQuery(problemIdStrings);
+        Cursor cursor = new ProblemCursorBuilder(db).retrieveListQuery(problemIdStrings);
 
         while (cursor.moveToNext()) {
             Problem prob;
@@ -117,7 +140,11 @@ public class DbController implements ProblemRepo {
     }
 
     @Override
-    public void deleteProblem(Problem problem) {}
-
+    public void deleteProblem(Problem problem) {
+        db.delete("Problems",
+                "problemId = ?",
+                new String[] {Integer.toString(problem.getProblemID())}
+                );
+    }
 
 }
