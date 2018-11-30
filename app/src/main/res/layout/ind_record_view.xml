@@ -32,16 +32,14 @@
                 android:id="@+id/deleteImg"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/baseline_delete_black_48"
                 android:tint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/recordImg"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/userIdView" />
 
             <TextView
                 android:id="@+id/titleView"
@@ -79,36 +77,42 @@
                 android:text="@string/user_id"
                 android:textColor="@color/secondary_text"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteImg"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
                 android:id="@+id/recordDesc"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/problemDesc"
                 android:textColor="@color/secondary_text"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/divider2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
             <View
                 android:id="@+id/divider2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="?android:attr/listDivider"
                 android:backgroundTint="@color/divider"
                 android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/deleteImg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recordDesc" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <View
                 android:id="@+id/divider"
