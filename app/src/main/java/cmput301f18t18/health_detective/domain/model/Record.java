@@ -93,7 +93,7 @@ public class Record implements Searchable, Serializable {
             return false;
 
         Record record = (Record) o;
-        return (this.recordId ==  record.getRecordId());
+        return (this.recordId.equals(record.getRecordId()));
     }
 
     public ArrayList<String> getPhotos() {

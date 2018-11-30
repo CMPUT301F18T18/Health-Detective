@@ -143,6 +143,6 @@ public class Problem implements Searchable, Serializable {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemId == problem.getProblemId());
+        return (this.problemId.equals(problem.getProblemId()));
     }
 }
