@@ -27,13 +27,13 @@ public class Patient extends User {
     }
 
     public void addProblem(Problem problem) {
-        problemIds.add(problem.getProblemID());
+        problemIds.add(problem.getProblemId());
     }
 
     public void addProblem(String problemID) { problemIds.add(problemID); }
 
     public void removeProblem(Problem problem) {
-        problemIds.remove(problem.getProblemID());
+        problemIds.remove(problem.getProblemId());
     }
 
     public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
