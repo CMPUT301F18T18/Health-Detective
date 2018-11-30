@@ -60,7 +60,7 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
         problem = treeParser.getCurrentProblemContext();
 
         // Problem cannot be found
-        if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
+        if(problemRepo.retrieveProblemById(problem.getProblemId()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
