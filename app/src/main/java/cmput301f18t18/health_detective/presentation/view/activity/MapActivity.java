@@ -1,7 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.Activity;
-import android.app.Dialog;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -22,41 +21,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.Manifest;
-//import cmput301f18t18.health_detective.Manifest;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.model.Patient;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private float ZOOM = 15f;
 
     private Boolean LocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationProviderClient;
     Patient patientContext;
     private EditText searchText;
 
@@ -66,7 +56,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        searchText = (EditText) findViewById(R.id.input_search);
+        searchText = findViewById(R.id.input_search);
 
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
@@ -83,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
-
+                    Log.d("abcdefg","tester");
                     locateSearch();
                 }
 
@@ -125,6 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void initMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(MapActivity.this);
 
 
@@ -133,7 +124,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getLocationPermission(){
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+        String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 LocationPermissionsGranted = true;
                 initMap();
@@ -147,7 +140,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void getDeviceLocation(){
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try{
             if(LocationPermissionsGranted){
@@ -168,7 +161,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
             }
-        }catch(SecurityException e){
+        }catch(SecurityException ignored){
 
         }
     }
@@ -210,11 +203,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 changeActivity(logoutIntent);
                 return true;
 
-            case R.id.List_option:
-                Intent listIntent = new Intent(this, PatientProblemsActivity.class);
-                listIntent.putExtra("PATIENT", patientContext);
-                changeActivity(listIntent);
-                return true;
 
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
@@ -253,9 +241,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             init();
         }
 
-        else{
-            Log.d("abcdefg","here");
-        }
     }
 
     private void createMarker( LatLng currentLatLng,String title){
@@ -263,6 +248,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions()
                 .position(currentLatLng)
                 .anchor(0.5f, 0.5f)
-                .title("test"));
+                .title(title));
     }
 }

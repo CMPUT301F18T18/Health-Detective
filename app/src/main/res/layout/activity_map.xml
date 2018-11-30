@@ -41,7 +41,9 @@
         android:hint="Enter address"
         android:textColor="#000"
         android:textSize="15sp"
-        android:imeOptions="actionSearch"/>
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:inputType="text"/>
 
 
     </RelativeLayout>

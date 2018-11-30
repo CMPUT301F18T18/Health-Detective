@@ -119,7 +119,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(patientContext.getUserId());
 
@@ -134,6 +134,15 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 // this takes the user 'back', as if they pressed the left-facing triangle icon on the main android toolbar.
                 // if this doesn't work as desired, another possibility is to call `finish()` here.
                 this.onBackPressed();
+                return true;
+            case R.id.app_bar_search:
+                Intent searchIntent = new Intent(this,SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+            case R.id.Map_option:
+                Intent mapIntent = new Intent(this,MapActivity.class);
+                mapIntent.putExtra("PATIENT", patientContext);
+                startActivity(mapIntent);
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
