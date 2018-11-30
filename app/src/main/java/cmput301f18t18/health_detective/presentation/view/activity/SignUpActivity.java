@@ -33,7 +33,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
-        //true if editing problem, false if creating new problem
+        //true if editing user profile, false if creating new suer
         if (patientContext == null){
             activityType = false;
         } else {
@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             userText.setFocusable(false);
             phoneText.setText(patientContext.getPhoneNumber());
             emailText.setText(patientContext.getEmailAddress());
-            signUp.setText("Save");
+            signUp.setText(R.string.saveBtn);
         }
         ImageView image = findViewById(R.id.imageView2);
         image.setImageResource(R.drawable.logo_transparent_background);
@@ -111,7 +111,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (activityType){
                     signUpPresenter.editUserInfo(patientContext, email, phone);
                 } else {
-                    signUpPresenter.createNewUser(user, email, phone);
+                    signUpPresenter.createNewUser(user, email, phone, type);
                 }
                 break;
             case R.id.cancelBtn:

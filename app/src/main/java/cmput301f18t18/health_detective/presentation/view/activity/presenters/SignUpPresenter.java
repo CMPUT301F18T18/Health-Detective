@@ -42,14 +42,14 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
      * @param userEmail new user email
      * @param userPhoneNum new user phone number
      */
-    public void createNewUser(String userName, String userEmail, String userPhoneNum){
+    public void createNewUser(String userName, String userEmail, String userPhoneNum, Boolean isCareProvider){
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
                 this,
                 userName,
                 userEmail,
                 userPhoneNum,
-                false
+                isCareProvider
         );
 
         createUserProfile.execute();

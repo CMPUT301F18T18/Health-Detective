@@ -19,6 +19,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Menu;
@@ -30,6 +31,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.View.OnTouchListener;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -169,11 +172,9 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             if (resultCode == RESULT_OK) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
-                    Photo photo = new Photo();
-                    temp =  photo.toBase64String(bitmap);
-                    base = photo.byteArrayToString(temp);
-                    Bitmap bitmap1 = photo.toBitmap(base);
-                    takenPhoto.setImageBitmap(bitmap1);
+                    //byte[] tempArray = toByteArray(bitmap);
+                    //TODO: pass bitmap to presenter and in presenter you convert to byte array
+                    takenPhoto.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -242,5 +243,30 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             //intent.putExtra("PHOTO", temp);
             startActivity(intent);
         }
+    }
+
+    // converting photo stuff
+    //https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
+//    public byte[] toByteArray(Bitmap bitmap){
+//
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+//        byte[] byteArray = outputStream.toByteArray();
+//
+//        return byteArray;
+//
+//    }
+
+    public Bitmap toBitmap(String base64String){
+        byte[] decodedBytes = Base64.decode(
+                base64String,
+                Base64.DEFAULT
+        );
+
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    public String byteArrayToString(byte [] byteArray){
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

@@ -94,29 +94,4 @@ public class DomainImage {
     public void setUser(String user) {
         this.user = user;
     }
-
-    // converting photo stuff
-    //https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
-    public byte[] toBase64String(Bitmap bitmap){
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
-
-        return byteArray;
-
-    }
-
-    public Bitmap toBitmap(String base64String){
-        byte[] decodedBytes = Base64.decode(
-                base64String,
-                Base64.DEFAULT
-        );
-
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
-
-    public String byteArrayToString(byte [] byteArray){
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
 }
