@@ -52,6 +52,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,8 +203,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Intent logoutIntent = new Intent(this,MainActivity.class);
                 changeActivity(logoutIntent);
                 return true;
-
-
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
                 userIdIntent.putExtra("PATIENT", patientContext);

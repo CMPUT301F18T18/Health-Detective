@@ -48,7 +48,8 @@
             android:name=".presentation.view.activity.PatientRecordViewActivity"
             android:parentActivityName=".presentation.view.activity.PatientRecordsActivity" />
         <activity android:name=".presentation.view.activity.PhotoViewActivity" />
-        <activity android:name=".presentation.view.activity.MapActivity" />
+        <activity android:name=".presentation.view.activity.MapActivity"
+            android:parentActivityName=".presentation.view.activity.PatientRecordsActivity"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
