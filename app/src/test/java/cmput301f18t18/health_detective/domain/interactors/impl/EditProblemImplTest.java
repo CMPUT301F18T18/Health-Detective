@@ -46,10 +46,7 @@ public class EditProblemImplTest {
         Date date = new Date();
 
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
                 problemToEdit,
                 title,
                 description,
@@ -82,10 +79,7 @@ public class EditProblemImplTest {
         Date date = new Date();
 
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
                 problemToEdit,
                 title,
                 description,
@@ -117,10 +111,7 @@ public class EditProblemImplTest {
         String description = "description";
         Date date = new Date();
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
                 problemToEdit,
                 title,
                 description,
@@ -142,10 +133,7 @@ public class EditProblemImplTest {
         String description = "description";
         Date date = null;
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
                 problemToEdit,
                 title,
                 description,

@@ -6,6 +6,10 @@ import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -15,27 +19,19 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class RemoveAssignedPatientImpl extends AbstractInteractor implements RemoveAssignedPatient {
 
     private RemoveAssignedPatient.Callback callback;
-    private UserRepo userRepo;
-    private CareProvider careProvider;
     private Patient patient;
 
     /**
      * Creates a new RemoveAssignedPatient object from the provided parameters
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param careProvider the care provider who is having a pateint removed
      * @param patient the patient being removed from the care provider
      */
-    public RemoveAssignedPatientImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                     RemoveAssignedPatient.Callback callback, UserRepo userRepo,
-                                     CareProvider careProvider, Patient patient) 
+    public RemoveAssignedPatientImpl(RemoveAssignedPatient.Callback callback,
+                                     CareProvider careProvider, Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
-        this.careProvider = careProvider;
         this.patient = patient;
     }
 
@@ -52,6 +48,24 @@ public class RemoveAssignedPatientImpl extends AbstractInteractor implements Rem
      */
     @Override
     public void run() {
+
+        final UserRepo userRepo = this.context.getUserRepo();
+        final CareProvider careProvider;
+
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        User userContext = treeParser.getCurrentUserContext();
+
+        if (!(userContext instanceof CareProvider)) {
+            this.mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onRAPInvalidPermissions();
+                }
+            });
+        }
+
+        careProvider = (CareProvider) userContext;
 
         if (!careProvider.hasPatient(patient)) {
             this.mainThread.post(new Runnable() {

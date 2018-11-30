@@ -59,10 +59,7 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
                 recordBefore,
                 title,
                 description,
@@ -97,10 +94,7 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
                 recordBefore,
                 title,
                 description,
@@ -133,10 +127,7 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
                 recordBefore,
                 title,
                 description,
@@ -158,10 +149,7 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
                 recordBefore,
                 title,
                 description,

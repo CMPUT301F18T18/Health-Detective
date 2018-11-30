@@ -18,7 +18,7 @@ public class UserLoginMockCareProviderSuccess extends AbstractInteractor impleme
                                             UserLogin.Callback callback, UserRepo userRepo,
                                             String userId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.userId = userId;

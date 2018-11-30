@@ -24,7 +24,7 @@ public class CreateRecordMockSuccess extends AbstractInteractor implements Creat
                                    CreateRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
                                    Problem problem, String recordTitle, String recordComment, Date date)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.problemRepo = problemRepo;
         this.recordRepo = recordRepo;

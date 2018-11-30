@@ -1,10 +1,14 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,38 +18,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.AddDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
-import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     ListView listView;
     RecordListAdapter adapter;
@@ -56,7 +56,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     int currentPosition;
     private String title, desc;
     private Date date;
-
+    private Geolocation myGeoLocation;
 
 
     @Override
@@ -67,14 +67,22 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+        RecordRepoMock mockRecord = new RecordRepoMock();
+        mockRecord.insertRecord(new Record("test", "test", new Date()));
+        ProblemRepoMock mockProblem = new ProblemRepoMock();
+        mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
-        this.recordListPresenter = new RecordListPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+//        this.recordListPresenter = new RecordListPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance(),
+//                //mockProblem,
+//                ElasticSearchController.getInstance()
+//                //mockRecord
+//        );
+
+        this.recordListPresenter = new RecordListPresenter(this);
 
 
         adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);
@@ -136,11 +144,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 this.onBackPressed();
                 return true;
             case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this,SearchActivity.class);
+                Intent searchIntent = new Intent(this, SearchActivity.class);
                 startActivity(searchIntent);
                 return true;
             case R.id.Map_option:
-                Intent mapIntent = new Intent(this,MapActivity.class);
+                Intent mapIntent = new Intent(this, MapActivity.class);
                 mapIntent.putExtra("PATIENT", patientContext);
                 startActivity(mapIntent);
                 return true;
@@ -156,16 +164,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.addRecordsBtn){
+        if (v.getId() == R.id.addRecordsBtn) {
             openDialog();
         }
     }
-    private void openDialog(){
+
+    private void openDialog() {
         AddDialog exampleDialog = new AddDialog();
         exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
-    public void changeActivity(Intent intent){
+    public void changeActivity(Intent intent) {
         startActivity(intent);
     }
 
@@ -228,7 +237,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.title = newTitle;
         this.desc = newComment;
         DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(),"date picker");
+        datePicker.show(getSupportFragmentManager(), "date picker");
 
     }
 
@@ -247,11 +256,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
-        c.set(Calendar.MINUTE,minute);
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
         date = c.getTime();
         Log.d("abcdefgh", date.toString());
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test");
+        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",this.myGeoLocation);
 
     }
 }

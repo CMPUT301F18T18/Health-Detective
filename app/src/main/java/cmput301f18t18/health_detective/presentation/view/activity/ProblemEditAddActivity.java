@@ -27,6 +27,7 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
@@ -41,6 +42,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     ProblemAddEditPresenter problemAddEditPresenter;
     Boolean type;
     Date problemDateTime;
+    Geolocation geoLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +70,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             problemDesc.setText(problemContext.getDescription());
         }
 
-        problemAddEditPresenter = new ProblemAddEditPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        problemAddEditPresenter = new ProblemAddEditPresenter(this);
 
         TextView cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);

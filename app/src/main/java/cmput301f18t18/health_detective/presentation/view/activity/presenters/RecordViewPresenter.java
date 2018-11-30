@@ -8,15 +8,13 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditRecordImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 
 public class RecordViewPresenter implements EditRecord.Callback{
 
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private RecordRepo recordRepo;
     private View view;
 
     public interface View {
@@ -24,11 +22,8 @@ public class RecordViewPresenter implements EditRecord.Callback{
     }
 
 
-    public RecordViewPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread, RecordRepo recordRepo){
+    public RecordViewPresenter(View view){
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.recordRepo = recordRepo;
     }
 
     /**
@@ -38,16 +33,14 @@ public class RecordViewPresenter implements EditRecord.Callback{
      * @param recordComment new record comment
      * @param recordDate new record date
      */
-    public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate){
+    public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate, Geolocation geoLocation){
         EditRecord editRecord = new EditRecordImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.recordRepo,
                 record,
                 recordTitle,
                 recordComment,
-                recordDate
+                recordDate,
+                geoLocation
         );
         editRecord.execute();
     }
@@ -69,8 +62,12 @@ public class RecordViewPresenter implements EditRecord.Callback{
     }
 
     @Override
-    public void onERFail() {
+    public void onERNoGeolocationProvided() {
 
     }
 
+    @Override
+    public void onERInvalidPermissions() {
+
+    }
 }

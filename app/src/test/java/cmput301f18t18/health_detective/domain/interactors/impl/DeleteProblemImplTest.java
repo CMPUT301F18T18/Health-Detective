@@ -69,11 +69,7 @@ public class DeleteProblemImplTest {
     public void testDPProblem() {
 
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
                 users.retrievePatientById("Patient1"),
                 problems.retrieveProblemById(1234)
         );
@@ -107,11 +103,7 @@ public class DeleteProblemImplTest {
 
         Patient patient = new Patient("HelloThere");
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
                 patient,
                 problems.retrieveProblemById(1234)
         );
@@ -132,11 +124,7 @@ public class DeleteProblemImplTest {
                  date
         );
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
                 users.retrievePatientById("Patient1"),
                 problem
         );

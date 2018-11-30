@@ -7,5 +7,6 @@ public interface RemoveAssignedPatient extends Interactor {
     interface Callback {
         void onRAPSuccess(Patient removedPatient);
         void onRAPPatientNotAssigned();
+        void onRAPInvalidPermissions();
     }
 }

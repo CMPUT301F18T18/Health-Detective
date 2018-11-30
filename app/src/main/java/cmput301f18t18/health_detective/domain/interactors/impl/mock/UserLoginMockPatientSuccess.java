@@ -19,7 +19,7 @@ public class UserLoginMockPatientSuccess extends AbstractInteractor implements U
                                        UserLogin.Callback callback, UserRepo userRepo,
                                        String userId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.userId = userId;

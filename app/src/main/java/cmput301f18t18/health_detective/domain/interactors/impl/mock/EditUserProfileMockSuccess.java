@@ -19,7 +19,7 @@ public class EditUserProfileMockSuccess extends AbstractInteractor implements Ed
                                       EditUserProfile.Callback callback, UserRepo userRepo,
                                       User userToEdit, String email, String phoneNumber)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.userToEdit = userToEdit;
