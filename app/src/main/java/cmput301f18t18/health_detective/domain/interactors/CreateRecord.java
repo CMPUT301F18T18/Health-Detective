@@ -8,6 +8,6 @@ public interface CreateRecord extends Interactor {
         void onCRSuccess(Record record);
         void onCRNullTitle();
         void onCRInvalidPermissions();
-        void onCRFail();
+        void onCRNoGeolocationProvided();
     }
 }
