@@ -64,7 +64,7 @@ public class Problem implements Searchable, Serializable {
         return description;
     }
 
-    public String getProblemID() {
+    public String getProblemId() {
         return problemId;
     }
 
@@ -143,6 +143,6 @@ public class Problem implements Searchable, Serializable {
             return false;
 
         Problem problem = (Problem) o;
-        return (this.problemId == problem.getProblemID());
+        return (this.problemId == problem.getProblemId());
     }
 }

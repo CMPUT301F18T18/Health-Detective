@@ -16,7 +16,7 @@ public class ProblemRepoMock implements ProblemRepo {
             return;
         }
 
-        this.problems.put(problem.getProblemID(), problem);
+        this.problems.put(problem.getProblemId(), problem);
     }
 
     @Override
@@ -53,6 +53,6 @@ public class ProblemRepoMock implements ProblemRepo {
             return;
         }
 
-        this.problems.remove(problem.getProblemID());
+        this.problems.remove(problem.getProblemId());
     }
 }
