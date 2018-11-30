@@ -60,8 +60,7 @@ public class RecordViewPresenter implements EditRecord.Callback{
     }
 
     @Override
-    public void onERFail() {
+    public void onERInvalidPermissions() {
 
     }
-
 }

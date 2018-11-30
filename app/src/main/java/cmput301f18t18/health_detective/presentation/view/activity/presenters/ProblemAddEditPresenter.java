@@ -117,4 +117,9 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     public void onEPNoStartDateProvided() {
 
     }
+
+    @Override
+    public void onEPInvalidPermissions() {
+
+    }
 }

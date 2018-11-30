@@ -5,6 +5,7 @@ import android.app.Application;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
+import cmput301f18t18.health_detective.domain.repository.mock.ImageRepoMock;
 
 public class AndroidApplication extends Application {
     @Override
@@ -18,6 +19,6 @@ public class AndroidApplication extends Application {
                 ElasticSearchController.getInstance(),
                 ElasticSearchController.getInstance(),
                 null,
-                null);
+                new ImageRepoMock());
     }
 }

@@ -111,8 +111,12 @@ public class Record implements Searchable, Serializable {
         return photos;
     }
 
-    public void setPhotos(ArrayList<String> photos) {
-        this.photos = photos;
+    public void insertPhoto(DomainImage image) {
+        photos.add(image.getImageId());
+    }
+
+    public void deletePhoto(DomainImage image) {
+        photos.remove(image.getImageId());
     }
 
     public Geolocation getGeolocation() {

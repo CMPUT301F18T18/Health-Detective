@@ -1,12 +1,19 @@
 package cmput301f18t18.health_detective.domain.interactors.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
+import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 /**
@@ -20,6 +27,9 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     private String title;
     private String comment;
     private Date date;
+    private ArrayList<DomainImage> imagesToInsert = new ArrayList<>();
+    private ArrayList<DomainImage> imagesToDelete = new ArrayList<>();
+
 
     /**
      * First constructor for EditRecordImpl
@@ -89,6 +99,19 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     @Override
     public void run() {
         final RecordRepo recordRepo = this.context.getRecordRepo();
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+
+        User loggedInUser = treeParser.getLoggedInUser();
+
+        if (loggedInUser instanceof CareProvider) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onERInvalidPermissions();
+                }
+            });
+        }
 
         // Missing title
         if (this.title == null || this.title.isEmpty()) {
@@ -122,6 +145,14 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.recordtoEdit.setComment(this.comment);
         this.recordtoEdit.setDate(this.date);
 
+        for (DomainImage image: imagesToInsert) {
+            recordtoEdit.insertPhoto(image);
+        }
+
+        for (DomainImage image: imagesToDelete) {
+            recordtoEdit.deletePhoto(image);
+        }
+
         recordRepo.updateRecord(this.recordtoEdit);
 
         // Record added
@@ -133,4 +164,17 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
             }
         });
     }
+
+
+    @Override
+    public void insertPhoto(DomainImage image) {
+        imagesToInsert.add(image);
+    }
+
+    @Override
+    public void deletePhoto(DomainImage image) {
+        imagesToDelete.add(image);
+    }
+
+
 }

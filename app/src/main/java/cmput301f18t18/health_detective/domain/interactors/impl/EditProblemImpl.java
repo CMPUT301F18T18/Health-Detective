@@ -6,7 +6,11 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.EditProblem;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
 /**
@@ -90,6 +94,19 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
     @Override
     public void run() {
         final ProblemRepo problemRepo = this.context.getProblemRepo();
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+
+        User loggedInUser = treeParser.getLoggedInUser();
+
+        if (loggedInUser instanceof CareProvider) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onEPInvalidPermissions();
+                }
+            });
+        }
 
         // Missing title
         if (this.title == null || this.title.isEmpty()) {
