@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DbHelper extends SQLiteOpenHelper {
+public class LocalDbHelper extends SQLiteOpenHelper {
 
     //TODO: Add other tables and formats
 
@@ -21,7 +21,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "recordIds TEXT " +
             ")";
 
-    DbHelper(Context context) {
+    LocalDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

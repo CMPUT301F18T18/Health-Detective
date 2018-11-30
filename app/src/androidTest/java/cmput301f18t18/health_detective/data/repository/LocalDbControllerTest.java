@@ -13,14 +13,14 @@ import cmput301f18t18.health_detective.domain.model.Record;
 
 import static org.junit.Assert.assertEquals;
 
-public class DbControllerTest {
-    private DbController dbController = DbController.getInstance();
+public class LocalDbControllerTest {
+    private LocalDbController localDbController = LocalDbController.getInstance();
 
     private Context appContext = InstrumentationRegistry.getTargetContext();
 
     @Before
     public void setup() {
-        dbController.init(appContext);
+        localDbController.init(appContext);
     }
 
     @Test
@@ -29,12 +29,12 @@ public class DbControllerTest {
         problem.addRecord(new Record(1, "a", "b"));
         problem.addRecord(new Record(2, "c", "d"));
         problem.addRecord(new Record(3, "e", "f"));
-        dbController.insertProblem(problem);
-        Problem ret = dbController.retrieveProblemById(1001);
+        localDbController.insertProblem(problem);
+        Problem ret = localDbController.retrieveProblemById(1001);
 
         assertEquals(problem, ret);
 
-//        dbController.deleteProblem(problem);
+//        localDbController.deleteProblem(problem);
     }
 
 }
