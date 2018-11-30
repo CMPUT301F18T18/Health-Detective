@@ -97,6 +97,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this,MapActivity.class);
+                mapIntent.putExtra("PATIENT", patientContext);
                 startActivity(mapIntent);
                 return true;
 
