@@ -18,10 +18,10 @@ public class ElasticSearchControllerTest {
 
     @Test
     public void testInsertRetrieveProblem() {
-        Problem problem = new Problem(1001, "TestInsert", "Stay", new Date());
+        Problem problem = new Problem("1001", "TestInsert", "Stay", new Date());
 
         elasticSearchController.insertProblem(problem);
-        Problem ret = elasticSearchController.retrieveProblemById(1001);
+        Problem ret = elasticSearchController.retrieveProblemById("1001");
 
         assertEquals(problem, ret);
 
@@ -34,20 +34,20 @@ public class ElasticSearchControllerTest {
         // Will fail once retrieveProblemById is implemented
         // Basically to remove we must be first able to check if get works
 
-        Problem problem = new Problem(1002, "TestDelete", "Add", new Date());
+        Problem problem = new Problem("1002", "TestDelete", "Add", new Date());
 
         elasticSearchController.insertProblem(problem);
         elasticSearchController.deleteProblem(problem);
 
-        assertNull(elasticSearchController.retrieveProblemById(1002));
+        assertNull(elasticSearchController.retrieveProblemById("1002"));
     }
 
     @Test
     public void testInsertRetrieveRecord() {
-        Record record = new Record(2001, "TestInsert", "Stay", new Date());
+        Record record = new Record("2001", "TestInsert", "Stay", new Date());
 
         elasticSearchController.insertRecord(record);
-        Record ret = elasticSearchController.retrieveRecordById(2001);
+        Record ret = elasticSearchController.retrieveRecordById("2001");
 
         assertEquals(record, ret);
 
@@ -60,20 +60,20 @@ public class ElasticSearchControllerTest {
         // Will fail once retrieveRecordById is implemented
         // Basically to remove we must be first able to check if get works
 
-        Record record = new Record(2002, "TestInsert", "Stay", new Date());
+        Record record = new Record("2002", "TestInsert", "Stay", new Date());
 
         elasticSearchController.insertRecord(record);
         elasticSearchController.deleteRecord(record);
-        assertNull(elasticSearchController.retrieveRecordById(2002));
+        assertNull(elasticSearchController.retrieveRecordById("2002"));
     }
 
     @Test
     public void testRetrieveRecordsById() {
         Record record;
         ArrayList<Record> records = new ArrayList<>();
-        ArrayList<Integer> recordIds = new ArrayList<>();
+        ArrayList<String> recordIds = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            record = new Record(2003+i,"","",null);
+            record = new Record(Integer.toString(2003+i),"","",null);
             recordIds.add(record.getRecordId());
             records.add(record);
             elasticSearchController.insertRecord(record);
