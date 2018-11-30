@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
@@ -23,6 +24,7 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     private CreateProblem.Callback callback;
     private String problemTitle;
     private String problemDescription;
+    private Geolocation geolocation;
     private Date startDate;
 
     /**
@@ -33,12 +35,13 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
      * @param startDate the date chosen for the created problem
      */
     public CreateProblemImpl(CreateProblem.Callback callback,
-                             String problemTitle, String problemDescription, Date startDate)
+                             String problemTitle, String problemDescription, Date startDate, Geolocation geolocation)
     {
         super();
         this.callback = callback;
         this.problemTitle = problemTitle;
         this.problemDescription = problemDescription;
+        this.geolocation = geolocation;
         this.startDate = startDate;
     }
 

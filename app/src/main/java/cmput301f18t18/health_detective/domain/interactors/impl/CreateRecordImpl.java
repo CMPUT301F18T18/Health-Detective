@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.CreateRecord;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -22,6 +23,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
     private CreateRecord.Callback callback;
     private String recordTitle;
     private String recordComment;
+    private Geolocation geolocation;
     private Date date;
 
     /**
@@ -33,12 +35,13 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
      * @param authorId the author that created the record
      */
     public CreateRecordImpl(CreateRecord.Callback callback,
-                            String recordTitle, String recordComment, Date date, String authorId)
+                            String recordTitle, String recordComment, Date date, Geolocation geolocation)
     {
         super();
         this.callback = callback;
         this.recordTitle = recordTitle;
         this.recordComment = recordComment;
+        this.geolocation = geolocation;
         this.date = date;
     }
 
@@ -95,6 +98,18 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         if(this.date != null){
             newRecord.setDate(this.date);
         }
+
+        // Missing geolocation
+        if (this.geolocation == null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onCRNoGeolocationProvided();
+                }
+            });
+        }
+
+        newRecord.setGeolocation(geolocation);
 
         //Add record to recordRepo
         recordRepo.insertRecord(newRecord);

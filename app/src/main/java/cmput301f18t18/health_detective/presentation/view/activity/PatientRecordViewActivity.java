@@ -159,8 +159,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.edit_photo:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
-                camaraIntent.putExtra("USER", patientContext);
-                camaraIntent.putExtra("RECORD", record);
                 startActivity(camaraIntent);
                 return true;
             case R.id.userId:
