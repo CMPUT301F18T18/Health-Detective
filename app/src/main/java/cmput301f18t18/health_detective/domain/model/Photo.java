@@ -10,7 +10,7 @@ import java.io.File;
 /**
  * Class to store photo data. Need to be remade.
  */
-public class Photo extends BodyPhoto {
+public class Photo {
     private int photoID;
     private File photoFile;
 

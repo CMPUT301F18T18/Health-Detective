@@ -11,15 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
@@ -51,15 +47,19 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         ProblemRepoMock mockProblem = new ProblemRepoMock();
         mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
-        this.problemsListPresenter = new ProblemsListPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                //mockProblem,
-                ElasticSearchController.getInstance(),
-                //mockUser
-                ElasticSearchController.getInstance()
-        );
+
+//        this.problemsListPresenter = new ProblemsListPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                //mockProblem,
+//                ElasticSearchController.getInstance(),
+//                //mockUser
+//                ElasticSearchController.getInstance()
+//        );
+
+        this.problemsListPresenter = new ProblemsListPresenter(this);
+
 
         ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);

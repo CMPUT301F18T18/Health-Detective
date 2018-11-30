@@ -39,10 +39,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "detective@ualberta.ca";
 
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 goodEmail,
                 goodNumber,
@@ -74,10 +71,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "health@ualberta.ca";
 
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 goodEmail,
                 goodNumber,
@@ -108,10 +102,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "detective@ualberta.ca";
         String goodNumber = "(780) 333-1111";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 emptyId,
                 goodEmail,
                 goodNumber,
@@ -129,10 +120,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "detective@ualberta.ca";
         String goodNumber = "(780) 333-1111";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 shortId,
                 goodEmail,
                 goodNumber,
@@ -150,10 +138,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "detective@ualberta.ca";
         String goodNumber = "(780) 333-1111";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 invalidId,
                 goodEmail,
                 goodNumber,
@@ -171,10 +156,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "healthd@ualberta.ca";
         String emptyNumber = "";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 goodEmail,
                 emptyNumber,
@@ -192,10 +174,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "healthd@ualberta.ca";
         String wrongNumber = "780 111 0000";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 goodEmail,
                 wrongNumber,
@@ -213,10 +192,7 @@ public class CreateUserProfileImplTest {
         String goodEmail = "healthd@ualberta.ca";
         String invalidNumber = "ABC---wxyz";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 goodEmail,
                 invalidNumber,
@@ -234,10 +210,7 @@ public class CreateUserProfileImplTest {
         String emptyEmail = "";
         String goodNumber = "(780) 333-7777";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 emptyEmail,
                 goodNumber,
@@ -255,10 +228,7 @@ public class CreateUserProfileImplTest {
         String invalidEmail = "jeffrey&hotmail,com";
         String goodNumber = "(780) 333-7777";
         CreateUserProfile command = new CreateUserProfileImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 goodId,
                 invalidEmail,
                 goodNumber,

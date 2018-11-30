@@ -20,7 +20,7 @@ public class AddAssignedPatientMockSuccess extends AbstractInteractor implements
                                          AddAssignedPatient.Callback callback, UserRepo userRepo,
                                          CareProvider careProvider, String patientId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.careProvider = careProvider;

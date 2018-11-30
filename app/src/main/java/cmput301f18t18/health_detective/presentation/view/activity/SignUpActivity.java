@@ -1,8 +1,6 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,13 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignUpPresenter.View {
@@ -62,12 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         ImageView image = findViewById(R.id.imageView2);
         image.setImageResource(R.drawable.logo_transparent_background);
 
-        signUpPresenter = new SignUpPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        signUpPresenter = new SignUpPresenter(this);
 
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);

@@ -14,32 +14,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.AddDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
-import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
@@ -72,15 +63,18 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         ProblemRepoMock mockProblem = new ProblemRepoMock();
         mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
-        this.recordListPresenter = new RecordListPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                //mockProblem,
-                ElasticSearchController.getInstance()
-                //mockRecord
-        );
+//        this.recordListPresenter = new RecordListPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance(),
+//                //mockProblem,
+//                ElasticSearchController.getInstance()
+//                //mockRecord
+//        );
+
+        this.recordListPresenter = new RecordListPresenter(this);
+
 
 
         adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);

@@ -10,11 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -35,13 +31,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UserRepoMock mockUser = new UserRepoMock();
         mockUser.insertUser(new Patient("12345678", "(250) 575-9089", "a@a.a"));
 
-        this.loginPresenter = new LoginPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-                //mockUser
-        );
+//        this.loginPresenter = new LoginPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance()
+//                //mockUser
+//        );
+        this.loginPresenter = new LoginPresenter(this);
 
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUpText);

@@ -8,5 +8,6 @@ public interface CreateProblem extends Interactor {
         void onCPSuccess(Problem problem);
         void onCPNullTitle();
         void onCPFail();
+        void onCPNoPatientInScope();
     }
 }

@@ -11,11 +11,9 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.executor.mock.MainThreadMock;
 import cmput301f18t18.health_detective.domain.executor.mock.ThreadExecutorMock;
-import cmput301f18t18.health_detective.domain.interactors.GetProblems;
-import cmput301f18t18.health_detective.domain.interactors.GetRecords;
+import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
@@ -23,7 +21,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 
 import static org.junit.Assert.*;
 
-public class GetProblemsImplTest {
+public class ViewPatientImplTest {
     private MainThread mainThread;
     private ThreadExecutor threadExecutor;
     private GetProblemsMockPresenter callback;
@@ -60,11 +58,8 @@ public class GetProblemsImplTest {
         problems.insertProblem(testProblem2);
         users.insertUser(testPatient);
 
-        GetProblems interactor = new GetProblemsImpl(
-                threadExecutor,
-                mainThread,
+        ViewPatient interactor = new ViewPatientImpl(
                 callback,
-                problems,
                 testPatient
         );
 
@@ -89,11 +84,8 @@ public class GetProblemsImplTest {
         Patient testPatient = new Patient();
         users.insertUser(testPatient);
 
-        GetProblems interactor = new GetProblemsImpl(
-                threadExecutor,
-                mainThread,
+        ViewPatient interactor = new ViewPatientImpl(
                 callback,
-                problems,
                 testPatient
         );
 
@@ -105,7 +97,7 @@ public class GetProblemsImplTest {
 
 }
 
-class GetProblemsMockPresenter implements GetProblems.Callback {
+class GetProblemsMockPresenter implements ViewPatient.Callback {
 
     private boolean isSuccess = false;
     private  boolean isNoProblems = false;

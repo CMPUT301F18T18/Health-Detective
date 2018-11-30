@@ -24,7 +24,7 @@ public class CreateProblemMockSuccess extends AbstractInteractor implements Crea
                                     CreateProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
                                     Patient patient, String problemTitle, String problemDescription, Date startDate)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.userRepo = userRepo;
         this.patient = patient;

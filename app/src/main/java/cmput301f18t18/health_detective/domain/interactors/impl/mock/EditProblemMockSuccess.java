@@ -22,7 +22,7 @@ public class EditProblemMockSuccess extends AbstractInteractor implements EditPr
                                   EditProblem.Callback callback, ProblemRepo problemRepo,
                                   Problem problemToEdit, String title, String description, Date startDate)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.problemRepo = problemRepo;
         this.problemToEdit = problemToEdit;

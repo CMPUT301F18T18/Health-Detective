@@ -19,11 +19,6 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProblem.Callback{
 
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private ProblemRepo problemRepo;
-    private RecordRepo recordRepo;
-    private UserRepo userRepo;
     private Context context;
     private ProblemAddEditPresenter.AddView addView;
 
@@ -44,18 +39,9 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     /**
      * This is the presenter constructor that is created when the new ProblemAddEditPresenter is made
      * @param view the view that the presenter is updating
-     * @param threadExecutor the thread it runs on
-     * @param mainThread
-     * @param problemRepo
-     * @param userRepo
      */
-    public ProblemAddEditPresenter (ProblemAddEditPresenter.AddView view, ThreadExecutor threadExecutor, MainThread mainThread,
-                                    ProblemRepo problemRepo, UserRepo userRepo) {
+    public ProblemAddEditPresenter (ProblemAddEditPresenter.AddView view) {
         this.addView = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.problemRepo = problemRepo;
-        this.userRepo = userRepo;
     }
 
     /**
@@ -67,12 +53,7 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
      */
     public void createNewProblem(Patient patient, String problemTitle, String problemDescription, Date startDate){
         CreateProblem createProblem = new CreateProblemImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
-                this.problemRepo,
-                patient,
                 problemTitle,
                 problemDescription,
                 startDate
@@ -89,10 +70,7 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
      */
     public void editUserProblem(Problem problem, String problemTitle, String problemDescription, Date startDate){
         EditProblem editProblem = new EditProblemImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.problemRepo,
                 problem,
                 problemTitle,
                 problemDescription,
@@ -122,6 +100,11 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     }
 
     @Override
+    public void onCPNoPatientInScope() {
+
+    }
+
+    @Override
     public void onEPSuccess(Problem problem) {
         this.addView.onEditProblem();
     }
@@ -132,6 +115,11 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
 
     @Override
     public void onEPNoStartDateProvided() {
+
+    }
+
+    @Override
+    public void onEPInvalidPermissions() {
 
     }
 }

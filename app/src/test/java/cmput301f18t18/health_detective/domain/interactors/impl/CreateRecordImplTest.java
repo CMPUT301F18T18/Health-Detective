@@ -56,11 +56,7 @@ public class CreateRecordImplTest {
         String authorId = "Me";
 
         CreateRecord command = new CreateRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
                 problems.retrieveProblemById(1234567),
                 title,
                 description,
@@ -95,11 +91,7 @@ public class CreateRecordImplTest {
         String authorId = "Me";
 
         CreateRecord command = new CreateRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
                 problems.retrieveProblemById(1234567),
                 title,
                 description,

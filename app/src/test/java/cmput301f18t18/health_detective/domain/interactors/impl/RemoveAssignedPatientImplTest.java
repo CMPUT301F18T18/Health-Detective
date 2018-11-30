@@ -88,10 +88,7 @@ public class RemoveAssignedPatientImplTest {
         Patient patientToRemove = userRepo.retrievePatientById("testPatient4");
 
         RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                userRepo,
                 careProviderToTest,
                 patientToRemove
         );
@@ -108,10 +105,7 @@ public class RemoveAssignedPatientImplTest {
         Patient patientToRemove = userRepo.retrievePatientById("testPatient2");
 
         RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                userRepo,
                 careProviderToTest,
                 patientToRemove
         );

@@ -1,13 +1,18 @@
 package cmput301f18t18.health_detective.domain.interactors.impl;
 
+import java.net.ContentHandler;
+
 import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.DeleteRecord;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
+import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
  * The DeleteRecordImpl class is a class intended to handle the deletion of records
@@ -16,31 +21,18 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord {
 
     private DeleteRecord.Callback callback;
-    private ProblemRepo problemRepo;
-    private RecordRepo recordRepo;
     private Record record;
-    private Problem problem;
 
     /**
      * Constructor for DeleteRecordImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param problemRepo the repository where problems are stored
-     * @param recordRepo the repository where the records are stored
-     * @param problem the problem that the record being deleted belongs to
      * @param record the record being deleted
      */
-    public DeleteRecordImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                            DeleteRecord.Callback callback, ProblemRepo problemRepo, RecordRepo recordRepo,
-                            Problem problem, Record record)
+    public DeleteRecordImpl(DeleteRecord.Callback callback, Record record)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
-        this.recordRepo = recordRepo;
         this.record = record;
-        this.problem = problem;
     }
 
     /**
@@ -58,6 +50,15 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
      */
     @Override
     public void run() {
+        final ProblemRepo problemRepo = context.getProblemRepo();
+        final RecordRepo recordRepo = context.getRecordRepo();
+        final Problem problem;
+
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+
+        problem = treeParser.getCurrentProblemContext();
+
         // Problem cannot be found
         if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
             this.mainThread.post(new Runnable() {
@@ -90,9 +91,9 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
         });
 
         //Delete Record
-        this.recordRepo.deleteRecord(record);
-        this.problem.removeRecord(record);
-        this.problemRepo.updateProblem(problem);
+        recordRepo.deleteRecord(record);
+        problem.removeRecord(record);
+        problemRepo.updateProblem(problem);
     }
 
 }

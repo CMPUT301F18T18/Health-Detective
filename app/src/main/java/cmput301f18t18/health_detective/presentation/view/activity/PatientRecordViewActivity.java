@@ -79,13 +79,15 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         RecordRepoMock mockRecord = new RecordRepoMock();
         mockRecord.insertRecord(new Record("test", "test", new Date()));
 
-        recordViewPresenter = new RecordViewPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-                //mockRecord
-        );
+
+//        recordViewPresenter = new RecordViewPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance()
+//                //mockRecord
+//        );
+        recordViewPresenter = new RecordViewPresenter(this);
 
         //stuff for all photos section
 //        GridViewAdapter adapter = new GridViewAdapter(this, 1);

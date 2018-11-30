@@ -3,39 +3,32 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.GetProblems;
+import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
 /**
  * The GetProblemImpl class is a class intended to handle the retrieval of
  * a patient's problems.
  */
-public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
+public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
 
-    private GetProblems.Callback callback;
-    private ProblemRepo problemRepo;
+    private ViewPatient.Callback callback;
     private Patient patient;
 
     /**
      * Constructor for GetProblemImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param problemRepo the repository where problems are stored
      * @param patient the patient who's list of problems is retrieved
      */
-    public GetProblemsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                           GetProblems.Callback callback, ProblemRepo problemRepo,
-                           Patient patient)
+    public ViewPatientImpl(ViewPatient.Callback callback, Patient patient)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.problemRepo = problemRepo;
         this.patient = patient;
     }
 
@@ -51,6 +44,9 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
      */
     @Override
     public void run() {
+        ProblemRepo problemRepo = this.context.getProblemRepo();
+        ContextTree tree = this.context.getContextTree();
+        tree.push(ContextTreeComponentFactory.getContextComponent(patient));
 
         if (patient.isProblemsEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -65,7 +61,7 @@ public class GetProblemsImpl extends AbstractInteractor implements GetProblems {
         }
 
         ArrayList<Integer> problemIds = patient.getProblemIds();
-        ArrayList<Problem> problems = this.problemRepo.retrieveProblemsById(problemIds);
+        ArrayList<Problem> problems = problemRepo.retrieveProblemsById(problemIds);
 
         problems.sort(new Comparator<Problem>() {
             @Override

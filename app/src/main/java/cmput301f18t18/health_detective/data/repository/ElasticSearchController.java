@@ -40,7 +40,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      *
      * @return reference to this object
      */
-    public static ElasticSearchController getInstance() {
+    public static synchronized ElasticSearchController getInstance() {
         setClient();
         return ourInstance;
     }

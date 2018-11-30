@@ -35,10 +35,7 @@ public class AddAssignedPatientImplTest {
         String testPatientId = "";
 
         AddAssignedPatientImpl interactor = new AddAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 careProvider,
                 testPatientId
         );
@@ -54,10 +51,7 @@ public class AddAssignedPatientImplTest {
     @Test
     public void testAddingNullId() {
         AddAssignedPatientImpl interactor = new AddAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 careProvider,
                 null
         );
@@ -76,10 +70,7 @@ public class AddAssignedPatientImplTest {
         assertTrue(User.isValidUserId(patientIdNotInRepo));
 
         AddAssignedPatientImpl interactor = new AddAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 careProvider,
                 patientIdNotInRepo
         );
@@ -104,10 +95,7 @@ public class AddAssignedPatientImplTest {
         users.updateUser(careProvider);
 
         AddAssignedPatientImpl interactor = new AddAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 careProvider,
                 testPatientId
         );
@@ -130,10 +118,7 @@ public class AddAssignedPatientImplTest {
         users.insertUser(patient);
 
         AddAssignedPatientImpl interactor = new AddAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 careProvider,
                 testPatientId
         );
@@ -176,6 +161,11 @@ class AddAssignedPatientCallbackMockPresenter implements AddAssignedPatient.Call
     @Override
     public void onAAPPatientDoesNotExist() {
         this.isAAPPatientDNE = true;
+    }
+
+    @Override
+    public void onAAPLoggedInUserNotACareProvider() {
+
     }
 
     public boolean isAAPSuccess() {

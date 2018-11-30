@@ -5,6 +5,8 @@ import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.EditUserProfile;
 import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -14,29 +16,20 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class EditUserProfileImpl extends AbstractInteractor implements EditUserProfile {
 
     private EditUserProfile.Callback callback;
-    private UserRepo userRepo;
-    private User userToEdit;
     private String email;
     private String phoneNumber;
 
     /**
      * Constructor for EditUserProfileImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
-     * @param userToEdit the user profile that is being edited
      * @param email the email of the user profile that is being edited
      * @param phoneNumber the phone number of the user profile being edited
      */
-    public EditUserProfileImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                               EditUserProfile.Callback callback, UserRepo userRepo,
-                               User userToEdit, String email, String phoneNumber)
+    public EditUserProfileImpl(EditUserProfile.Callback callback,
+                               String email, String phoneNumber)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
-        this.userToEdit = userToEdit;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
@@ -56,6 +49,8 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
+        final User userToEdit;
 
         // Check if new email is valid
         if (!User.isValidEmailAddress(this.email)) {
@@ -77,10 +72,23 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
             });
         }
 
+        ContextTree tree = this.context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        userToEdit = treeParser.getLoggedInUser();
+
+        if (userToEdit != treeParser.getCurrentUserContext()) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onEUPInvalidPermissions();
+                }
+            });
+        }
+
         // Entered information is correct
-        this.userToEdit.setEmailAddress(this.email);
-        this.userToEdit.setPhoneNumber(this.phoneNumber);
-        this.userRepo.updateUser(userToEdit);
+        userToEdit.setEmailAddress(this.email);
+        userToEdit.setPhoneNumber(this.phoneNumber);
+        userRepo.updateUser(userToEdit);
 
         this.mainThread.post(new Runnable(){
 
