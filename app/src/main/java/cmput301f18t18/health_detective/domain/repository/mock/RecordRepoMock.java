@@ -8,7 +8,7 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 public class RecordRepoMock implements RecordRepo {
 
-    private HashMap< Integer, Record> records = new HashMap<>();
+    private HashMap<String, Record> records = new HashMap<>();
 
     @Override
     public void insertRecord(Record record) {
@@ -25,7 +25,7 @@ public class RecordRepoMock implements RecordRepo {
     }
 
     @Override
-    public Record retrieveRecordById(Integer recordID) {
+    public Record retrieveRecordById(String recordID) {
         if (recordID == null) {
             return null;
         }
@@ -34,7 +34,7 @@ public class RecordRepoMock implements RecordRepo {
     }
 
     @Override
-    public ArrayList<Record> retrieveRecordsById(ArrayList<Integer> recordIDs) {
+    public ArrayList<Record> retrieveRecordsById(ArrayList<String> recordIDs) {
         ArrayList<Record> recordList = new ArrayList<>();
 
         if (recordIDs == null || recordIDs.isEmpty()) {

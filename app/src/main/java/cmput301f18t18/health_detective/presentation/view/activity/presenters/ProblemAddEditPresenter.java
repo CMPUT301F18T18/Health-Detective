@@ -56,7 +56,8 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
                 this,
                 problemTitle,
                 problemDescription,
-                startDate
+                startDate,
+                null
         );
         createProblem.execute();
     }

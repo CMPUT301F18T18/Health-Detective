@@ -60,7 +60,7 @@ public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
             return;
         }
 
-        ArrayList<Integer> problemIds = patient.getProblemIds();
+        ArrayList<String> problemIds = patient.getProblemIds();
         ArrayList<Problem> problems = problemRepo.retrieveProblemsById(problemIds);
 
         problems.sort(new Comparator<Problem>() {

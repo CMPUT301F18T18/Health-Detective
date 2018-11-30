@@ -59,7 +59,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
                 recordTitle,
                 recordComment,
                 recordDate,
-                userId
+                null
         );
 
         createRecord.execute();
@@ -107,8 +107,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     }
 
     @Override
-    public void onCRFail() {
-        this.view.onCreateRecordFail();
+    public void onCRNoGeolocationProvided() {
 
     }
 

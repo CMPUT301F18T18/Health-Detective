@@ -71,7 +71,7 @@ public class DeleteRecordImpl extends AbstractInteractor implements DeleteRecord
             return;
         }
         //Record cannot be found
-        if(recordRepo.retrieveRecordById(record.recordId) == null){
+        if(recordRepo.retrieveRecordById(record.getRecordId()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {

@@ -38,7 +38,8 @@ public class RecordViewPresenter implements EditRecord.Callback{
                 record,
                 recordTitle,
                 recordComment,
-                recordDate
+                recordDate,
+                null
         );
         editRecord.execute();
     }
@@ -56,6 +57,11 @@ public class RecordViewPresenter implements EditRecord.Callback{
 
     @Override
     public void onERNoDateProvided() {
+
+    }
+
+    @Override
+    public void onERNoGeolocationProvided() {
 
     }
 

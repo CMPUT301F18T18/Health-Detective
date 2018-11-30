@@ -8,7 +8,7 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
 
 public class ProblemRepoMock implements ProblemRepo {
-    private HashMap<Integer, Problem> problems = new HashMap<>();
+    private HashMap<String, Problem> problems = new HashMap<>();
 
     @Override
     public void insertProblem(Problem problem) {
@@ -25,7 +25,7 @@ public class ProblemRepoMock implements ProblemRepo {
     }
 
     @Override
-    public Problem retrieveProblemById(Integer problemID) {
+    public Problem retrieveProblemById(String problemID) {
         if (problemID == null) {
             return null;
         }
@@ -33,7 +33,7 @@ public class ProblemRepoMock implements ProblemRepo {
         return this.problems.get(problemID);    }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemIDs) {
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemIDs) {
         ArrayList<Problem> problemList = new ArrayList<>();
 
         if (problemIDs == null || problemIDs.isEmpty()) {

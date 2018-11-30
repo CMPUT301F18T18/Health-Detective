@@ -5,61 +5,47 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
+import cmput301f18t18.health_detective.domain.util.Id;
 
 /**
  *
  */
 public class Problem implements Searchable, Serializable {
     private static final long serialVersionUID = 1L;
-    private int problemId;
+    private String problemId;
     private String title;
     private Date startDate;
     private String description;
-    private HashSet<Integer> records;
+    private HashSet<String> records;
 
     public Problem() {
         records = new HashSet<>();
-        Date createDate = new Date();
-        this.problemId = createDate.hashCode();
+        DomainContext context = DomainContext.getInstance();
+        String newId = Id.genUniqueId(context.getSecureRandom());
+
+        this.problemId = newId;
         this.setTitle(null);
         this.setDescription(null);
-        this.setStartDate(createDate);
-    }
-
-    public Problem(int problemId, String title, String description) {
-        records = new HashSet<>();
-        Date createDate = new Date();
-        this.problemId = problemId;
-        this.setTitle(title);
-        this.setDescription(description);
-        this.setStartDate(createDate);
+        this.setStartDate(new Date());
     }
 
     public Problem(String title, String description) {
-        records = new HashSet<>();
-        Date createDate = new Date();
-        this.problemId = createDate.hashCode();
+        this();
         this.setTitle(title);
         this.setDescription(description);
-        this.setStartDate(createDate);
     }
 
     public Problem(String title, String description, Date startDate) {
-        records = new HashSet<>();
-        Date createDate = new Date();
-        this.problemId = createDate.hashCode();
-        this.setTitle(title);
-        this.setDescription(description);
+        this(title, description);
         this.setStartDate(startDate);
     }
 
-    public Problem(int problemId, String title, String description, Date startDate) {
-        records = new HashSet<>();
+    public Problem(String problemId, String title, String description, Date startDate) {
+        this(title, description, startDate);
+
         this.problemId = problemId;
-        this.setTitle(title);
-        this.setDescription(description);
-        this.setStartDate(startDate);
     }
 
     public void setDescription(String description) {
@@ -78,7 +64,7 @@ public class Problem implements Searchable, Serializable {
         return description;
     }
 
-    public int getProblemID() {
+    public String getProblemID() {
         return problemId;
     }
 
@@ -94,7 +80,7 @@ public class Problem implements Searchable, Serializable {
         records.add(record.getRecordId());
     }
 
-    public void addRecord(Integer recordId) {
+    public void addRecord(String recordId) {
         records.add(recordId);
     }
 
@@ -110,14 +96,14 @@ public class Problem implements Searchable, Serializable {
         return records.isEmpty();
     }
 
-    public ArrayList<Integer> getRecordIds() {
-        ArrayList<Integer> recordIds = new ArrayList<>();
+    public ArrayList<String> getRecordIds() {
+        ArrayList<String> recordIds = new ArrayList<>();
 
         if (this.isRecordsEmpty()) {
             return recordIds;
         }
 
-        for (Integer recordId: this.records) {
+        for (String recordId: this.records) {
             recordIds.add(recordId);
         }
 
