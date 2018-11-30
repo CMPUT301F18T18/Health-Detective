@@ -188,7 +188,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      */
     @Override
     public void deleteProblem(Problem problem) {
-        String elasticSearchId = getProblemElasticSearchId(problem.getProblemID());
+        String elasticSearchId = getProblemElasticSearchId(problem.getProblemId());
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
