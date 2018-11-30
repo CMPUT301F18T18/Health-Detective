@@ -32,15 +32,19 @@ import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     LinearLayout bodyPhotoScroll;
     Record record;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    ImageView frontBL, backBL, addNPhoto;
     Patient patientContext;
+    byte[] image;
+    int testImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,45 +54,72 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+        this.image = (byte[]) newIntent.getSerializableExtra("PHOTO");
+        if (image == null){
+            testImages = 0;
+        } else {
+            testImages = 1;
+        }
 
+        frontBL = findViewById(R.id.frontBL);
+        backBL = findViewById(R.id.backBL);
+        backBLTag = findViewById(R.id.backTag);
+        frontBLTag = findViewById(R.id.frontTag);
+        addNPhoto = findViewById(R.id.addNPhoto);
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
-        setTextViews();
 
+        addNPhoto.setOnClickListener(this);
+        frontBL.setOnClickListener(this);
+        backBL.setOnClickListener(this);
+
+
+        setTextViews();
+        RecordRepoMock mockRecord = new RecordRepoMock();
+        mockRecord.insertRecord(new Record("test", "test", new Date()));
+
+
+//        recordViewPresenter = new RecordViewPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance()
+//                //mockRecord
+//        );
         recordViewPresenter = new RecordViewPresenter(this);
 
         //stuff for all photos section
-        GridViewAdapter adapter = new GridViewAdapter(this, 10);
-        GridView gridView = (GridView) findViewById(R.id.allPhotosView);
-
-        gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+//        GridViewAdapter adapter = new GridViewAdapter(this, 1);
+//        GridView gridView = (GridView) findViewById(R.id.allPhotosView);
+//
+//        gridView.setAdapter(adapter);
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
+//                toast.show();
+//                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
         ImageView testImg = new ImageView(this);
         testImg.setImageResource(R.drawable.ic_launcher_background);
+        setAllPhotoScroll();
 
         bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
+                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
             toast.show();
             }
         });
-        test();
-        test();
-        test();
-        test();
-        test();
     }
 
     @Override
@@ -143,12 +174,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         }
     }
 
-    public void test(){
+    private void setAllPhotoScroll(){
         ImageView testImg = new ImageView(this);
         testImg.setImageResource(R.drawable.ic_launcher_background);
         bodyPhotoScroll.addView(testImg);
         bodyPhotoScroll.invalidate();
     }
+
 
     @Override
     public void onEditRecord(Record record) {
@@ -203,5 +235,26 @@ public class PatientRecordViewActivity extends AppCompatActivity implements Reco
         Date currentDate = c.getTime();
         recordViewPresenter.editUserRecord(record,record.getTitle(),record.getComment(), currentDate);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addNPhoto:
+                // go to camera activity, but make sure that it gets rid of add body location selection
+                this.onBackPressed();
+            case R.id.frontBL:
+                Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                camaraIntent.putExtra("USER", patientContext);
+                camaraIntent.putExtra("RECORD", record);
+                startActivity(camaraIntent);
+                //dialog box for add new front body location photo
+            case R.id.backBL:
+                Intent backBlIntent = new Intent(this, CamaraActivity.class);
+                backBlIntent.putExtra("USER", patientContext);
+                backBlIntent.putExtra("RECORD", record);
+                startActivity(backBlIntent);
+                //dialog box for add new back body location photo
+        }
     }
 }

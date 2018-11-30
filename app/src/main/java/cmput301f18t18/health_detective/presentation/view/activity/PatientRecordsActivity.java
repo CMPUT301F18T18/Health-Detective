@@ -31,6 +31,8 @@ import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
+import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
@@ -56,8 +58,23 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+        RecordRepoMock mockRecord = new RecordRepoMock();
+        mockRecord.insertRecord(new Record("test", "test", new Date()));
+        ProblemRepoMock mockProblem = new ProblemRepoMock();
+        mockProblem.insertProblem(new Problem("test", "test", new Date()));
+
+//        this.recordListPresenter = new RecordListPresenter(
+//                this,
+//                ThreadExecutorImpl.getInstance(),
+//                MainThreadImpl.getInstance(),
+//                ElasticSearchController.getInstance(),
+//                //mockProblem,
+//                ElasticSearchController.getInstance()
+//                //mockRecord
+//        );
 
         this.recordListPresenter = new RecordListPresenter(this);
+
 
 
         adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);

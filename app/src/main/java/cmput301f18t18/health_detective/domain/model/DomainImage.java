@@ -1,5 +1,11 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
+
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 import cmput301f18t18.health_detective.domain.util.Id;
 
