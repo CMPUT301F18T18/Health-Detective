@@ -19,13 +19,9 @@ public class ProblemTest {
 
     @Test
     public void getProblemID() {
-        Problem problem = new Problem(
-                1,
-                "Title",
-                "Description"
-        );
+        Problem problem = new Problem("1");
 
-        assertEquals(1, problem.getProblemID());
+        assertEquals("1", problem.getProblemId());
     }
 
     @Test
@@ -91,14 +87,14 @@ public class ProblemTest {
     @Test
     public void equals() {
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
         );
 
         Problem problem2 = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
@@ -110,14 +106,14 @@ public class ProblemTest {
     @Test
     public void equals_DifferentTitle() {
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
         );
 
         Problem problem2 = new Problem(
-                1,
+                "1",
                 "Title2",
                 "Description",
                 new Date()
@@ -129,14 +125,14 @@ public class ProblemTest {
     @Test
     public void equals_DifferentDescription() {
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
         );
 
         Problem problem2 = new Problem(
-                1,
+                "1",
                 "Title",
                 "Comment2",
                 new Date()
@@ -149,14 +145,14 @@ public class ProblemTest {
     public void equals_DifferentProblemId() {
         Date date = new Date();
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 date
         );
 
         Problem problem2 = new Problem(
-                2,
+                "2",
                 "Title",
                 "Description",
                 date
@@ -169,7 +165,7 @@ public class ProblemTest {
     public void equals_SameObject() {
         Date date = new Date();
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 date
@@ -182,7 +178,7 @@ public class ProblemTest {
     public void equals_NotAProblem() {
         Date date = new Date();
         Problem problem = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 date
@@ -195,18 +191,17 @@ public class ProblemTest {
     public void addRecordWithRecordObj() {
         Problem problem = new Problem();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Description",
-                new Date()
+                "Description"
         );
 
         problem.addRecord(record);
 
-        ArrayList<Integer> expectedRecordIds = new ArrayList<>();
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> expectedRecordIds = new ArrayList<>();
+        ArrayList<String> recordIds = problem.getRecordIds();
 
-        expectedRecordIds.add(1);
+        expectedRecordIds.add("1");
 
         assertEquals(expectedRecordIds, recordIds);
     }
@@ -215,13 +210,13 @@ public class ProblemTest {
     public void addRecordAddRecordById() {
         Problem problem = new Problem();
 
-        problem.addRecord(1);
+        problem.addRecord("1");
 
-        ArrayList<Integer> expectedRecordIds = new ArrayList<>();
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> expectedRecordIds = new ArrayList<>();
+        ArrayList<String> recordIds = problem.getRecordIds();
 
 
-        expectedRecordIds.add(1);
+        expectedRecordIds.add("1");
 
         assertEquals(expectedRecordIds, recordIds);
     }
@@ -230,17 +225,16 @@ public class ProblemTest {
     public void removeRecordByObj() {
         Problem problem = new Problem();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Description",
-                new Date()
+                "Description"
         );
 
-        problem.addRecord(1);
+        problem.addRecord("1");
         problem.removeRecord(record);
 
-        ArrayList<Integer> expectedRecordIds = new ArrayList<>();
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> expectedRecordIds = new ArrayList<>();
+        ArrayList<String> recordIds = problem.getRecordIds();
 
         assertEquals(expectedRecordIds, recordIds);
     }
@@ -249,17 +243,16 @@ public class ProblemTest {
     public void removeRecordByRecordId() {
         Problem problem = new Problem();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Description",
-                new Date()
+                "Description"
         );
 
-        problem.addRecord(1);
-        problem.removeRecord(1);
+        problem.addRecord(record);
+        problem.removeRecord("1");
 
-        ArrayList<Integer> expectedRecordIds = new ArrayList<>();
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> expectedRecordIds = new ArrayList<>();
+        ArrayList<String> recordIds = problem.getRecordIds();
 
         assertEquals(expectedRecordIds, recordIds);
     }
@@ -274,7 +267,7 @@ public class ProblemTest {
     @Test
     public void isRecordsEmpty_AddingARecord() {
         Problem problem = new Problem();
-        problem.addRecord(1);
+        problem.addRecord("1");
 
         assertFalse(problem.isRecordsEmpty());
     }
@@ -283,10 +276,10 @@ public class ProblemTest {
     public void isRecordsEmpty_AfterRemoving() {
         Problem problem = new Problem();
 
-        problem.addRecord(1);
-        problem.addRecord(2);
-        problem.removeRecord(1);
-        problem.removeRecord(2);
+        problem.addRecord("1");
+        problem.addRecord("2");
+        problem.removeRecord("1");
+        problem.removeRecord("2");
 
         assertTrue(problem.isRecordsEmpty());
     }
@@ -295,14 +288,14 @@ public class ProblemTest {
     public void getRecordIds() {
         Problem problem = new Problem();
 
-        problem.addRecord(1);
-        problem.addRecord(2000);
-        problem.addRecord(100);
+        problem.addRecord("1");
+        problem.addRecord("2000");
+        problem.addRecord("100");
 
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> recordIds = problem.getRecordIds();
 
-        assertTrue(recordIds.contains(1));
-        assertTrue(recordIds.contains(2000));
-        assertTrue(recordIds.contains(100));
+        assertTrue(recordIds.contains("1"));
+        assertTrue(recordIds.contains("2000"));
+        assertTrue(recordIds.contains("100"));
     }
 }

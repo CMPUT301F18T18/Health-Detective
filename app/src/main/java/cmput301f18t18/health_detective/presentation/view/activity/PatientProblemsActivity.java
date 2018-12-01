@@ -34,15 +34,12 @@ import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
-public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener,
-                                                                          ProblemsListPresenter.View, ProblemOnClickListener{
-
+public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener, ProblemsListPresenter.View, ProblemOnClickListener, GetLoggedInUser.Callback{
+    String userId = "";
     ListView listView;
     ProblemListAdapter adapter;
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
-    Patient patientContext;
-    CareProvider cpContext;
 
 
     @Override
@@ -59,37 +56,24 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
 
-        //Intent intent = this.getIntent();
-        //this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
-        UserRepoMock mockUser = new UserRepoMock();
-        mockUser.retrievePatientById("12345678");
-        ProblemRepoMock mockProblem = new ProblemRepoMock();
-        //patientContext = mockUser.retrievePatientById("dnallen1234");
-        mockProblem.insertProblem(new Problem("test", "test", new Date()));
-
-
-
-        this.problemsListPresenter = new ProblemsListPresenter(this);
-
+        problemsListPresenter = new ProblemsListPresenter(this);
+        adapter = new ProblemListAdapter(this, this.problemList, this);
 
         ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
-
         listView = findViewById(R.id.problemListView);
-
-
-        adapter = new ProblemListAdapter(this, this.problemList, this);
         listView.setAdapter(adapter);
-        this.problemsListPresenter.getProblems(this.patientContext);
+
+        this.problemsListPresenter.getProblems();
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.problemsListPresenter.getProblems(this.patientContext);
-        //adapter.notifyDataSetChanged();
+
+        this.problemsListPresenter.getProblems();
     }
 
     @Override
@@ -105,7 +89,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
+        userIdMenu.setTitle(userId);
 
         return true;
     }
@@ -119,13 +103,11 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 return true;
 
             case R.id.Logout_option:
-                Intent logoutIntent = new Intent(this,MainActivity.class);
-                startActivity(logoutIntent);
+                problemsListPresenter.onLogout();
                 return true;
 
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
 
@@ -133,7 +115,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -141,7 +122,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         if (v.getId() == R.id.addProbBtn){
             Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
-            problemsIntent.putExtra("PATIENT", this.patientContext);
+            problemsIntent.putExtra("TYPE", (Boolean) false);
             startActivity(problemsIntent);
         }
     }
@@ -154,11 +135,36 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     }
 
     @Override
+    public void onProblemListUserId(String userId) {
+        this.userId = userId;
+        invalidateOptionsMenu();
+    }
+
+    @Override
     public void onProblemDeleted(Problem problem) {
         this.problemList.remove(problem);
         this.adapter.notifyDataSetChanged();
     }
 
+
+    @Override
+    public void onViewProblem() {
+        Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
+        startActivity(recordsIntent);
+    }
+
+    @Override
+    public void onEditProblem() {
+        Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
+        problemsIntent.putExtra("TYPE", (Boolean) true);
+        startActivity(problemsIntent);
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
+    }
 
     @Override
     public void onDeleteClicked(final Problem problem) {
@@ -174,7 +180,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        problemsListPresenter.deleteProblem(patientContext, problem);
+                        problemsListPresenter.deleteProblem(problem);
                     }
                 });
         AlertDialog dialog = alert.create();
@@ -184,17 +190,12 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onEditClicked(Problem problem) {
-        Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
-        problemsIntent.putExtra("PROBLEM", problem);
-        startActivity(problemsIntent);
+        problemsListPresenter.onEdit(problem);
     }
 
     @Override
     public void onRecordsClicked(Problem problem) {
-        Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
-        recordsIntent.putExtra("USER", patientContext);
-        recordsIntent.putExtra("PROBLEM", problem);
-        startActivity(recordsIntent);
+        problemsListPresenter.onView(problem);
     }
 
 

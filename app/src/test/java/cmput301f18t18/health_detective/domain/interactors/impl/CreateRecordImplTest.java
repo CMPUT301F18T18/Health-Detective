@@ -39,7 +39,7 @@ public class CreateRecordImplTest {
         Date date = new Date();
 
         Problem problem1 = new Problem(
-                1234567,
+                "1234567",
                 "title",
                 "description",
                 date
@@ -57,11 +57,10 @@ public class CreateRecordImplTest {
 
         CreateRecord command = new CreateRecordImpl(
                 callback,
-                problems.retrieveProblemById(1234567),
                 title,
                 description,
                 date,
-                authorId
+                null
         );
         command.execute();
 
@@ -79,7 +78,7 @@ public class CreateRecordImplTest {
         assertEquals(records.retrieveRecordById(record.getRecordId()).getRecordId(), record.getRecordId());
 
         // Check record has been added to problem
-        assertTrue(problems.retrieveProblemById(1234567).getRecordIds().contains(record.getRecordId()));
+        assertTrue(problems.retrieveProblemById("1234567").getRecordIds().contains(record.getRecordId()));
     }
 
     // Testing null title
@@ -92,11 +91,10 @@ public class CreateRecordImplTest {
 
         CreateRecord command = new CreateRecordImpl(
                 callback,
-                problems.retrieveProblemById(1234567),
                 title,
                 description,
                 date,
-                authorId
+                null
         );
         command.execute();
 
@@ -138,6 +136,12 @@ class CreateRecordMockPresenter implements CreateRecord.Callback {
     }
 
     @Override
-    public void onCRFail() {
+    public void onCRInvalidPermissions() {
+
+    }
+
+    @Override
+    public void onCRNoGeolocationProvided() {
+
     }
 }

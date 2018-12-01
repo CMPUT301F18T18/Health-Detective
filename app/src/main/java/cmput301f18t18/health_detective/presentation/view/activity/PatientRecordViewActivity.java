@@ -38,7 +38,6 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
@@ -48,12 +47,15 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Rec
 public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
 
     LinearLayout bodyPhotoScroll;
-    Record record;
     RecordViewPresenter recordViewPresenter;
     TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
     ImageView frontBL, backBL, addNPhoto;
-    Patient patientContext;
     byte[] image;
+    String userId = "";
+    String title;
+    String comment;
+    Date date;
+    Geolocation geolocation = null;
     int testImages;
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
@@ -67,10 +69,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         getLocationPermission();
 
-        Intent newIntent = this.getIntent();
-        this.record = (Record) newIntent.getSerializableExtra("RECORD");
-        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
-        this.image = (byte[]) newIntent.getSerializableExtra("PHOTO");
         if (image == null){
             testImages = 0;
         } else {
@@ -92,19 +90,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
 
-
-        setTextViews();
         RecordRepoMock mockRecord = new RecordRepoMock();
         mockRecord.insertRecord(new Record("test", "test", new Date()));
 
-
-//        recordViewPresenter = new RecordViewPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                ElasticSearchController.getInstance()
-//                //mockRecord
-//        );
         recordViewPresenter = new RecordViewPresenter(this);
 
         //stuff for all photos section
@@ -141,11 +129,18 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        recordViewPresenter.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
+        userIdMenu.setTitle(userId);
         return true;
     }
 
@@ -165,7 +160,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.edit_title:
                 String promptTitle = "Edit Title";
-                openDialog(promptTitle,0,record.getTitle());
+                openDialog(promptTitle,0,recordTitle.getText().toString());
                 return true;
             case R.id.edit_date:
                 DialogFragment datePicker = new DatePickerFragment();
@@ -173,7 +168,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.edit_desc:
                 String promptDesc = "Edit Description";
-                openDialog(promptDesc,2,record.getComment());
+                openDialog(promptDesc,2, recordDesc.getText().toString());
                 return true;
             case R.id.edit_photo:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
@@ -181,7 +176,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
             default:
@@ -199,18 +193,31 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         bodyPhotoScroll.invalidate();
     }
 
-
-    @Override
-    public void onEditRecord(Record record) {
-        setTextViews();
-        Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Record is edited", Toast.LENGTH_SHORT);
-        toast.show();
+    public void setTextViews(){
+        recordTitle.setText(title);
+        recordDate.setText(date.toString());
+        recordDesc.setText(comment);
     }
 
-    private void setTextViews(){
-        recordTitle.setText(record.getTitle());
-        recordDate.setText(record.getDate().toString());
-        recordDesc.setText(record.getComment());
+    @Override
+    public void onRecordDetails(String title, String comment, Date date, Geolocation geolocation) {
+        if (title == null)
+            title = "";
+        if (comment == null)
+            comment = "";
+
+        this.title = title;
+        this.comment = comment;
+        this.date = date;
+        this.geolocation = geolocation;
+
+        setTextViews();
+    }
+
+    @Override
+    public void makeToast(String msg, int length) {
+        Toast toast = Toast.makeText(PatientRecordViewActivity.this, msg, length);
+        toast.show();
     }
 
     private void openDialog(String prompt,int type,String recordInfo){
@@ -221,12 +228,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void applyEditTitle(String editedText) {
-        recordViewPresenter.editUserRecord(record, editedText, record.getComment(), record.getDate(),record.getGeolocation());
+        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation);
     }
 
     @Override
     public void applyEditDesc(String editedComment) {
-        recordViewPresenter.editUserRecord(record, record.getTitle(), editedComment, record.getDate(),record.getGeolocation());
+        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation);
     }
 
 
@@ -236,22 +243,20 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        Date currentDate = c.getTime();
-        recordViewPresenter.editUserRecord(record, record.getTitle(), record.getComment(),currentDate ,record.getGeolocation());
-
+        date = c.getTime();
+        // recordViewPresenter.editUserRecord(title, comment, currentDate, geolocation);
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Date ourDate = record.getDate();
         Calendar c = Calendar.getInstance();
-        c.setTime(ourDate);
+        c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
-        Date currentDate = c.getTime();
-        recordViewPresenter.editUserRecord(record,record.getTitle(),record.getComment(), currentDate,record.getGeolocation());
+        date = c.getTime();
+        recordViewPresenter.editUserRecord(title, comment, date, geolocation);
 
     }
 
@@ -263,14 +268,10 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 this.onBackPressed();
             case R.id.frontBL:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
-                camaraIntent.putExtra("USER", patientContext);
-                camaraIntent.putExtra("RECORD", record);
                 startActivity(camaraIntent);
                 //dialog box for add new front body location photo
             case R.id.backBL:
                 Intent backBlIntent = new Intent(this, CamaraActivity.class);
-                backBlIntent.putExtra("USER", patientContext);
-                backBlIntent.putExtra("RECORD", record);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
 

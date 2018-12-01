@@ -24,7 +24,6 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class EditRecordImpl extends AbstractInteractor implements EditRecord {
 
     private EditRecord.Callback callback;
-    private Record recordtoEdit;
     private String title;
     private String comment;
     private Date date;
@@ -34,17 +33,15 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     /**
      * First constructor for EditRecordImpl
      * @param callback
-     * @param recordToEdit the record that is being edited
      * @param title the title of the record that is being edited
      * @param comment the description of the record being edited
      * @param date the date assigned to the record being edited
      */
     public EditRecordImpl(EditRecord.Callback callback,
-                          Record recordToEdit, String title, String comment, Date date, Geolocation geolocation)
+                          String title, String comment, Date date, Geolocation geolocation)
     {
         super();
         this.callback = callback;
-        this.recordtoEdit = recordToEdit;
         this.title = title;
         this.comment = comment;
         this.date = date;
@@ -66,6 +63,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
      */
     @Override
     public void run() {
+        final Record recordtoEdit;
         final RecordRepo recordRepo = this.context.getRecordRepo();
         ContextTree tree = context.getContextTree();
         ContextTreeParser treeParser = new ContextTreeParser(tree);
@@ -80,6 +78,8 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
                 }
             });
         }
+
+        recordtoEdit = treeParser.getCurrentRecordContext();
 
         // Missing title
         if (this.title == null || this.title.isEmpty()) {
@@ -119,16 +119,15 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
             this.comment = "";
         }
 
-        this.recordtoEdit.setTitle(this.title);
-        this.recordtoEdit.setComment(this.comment);
-        this.recordtoEdit.setDate(this.date);
-        this.recordtoEdit.setGeolocation(geolocation);
+        recordtoEdit.setTitle(this.title);
+        recordtoEdit.setComment(this.comment);
+        recordtoEdit.setDate(this.date);
+        recordtoEdit.setGeolocation(geolocation);
 
-        recordRepo.updateRecord(this.recordtoEdit);
+        recordRepo.updateRecord(recordtoEdit);
 
         // Record added
         this.mainThread.post(new Runnable(){
-
             @Override
             public void run() {
                 callback.onERSuccess(recordtoEdit);

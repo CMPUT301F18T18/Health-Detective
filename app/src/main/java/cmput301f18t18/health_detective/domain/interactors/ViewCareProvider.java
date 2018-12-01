@@ -7,7 +7,9 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 
 public interface ViewCareProvider extends Interactor {
     interface Callback {
-        void onGAPSuccess(ArrayList<Patient> assignedPatients);
-        void onGAPNoPatients();
+        void onVCPSuccess(ArrayList<Patient> assignedPatients);
+        void onVCPSuccessDetails(String userId, String email, String phone);
+        void onVCPNoPatients();
+        void onVCPNoContext();
     }
 }

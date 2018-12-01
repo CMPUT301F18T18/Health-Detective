@@ -147,7 +147,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onGetUser(CareProvider careProvider) {
         cpContext = careProvider;
-        this.careProPatientListPresenter.getAssignedPatients(careProvider);
+        this.careProPatientListPresenter.getAssignedPatients();
     }
 
 }

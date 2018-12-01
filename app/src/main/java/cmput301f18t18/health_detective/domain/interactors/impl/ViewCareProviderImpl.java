@@ -6,6 +6,9 @@ import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -14,19 +17,15 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
  */
 public class ViewCareProviderImpl extends AbstractInteractor implements ViewCareProvider {
 
-    private ViewCareProvider.Callback callback;
-    private CareProvider careProvider;
+    private Callback callback;
 
     /**
      * Constructor for GetAssignedPatientImpl
      * @param callback
-     * @param careProvider the care provider who's list of patient's are retrieved
      */
-    public ViewCareProviderImpl(ViewCareProvider.Callback callback, CareProvider careProvider)
+    public ViewCareProviderImpl(ViewCareProvider.Callback callback)
     {
-        super();
         this.callback = callback;
-        this.careProvider = careProvider;
     }
 
     /**
@@ -41,14 +40,41 @@ public class ViewCareProviderImpl extends AbstractInteractor implements ViewCare
      */
     @Override
     public void run() {
+        if (callback == null)
+            return;
+
+        final CareProvider careProvider;
         final UserRepo userRepo = this.context.getUserRepo();
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        User user = treeParser.getCurrentUserContext();
+
+        if (!(user instanceof CareProvider)) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onVCPNoContext();
+                }
+            });
+
+            return;
+        }
+
+        careProvider = (CareProvider) user;
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onVCPSuccessDetails(careProvider.getUserId(), careProvider.getEmailAddress(), careProvider.getPhoneNumber());
+            }
+        });
+
 
         if (careProvider.isPatientsEmpty()) {
             this.mainThread.post(new Runnable() {
 
                 @Override
                 public void run() {
-                    callback.onGAPNoPatients();
+                    callback.onVCPNoPatients();
                 }
             });
 
@@ -62,7 +88,7 @@ public class ViewCareProviderImpl extends AbstractInteractor implements ViewCare
 
             @Override
             public void run() {
-                callback.onGAPSuccess(patients);
+                callback.onVCPSuccess(patients);
             }
         });
     }
