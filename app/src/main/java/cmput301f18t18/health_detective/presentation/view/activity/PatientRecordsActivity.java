@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -56,13 +60,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     int currentPosition;
     private String title, desc;
     private Date date;
-    private Geolocation myGeoLocation;
+    private Geolocation currentGeoLocation;
+    private Boolean LocationPermissionsGranted = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
+
+        getLocationPermission();
+        getDeviceLocation();
 
         Intent newIntent = this.getIntent();
         this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
@@ -259,8 +267,52 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        Log.d("abcdefgh", date.toString());
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",this.myGeoLocation);
+        Log.d("abcdefgh",Double.toString(currentGeoLocation.getlatitude()));
+        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
 
     }
+
+
+
+    private void getDeviceLocation(){
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(LocationPermissionsGranted){
+
+                Task location = fusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location currentLocation = (Location) task.getResult();
+                            //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                            currentGeoLocation = new Geolocation(currentLocation.getLongitude(),currentLocation.getLatitude());
+                            Log.d("abcdefg",Double.toString(currentGeoLocation.getlatitude()));
+
+                        }
+                    }
+                });
+            }
+        }catch(SecurityException ignored){
+
+        }
+    }
+
+    private void getLocationPermission(){
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationPermissionsGranted = true;
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1234);
+            }
+        }else{ActivityCompat.requestPermissions(this,permissions,1234);
+        }
+
+    }
+
 }

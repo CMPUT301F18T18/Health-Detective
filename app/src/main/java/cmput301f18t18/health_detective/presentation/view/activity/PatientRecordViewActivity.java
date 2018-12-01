@@ -1,9 +1,14 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +25,10 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,7 +44,7 @@ import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
 
     LinearLayout bodyPhotoScroll;
     Record record;
@@ -45,11 +54,15 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     Patient patientContext;
     byte[] image;
     int testImages;
+    private boolean LocationPermissionsGranted;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
+
+        getLocationPermission();
 
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
@@ -255,6 +268,63 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 backBlIntent.putExtra("RECORD", record);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
+        }
+    }
+
+    private void getLocationPermission(){
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationPermissionsGranted = true;
+                initMap();
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1234);
+            }
+        }else{ActivityCompat.requestPermissions(this,permissions,1234);
+        }
+
+    }
+
+    private void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_record_display);
+        assert mapFragment != null;
+        mapFragment.getMapAsync( PatientRecordViewActivity.this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        LocationPermissionsGranted = false;
+
+        switch(requestCode){
+            case 1234:
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            LocationPermissionsGranted = false;
+                            return;
+                        }
+                    }
+                    LocationPermissionsGranted = true;
+                    initMap();
+                }
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        if(LocationPermissionsGranted) {
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
     }
 }
