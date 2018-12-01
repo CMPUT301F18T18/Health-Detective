@@ -47,6 +47,7 @@ public class PatientListAdapter extends ArrayAdapter{
 
         Patient data = patientList.get(postition);
         nameText.setText(data.getUserId());
+        patientPhone.setText(data.getPhoneNumber());
 
 
         deleteImg.setOnClickListener(new View.OnClickListener() {

@@ -55,13 +55,13 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
     String base;
     byte[] temp;
     Bitmap bitmap;
+    Canvas canvas;
 
     // adding in trying to draw a goddamn circle
     private Paint pTouch;
-    public int x;
-    public int y;
     int radius = 5;
-    Canvas canvas;
+    Float x;
+    Float y;
 
 
     // These matrices will be used to scale points of the image
@@ -173,7 +173,15 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
                     //byte[] tempArray = toByteArray(bitmap);
                     //TODO: pass bitmap to presenter and in presenter you convert to byte array
-                    takenPhoto.setImageBitmap(bitmap);
+                    Bitmap tempBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                    Canvas canvas = new Canvas(tempBitmap);
+                    //takenPhoto.draw(canvas);
+//                    canvas.drawBitmap(bitmap, null, null);
+                    Paint p = new Paint();
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(60, 50, 5,p);
+                    takenPhoto.setImageBitmap(tempBitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -185,50 +193,45 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
 
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // MotionEvent object holds X-Y values
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String text = "You click at x = " + event.getX() + " and y = " + event.getY();
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        }
-
-        return super.onTouchEvent(event);
-    }
-
-    @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             String text = "You click at x = " + event.getX() + " and y = " + event.getY();
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-            Drawable drawable = takenPhoto.getDrawable();
-            Rect imageBounds = drawable.getBounds();
+
+            Drawable tempDraw = takenPhoto.getDrawable();
+            Rect imageBounds = tempDraw.getBounds();
+
+            int ih = tempDraw.getIntrinsicHeight();
+            int iW = tempDraw.getIntrinsicWidth();
+            int sh = imageBounds.height();
+            int sw = imageBounds.width();
+            float hr = ih/sh;
+            float wr = iW/sw;
+
+            float siox = event.getX() - imageBounds.left;
+            float soiy = event.getY() - imageBounds.right;
 
 
-            DisplayMetrics metrics = this.getResources().getDisplayMetrics();
-            int width = metrics.widthPixels;
-            int height = metrics.heightPixels;
+
+            int imHeight = takenPhoto.getHeight();
+            int newHight = (imHeight - bitmap.getHeight())/2;
+            int newY = (int) event.getY() - newHight;
+
+            Bitmap bmOverlay = Bitmap.createBitmap(bitmap.getWidth(),
+                    bitmap.getHeight(),
+                    bitmap.getConfig());
+            Canvas canvas = new Canvas(bmOverlay);
+            Paint p = new Paint();
+            p.setAntiAlias(true);
+            p.setColor(Color.RED);
+            p.setStrokeWidth(50);
+            p.setStyle(Paint.Style.STROKE);
+            canvas.drawBitmap(bitmap,new Matrix(),null);
+            canvas.drawCircle(event.getX(), newY, 100, p);
+            takenPhoto.setImageBitmap(bmOverlay);
 
 
 
-            Rect frameToDraw = new Rect(0, 0, width, height);
-            RectF whereToDraw = new RectF(0, 0, width, height - 300);
-
-            canvas.drawBitmap(bitmap,frameToDraw,whereToDraw, null);
-
-
-
-//            Canvas canvas = new Canvas(bitmap);
-//            Paint paint = new Paint();
-//            paint.setStyle(Paint.Style.FILL);
-//            paint.setColor(Color.RED);
-//            paint.setAntiAlias(true);
-//            canvas.drawCircle(
-//                    canvas.getWidth() / 2, // cx
-//                    canvas.getHeight() / 2, // cy
-//                    5, // Radius
-//                    paint // Paint
-//            );
-//            takenPhoto.setImageBitmap(bitmap);
         }
         return true;
     }

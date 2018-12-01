@@ -68,7 +68,7 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
             return;
         }
         // Problem cannot be found
-        if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
+        if(problemRepo.retrieveProblemById(problem.getProblemId()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
