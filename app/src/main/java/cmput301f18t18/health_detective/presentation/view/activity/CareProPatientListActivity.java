@@ -25,7 +25,7 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Car
 
 
 
-public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,PatientDialog.AddPatientDialogListener, GetLoggedInUser.Callback{
+public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,PatientDialog.AddPatientDialogListener{
 
     ListView listView;
     PatientListAdapter adapter;
@@ -45,14 +45,17 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        //Toast.makeText(CareProPatientListActivity.this,"Bet you wished this actually deleted",Toast.LENGTH_SHORT).show();
 
         this.careProPatientListPresenter = new CareProPatientListPresenter(this);
 
         ImageView addPatient = findViewById(R.id.addPatientBtn);
         addPatient.setOnClickListener(this);
         listView = findViewById(R.id.patientListView);
+        //patientList.add(new Patient("12345678", "12345678", "123455663424"));
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
+        //this.careProPatientListPresenter.getAssignedPatients(this.cpContext);
 
 
     }
@@ -124,19 +127,25 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     }
 
-
     @Override
-    public void onGLIUNoUserLoggedIn() {
-
+    public void onGetPatientSuccess(ArrayList<Patient> assignedPatients) {
+        Toast toast = Toast.makeText(this, "TYRING TO GET PATIENTS", Toast.LENGTH_SHORT);
+        toast.show();
+        this.patientList.clear();
+        this.patientList.addAll(assignedPatients);
+        this.adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onGLIUPatient(Patient patient) {
-
+    public void noPatients() {
+        Toast toast = Toast.makeText(this, "NO PATIENTS", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
-    public void onGLIUCareProvider(CareProvider careProvider) {
+    public void onGetUser(CareProvider careProvider) {
         cpContext = careProvider;
+        this.careProPatientListPresenter.getAssignedPatients(careProvider);
     }
+
 }
