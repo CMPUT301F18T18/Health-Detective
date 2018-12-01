@@ -56,13 +56,14 @@
         <activity android:name=".presentation.view.activity.PhotoViewActivity" />
         <activity android:name=".presentation.view.activity.MapActivity"
             android:parentActivityName=".presentation.view.activity.PatientRecordsActivity"/>
+        <activity android:name=".presentation.view.activity.CamaraActivity" />
+        <activity android:name=".presentation.view.activity.CareProPatientListActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".presentation.view.activity.CamaraActivity" />
-        <activity android:name=".presentation.view.activity.CareProPatientListActivity"></activity>
+
     </application>
 
 </manifest>
