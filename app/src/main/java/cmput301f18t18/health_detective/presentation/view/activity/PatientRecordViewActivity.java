@@ -25,9 +25,11 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -325,6 +327,14 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+
+            LatLng location = new LatLng(record.getGeolocation().getlatitude(),record.getGeolocation().getlongitude());
+            moveCamera(location, 15f);
         }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 }
