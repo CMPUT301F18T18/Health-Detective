@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -20,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.Geolocation;
+import cmput301f18t18.health_detective.presentation.view.activity.MapActivity;
+import cmput301f18t18.health_detective.presentation.view.activity.PatientRecordsActivity;
 
 /**
 /  This class creates a Add Record Dialog box that gets user inputted Title and Description
@@ -33,6 +36,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
     private Geolocation geolocation;
     private Date updateDate = new Date();
     private Address address;
+
 
     public AddDialog() {
         this.geolocation = null;
@@ -78,7 +82,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentLocation.setText(address.getAddressLine(0));
+        updateAddress(address);
         currentDate.setText(nowDate.toString());
 
         addDate = view.findViewById(R.id.addDateRecordBtn);
@@ -106,29 +110,10 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
             listener.applyDate();
         }
         else if (v.getId() == R.id.addGeoRecordBtn){
-            Log.d("abcdefg","Add geo");
+            listener.openMapDialog();
+
         }
     }
-
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Calendar c = Calendar.getInstance();
-//        c.set(Calendar.YEAR, year);
-//        c.set(Calendar.MONTH, month);
-//        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//        updateDate = c.getTime();
-//    }
-//
-//    @Override
-//    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//        Calendar c = Calendar.getInstance();
-//        c.setTime(updateDate);
-//        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-//        c.set(Calendar.MINUTE, minute);
-//        updateDate = c.getTime();
-//        currentDate.setText(updateDate.toString());
-//    }
-
 
     /**
      * AddDialogListener is an interface that our activity implements, and then they define applyEdit
@@ -137,12 +122,20 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
         void applyEdit(String title, String comment);
         void applyDate();
         Address getAddress() throws IOException;
+        void openMapDialog();
 
+    }
+
+
+    public void updateAddress(Address address){
+        currentLocation.setText(address.getAddressLine(0));
     }
 
     public void changeTime(Date date){
         this.updateDate = date;
         this.currentDate.setText(updateDate.toString());
     }
+
+
 
 }

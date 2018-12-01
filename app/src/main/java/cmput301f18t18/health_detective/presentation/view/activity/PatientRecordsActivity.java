@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -66,6 +68,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Geolocation currentGeoLocation;
     private Boolean LocationPermissionsGranted = false;
     private AddDialog exampleDialog;
+    private Geolocation myLocation;
+    private int REQUEST_CODE = 1212;
+    private Address myAddress;
 
 
     @Override
@@ -346,4 +351,35 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
         return address;
     }
+
+    @Override
+    public void openMapDialog() {
+        Intent mapIntent = new Intent(this, MapActivity.class);
+        mapIntent.putExtra("PATIENT", patientContext);
+        mapIntent.putExtra("type",1);
+        startActivityForResult(mapIntent,REQUEST_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                 double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
+                 myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                 currentGeoLocation = myLocation;
+                try {
+                    myAddress = getAddress();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                exampleDialog.updateAddress(myAddress);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
 }

@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,18 +42,22 @@ import java.util.List;
 
 import android.Manifest;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Problem;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
 
     private float ZOOM = 15f;
 
     private Boolean LocationPermissionsGranted = false;
     private GoogleMap mMap;
     Patient patientContext;
+    Problem problemContext;
     private EditText searchText;
-
-
+    private int type;
+    private Geolocation myLocation;
+    private Button Cancel, Save;;
 
 
     @Override
@@ -61,6 +68,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
+        this.type = (int) intent.getSerializableExtra("type");
+
+        Cancel = findViewById(R.id.MapCancel);
+        Save = findViewById(R.id.MapSave);
+        Cancel.setOnClickListener(this);
+        Save.setOnClickListener(this);
+
 
         getLocationPermission();
 
@@ -79,6 +93,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mMap.clear();
+                createMarker(latLng,"new record");
             }
         });
     }
@@ -246,10 +268,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void createMarker( LatLng currentLatLng,String title){
-
         mMap.addMarker(new MarkerOptions()
                 .position(currentLatLng)
                 .anchor(0.5f, 0.5f)
                 .title(title));
+
+        myLocation = new Geolocation(currentLatLng.latitude,currentLatLng.longitude);
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()== R.id.MapCancel){
+            finish();
+        }
+        if(v.getId()==R.id.MapSave){
+            Intent returnIntent = new Intent();
+            double[] array = new double[]{myLocation.getlatitude(), myLocation.getlongitude()};
+            returnIntent.putExtra("result",array);
+            setResult(PatientRecordsActivity.RESULT_OK,returnIntent);
+            finish();
+        }
     }
 }
