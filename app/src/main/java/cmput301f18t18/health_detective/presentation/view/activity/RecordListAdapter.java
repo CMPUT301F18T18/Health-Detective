@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +22,12 @@ public class RecordListAdapter extends ArrayAdapter{
     private Context mContext;
     private List<Record> recordList = new ArrayList<>();
     private RecordOnClickListener listener;
-    private String recordUserId;
 
 
-    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, String userId, RecordOnClickListener listener) {
+    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener) {
         super(context, R.layout.ind_record_view, list);
         mContext = context;
         recordList = list;
-        recordUserId = userId;
         this.listener = listener;
     }
 
@@ -42,11 +39,11 @@ public class RecordListAdapter extends ArrayAdapter{
 
         Record record = recordList.get(postition);
 
-        TextView recordTitle = rowView.findViewById(R.id.titleView);
+        TextView recordTitle = rowView.findViewById(R.id.problemTitle);
         recordTitle.setText(record.getTitle());
 
         TextView recordUser = rowView.findViewById(R.id.userIdView);
-        recordUser.setText(recordUserId);
+        recordUser.setText(record.getAuthor());
 
         TextView recordDescription = rowView.findViewById(R.id.recordDesc);
         recordDescription.setText(record.getComment());

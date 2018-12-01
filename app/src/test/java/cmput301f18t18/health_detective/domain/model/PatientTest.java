@@ -16,7 +16,7 @@ public class PatientTest {
         );
 
         Problem problemToAdd = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
@@ -24,10 +24,10 @@ public class PatientTest {
 
         patientToAddToo.addProblem(problemToAdd);
 
-        ArrayList<Integer> expectedProblemIds = new ArrayList<>();
-        ArrayList<Integer> patientsProblemIds = patientToAddToo.getProblemIds();
+        ArrayList<String> expectedProblemIds = new ArrayList<>();
+        ArrayList<String> patientsProblemIds = patientToAddToo.getProblemIds();
 
-        expectedProblemIds.add(1);
+        expectedProblemIds.add("1");
 
         assertEquals(expectedProblemIds, patientsProblemIds);
     }
@@ -38,12 +38,12 @@ public class PatientTest {
                 "patient"
         );
 
-        patientToAddToo.addProblem(1);
+        patientToAddToo.addProblem("1");
 
-        ArrayList<Integer> expectedProblemIds = new ArrayList<>();
-        ArrayList<Integer> patientsProblemIds = patientToAddToo.getProblemIds();
+        ArrayList<String> expectedProblemIds = new ArrayList<>();
+        ArrayList<String> patientsProblemIds = patientToAddToo.getProblemIds();
 
-        expectedProblemIds.add(1);
+        expectedProblemIds.add("1");
 
         assertEquals(expectedProblemIds, patientsProblemIds);
     }
@@ -55,7 +55,7 @@ public class PatientTest {
         );
 
         Problem problemToRemove = new Problem(
-                1,
+                "1",
                 "Title",
                 "Description",
                 new Date()
@@ -66,8 +66,8 @@ public class PatientTest {
 
         patientToRemoveFrom.removeProblem(problemToRemove);
 
-        ArrayList<Integer> expectedProblemIds = new ArrayList<>();
-        ArrayList<Integer> patientsProblemIds = patientToRemoveFrom.getProblemIds();
+        ArrayList<String> expectedProblemIds = new ArrayList<>();
+        ArrayList<String> patientsProblemIds = patientToRemoveFrom.getProblemIds();
 
 
         assertEquals(expectedProblemIds, patientsProblemIds);
@@ -80,11 +80,11 @@ public class PatientTest {
                 "patient"
         );
 
-        patientToRemoveFrom.addProblem(1);
-        patientToRemoveFrom.removeProblem(1);
+        patientToRemoveFrom.addProblem("1");
+        patientToRemoveFrom.removeProblem("1");
 
-        ArrayList<Integer> expectedProblemIds = new ArrayList<>();
-        ArrayList<Integer> patientsProblemIds = patientToRemoveFrom.getProblemIds();
+        ArrayList<String> expectedProblemIds = new ArrayList<>();
+        ArrayList<String> patientsProblemIds = patientToRemoveFrom.getProblemIds();
 
 
         assertEquals(expectedProblemIds, patientsProblemIds);
@@ -105,7 +105,7 @@ public class PatientTest {
                 "patient"
         );
 
-        patient.addProblem(1);
+        patient.addProblem("1");
 
         assertFalse(patient.isProblemsEmpty());
     }
@@ -118,10 +118,10 @@ public class PatientTest {
                 "email"
         );
 
-        patient.addProblem(1);
-        patient.addProblem(2);
-        patient.removeProblem(1);
-        patient.removeProblem(2);
+        patient.addProblem("1");
+        patient.addProblem("2");
+        patient.removeProblem("1");
+        patient.removeProblem("2");
 
         assertTrue(patient.isProblemsEmpty());
     }
@@ -130,14 +130,14 @@ public class PatientTest {
     public void getProblemIds() {
         Patient patient = new Patient();
 
-        patient.addProblem(1);
-        patient.addProblem(2000);
-        patient.addProblem(100);
+        patient.addProblem("1");
+        patient.addProblem("2000");
+        patient.addProblem("100");
 
-        ArrayList<Integer> patientsProblemIds = patient.getProblemIds();
+        ArrayList<String> patientsProblemIds = patient.getProblemIds();
 
-        assertTrue(patientsProblemIds.contains(1));
-        assertTrue(patientsProblemIds.contains(2000));
-        assertTrue(patientsProblemIds.contains(100));
+        assertTrue(patientsProblemIds.contains("1"));
+        assertTrue(patientsProblemIds.contains("2000"));
+        assertTrue(patientsProblemIds.contains("100"));
     }
 }

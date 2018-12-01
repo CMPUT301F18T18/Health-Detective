@@ -47,13 +47,13 @@ public class ProblemRepoImpl extends AbstractRepo {
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"problemId\": " + problemId + "\n" +
+                "      \"problemId\": \"" + problemId + "\"\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test")
+                .addIndex("cmput301f18t18test2")
                 .addType("Problem")
                 .build();
         try {
@@ -85,7 +85,7 @@ public class ProblemRepoImpl extends AbstractRepo {
         if (problem == null)
             return;
         Index index = new Index.Builder(problem)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -138,7 +138,7 @@ public class ProblemRepoImpl extends AbstractRepo {
      */
     public Problem retrieve() {
         String elasticSearchId = getProblemElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
                 .type("Problem")
                 .build();
         try {
@@ -182,7 +182,7 @@ public class ProblemRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {

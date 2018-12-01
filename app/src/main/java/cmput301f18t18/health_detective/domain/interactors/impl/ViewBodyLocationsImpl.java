@@ -11,7 +11,7 @@ import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.BodyLocationRepo;
 
-class ViewBodyLocationsImpl extends AbstractInteractor implements ViewBodyLocations {
+public class ViewBodyLocationsImpl extends AbstractInteractor implements ViewBodyLocations {
 
     private Callback callback;
 

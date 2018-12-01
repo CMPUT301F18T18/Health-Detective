@@ -168,23 +168,30 @@
 
         <TextView
             android:id="@+id/mapTitle"
-            android:layout_width="match_parent"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="@string/mapTitle"
             android:textColor="@color/primary_text"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="230dp" />
+        <TextView
+            android:id="@+id/mapEdit"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_geo"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <GridView
-            android:id="@+id/allPhotosView"
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map_record_display"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="246dp"
-            android:numColumns="3" />
+            android:layout_height="300dp"
+            tools:context=".presentation.view.activity.MapActivity" />
+
 
     </LinearLayout>
     </ScrollView>

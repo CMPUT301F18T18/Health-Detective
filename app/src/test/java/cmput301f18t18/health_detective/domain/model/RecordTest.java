@@ -11,7 +11,7 @@ public class RecordTest {
     @Test
     public void getRecordId() {
         Record record = new Record(
-                1,
+                "1",
                 "Title",
                 "Comment"
         );
@@ -91,17 +91,15 @@ public class RecordTest {
     @Test
     public void equals() {
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                new Date()
+                "Comment"
         );
 
         Record record2 = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                new Date()
+                "Comment"
         );
 
         assertTrue(record.equals(record2));
@@ -110,17 +108,15 @@ public class RecordTest {
     @Test
     public void equals_DifferentTitle() {
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                new Date()
+                "Comment"
         );
 
         Record record2 = new Record(
-                1,
+                "1",
                 "Title2",
-                "Comment",
-                new Date()
+                "Comment"
         );
 
         assertTrue(record.equals(record2));
@@ -129,17 +125,15 @@ public class RecordTest {
     @Test
     public void equals_DifferentComment() {
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                new Date()
+                "Comment"
         );
 
         Record record2 = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment2",
-                new Date()
+                "Comment2"
         );
 
         assertTrue(record.equals(record2));
@@ -149,17 +143,15 @@ public class RecordTest {
     public void equals_DifferentRecordId() {
         Date date = new Date();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                date
+                "Comment"
         );
 
         Record record2 = new Record(
-                2,
+                "2",
                 "Title",
-                "Comment",
-                 date
+                "Comment"
         );
 
         assertFalse(record.equals(record2));
@@ -169,10 +161,9 @@ public class RecordTest {
     public void equals_SameObject() {
         Date date = new Date();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                date
+                "Comment"
         );
 
         assertTrue(record.equals(record));
@@ -182,10 +173,9 @@ public class RecordTest {
     public void equals_NotARecord() {
         Date date = new Date();
         Record record = new Record(
-                1,
+                "1",
                 "Title",
-                "Comment",
-                date
+                "Comment"
         );
 
         assertFalse(record.equals(new Date()));

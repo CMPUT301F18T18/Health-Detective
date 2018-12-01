@@ -16,13 +16,13 @@ import android.widget.Toast;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignUpPresenter.View {
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
-    private Patient patientContext;
     private Boolean activityType;
 
     @Override
@@ -31,40 +31,19 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         getSupportActionBar().hide();
 
-        Intent intent = this.getIntent();
-        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
-        //true if editing user profile, false if creating new suer
-        if (patientContext == null){
-            activityType = false;
-        } else {
-            activityType = true;
-        }
-
-        Button signUp = findViewById(R.id.signUpBtn);
-        TextView cancelBtn = findViewById(R.id.cancelBtn);
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
-
-        if (activityType){
-            userText.setText(patientContext.getUserId());
-            userText.setFocusable(false);
-            phoneText.setText(patientContext.getPhoneNumber());
-            emailText.setText(patientContext.getEmailAddress());
-            signUp.setText(R.string.saveBtn);
-        }
-        ImageView image = findViewById(R.id.imageView2);
-        image.setImageResource(R.drawable.logo_transparent_background);
-
-        signUpPresenter = new SignUpPresenter(this);
-
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
-        signUp.setOnClickListener(this);
-        cancelBtn.setOnClickListener(this);
+
+        ImageView image = findViewById(R.id.imageView2);
+        image.setImageResource(R.drawable.logo_transparent_background);
+
+        signUpPresenter = new SignUpPresenter(this);
     }
 
     @Override
@@ -109,7 +88,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String phone = phoneText.getText().toString();
                 String email = emailText.getText().toString();
                 if (activityType){
-                    signUpPresenter.editUserInfo(patientContext, email, phone);
+                    signUpPresenter.editUserInfo(email, phone);
                 } else {
                     signUpPresenter.createNewUser(user, email, phone, type);
                 }
@@ -120,16 +99,39 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onCreatePatient(Patient patient) {
+    public void onIsSignup() {
+        activityType = false;
+        init();
+    }
+
+    @Override
+    public void onIsEditCareProvider(CareProvider careProvider) {
+        activityType = true;
+        careCheck.setChecked(true);
+
+        editInit(careProvider);
+    }
+
+    @Override
+    public void onIsEditPatient(Patient patient) {
+        activityType = true;
+        patientCheck.setChecked(true);
+
+        editInit(patient);
+    }
+
+    @Override
+    public void onCreatePatient() {
         Intent intent = new Intent(this, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
         Toast.makeText(this, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
         this.startActivity(intent);
     }
 
     @Override
-    public void onCreateCareProvider(CareProvider careProvider) {
-
+    public void onCreateCareProvider() {
+        Intent intent = new Intent(this, CareProPatientListActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -148,10 +150,29 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onEditUserSuccess(Patient patient) {
+    public void onEditUserSuccess() {
         Intent intent = new Intent(this, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
         startActivity(intent);
         Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
+    }
+
+    private void editInit(User user) {
+        Button signUp = findViewById(R.id.signUpBtn);
+
+        userText.setText(user.getUserId());
+        userText.setFocusable(false);
+        phoneText.setText(user.getPhoneNumber());
+        emailText.setText(user.getEmailAddress());
+        signUp.setText(R.string.saveBtn);
+
+        init();
+    }
+
+    private void  init() {
+        Button signUp = findViewById(R.id.signUpBtn);
+        TextView cancelBtn = findViewById(R.id.cancelBtn);
+
+        signUp.setOnClickListener(this);
+        cancelBtn.setOnClickListener(this);
     }
 }

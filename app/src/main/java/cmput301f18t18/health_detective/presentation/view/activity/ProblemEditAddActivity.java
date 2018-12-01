@@ -22,18 +22,16 @@ import java.util.Date;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemAddEditPresenter;
 
 public class ProblemEditAddActivity extends AppCompatActivity implements View.OnClickListener, ProblemAddEditPresenter.AddView, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
-    Patient patientContext;
-    Problem problemContext;
     private TextView problemTitle, problemDate, problemDesc;
-    ProblemAddEditPresenter problemAddEditPresenter;
-    Boolean type;
-    Date problemDateTime;
+    private ProblemAddEditPresenter problemAddEditPresenter;
+    private Boolean type;
+    private Date problemDateTime;
+    private String title = "";
+    private String comment = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,25 +39,14 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_problem_edit_add);
 
         Intent intent = getIntent();
-        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
-        problemContext = (Problem) intent.getSerializableExtra("PROBLEM");
-
-        //true if editing problem, false if creating new problem
-        if (patientContext == null){
-            type = true;
-        } else {
-            type = false;
-        }
+        type = (Boolean) intent.getSerializableExtra("TYPE");
 
         problemTitle = findViewById(R.id.problemTitle);
         problemDate = findViewById(R.id.problemDate);
         problemDesc = findViewById(R.id.problemDesc);
         problemDate.setFocusable(false);
-        if (type){
-            problemTitle.setText(problemContext.getTitle());
-            problemDate.setText(problemContext.getStartDate().toString());
-            problemDesc.setText(problemContext.getDescription());
-        }
+
+
 
         problemAddEditPresenter = new ProblemAddEditPresenter(this);
 
@@ -95,20 +82,14 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveBtn:
-                String probTitle = problemTitle.getText().toString();
-                String probDesc = problemDesc.getText().toString();
-                String probDate = problemDate.getText().toString();
-                if (probDate == null){
-                    problemDateTime = new Date();
-                }
+                title = problemTitle.getText().toString();
+                comment = problemDesc.getText().toString();
+
                 if (type){
-                    if (problemDateTime == null){
-                        problemDateTime = problemContext.getStartDate();
-                    }
-                    problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, problemDateTime);
+                    problemAddEditPresenter.editUserProblem(title, comment, problemDateTime);
                 }
                 else {
-                    problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, problemDateTime);
+                    problemAddEditPresenter.createNewProblem(title, comment, problemDateTime);
                 }
                 break;
             case R.id.cancelBtn:
@@ -122,11 +103,9 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCreateProblem(Problem problem) {
-            Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
-            problemListIntent.putExtra("PATIENT", patientContext);
-            this.startActivity(problemListIntent);
-
+    public void onCreateProblem() {
+        Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
+        this.startActivity(problemListIntent);
     }
 
     @Override
@@ -134,6 +113,23 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         Toast toast = Toast.makeText(this, "Problem Edited", Toast.LENGTH_SHORT);
         toast.show();
         finish();
+    }
+
+    @Override
+    public void onProblemDetails(String title, String description, Date date) {
+        if (type){
+            this.title = title;
+            this.comment = description;
+            this.problemDateTime = date;
+
+            if (problemDateTime != null) {
+
+            }
+
+            problemTitle.setText(title);
+            problemDesc.setText(comment);
+            problemDate.setText(problemDateTime.toString());
+        }
     }
 
     @Override
@@ -165,6 +161,5 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         Date currentDate = c.getTime();
         problemDateTime = currentDate;
         problemDate.setText((CharSequence) currentDate.toString());
-
     }
 }

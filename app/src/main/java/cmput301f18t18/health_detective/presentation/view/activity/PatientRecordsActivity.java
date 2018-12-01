@@ -1,11 +1,19 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,34 +28,44 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import cmput301f18t18.health_detective.AddDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
-import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    String userId = "";
     ListView listView;
     RecordListAdapter adapter;
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
-    Problem problemContext;
-    Patient patientContext;
     int currentPosition;
     private String title, desc;
     private Date date;
-
+    private Geolocation currentGeoLocation;
+    private Boolean LocationPermissionsGranted = false;
+    private AddDialog exampleDialog;
+    private Geolocation myLocation;
+    private int REQUEST_CODE = 1212;
+    private Address myAddress;
 
 
     @Override
@@ -55,30 +73,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
 
-        Intent newIntent = this.getIntent();
-        this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
-        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
-        RecordRepoMock mockRecord = new RecordRepoMock();
-        mockRecord.insertRecord(new Record("test", "test", new Date()));
-        ProblemRepoMock mockProblem = new ProblemRepoMock();
-        mockProblem.insertProblem(new Problem("test", "test", new Date()));
-
-//        this.recordListPresenter = new RecordListPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                ElasticSearchController.getInstance(),
-//                //mockProblem,
-//                ElasticSearchController.getInstance()
-//                //mockRecord
-//        );
+        getLocationPermission();
+        getDeviceLocation();
 
         this.recordListPresenter = new RecordListPresenter(this);
-
-
-
-        adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);
-
 
         ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
@@ -87,27 +85,24 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView = findViewById(R.id.recordListView);
 
 
-        adapter = new RecordListAdapter(this, this.recordList, patientContext.getUserId(), this);
+        adapter = new RecordListAdapter(this, this.recordList, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentPosition = position;
-                Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
-                intent.putExtra("RECORD", recordList.get(position));
-                intent.putExtra("USER", patientContext);
-                changeActivity(intent);
+                recordListPresenter.onView(recordList.get(position));
             }
         });
 
-        this.recordListPresenter.getUserRecords(this.problemContext);
-
+        this.recordListPresenter.getUserRecords();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.recordListPresenter.getUserRecords(this.problemContext);
+
+
+        this.recordListPresenter.getUserRecords();
     }
 
     @Override
@@ -119,10 +114,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
-
+        userIdMenu.setTitle(userId);
 
         return true;
     }
@@ -135,9 +129,19 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 // if this doesn't work as desired, another possibility is to call `finish()` here.
                 this.onBackPressed();
                 return true;
+            case R.id.app_bar_search:
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+            case R.id.Map_option:
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                //mapIntent.putExtra("PATIENT", null);
+                mapIntent.putExtra("type",0);
+                mapIntent.putExtra("location", currentGeoLocation);
+                startActivity(mapIntent);
+                return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
             default:
@@ -147,16 +151,18 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.addRecordsBtn){
+        if (v.getId() == R.id.addRecordsBtn) {
             openDialog();
         }
     }
-    private void openDialog(){
-        AddDialog exampleDialog = new AddDialog();
+
+    private void openDialog() {
+        myLocation = currentGeoLocation;
+        exampleDialog = new AddDialog(currentGeoLocation);
         exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
-    public void changeActivity(Intent intent){
+    public void changeActivity(Intent intent) {
         startActivity(intent);
     }
 
@@ -174,11 +180,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        recordListPresenter.deleteUserRecords(problemContext, record);
+                        recordListPresenter.deleteUserRecords(record);
                     }
                 });
         AlertDialog dialog = alert.create();
         dialog.show();
+    }
+
+    @Override
+    public void onRecordView() {
+        Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
+        changeActivity(intent);
     }
 
     @Override
@@ -195,17 +207,15 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCreateRecord(Record record) {
+    public void onCreateRecord() {
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        intent.putExtra("USER", patientContext);
-        intent.putExtra("RECORD", record);
         this.startActivity(intent);
     }
 
     @Override
-    public void onCreateRecordFail() {
-        Toast toast = Toast.makeText(this, "Record Not Added", Toast.LENGTH_SHORT);
-        toast.show();
+    public void onRecordListUserId(String userId) {
+        this.userId = userId;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -218,8 +228,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(),"date picker");
+
+        recordListPresenter.createUserRecord(this.title, this.desc, this.date, currentGeoLocation);
+
 
     }
 
@@ -238,11 +249,108 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
-        c.set(Calendar.MINUTE,minute);
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        Log.d("abcdefgh", date.toString());
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test");
+        exampleDialog.changeTime(date);
+    }
+
+
+
+    private void getDeviceLocation(){
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(LocationPermissionsGranted){
+                Task location = fusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location currentLocation = (Location) task.getResult();
+                            //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+                            currentGeoLocation = new Geolocation(currentLocation.getLatitude(),currentLocation.getLongitude());
+                            myLocation = currentGeoLocation;
+                        }
+                    }
+                });
+            }
+        }catch(SecurityException ignored){
+
+        }
+    }
+
+    private void getLocationPermission(){
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationPermissionsGranted = true;
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1234);
+            }
+        }else{ActivityCompat.requestPermissions(this,permissions,1234);
+        }
 
     }
+
+    @Override
+    public void applyDate() {
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "date picker");
+    }
+
+    public Address getAddress() throws IOException {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        Double lat = myLocation.getlatitude();
+        Double lng = myLocation.getlongitude();
+        List<Address> addresses = null;
+
+        try {
+            addresses = gcd.getFromLocation(lat, lng, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address;
+        if (addresses.size() > 0) {
+            address = addresses.get(0);
+        }
+        else {
+            address = new Address(Locale.getDefault());
+        }
+        return address;
+    }
+
+    @Override
+    public void openMapDialog() {
+        Intent mapIntent = new Intent(this, MapActivity.class);
+        //mapIntent.putExtra("PATIENT", null);
+        mapIntent.putExtra("type",1);
+        mapIntent.putExtra("location",currentGeoLocation);
+        startActivityForResult(mapIntent,REQUEST_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                 double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
+                 myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                try {
+                    myAddress = getAddress();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                exampleDialog.updateAddress(myAddress);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
 }

@@ -28,5 +28,8 @@
     <string name="blFront">BL Tag</string>
     <string name="blBack">BL Tag</string>
     <string name="add_date">Add Date</string>
+    <string name="cap_Problem">PROBLEMS</string>
+    <string name="add_geo">Add Geolocation</string>
+    <string name="edit_geo">Edit Geolocation</string>
 
 </resources>

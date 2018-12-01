@@ -42,7 +42,7 @@
                 app:layout_constraintStart_toEndOf="@+id/userIdView" />
 
             <TextView
-                android:id="@+id/titleView"
+                android:id="@+id/problemTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -65,7 +65,7 @@
                 android:text="@string/recDate"
                 android:textColor="@color/icons"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleView" />
+                app:layout_constraintTop_toBottomOf="@+id/problemTitle" />
 
             <TextView
                 android:id="@+id/userIdView"
@@ -135,7 +135,7 @@
                 android:layout_height="@android:dimen/thumbnail_height"
                 android:scaleType="centerCrop"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/titleView"
+                app:layout_constraintBottom_toTopOf="@+id/problemTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

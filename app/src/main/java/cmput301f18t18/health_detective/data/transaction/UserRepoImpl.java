@@ -53,7 +53,7 @@ public class UserRepoImpl extends AbstractRepo {
                 "}";
         Log.d("ESC:getUserElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test")
+                .addIndex("cmput301f18t18test2")
                 .addType("Patient")
                 .addType("CareProvider")
                 .build();
@@ -84,7 +84,7 @@ public class UserRepoImpl extends AbstractRepo {
     @Override
     public void insert() {
         Index index = new Index.Builder(user)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(user.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -120,7 +120,7 @@ public class UserRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(user.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -142,7 +142,7 @@ public class UserRepoImpl extends AbstractRepo {
      */
     public Patient retrievePatient() {
         String elasticSearchId = getUserElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
                 .type("Patient")
                 .build();
         try {
@@ -167,7 +167,7 @@ public class UserRepoImpl extends AbstractRepo {
      */
     public CareProvider retrieveCareProvider() {
         String elasticSearchId = getUserElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
                 .type("CareProvider")
                 .build();
         try {

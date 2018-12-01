@@ -40,7 +40,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
      *
      * @return reference to this object
      */
-    public static DbController getInstance() {
+    public synchronized static DbController getInstance() {
         setClient();
         return ourInstance;
     }
@@ -48,11 +48,11 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     private DbController() {
     }
 
-    public void init_ONLY_CALL_START(Context context) {
+    public synchronized void init_ONLY_CALL_START(Context context) {
         db = new LocalDbHelper(context).getWritableDatabase();
     }
 
-    public void closeDB_ONLY_CALL_END() {
+    public synchronized void closeDB_ONLY_CALL_END() {
         db.close();
     }
 
@@ -72,19 +72,19 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public void insertProblem(Problem problem) {
+    public synchronized void insertProblem(Problem problem) {
         AbstractRepo repo = RepoFactory.build(client, db, problem);
         repo.insert();
     }
 
     @Override
-    public void updateProblem(Problem problem) {
+    public synchronized void updateProblem(Problem problem) {
         AbstractRepo repo = RepoFactory.build(client, db, problem);
         repo.update();
     }
 
     @Override
-    public Problem retrieveProblemById(String problemId) {
+    public synchronized Problem retrieveProblemById(String problemId) {
         AbstractRepo repo = RepoFactory.build(client, db, Problem.class, problemId);
         if (repo instanceof ProblemRepoImpl) {
             return ((ProblemRepoImpl) repo).retrieve();
@@ -93,7 +93,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
+    public synchronized ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
         AbstractRepo repo = RepoFactory.build(client, db, Problem.class, null);
         if (repo instanceof ProblemRepoImpl) {
             return ((ProblemRepoImpl) repo).retrieveProblemsById(problemId);
@@ -102,25 +102,25 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public void deleteProblem(Problem problem) {
+    public synchronized void deleteProblem(Problem problem) {
         AbstractRepo repo = RepoFactory.build(client, db, problem);
         repo.delete();
     }
 
     @Override
-    public void insertRecord(Record record) {
+    public synchronized void insertRecord(Record record) {
         AbstractRepo repo = RepoFactory.build(client, db, record);
         repo.insert();
     }
 
     @Override
-    public void updateRecord(Record record) {
+    public synchronized void updateRecord(Record record) {
         AbstractRepo repo = RepoFactory.build(client, db, record);
         repo.update();
     }
 
     @Override
-    public Record retrieveRecordById(String recordId) {
+    public synchronized Record retrieveRecordById(String recordId) {
         AbstractRepo repo = RepoFactory.build(client, db, Record.class, recordId);
         if (repo instanceof RecordRepoImpl) {
             return ((RecordRepoImpl) repo).retrieve();
@@ -129,7 +129,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Record> retrieveRecordsById(ArrayList<String> recordId) {
+    public synchronized ArrayList<Record> retrieveRecordsById(ArrayList<String> recordId) {
         AbstractRepo repo = RepoFactory.build(client, db, Record.class, null);
         if (repo instanceof RecordRepoImpl) {
             return ((RecordRepoImpl) repo).retrieveRecordsById(recordId);
@@ -138,31 +138,31 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public void deleteRecord(Record record) {
+    public synchronized void deleteRecord(Record record) {
         AbstractRepo repo = RepoFactory.build(client, db, record);
         repo.delete();
     }
 
     @Override
-    public void insertUser(User user) {
+    public synchronized void insertUser(User user) {
         AbstractRepo repo = RepoFactory.build(client, db, user);
         repo.insert();
     }
 
     @Override
-    public void updateUser(User user) {
+    public synchronized void updateUser(User user) {
         AbstractRepo repo = RepoFactory.build(client, db, user);
         repo.update();
     }
 
     @Override
-    public void deleteUser(User user) {
+    public synchronized void deleteUser(User user) {
         AbstractRepo repo = RepoFactory.build(client, db, user);
         repo.delete();
     }
 
     @Override
-    public Patient retrievePatientById(String patientId) {
+    public synchronized Patient retrievePatientById(String patientId) {
         AbstractRepo repo = RepoFactory.build(client, db, Patient.class, patientId);
         if (repo instanceof UserRepoImpl) {
             User usr = ((UserRepoImpl) repo).retrievePatient();
@@ -173,7 +173,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
+    public synchronized ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
         AbstractRepo repo = RepoFactory.build(client, db, Patient.class, null);
         if (repo instanceof UserRepoImpl) {
             return ((UserRepoImpl) repo).retrievePatientsById(patientIds);
@@ -183,7 +183,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public CareProvider retrieveCareProviderById(String careProviderId) {
+    public synchronized CareProvider retrieveCareProviderById(String careProviderId) {
         AbstractRepo repo = RepoFactory.build(client, db, CareProvider.class, careProviderId);
         if (repo instanceof UserRepoImpl) {
             User usr = ((UserRepoImpl) repo).retrieveCareProvider();
@@ -194,7 +194,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public boolean validateUserIdUniqueness(String userId) {
+    public synchronized boolean validateUserIdUniqueness(String userId) {
         AbstractRepo repo = RepoFactory.build(client, db, User.class, userId);
         if (repo instanceof UserRepoImpl)
             return ((UserRepoImpl) repo).validateUserIdUniqueness();

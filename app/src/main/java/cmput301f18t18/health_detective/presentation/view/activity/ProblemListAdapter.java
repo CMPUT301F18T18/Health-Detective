@@ -40,7 +40,7 @@ public class ProblemListAdapter extends ArrayAdapter {
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView editImg = rowView.findViewById(R.id.editImg);
-        TextView titleText = rowView.findViewById(R.id.titleView);
+        TextView titleText = rowView.findViewById(R.id.problemTitle);
         TextView descText = rowView.findViewById(R.id.descView);
         TextView recordBut = rowView.findViewById(R.id.recordsBut);
         TextView dateText = rowView.findViewById(R.id.problemDate);

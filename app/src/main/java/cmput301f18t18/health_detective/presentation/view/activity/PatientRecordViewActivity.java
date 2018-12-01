@@ -1,9 +1,14 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +23,14 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,31 +38,36 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
+public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
 
     LinearLayout bodyPhotoScroll;
-    Record record;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
     ImageView frontBL, backBL, addNPhoto;
-    Patient patientContext;
     byte[] image;
+    String userId = "";
+    String title;
+    String comment;
+    Date date;
+    Geolocation geolocation = null;
     int testImages;
+    private boolean LocationPermissionsGranted;
+    private GoogleMap mMap;
+    private int REQUEST_CODE = 1212;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
 
-        Intent newIntent = this.getIntent();
-        this.record = (Record) newIntent.getSerializableExtra("RECORD");
-        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
-        this.image = (byte[]) newIntent.getSerializableExtra("PHOTO");
+
+
         if (image == null){
             testImages = 0;
         } else {
@@ -64,24 +82,16 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
+        editMap = findViewById(R.id.mapEdit);
 
+        editMap.setOnClickListener(this);
         addNPhoto.setOnClickListener(this);
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
 
-
-        setTextViews();
         RecordRepoMock mockRecord = new RecordRepoMock();
         mockRecord.insertRecord(new Record("test", "test", new Date()));
 
-
-//        recordViewPresenter = new RecordViewPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                ElasticSearchController.getInstance()
-//                //mockRecord
-//        );
         recordViewPresenter = new RecordViewPresenter(this);
 
         //stuff for all photos section
@@ -118,11 +128,18 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        recordViewPresenter.onResume();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
+        userIdMenu.setTitle(userId);
         return true;
     }
 
@@ -142,7 +159,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.edit_title:
                 String promptTitle = "Edit Title";
-                openDialog(promptTitle,0,record.getTitle());
+                openDialog(promptTitle,0,recordTitle.getText().toString());
                 return true;
             case R.id.edit_date:
                 DialogFragment datePicker = new DatePickerFragment();
@@ -150,7 +167,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.edit_desc:
                 String promptDesc = "Edit Description";
-                openDialog(promptDesc,2,record.getComment());
+                openDialog(promptDesc,2, recordDesc.getText().toString());
                 return true;
             case R.id.edit_photo:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
@@ -158,7 +175,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
             default:
@@ -176,18 +192,36 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         bodyPhotoScroll.invalidate();
     }
 
-
-    @Override
-    public void onEditRecord(Record record) {
-        setTextViews();
-        Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Record is edited", Toast.LENGTH_SHORT);
-        toast.show();
+    public void setTextViews(){
+        recordTitle.setText(title);
+        recordDate.setText(date.toString());
+        recordDesc.setText(comment);
     }
 
-    private void setTextViews(){
-        recordTitle.setText(record.getTitle());
-        recordDate.setText(record.getDate().toString());
-        recordDesc.setText(record.getComment());
+    @Override
+    public void onRecordDetails(String title, String comment, Date date, Geolocation geolocation) {
+        if (title == null)
+            title = "";
+        if (comment == null)
+            comment = "";
+
+        this.title = title;
+        this.comment = comment;
+        this.date = date;
+        this.geolocation = geolocation;
+        if (geolocation!=null){
+            getLocationPermission();
+        }
+
+
+
+        setTextViews();
+    }
+
+    @Override
+    public void makeToast(String msg, int length) {
+        Toast toast = Toast.makeText(PatientRecordViewActivity.this, msg, length);
+        toast.show();
     }
 
     private void openDialog(String prompt,int type,String recordInfo){
@@ -198,12 +232,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void applyEditTitle(String editedText) {
-        recordViewPresenter.editUserRecord(record, editedText, record.getComment(), record.getDate());
+        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation);
     }
 
     @Override
     public void applyEditDesc(String editedComment) {
-        recordViewPresenter.editUserRecord(record, record.getTitle(), editedComment, record.getDate());
+        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation);
     }
 
 
@@ -213,22 +247,20 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        Date currentDate = c.getTime();
-        recordViewPresenter.editUserRecord(record, record.getTitle(), record.getComment(),currentDate );
-
+        date = c.getTime();
+        // recordViewPresenter.editUserRecord(title, comment, currentDate, geolocation);
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Date ourDate = record.getDate();
         Calendar c = Calendar.getInstance();
-        c.setTime(ourDate);
+        c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
-        Date currentDate = c.getTime();
-        recordViewPresenter.editUserRecord(record,record.getTitle(),record.getComment(), currentDate);
+        date = c.getTime();
+        recordViewPresenter.editUserRecord(title, comment, date, geolocation);
 
     }
 
@@ -240,16 +272,112 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 this.onBackPressed();
             case R.id.frontBL:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
-                camaraIntent.putExtra("USER", patientContext);
-                camaraIntent.putExtra("RECORD", record);
                 startActivity(camaraIntent);
                 //dialog box for add new front body location photo
             case R.id.backBL:
                 Intent backBlIntent = new Intent(this, CamaraActivity.class);
-                backBlIntent.putExtra("USER", patientContext);
-                backBlIntent.putExtra("RECORD", record);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
+
+            case R.id.mapEdit:
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                //mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("type",1);
+                //mapIntent.putExtra("location", record.getGeolocation());
+                startActivityForResult(mapIntent,REQUEST_CODE);
+        }
+    }
+
+    private void getLocationPermission(){
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationPermissionsGranted = true;
+                initMap();
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, 1234);
+            }
+        }else{ActivityCompat.requestPermissions(this,permissions,1234);
+        }
+
+    }
+
+    private void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_record_display);
+        assert mapFragment != null;
+        mapFragment.getMapAsync( PatientRecordViewActivity.this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        LocationPermissionsGranted = false;
+
+        switch(requestCode){
+            case 1234:
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            LocationPermissionsGranted = false;
+                            return;
+                        }
+                    }
+                    LocationPermissionsGranted = true;
+                    initMap();
+                }
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        if(LocationPermissionsGranted) {
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+
+            LatLng location = new LatLng(geolocation.getlatitude(), geolocation.getlongitude());
+            moveCamera(location, 15f);
+            createMarker(location, title);
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+    }
+
+    private void createMarker( LatLng currentLatLng,String title){
+
+        mMap.addMarker(new MarkerOptions()
+                .position(currentLatLng)
+                .anchor(0.5f, 0.5f)
+                .title(title));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                double[] doubleArrayExtra = data.getDoubleArrayExtra("result");
+                geolocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
+                createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),"record");
+                // edit records geo
+                recordViewPresenter.editUserRecord(title , comment, date, geolocation);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
         }
     }
 }
