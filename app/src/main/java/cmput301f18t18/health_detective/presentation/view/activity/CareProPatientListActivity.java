@@ -1,7 +1,9 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import cmput301f18t18.health_detective.PatientDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
@@ -21,7 +24,8 @@ import cmput301f18t18.health_detective.presentation.view.activity.listeners.Pati
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CareProPatientListPresenter;
 
 
-public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View, GetLoggedInUser.Callback{
+
+public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,PatientDialog.AddPatientDialogListener, GetLoggedInUser.Callback{
 
     ListView listView;
     PatientListAdapter adapter;
@@ -61,12 +65,36 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onDeleteClicked(Patient patient) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setCancelable(true)
+                .setTitle("Are you sure you want to delete?")
+                .setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                })
+                .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(CareProPatientListActivity.this,"Bet you wished this actually deleted",Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+
+
+    }
+    private void openDialog() {
+        PatientDialog exampleDialog = new PatientDialog();
+        exampleDialog.show(getSupportFragmentManager(), "Add Patient");
     }
 
     @Override
-    public void onClick(android.view.View v) {
-
+    public void onClick(View v) {
+        if (v.getId() == R.id.addPatientBtn) {
+            openDialog();
+        }
     }
 
     @Override
@@ -78,6 +106,14 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     }
 
     @Override
+    public void applyEdit(String patient) {
+        // add the patient done here
+        Toast toast = Toast.makeText(this, patient, Toast.LENGTH_SHORT);
+        toast.show();
+        this.careProPatientListPresenter.addNewPatient(patient);
+    }
+
+
     public void onDeletePatientSuccess() {
 
     }
