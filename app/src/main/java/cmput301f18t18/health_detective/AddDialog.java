@@ -1,30 +1,20 @@
 package cmput301f18t18.health_detective;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Address;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -82,7 +72,8 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
         Calendar c = Calendar.getInstance();
         Date nowDate = new Date();
         nowDate = c.getTime();
-        //currentLocation.setText(Double.toString(geolocation.getlatitude())+" "+Double.toString(geolocation.getlongitude()));
+        listener.getAddress();
+        currentLocation.setText("");//address.getAddressLine(0)+" "+ address.getCountryName());
         currentDate.setText(nowDate.toString());
 
         addDate = view.findViewById(R.id.addDateRecordBtn);
@@ -140,6 +131,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
     public interface AddDialogListener{
         void applyEdit(String title, String comment);
         void applyDate();
+        void getAddress();
 
     }
 
