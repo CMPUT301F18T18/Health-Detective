@@ -79,6 +79,7 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
     @Override
     public void onCUPCareProviderSuccess(CareProvider careProvider) {
         // Not sure what you do with this information but here it is
+        this.view.onCreateCareProvider(careProvider);
 
     }
 

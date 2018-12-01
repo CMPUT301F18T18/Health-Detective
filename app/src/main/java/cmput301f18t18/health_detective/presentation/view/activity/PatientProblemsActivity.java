@@ -70,6 +70,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
         adapter = new ProblemListAdapter(this, this.problemList, this);
         listView.setAdapter(adapter);
+        this.problemsListPresenter.getProblems(this.patientContext);
 
     }
 
@@ -77,6 +78,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public void onResume() {
         super.onResume();
         this.problemsListPresenter.getProblems(this.patientContext);
+        //adapter.notifyDataSetChanged();
     }
 
     @Override

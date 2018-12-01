@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onLoginCareProvider(CareProvider careProvider) {
+        Intent intent = new Intent(this, CareProPatientListActivity.class);
+        //intent.putExtra("PATIENT", patient);
+        Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show();
+        this.startActivity(intent);
 
     }
 

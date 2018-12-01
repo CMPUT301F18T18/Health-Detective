@@ -34,4 +34,3 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'io.searchbox:jest-droid:6.3.1'
 }
-

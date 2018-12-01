@@ -5,8 +5,9 @@
     <color name="colorAccent">#00bcd4</color>
     <color name="border_color">#000000</color>
     <color name="background_color">#ffffff</color>
-    <color name="colorCareProvider">#f9303a</color>
-    <color name="colorCareProviderDark">#b42328</color>
+    <color name="colorCareProvider">#9c27b0</color>
+    <color name="colorCareProviderDark">#ef5350</color>
+    <color name="cpLight">#ffc046</color>
     <color name="primary">#03A9F4</color>
     <color name="primary_dark">#0288D1</color>
     <color name="primary_light">#B3E5FC</color>
