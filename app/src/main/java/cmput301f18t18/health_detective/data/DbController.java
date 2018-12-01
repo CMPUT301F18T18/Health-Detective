@@ -10,6 +10,7 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 
+import cmput301f18t18.health_detective.data.transaction.PhotoRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.RecordRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.UserRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
@@ -17,15 +18,17 @@ import cmput301f18t18.health_detective.data.transaction.SQL.LocalDbHelper;
 import cmput301f18t18.health_detective.data.transaction.ProblemRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.factory.RepoFactory;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.repository.ImageRepo;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
-public class DbController implements UserRepo, ProblemRepo, RecordRepo {
+public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRepo {
 
     private static final DbController ourInstance = new DbController();
 
@@ -196,5 +199,34 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo {
         if (repo instanceof UserRepoImpl)
             return ((UserRepoImpl) repo).validateUserIdUniqueness();
         return false;
+    }
+
+    @Override
+    public void insertImage(DomainImage DomainImage) {
+        AbstractRepo repo = RepoFactory.build(client, db, DomainImage);
+        repo.insert();
+    }
+
+    @Override
+    public DomainImage retrieveImageById(String id) {
+        AbstractRepo repo = RepoFactory.build(client, db, DomainImage.class, id);
+        if (repo instanceof PhotoRepoImpl)
+            return ((PhotoRepoImpl) repo).retrieve();
+        return null;
+    }
+
+    @Override
+    public ArrayList<DomainImage> retrieveImagesByIds(ArrayList<String> id) {
+        AbstractRepo repo = RepoFactory.build(client, db, DomainImage.class, null);
+        if (repo instanceof PhotoRepoImpl) {
+            return ((PhotoRepoImpl) repo).retrievePhotosById(id);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteImage(DomainImage DomainImage) {
+        AbstractRepo repo = RepoFactory.build(client, db, DomainImage);
+        repo.delete();
     }
 }

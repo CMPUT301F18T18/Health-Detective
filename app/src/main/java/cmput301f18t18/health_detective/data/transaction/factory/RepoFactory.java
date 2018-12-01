@@ -4,11 +4,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.searchly.jestdroid.JestDroidClient;
 
+import cmput301f18t18.health_detective.data.transaction.PhotoRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
 import cmput301f18t18.health_detective.data.transaction.ProblemRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.RecordRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.UserRepoImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
@@ -24,8 +26,8 @@ public abstract class RepoFactory {
             return new RecordRepoImpl(client, db, (Record) o);
         if (o instanceof User)
             return new UserRepoImpl(client, db, (User) o);
-//        if (o instanceof DomainImage)
-//            return new PhotoRepoImpl(client, db, (DomainImage) o);
+        if (o instanceof DomainImage)
+            return new PhotoRepoImpl(client, db, (DomainImage) o);
         return null;
     }
 
@@ -36,7 +38,8 @@ public abstract class RepoFactory {
             return new RecordRepoImpl(client, db, id);
         if (clazz == Patient.class || clazz == CareProvider.class || clazz == User.class)
             return new UserRepoImpl(client, db, id);
-
+        if (clazz == DomainImage.class)
+            return new PhotoRepoImpl(client, db, id);
         return null;
     }
 
