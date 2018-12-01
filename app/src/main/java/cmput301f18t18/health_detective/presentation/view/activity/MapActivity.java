@@ -53,11 +53,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean LocationPermissionsGranted = false;
     private GoogleMap mMap;
     Patient patientContext;
-    Problem problemContext;
     private EditText searchText;
     private int type;
-    private Geolocation myLocation;
-    private Button Cancel, Save;;
+    private Geolocation myLocation, startLocation;
+    private Button Cancel, Save;
 
 
     @Override
@@ -69,6 +68,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
         this.type = (int) intent.getSerializableExtra("type");
+        this.startLocation = (Geolocation) intent.getSerializableExtra("location");
 
         Cancel = findViewById(R.id.MapCancel);
         Save = findViewById(R.id.MapSave);
@@ -88,7 +88,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    Log.d("abcdefg","tester");
                     locateSearch();
                 }
 
@@ -162,32 +161,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    private void getDeviceLocation(){
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    private void getDeviceLocation() {
 
-        try{
-            if(LocationPermissionsGranted){
-
-                Task location = fusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Location currentLocation = (Location) task.getResult();
-                            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                            moveCamera(currentLatLng,ZOOM);
-                            createMarker(currentLatLng,"title");
-                        }
-                        else{
-                            Toast.makeText(MapActivity.this,"cant get location",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch(SecurityException ignored){
-
+        LatLng startLatLng = new LatLng(startLocation.getlatitude(), startLocation.getlongitude());
+        moveCamera(startLatLng, ZOOM);
+        if (type == 1) {
+            createMarker(startLatLng, "title");
         }
     }
+
+
+//        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+//
+//        try{
+//            if(LocationPermissionsGranted){
+//
+//                Task location = fusedLocationProviderClient.getLastLocation();
+//                location.addOnCompleteListener(new OnCompleteListener() {
+//                    @Override
+//                    public void onComplete(@NonNull Task task) {
+//                        if (task.isSuccessful()) {
+//                            Location currentLocation = (Location) task.getResult();
+//                            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//                            moveCamera(currentLatLng,ZOOM);
+//                            createMarker(currentLatLng,"title");
+//                        }
+//                        else{
+//                            Toast.makeText(MapActivity.this,"cant get location",Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//            }
+//        }catch(SecurityException ignored){
+//
+//        }
+
 
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));

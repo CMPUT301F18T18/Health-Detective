@@ -167,6 +167,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("type",0);
+                mapIntent.putExtra("location", currentGeoLocation);
                 startActivity(mapIntent);
                 return true;
             case R.id.userId:
@@ -187,6 +189,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     private void openDialog() {
+        myLocation = currentGeoLocation;
         exampleDialog = new AddDialog(currentGeoLocation);
         exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
@@ -299,7 +302,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                             Location currentLocation = (Location) task.getResult();
                             //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
                             currentGeoLocation = new Geolocation(currentLocation.getLatitude(),currentLocation.getLongitude());
-
+                            myLocation = currentGeoLocation;
                         }
                     }
                 });
@@ -333,8 +336,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public Address getAddress() throws IOException {
         Geocoder gcd = new Geocoder(this, Locale.getDefault());
-        Double lat = currentGeoLocation.getlatitude();
-        Double lng = currentGeoLocation.getlongitude();
+        Double lat = myLocation.getlatitude();
+        Double lng = myLocation.getlongitude();
         List<Address> addresses = null;
 
         try {
@@ -357,6 +360,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         Intent mapIntent = new Intent(this, MapActivity.class);
         mapIntent.putExtra("PATIENT", patientContext);
         mapIntent.putExtra("type",1);
+        mapIntent.putExtra("location",currentGeoLocation);
         startActivityForResult(mapIntent,REQUEST_CODE);
     }
 
@@ -368,7 +372,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                  double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
                  myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
-                 currentGeoLocation = myLocation;
                 try {
                     myAddress = getAddress();
                 } catch (IOException e) {

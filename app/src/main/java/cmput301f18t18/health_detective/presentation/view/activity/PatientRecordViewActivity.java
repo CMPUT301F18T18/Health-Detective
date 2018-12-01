@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,6 +43,7 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
 import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
 import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
@@ -52,13 +54,15 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     LinearLayout bodyPhotoScroll;
     Record record;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
     ImageView frontBL, backBL, addNPhoto;
     Patient patientContext;
     byte[] image;
     int testImages;
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
+    private int REQUEST_CODE = 1212;
+    private Geolocation myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +89,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
+        editMap = findViewById(R.id.mapEdit);
 
+        editMap.setOnClickListener(this);
         addNPhoto.setOnClickListener(this);
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
@@ -271,6 +277,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 backBlIntent.putExtra("RECORD", record);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
+
+            case R.id.mapEdit:
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("type",1);
+                mapIntent.putExtra("location", record.getGeolocation());
+                startActivityForResult(mapIntent,REQUEST_CODE);
         }
     }
 
@@ -346,5 +359,24 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 .position(currentLatLng)
                 .anchor(0.5f, 0.5f)
                 .title(title));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
+                myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                moveCamera(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),15f);
+                createMarker(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),"record");
+                // edit records geo
+                recordViewPresenter.editUserRecord(record, record.getTitle(),record.getComment(), record.getDate(),myLocation);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 }
