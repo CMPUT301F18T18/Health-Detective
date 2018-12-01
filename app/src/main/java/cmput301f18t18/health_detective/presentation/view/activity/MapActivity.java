@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,9 +42,11 @@ import java.util.List;
 
 import android.Manifest;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Problem;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
 
     private float ZOOM = 15f;
 
@@ -49,8 +54,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     Patient patientContext;
     private EditText searchText;
-
-
+    private int type;
+    private Geolocation myLocation, startLocation;
+    private Button Cancel, Save;
 
 
     @Override
@@ -61,6 +67,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
+        this.type = (int) intent.getSerializableExtra("type");
+        this.startLocation = (Geolocation) intent.getSerializableExtra("location");
+
+        Cancel = findViewById(R.id.MapCancel);
+        Save = findViewById(R.id.MapSave);
+        Cancel.setOnClickListener(this);
+        Save.setOnClickListener(this);
+
 
         getLocationPermission();
 
@@ -74,11 +88,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN
                         || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    Log.d("abcdefg","tester");
                     locateSearch();
                 }
 
                 return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mMap.clear();
+                createMarker(latLng,"new record");
             }
         });
     }
@@ -140,32 +161,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    private void getDeviceLocation(){
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    private void getDeviceLocation() {
 
-        try{
-            if(LocationPermissionsGranted){
-
-                Task location = fusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Location currentLocation = (Location) task.getResult();
-                            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                            moveCamera(currentLatLng,ZOOM);
-                            createMarker(currentLatLng,"title");
-                        }
-                        else{
-                            Toast.makeText(MapActivity.this,"cant get location",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }catch(SecurityException ignored){
-
+        LatLng startLatLng = new LatLng(startLocation.getlatitude(), startLocation.getlongitude());
+        moveCamera(startLatLng, ZOOM);
+        if (type == 1) {
+            createMarker(startLatLng, "title");
         }
     }
+
+
+//        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+//
+//        try{
+//            if(LocationPermissionsGranted){
+//
+//                Task location = fusedLocationProviderClient.getLastLocation();
+//                location.addOnCompleteListener(new OnCompleteListener() {
+//                    @Override
+//                    public void onComplete(@NonNull Task task) {
+//                        if (task.isSuccessful()) {
+//                            Location currentLocation = (Location) task.getResult();
+//                            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//                            moveCamera(currentLatLng,ZOOM);
+//                            createMarker(currentLatLng,"title");
+//                        }
+//                        else{
+//                            Toast.makeText(MapActivity.this,"cant get location",Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//            }
+//        }catch(SecurityException ignored){
+//
+//        }
+
 
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
@@ -246,10 +276,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void createMarker( LatLng currentLatLng,String title){
-
         mMap.addMarker(new MarkerOptions()
                 .position(currentLatLng)
                 .anchor(0.5f, 0.5f)
                 .title(title));
+
+        myLocation = new Geolocation(currentLatLng.latitude,currentLatLng.longitude);
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()== R.id.MapCancel){
+            finish();
+        }
+        if(v.getId()==R.id.MapSave){
+            Intent returnIntent = new Intent();
+            double[] array = new double[]{myLocation.getlatitude(), myLocation.getlongitude()};
+            returnIntent.putExtra("result",array);
+            setResult(PatientRecordsActivity.RESULT_OK,returnIntent);
+            finish();
+        }
     }
 }

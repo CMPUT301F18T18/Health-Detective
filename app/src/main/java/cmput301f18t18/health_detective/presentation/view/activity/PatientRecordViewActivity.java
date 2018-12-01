@@ -23,10 +23,14 @@ import android.widget.Toast;
 
 //TODO: Make the all photo section increase with each photo addition
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,7 +48,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     LinearLayout bodyPhotoScroll;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
     ImageView frontBL, backBL, addNPhoto;
     byte[] image;
     String userId = "";
@@ -55,6 +59,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     int testImages;
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
+    private int REQUEST_CODE = 1212;
+    private Geolocation myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
+        editMap = findViewById(R.id.mapEdit);
 
+        editMap.setOnClickListener(this);
         addNPhoto.setOnClickListener(this);
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
@@ -266,6 +274,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 Intent backBlIntent = new Intent(this, CamaraActivity.class);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
+
+            case R.id.mapEdit:
+                Intent mapIntent = new Intent(this, MapActivity.class);
+                mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("type",1);
+                mapIntent.putExtra("location", record.getGeolocation());
+                startActivityForResult(mapIntent,REQUEST_CODE);
         }
     }
 
@@ -323,6 +338,42 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+
+            LatLng location = new LatLng(record.getGeolocation().getlatitude(),record.getGeolocation().getlongitude());
+            moveCamera(location, 15f);
+            createMarker(location,record.getTitle());
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+    }
+
+    private void createMarker( LatLng currentLatLng,String title){
+
+        mMap.addMarker(new MarkerOptions()
+                .position(currentLatLng)
+                .anchor(0.5f, 0.5f)
+                .title(title));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
+                myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                moveCamera(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),15f);
+                createMarker(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),"record");
+                // edit records geo
+                recordViewPresenter.editUserRecord(record, record.getTitle(),record.getComment(), record.getDate(),myLocation);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
         }
     }
 }

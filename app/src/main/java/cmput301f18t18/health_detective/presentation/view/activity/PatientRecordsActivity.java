@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,9 +34,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import cmput301f18t18.health_detective.AddDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
@@ -57,6 +62,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Date date;
     private Geolocation currentGeoLocation;
     private Boolean LocationPermissionsGranted = false;
+    private AddDialog exampleDialog;
+    private Geolocation myLocation;
+    private int REQUEST_CODE = 1212;
+    private Address myAddress;
 
 
     @Override
@@ -124,7 +133,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this, MapActivity.class);
-                //mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("PATIENT", patientContext);
+                mapIntent.putExtra("type",0);
+                mapIntent.putExtra("location", currentGeoLocation);
                 startActivity(mapIntent);
                 return true;
             case R.id.userId:
@@ -144,7 +155,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     private void openDialog() {
-        AddDialog exampleDialog = new AddDialog();
+        myLocation = currentGeoLocation;
+        exampleDialog = new AddDialog(currentGeoLocation);
         exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
@@ -214,8 +226,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
+
+        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
+
 
     }
 
@@ -237,9 +250,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        Log.d("abcdefgh", date.toString());
-        recordListPresenter.createUserRecord(this.title, this.desc, this.date, null);
-
+        exampleDialog.changeTime(date);
     }
 
 
@@ -256,9 +267,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                         if (task.isSuccessful()) {
                             Location currentLocation = (Location) task.getResult();
                             //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                            currentGeoLocation = new Geolocation(currentLocation.getLongitude(),currentLocation.getLatitude());
-                            Log.d("abcdefg",Double.toString(currentGeoLocation.getlatitude()));
-
+                            currentGeoLocation = new Geolocation(currentLocation.getLatitude(),currentLocation.getLongitude());
+                            myLocation = currentGeoLocation;
                         }
                     }
                 });
@@ -282,6 +292,63 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }else{ActivityCompat.requestPermissions(this,permissions,1234);
         }
 
+    }
+
+    @Override
+    public void applyDate() {
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "date picker");
+    }
+
+    public Address getAddress() throws IOException {
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        Double lat = myLocation.getlatitude();
+        Double lng = myLocation.getlongitude();
+        List<Address> addresses = null;
+
+        try {
+            addresses = gcd.getFromLocation(lat, lng, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address;
+        if (addresses.size() > 0) {
+            address = addresses.get(0);
+        }
+        else {
+            address = new Address(Locale.getDefault());
+        }
+        return address;
+    }
+
+    @Override
+    public void openMapDialog() {
+        Intent mapIntent = new Intent(this, MapActivity.class);
+        mapIntent.putExtra("PATIENT", patientContext);
+        mapIntent.putExtra("type",1);
+        mapIntent.putExtra("location",currentGeoLocation);
+        startActivityForResult(mapIntent,REQUEST_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == PatientRecordsActivity.RESULT_OK){
+                 double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
+                 myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                try {
+                    myAddress = getAddress();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                exampleDialog.updateAddress(myAddress);
+            }
+            if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
 }

@@ -146,6 +146,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         this.adapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onViewProblem() {
         Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
@@ -197,23 +198,20 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         problemsListPresenter.onView(problem);
     }
 
-    @Override
-    public void onGLIUNoUserLoggedIn() {
 
+    @Override
+    public void getPatientUser(Patient patient) {
+        patientContext = patient;
+        this.problemsListPresenter.getProblems(patient);
     }
 
     @Override
-    public void onGLIUPatient(Patient patient) {
-
-    }
-
-    @Override
-    public void onGLIUCareProvider(CareProvider careProvider) {
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-
+    public void getCPUser(CareProvider careProvider) {
+//        cpContext = careProvider;
+//        Window window = this.getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
     }
 }

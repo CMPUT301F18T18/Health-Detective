@@ -63,7 +63,8 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onPatientClicked(Patient patient) {
-
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(CareProPatientListActivity.this,"Bet you wished this actually deleted",Toast.LENGTH_SHORT).show();
+                        careProPatientListPresenter.deletePatient(cpContext, patient);
                     }
                 });
         AlertDialog dialog = alert.create();
@@ -102,10 +103,10 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onAddPatientSuccess() {
-        //Intent intent = new Intent(this, PatientProblemsActivity.class);
-        //startActivity(intent);
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
+        this.careProPatientListPresenter.getAssignedPatients(cpContext);
+
     }
 
     @Override
@@ -123,14 +124,15 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     }
 
 
-    public void onDeletePatientSuccess() {
-
+    public void onDeletePatientSuccess(Patient patient) {
+        this.patientList.remove(patient);
+        adapter.notifyDataSetChanged();
+        Toast toast = Toast.makeText(this, "Delete Patient", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
     public void onGetPatientSuccess(ArrayList<Patient> assignedPatients) {
-        Toast toast = Toast.makeText(this, "TYRING TO GET PATIENTS", Toast.LENGTH_SHORT);
-        toast.show();
         this.patientList.clear();
         this.patientList.addAll(assignedPatients);
         this.adapter.notifyDataSetChanged();
