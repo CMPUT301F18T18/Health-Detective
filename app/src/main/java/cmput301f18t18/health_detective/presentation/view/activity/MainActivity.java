@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        UserRepoMock mockUser = new UserRepoMock();
-        mockUser.insertUser(new Patient("12345678", "(250) 575-9089", "a@a.a"));
 
         this.loginPresenter = new LoginPresenter(this);
 

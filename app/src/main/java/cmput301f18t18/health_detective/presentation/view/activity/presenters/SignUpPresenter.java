@@ -10,6 +10,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.CreateUserProfile;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditUserProfileImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -21,10 +22,9 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
 
     private View view;
 
-
     public interface View {
-        void onCreatePatient(Patient patient);
-        void onCreateCareProvider(CareProvider careProvider);
+        void onCreatePatient();
+        void onCreateCareProvider();
         void onInvalidId();
         void onInvalidEmail();
         void onInvalidPhoneNumber();
@@ -73,12 +73,14 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
 
     @Override
     public void onCUPPatientSuccess(Patient patient) {
-        this.view.onCreatePatient(patient);
+        new PutContext(patient).execute();
+
+        this.view.onCreatePatient();
     }
 
     @Override
     public void onCUPCareProviderSuccess(CareProvider careProvider) {
-        // Not sure what you do with this information but here it is
+        
 
     }
 
