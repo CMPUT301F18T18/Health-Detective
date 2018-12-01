@@ -4,9 +4,11 @@ import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +42,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ProblemListAdapter adapter;
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
+    ImageView addProblem;
 
 
     @Override
@@ -59,7 +62,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         problemsListPresenter = new ProblemsListPresenter(this);
         adapter = new ProblemListAdapter(this, this.problemList, this);
 
-        ImageView addProblem = findViewById(R.id.addProbBtn);
+        addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
         listView = findViewById(R.id.problemListView);
@@ -211,6 +214,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+        addProblem.setImageResource(R.drawable.cp_circle);
     }
 
 }

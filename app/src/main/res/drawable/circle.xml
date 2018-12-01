@@ -8,6 +8,7 @@
     <item
 
         android:drawable="@drawable/ic_add_black_24dp"
+        android:tint="@color/icons"
         android:bottom="20dp"
         android:left="20dp"
         android:right="20dp"
