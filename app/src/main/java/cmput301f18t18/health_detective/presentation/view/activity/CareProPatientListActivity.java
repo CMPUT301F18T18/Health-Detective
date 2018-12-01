@@ -55,7 +55,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         //patientList.add(new Patient("12345678", "12345678", "123455663424"));
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
-        //this.careProPatientListPresenter.getAssignedPatients(this.cpContext);
+        this.careProPatientListPresenter.getAssignedPatients();
 
 
     }
@@ -81,7 +81,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        careProPatientListPresenter.deletePatient(cpContext, patient);
+                        careProPatientListPresenter.deletePatient(patient);
                     }
                 });
         AlertDialog dialog = alert.create();
@@ -105,7 +105,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onAddPatientSuccess() {
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
-        this.careProPatientListPresenter.getAssignedPatients(cpContext);
+        this.careProPatientListPresenter.getAssignedPatients();
 
     }
 
@@ -147,7 +147,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onGetUser(CareProvider careProvider) {
         cpContext = careProvider;
-        this.careProPatientListPresenter.getAssignedPatients(careProvider);
+        this.careProPatientListPresenter.getAssignedPatients();
     }
 
 }

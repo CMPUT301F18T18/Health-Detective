@@ -168,12 +168,21 @@
 
         <TextView
             android:id="@+id/mapTitle"
-            android:layout_width="match_parent"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="@string/mapTitle"
             android:textColor="@color/primary_text"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mapEdit"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_geo"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"

@@ -37,7 +37,7 @@ public class EditRecordImplTest {
         Date date = new Date();
 
         Problem problem1 = new Problem(
-                1234567,
+                "1234567",
                 "title",
                 "description",
                 date
@@ -60,10 +60,10 @@ public class EditRecordImplTest {
 
         EditRecord command = new EditRecordImpl(
                 callback,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null
         );
         command.execute();
 
@@ -95,10 +95,10 @@ public class EditRecordImplTest {
 
         EditRecord command = new EditRecordImpl(
                 callback,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null
         );
         command.execute();
 
@@ -128,10 +128,10 @@ public class EditRecordImplTest {
 
         EditRecord command = new EditRecordImpl(
                 callback,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null
         );
         command.execute();
 
@@ -150,10 +150,10 @@ public class EditRecordImplTest {
 
         EditRecord command = new EditRecordImpl(
                 callback,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null
         );
         command.execute();
 
@@ -203,7 +203,12 @@ class EditRecordMockPresenter implements EditRecord.Callback {
     }
 
     @Override
-    public void onERFail() {
-        
+    public void onERNoGeolocationProvided() {
+
+    }
+
+    @Override
+    public void onERInvalidPermissions() {
+
     }
 }

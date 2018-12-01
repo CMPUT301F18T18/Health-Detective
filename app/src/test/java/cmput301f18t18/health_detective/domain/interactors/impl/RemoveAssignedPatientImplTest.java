@@ -153,4 +153,9 @@ class RemoveAssignedPatientMockPresenter implements RemoveAssignedPatient.Callba
     public void onRAPPatientNotAssigned() {
         this.rapPatientNotAssigned = true;
     }
+
+    @Override
+    public void onRAPInvalidPermissions() {
+
+    }
 }

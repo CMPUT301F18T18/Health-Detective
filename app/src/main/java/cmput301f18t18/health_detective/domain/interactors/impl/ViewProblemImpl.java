@@ -9,6 +9,7 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 /**
@@ -18,18 +19,15 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 public class ViewProblemImpl extends AbstractInteractor implements ViewProblem {
 
     private ViewProblem.Callback callback;
-    private Problem problem;
 
     /**
      * Constructor for GetRecordsImpl
      * @param callback
-     * @param problem the problem who's list of records is retrieved
      */
-    public ViewProblemImpl(ViewProblem.Callback callback, Problem problem)
+    public ViewProblemImpl(ViewProblem.Callback callback)
     {
         super();
         this.callback = callback;
-        this.problem = problem;
     }
 
     /**
@@ -44,15 +42,37 @@ public class ViewProblemImpl extends AbstractInteractor implements ViewProblem {
      */
     @Override
     public void run() {
+        if (callback == null)
+            return;
+
         RecordRepo recordRepo = this.context.getRecordRepo();
         ContextTree tree = this.context.getContextTree();
-        tree.push(ContextTreeComponentFactory.getContextComponent(problem));
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        final Problem problem = treeParser.getCurrentProblemContext();
+
+        if (problem == null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onVPNoContext();
+                }
+            });
+
+            return;
+        }
+
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onVPSuccessDetails(problem.getTitle(), problem.getDescription(), problem.getStartDate());
+            }
+        });
 
         if (problem.isRecordsEmpty()) {
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onGRNoRecords();
+                    callback.onVPNoRecords();
                 }
             });
 
@@ -75,7 +95,7 @@ public class ViewProblemImpl extends AbstractInteractor implements ViewProblem {
 
             @Override
             public void run() {
-                callback.onGRSuccess(records);
+                callback.onVPSuccess(records);
             }
         });
     }

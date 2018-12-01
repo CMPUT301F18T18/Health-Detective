@@ -1,6 +1,7 @@
 package cmput301f18t18.health_detective.domain.model.context.tree;
 
 import cmput301f18t18.health_detective.domain.model.BodyLocation;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
@@ -11,6 +12,7 @@ import cmput301f18t18.health_detective.domain.model.context.component.impl.CareP
 import cmput301f18t18.health_detective.domain.model.context.component.impl.PatientContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.ProblemContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.RecordContext;
+import cmput301f18t18.health_detective.domain.model.context.component.impl.UserContext;
 
 public class ContextTreeParser {
 
@@ -28,14 +30,11 @@ public class ContextTreeParser {
         while (true) {
             if (treeComponent == null)
                 return null;
-            else if (treeComponent instanceof CareProviderContext) {
-                return ((CareProviderContext) treeComponent).getCareProvider();
-            }
-            else if (treeComponent instanceof PatientContext) {
-                return ((PatientContext) treeComponent).getPatient();
+            else if (treeComponent instanceof UserContext) {
+                return ((UserContext) treeComponent).getUser();
             }
 
-            treeComponent = treeComponent.stepForward();
+            treeComponent = treeComponent.prev();
         }
     }
 
@@ -47,6 +46,9 @@ public class ContextTreeParser {
         while (true) {
             if (treeComponent == null)
                 return null;
+            else if (treeComponent instanceof UserContext) {
+                return ((UserContext) treeComponent).getUser();
+            }
             else if (treeComponent instanceof CareProviderContext) {
                 return ((CareProviderContext) treeComponent).getCareProvider();
             }
@@ -54,7 +56,7 @@ public class ContextTreeParser {
                 return ((PatientContext) treeComponent).getPatient();
             }
 
-            treeComponent = treeComponent.stepBackward();
+            treeComponent = treeComponent.next();
         }
     }
 
@@ -67,11 +69,17 @@ public class ContextTreeParser {
             if (treeComponent == null)
                 return null;
 
+            else if (treeComponent instanceof UserContext) {
+                User user = ((UserContext) treeComponent).getUser();
+
+                if (user instanceof Patient)
+                    return (Patient) user;
+            }
             else if (treeComponent instanceof PatientContext) {
                 return ((PatientContext) treeComponent).getPatient();
             }
 
-            treeComponent = treeComponent.stepBackward();
+            treeComponent = treeComponent.next();
         }
     }
 
@@ -95,7 +103,7 @@ public class ContextTreeParser {
                 return ((ProblemContext) treeComponent).getProblem();
             }
 
-            treeComponent = treeComponent.stepBackward();
+            treeComponent = treeComponent.next();
         }
     }
 
@@ -119,7 +127,7 @@ public class ContextTreeParser {
                 return ((RecordContext) treeComponent).getRecord();
             }
 
-            treeComponent = treeComponent.stepBackward();
+            treeComponent = treeComponent.next();
         }
     }
 
@@ -139,7 +147,7 @@ public class ContextTreeParser {
                 return ((BodyLocationContext) treeComponent).getBodyLocation();
             }
 
-            treeComponent = treeComponent.stepBackward();
+            treeComponent = treeComponent.next();
         }
     }
 }

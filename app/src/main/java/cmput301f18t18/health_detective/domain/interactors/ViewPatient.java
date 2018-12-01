@@ -7,7 +7,9 @@ import cmput301f18t18.health_detective.domain.model.Problem;
 
 public interface ViewPatient extends Interactor {
     interface Callback {
-        void onGPSuccess(ArrayList<Problem> patientProblems);
-        void onGPNoProblems();
+        void onVPaSuccess(ArrayList<Problem> patientProblems);
+        void onVPaSuccessDetails(String userId, String email, String phone);
+        void onVPaNoProblems();
+        void onVPaNoContext();
     }
 }

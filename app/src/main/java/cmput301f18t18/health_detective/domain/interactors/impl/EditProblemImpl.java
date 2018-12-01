@@ -20,7 +20,6 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 public class EditProblemImpl extends AbstractInteractor implements EditProblem {
 
     private EditProblem.Callback callback;
-    private Problem problemToEdit;
     private String title;
     private String description;
     private Date startDate;
@@ -28,54 +27,18 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
     /**
      * First constructor for EditProblemImpl
      * @param callback
-     * @param problemToEdit the problem that is being edited
      * @param title the title of the problem that is being edited
      * @param description the description of the problem being edited
      * @param startDate the date assigned to the problem being edited
      */
     public EditProblemImpl(EditProblem.Callback callback,
-                           Problem problemToEdit, String title, String description, Date startDate)
+                           String title, String description, Date startDate)
     {
         super();
         this.callback = callback;
-        this.problemToEdit = problemToEdit;
         this.title = title;
         this.description = description;
         this.startDate = startDate;
-    }
-
-    /**
-     * Second constructor for EditProblemImpl
-     * @param problemToEdit the problem that is being edited
-     * @param title the title of the problem that is being edited
-     * @param description the description of the problem being edited
-     */
-    public EditProblemImpl(EditProblem.Callback callback,
-                           Problem problemToEdit, String title, String description)
-    {
-        super();
-        this.callback = callback;
-        this.problemToEdit = problemToEdit;
-        this.description = description;
-        this.title = title;
-        this.startDate = problemToEdit.getStartDate();
-    }
-
-    /**
-     * Third constructor for EditProblemImpl
-     * @param problemToEdit the problem that is being edited
-     * @param description the description of the problem being edited
-     */
-    public EditProblemImpl(EditProblem.Callback callback,
-                           Problem problemToEdit, String description)
-    {
-        super();
-        this.callback = callback;
-        this.problemToEdit = problemToEdit;
-        this.description = description;
-        this.title = problemToEdit.getTitle();
-        this.startDate = problemToEdit.getStartDate();
-
     }
 
     /**
@@ -98,6 +61,7 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         ContextTreeParser treeParser = new ContextTreeParser(tree);
 
         User loggedInUser = treeParser.getLoggedInUser();
+        Problem problemToEdit = treeParser.getCurrentProblemContext();
 
         if (loggedInUser instanceof CareProvider) {
             mainThread.post(new Runnable() {
@@ -137,11 +101,11 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
             this.description = "";
         }
 
-        this.problemToEdit.setTitle(this.title);
-        this.problemToEdit.setDescription(this.description);
-        this.problemToEdit.setStartDate(this.startDate);
+        problemToEdit.setTitle(this.title);
+        problemToEdit.setDescription(this.description);
+        problemToEdit.setStartDate(this.startDate);
 
-        problemRepo.updateProblem(this.problemToEdit);
+        problemRepo.updateProblem(problemToEdit);
 
         // Problem added
         this.mainThread.post(new Runnable(){

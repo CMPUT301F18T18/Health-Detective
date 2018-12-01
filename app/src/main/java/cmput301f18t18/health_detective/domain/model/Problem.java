@@ -31,6 +31,11 @@ public class Problem implements Searchable, Serializable {
         this.setStartDate(new Date());
     }
 
+    public Problem(String id) {
+        this();
+        this.problemId = id;
+    }
+
     public Problem(String title, String description) {
         this();
         this.setTitle(title);
@@ -88,7 +93,7 @@ public class Problem implements Searchable, Serializable {
         records.remove(record.getRecordId());
     }
 
-    public void removeRecord(Integer recordId) {
+    public void removeRecord(String recordId) {
         records.remove(recordId);
     }
 

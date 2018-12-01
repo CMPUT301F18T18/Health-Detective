@@ -45,13 +45,13 @@ public class RecordRepoImpl extends AbstractRepo {
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"recordId\": " + recordId + "\n" +
+                "      \"recordId\": \"" + recordId + "\"\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
         Log.d("ESC:getRecordElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test")
+                .addIndex("cmput301f18t18test2")
                 .addType("Record")
                 .build();
         try {
@@ -82,7 +82,7 @@ public class RecordRepoImpl extends AbstractRepo {
     @Override
     public void insert() {
         Index index = new Index.Builder(record)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(record.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -114,8 +114,11 @@ public class RecordRepoImpl extends AbstractRepo {
      * @return          The record associated with recordID
      */
     public Record retrieve() {
+        if (recordId == null)
+            return null;
+
         String elasticSearchId = getRecordElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
+        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
                 .type("Record")
                 .build();
         try {
@@ -143,7 +146,12 @@ public class RecordRepoImpl extends AbstractRepo {
 
         for (String id : recordID) {
             this.recordId = id;
-            records.add(retrieve());
+            Record record = retrieve();
+
+            if (record == null)
+                continue;
+
+            records.add(record);
         }
 
         return records;
@@ -159,7 +167,7 @@ public class RecordRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test")
+                .index("cmput301f18t18test2")
                 .type(record.getClass().getSimpleName())
                 .build();
         try {

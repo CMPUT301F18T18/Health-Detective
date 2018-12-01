@@ -9,6 +9,7 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
 /**
@@ -17,19 +18,16 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
  */
 public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
 
-    private ViewPatient.Callback callback;
-    private Patient patient;
+    private Callback callback;
 
     /**
      * Constructor for GetProblemImpl
      * @param callback
-     * @param patient the patient who's list of problems is retrieved
      */
-    public ViewPatientImpl(ViewPatient.Callback callback, Patient patient)
+    public ViewPatientImpl(Callback callback)
     {
         super();
         this.callback = callback;
-        this.patient = patient;
     }
 
     /**
@@ -44,16 +42,38 @@ public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
      */
     @Override
     public void run() {
+        if (callback == null)
+            return;
+
         ProblemRepo problemRepo = this.context.getProblemRepo();
         ContextTree tree = this.context.getContextTree();
-        tree.push(ContextTreeComponentFactory.getContextComponent(patient));
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+        final Patient patient = treeParser.getCurrentPatientContext();
+
+        if (patient == null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onVPaNoContext();
+                }
+            });
+
+            return;
+        }
+
+        mainThread.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onVPaSuccessDetails(patient.getUserId(), patient.getEmailAddress(), patient.getPhoneNumber());
+            }
+        });
 
         if (patient.isProblemsEmpty()) {
             this.mainThread.post(new Runnable() {
 
                 @Override
                 public void run() {
-                    callback.onGPNoProblems();
+                    callback.onVPaNoProblems();
                 }
             });
 
@@ -76,7 +96,7 @@ public class ViewPatientImpl extends AbstractInteractor implements ViewPatient {
 
             @Override
             public void run() {
-                callback.onGPSuccess(problems);
+                callback.onVPaSuccess(problems);
             }
         });
     }

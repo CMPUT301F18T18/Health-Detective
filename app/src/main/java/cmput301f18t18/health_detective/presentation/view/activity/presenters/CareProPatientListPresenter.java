@@ -20,6 +20,25 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
 
     private View view;
 
+    @Override
+    public void onVCPSuccess(ArrayList<Patient> assignedPatients) {
+        this.view.onGetPatientSuccess(assignedPatients);
+    }
+
+    @Override
+    public void onVCPSuccessDetails(String userId, String email, String phone) {
+
+    }
+
+    @Override
+    public void onVCPNoPatients() {
+        this.view.noPatients();
+    }
+
+    @Override
+    public void onVCPNoContext() {
+
+    }
 
 
     public interface View {
@@ -46,26 +65,26 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
         command.execute();
     }
 
-    public void deletePatient(CareProvider careProvider, Patient patient){
+    public void deletePatient(Patient patient){
         RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
                 this,
-                careProvider,
+                null,
                 patient
         );
 
         command.execute();
     }
 
-    public void getAssignedPatients(CareProvider careProvider) {
+    public void getAssignedPatients() {
         ViewCareProvider command = new ViewCareProviderImpl(
-                this,
-                careProvider
+                this
         );
         command.execute();
     }
 
     @Override
     public void onAAPSuccess() {
+
         this.view.onAddPatientSuccess();
     }
 
@@ -102,16 +121,6 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
     @Override
     public void onRAPInvalidPermissions() {
 
-    }
-
-    @Override
-    public void onGAPSuccess(ArrayList<Patient> assignedPatients) {
-        this.view.onGetPatientSuccess(assignedPatients);
-    }
-
-    @Override
-    public void onGAPNoPatients() {
-        this.view.noPatients();
     }
 
     @Override

@@ -24,10 +24,11 @@ public class ContextTreeParserTest {
     public void init() {
         tree = new ContextTree();
 
-        tree.push(ContextTreeComponentFactory.getContextComponent(new Record("r1", "")));
-        tree.push(ContextTreeComponentFactory.getContextComponent(new Patient("patient")));
-        tree.push(ContextTreeComponentFactory.getContextComponent(new Problem("p1", "")));
-        tree.push(ContextTreeComponentFactory.getContextComponent(new Record("r2", "")));
+        tree.push(ContextTreeComponentFactory.getContextComponent(new Patient("patient"), tree));
+        tree.push(ContextTreeComponentFactory.getContextComponent(new Record("r1", ""),tree));
+        tree.push(ContextTreeComponentFactory.getContextComponent(new Patient("patient"), tree));
+        tree.push(ContextTreeComponentFactory.getContextComponent(new Problem("p1", ""), tree));
+        tree.push(ContextTreeComponentFactory.getContextComponent(new Record("r2", ""), tree));
     }
 
     @Test
@@ -64,20 +65,17 @@ public class ContextTreeParserTest {
 
         Record record = treeParser.getCurrentRecordContext();
 
-        assertEquals("r2", record.getTitle());
+        assertEquals("r1", record.getTitle());
         assertEquals("", record.getComment());
     }
 
     @Test
     public void getCurrentRecordContext2() {
-
-        tree.pop();
-
         ContextTreeParser treeParser = new ContextTreeParser(tree);
 
         Record record = treeParser.getCurrentRecordContext();
 
-        assertEquals(null, record);
+        assertEquals("r2", record);
     }
 
     @Test
