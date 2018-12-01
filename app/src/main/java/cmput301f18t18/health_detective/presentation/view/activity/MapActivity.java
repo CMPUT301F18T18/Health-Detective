@@ -42,21 +42,25 @@ import java.util.List;
 
 import android.Manifest;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
+public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Callback, OnMapReadyCallback, View.OnClickListener{
 
     private float ZOOM = 15f;
 
     private Boolean LocationPermissionsGranted = false;
     private GoogleMap mMap;
-    Patient patientContext;
     private EditText searchText;
     private int type;
     private Geolocation myLocation, startLocation;
     private Button Cancel, Save;
+    private String userID = "user";
 
 
     @Override
@@ -66,7 +70,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         searchText = findViewById(R.id.input_search);
 
         Intent intent = this.getIntent();
-        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
         this.type = (int) intent.getSerializableExtra("type");
         this.startLocation = (Geolocation) intent.getSerializableExtra("location");
 
@@ -77,6 +80,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         getLocationPermission();
+
+        new GetLoggedInUserImpl(this).execute();
 
     }
 
@@ -131,7 +136,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
+        userIdMenu.setTitle(userID);
         return true;
     }
 
@@ -238,7 +243,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
 
@@ -299,5 +303,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             setResult(PatientRecordsActivity.RESULT_OK,returnIntent);
             finish();
         }
+    }
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+        userID = patient.getUserId();
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+
     }
 }

@@ -66,7 +66,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
 
-        getLocationPermission();
+
 
         if (image == null){
             testImages = 0;
@@ -209,6 +209,11 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         this.comment = comment;
         this.date = date;
         this.geolocation = geolocation;
+        if (geolocation!=null){
+            getLocationPermission();
+        }
+
+
 
         setTextViews();
     }
