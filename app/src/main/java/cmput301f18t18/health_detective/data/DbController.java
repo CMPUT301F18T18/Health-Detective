@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +9,10 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 
+import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
+import cmput301f18t18.health_detective.data.transaction.SQL.LocalDbHelper;
+import cmput301f18t18.health_detective.data.transaction.ProblemRepoImpl;
+import cmput301f18t18.health_detective.data.transaction.factory.RepoFactory;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
@@ -62,7 +66,6 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo {
     public void insertProblem(Problem problem) {
         AbstractRepo repo = RepoFactory.build(client, db, problem);
         repo.insert();
-//        ProblemRepoImpl.insertProblem(client, problem);
     }
 
     @Override
@@ -70,13 +73,20 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo {
     }
 
     @Override
-    public Problem retrieveProblemById(Integer problemID) {
-        AbstractRepo repo = RepoFactory.build(client, db, Problem.class, problemID.toString());
+    public Problem retrieveProblemById(String problemId) {
+        AbstractRepo repo = RepoFactory.build(client, db, Problem.class, problemId);
+        if (repo instanceof ProblemRepoImpl) {
+            return ((ProblemRepoImpl) repo).retrieveProblemById();
+        }
         return null;
     }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemID) {
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
+        AbstractRepo repo = RepoFactory.build(client, db, Problem.class, null);
+        if (repo instanceof ProblemRepoImpl) {
+            return ((ProblemRepoImpl) repo).retrieveProblemsById(problemId);
+        }
         return null;
     }
 
@@ -96,12 +106,12 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo {
     }
 
     @Override
-    public Record retrieveRecordById(Integer recordID) {
+    public Record retrieveRecordById(String recordID) {
         return null;
     }
 
     @Override
-    public ArrayList<Record> retrieveRecordsById(ArrayList<Integer> recordID) {
+    public ArrayList<Record> retrieveRecordsById(ArrayList<String> recordID) {
         return null;
     }
 

@@ -1,9 +1,10 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.transaction;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import com.searchly.jestdroid.JestDroidClient;
 
+import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
 import cmput301f18t18.health_detective.domain.model.Record;
 
 public class RecordRepoImpl extends AbstractRepo {
@@ -11,29 +12,29 @@ public class RecordRepoImpl extends AbstractRepo {
     private Record record;
     private String recordId;
 
-    RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, Record record) {
+    public RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, Record record) {
         super(client, db);
         this.record = record;
-        this.recordId = Integer.toString(record.getRecordId());
+        this.recordId = record.getRecordId();
     }
 
-    RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
+    public RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
         super(client, db);
         this.recordId = id;
     }
 
     @Override
-    void insert() {
+    public void insert() {
 
     }
 
     @Override
-    void update() {
+    public void update() {
 
     }
 
     @Override
-    void delete() {
+    public void delete() {
 
     }
 }

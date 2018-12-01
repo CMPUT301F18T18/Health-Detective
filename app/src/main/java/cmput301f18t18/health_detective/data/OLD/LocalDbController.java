@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.OLD;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cmput301f18t18.health_detective.data.transaction.SQL.LocalDbHelper;
+import cmput301f18t18.health_detective.data.transaction.SQL.ProblemCursorBuilder;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 
@@ -33,14 +35,14 @@ public class LocalDbController implements ProblemRepo {
     @Override
     public void insertProblem(Problem problem) {
         ContentValues values = new ContentValues();
-        values.put("problemId", problem.getProblemID());
+        values.put("problemId", problem.getProblemId());
         values.put("title", problem.getTitle());
         values.put("description", problem.getDescription());
         values.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(problem.getStartDate()));
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (Integer id : problem.getRecordIds()) {
-            stringBuilder.append(id.toString()).append(",");
+        for (String id : problem.getRecordIds()) {
+            stringBuilder.append(id).append(",");
         }
 
         String recordIds = stringBuilder.toString();
@@ -56,14 +58,14 @@ public class LocalDbController implements ProblemRepo {
     @Override
     public void updateProblem(Problem problem) {
         ContentValues values = new ContentValues();
-        values.put("problemId", problem.getProblemID());
+        values.put("problemId", problem.getProblemId());
         values.put("title", problem.getTitle());
         values.put("description", problem.getDescription());
         values.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(problem.getStartDate()));
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (Integer id : problem.getRecordIds()) {
-            stringBuilder.append(id.toString()).append(",");
+        for (String id : problem.getRecordIds()) {
+            stringBuilder.append(id).append(",");
         }
 
         String recordIds = stringBuilder.toString();
@@ -76,16 +78,16 @@ public class LocalDbController implements ProblemRepo {
         db.update("Problems",
                 values,
                 "problemId = ?",
-                new String[] {Integer.toString(problem.getProblemID())});
+                new String[] {problem.getProblemId()});
     }
 
     @Override
-    public Problem retrieveProblemById(Integer problemID) {
-        Cursor cursor = new ProblemCursorBuilder(db).retrieveQuery(Integer.toString(problemID));
+    public Problem retrieveProblemById(String problemID) {
+        Cursor cursor = new ProblemCursorBuilder(db).retrieveQuery(problemID);
         cursor.moveToNext();
         Problem ret;
         try {
-            Integer problemId = Integer.parseInt(cursor.getString(0));
+            String problemId = cursor.getString(0);
             String problemTitle = cursor.getString(1);
             String problemDesc = cursor.getString(2);
             Date problemDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(3));
@@ -93,7 +95,7 @@ public class LocalDbController implements ProblemRepo {
             ret = new Problem(problemId, problemTitle, problemDesc, problemDate);
 
             for (String recordId : cursor.getString(4).split(",")) {
-                ret.addRecord(Integer.parseInt(recordId));
+                ret.addRecord(recordId);
             }
         }
         catch (ParseException e) {
@@ -104,22 +106,16 @@ public class LocalDbController implements ProblemRepo {
     }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemIds) {
-
-        // TODO: REMOVE ONCE IDS CHANGE TO STRING
-        ArrayList<String> problemIdStrings = new ArrayList<>();
-        for (Integer i: problemIds) {
-            problemIdStrings.add(i.toString());
-        }
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemIds) {
 
         ArrayList<Problem> retArray = new ArrayList<>();
 
-        Cursor cursor = new ProblemCursorBuilder(db).retrieveListQuery(problemIdStrings);
+        Cursor cursor = new ProblemCursorBuilder(db).retrieveListQuery(problemIds);
 
         while (cursor.moveToNext()) {
             Problem prob;
             try {
-                Integer problemId = Integer.parseInt(cursor.getString(0));
+                String problemId = cursor.getString(0);
                 String problemTitle = cursor.getString(1);
                 String problemDesc = cursor.getString(2);
                 Date problemDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(3));
@@ -127,7 +123,7 @@ public class LocalDbController implements ProblemRepo {
                 prob = new Problem(problemId, problemTitle, problemDesc, problemDate);
 
                 for (String recordId : cursor.getString(4).split(",")) {
-                    prob.addRecord(Integer.parseInt(recordId));
+                    prob.addRecord(recordId);
                 }
             }
             catch (ParseException e) {
@@ -143,7 +139,7 @@ public class LocalDbController implements ProblemRepo {
     public void deleteProblem(Problem problem) {
         db.delete("Problems",
                 "problemId = ?",
-                new String[] {Integer.toString(problem.getProblemID())}
+                new String[] {problem.getProblemId()}
                 );
     }
 

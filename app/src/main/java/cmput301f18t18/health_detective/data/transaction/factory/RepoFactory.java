@@ -1,17 +1,21 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.transaction.factory;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import com.searchly.jestdroid.JestDroidClient;
 
+import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
+import cmput301f18t18.health_detective.data.transaction.ProblemRepoImpl;
+import cmput301f18t18.health_detective.data.transaction.RecordRepoImpl;
+import cmput301f18t18.health_detective.data.transaction.UserRepoImpl;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
 
-abstract class RepoFactory {
+public abstract class RepoFactory {
 
     private RepoFactory() { }
-    static AbstractRepo build(JestDroidClient client, SQLiteDatabase db, Object o) {
+    public static AbstractRepo build(JestDroidClient client, SQLiteDatabase db, Object o) {
         if (o instanceof Problem)
             return new ProblemRepoImpl(client, db, (Problem) o);
         if (o instanceof Record)
@@ -23,7 +27,7 @@ abstract class RepoFactory {
         return null;
     }
 
-    static AbstractRepo build(JestDroidClient client, SQLiteDatabase db, Class clazz, String id) {
+    public static AbstractRepo build(JestDroidClient client, SQLiteDatabase db, Class clazz, String id) {
         if (clazz == Problem.class)
             return new ProblemRepoImpl(client, db, id);
 

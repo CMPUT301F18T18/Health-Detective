@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.transaction.SQL;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,7 +21,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 "recordIds TEXT " +
             ")";
 
-    LocalDbHelper(Context context) {
+    public LocalDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

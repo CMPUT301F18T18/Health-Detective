@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,18 +18,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import cmput301f18t18.health_detective.DatePickerFragment;
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemAddEditPresenter;
 
 public class ProblemEditAddActivity extends AppCompatActivity implements View.OnClickListener, ProblemAddEditPresenter.AddView, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {

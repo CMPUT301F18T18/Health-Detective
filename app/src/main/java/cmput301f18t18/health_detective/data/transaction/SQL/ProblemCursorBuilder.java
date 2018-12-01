@@ -1,9 +1,11 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.transaction.SQL;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+
+import cmput301f18t18.health_detective.data.transaction.SQL.QueryBuilder;
 
 public class ProblemCursorBuilder implements QueryBuilder {
 
@@ -11,7 +13,7 @@ public class ProblemCursorBuilder implements QueryBuilder {
 
     SQLiteDatabase db;
 
-    ProblemCursorBuilder(SQLiteDatabase db) {
+    public ProblemCursorBuilder(SQLiteDatabase db) {
         this.db = db;
     }
 

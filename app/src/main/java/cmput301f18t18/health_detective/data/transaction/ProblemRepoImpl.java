@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data.repository;
+package cmput301f18t18.health_detective.data.transaction;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -23,13 +24,13 @@ public class ProblemRepoImpl extends AbstractRepo {
     private Problem problem;
     private String problemId;
 
-    ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, Problem problem) {
+    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, Problem problem) {
         super(client, db);
         this.problem = problem;
-        this.problemId = Integer.toString(problem.getProblemID());
+        this.problemId = problem.getProblemId();
     }
 
-    ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
+    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
         super(client, db);
         this.problemId = id;
     }
@@ -136,11 +137,11 @@ public class ProblemRepoImpl extends AbstractRepo {
      * @param problemId The list of problem ids to find
      * @return          A list of associated problem ids
      */
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemId) {
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
         ArrayList<Problem> problems = new ArrayList<>();
 
-        for (Integer id : problemId) {
-            this.problemId = Integer.toString(id);
+        for (String id : problemId) {
+            this.problemId = id;
             problems.add(retrieveProblemById());
         }
 
