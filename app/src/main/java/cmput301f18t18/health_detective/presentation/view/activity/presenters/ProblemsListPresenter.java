@@ -6,13 +6,13 @@ import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import io.searchbox.core.Get;
 
 public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback, GetLoggedInUser.Callback {
 

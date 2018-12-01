@@ -34,7 +34,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
-public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener, ProblemsListPresenter.View, ProblemOnClickListener, GetLoggedInUser.Callback{
+public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener, ProblemsListPresenter.View, ProblemOnClickListener {
     String userId = "";
     ListView listView;
     ProblemListAdapter adapter;
@@ -201,17 +201,16 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void getPatientUser(Patient patient) {
-        patientContext = patient;
-        this.problemsListPresenter.getProblems(patient);
+
     }
 
     @Override
     public void getCPUser(CareProvider careProvider) {
-//        cpContext = careProvider;
-//        Window window = this.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
     }
+
 }

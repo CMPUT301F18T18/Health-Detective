@@ -60,7 +60,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
     private int REQUEST_CODE = 1212;
-    private Geolocation myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,9 +276,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
             case R.id.mapEdit:
                 Intent mapIntent = new Intent(this, MapActivity.class);
-                mapIntent.putExtra("PATIENT", patientContext);
+                //mapIntent.putExtra("PATIENT", patientContext);
                 mapIntent.putExtra("type",1);
-                mapIntent.putExtra("location", record.getGeolocation());
+                //mapIntent.putExtra("location", record.getGeolocation());
                 startActivityForResult(mapIntent,REQUEST_CODE);
         }
     }
@@ -340,9 +339,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
 
-            LatLng location = new LatLng(record.getGeolocation().getlatitude(),record.getGeolocation().getlongitude());
+            LatLng location = new LatLng(geolocation.getlatitude(), geolocation.getlongitude());
             moveCamera(location, 15f);
-            createMarker(location,record.getTitle());
+            createMarker(location, title);
         }
     }
 
@@ -364,12 +363,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         if (requestCode == REQUEST_CODE) {
             if(resultCode == PatientRecordsActivity.RESULT_OK){
-                double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
-                myLocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
-                moveCamera(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),15f);
-                createMarker(new LatLng(myLocation.getlatitude(),myLocation.getlongitude()),"record");
+                double[] doubleArrayExtra = data.getDoubleArrayExtra("result");
+                geolocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
+                moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
+                createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),"record");
                 // edit records geo
-                recordViewPresenter.editUserRecord(record, record.getTitle(),record.getComment(), record.getDate(),myLocation);
+                recordViewPresenter.editUserRecord(title , comment, date, geolocation);
             }
             if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
                 //Write your code if there's no result

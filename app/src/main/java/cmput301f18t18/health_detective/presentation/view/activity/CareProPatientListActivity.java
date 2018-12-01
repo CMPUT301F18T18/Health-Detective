@@ -105,7 +105,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onAddPatientSuccess() {
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
-        this.careProPatientListPresenter.getAssignedPatients(cpContext);
 
     }
 
