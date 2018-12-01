@@ -20,9 +20,6 @@ import cmput301f18t18.health_detective.presentation.view.activity.PatientProblem
 public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProfile.Callback {
 
     private View view;
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private UserRepo userRepo;
 
 
     public interface View {
@@ -34,13 +31,9 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
         void onEditUserSuccess(Patient patient);
     }
 
-    public SignUpPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                           UserRepo userRepo)
+    public SignUpPresenter(View view)
     {
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.userRepo = userRepo;
     }
 
     /**
@@ -49,17 +42,14 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
      * @param userEmail new user email
      * @param userPhoneNum new user phone number
      */
-    public void createNewUser(String userName, String userEmail, String userPhoneNum){
+    public void createNewUser(String userName, String userEmail, String userPhoneNum, Boolean isCareProvider){
         // Need a way to inject type of user
         CreateUserProfile createUserProfile = new CreateUserProfileImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
                 userName,
                 userEmail,
                 userPhoneNum,
-                false
+                isCareProvider
         );
 
         createUserProfile.execute();
@@ -73,11 +63,7 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
      */
     public void editUserInfo(User userToEdit, String email, String phoneNumber){
         EditUserProfile editUserProfile = new EditUserProfileImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
-                userToEdit,
                 email,
                 phoneNumber
         );
@@ -128,6 +114,11 @@ public class SignUpPresenter implements CreateUserProfile.Callback, EditUserProf
 
     @Override
     public void onEUPInvaildPhoneNumber() {
+
+    }
+
+    @Override
+    public void onEUPInvalidPermissions() {
 
     }
 

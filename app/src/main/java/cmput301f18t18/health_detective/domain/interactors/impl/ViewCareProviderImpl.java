@@ -2,41 +2,30 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 
 import java.util.ArrayList;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.interactors.GetAssignedPatients;
+import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
  * The GetAssignedPatientImpl class is a class intended to handle the retrieval of
  * a care provider's patient list.
  */
-public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAssignedPatients {
+public class ViewCareProviderImpl extends AbstractInteractor implements ViewCareProvider {
 
-    private GetAssignedPatients.Callback callback;
-    private UserRepo userRepo;
+    private ViewCareProvider.Callback callback;
     private CareProvider careProvider;
 
     /**
      * Constructor for GetAssignedPatientImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param careProvider the care provider who's list of patient's are retrieved
      */
-    public GetAssignedPatientsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                                   GetAssignedPatients.Callback callback, UserRepo userRepo,
-                                   CareProvider careProvider)
+    public ViewCareProviderImpl(ViewCareProvider.Callback callback, CareProvider careProvider)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.careProvider = careProvider;
     }
 
@@ -52,6 +41,7 @@ public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAs
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
 
         if (careProvider.isPatientsEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -66,7 +56,7 @@ public class GetAssignedPatientsImpl extends AbstractInteractor implements GetAs
         }
 
         ArrayList<String> patientIds = careProvider.getPatientIds();
-        ArrayList<Patient> patients =  this.userRepo.retrievePatientsById(patientIds);
+        ArrayList<Patient> patients =  userRepo.retrievePatientsById(patientIds);
 
         this.mainThread.post(new Runnable(){
 

@@ -1,12 +1,12 @@
 package cmput301f18t18.health_detective.domain.interactors.impl;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 /**
@@ -16,24 +16,17 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class UserLoginImpl extends AbstractInteractor implements UserLogin {
 
     private UserLogin.Callback callback;
-    private UserRepo userRepo;
     private String userId;
 
     /**
      * Creates a new UserLoginImpl object from the provided parameters
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
      * @param userId the Id of the user attempting to log in
      */
-    public UserLoginImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                         UserLogin.Callback callback, UserRepo userRepo,
-                         String userId)
+    public UserLoginImpl(UserLogin.Callback callback, String userId)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
         this.userId = userId;
     }
 
@@ -53,6 +46,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
     public void run() {
         final Patient patient;
         final CareProvider careProvider;
+        final UserRepo userRepo = context.getUserRepo();
 
         if (!User.isValidUserId(userId)){
             this.mainThread.post(new Runnable() {
@@ -66,9 +60,13 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
             return;
         }
 
-        patient = this.userRepo.retrievePatientById(userId);
+        patient = userRepo.retrievePatientById(userId);
 
         if (patient != null) {
+
+            ContextTree tree = this.context.getContextTree();
+            tree.push(ContextTreeComponentFactory.getContextComponent(patient));
+
             this.mainThread.post(new Runnable() {
 
                 @Override
@@ -80,9 +78,13 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
             return;
         }
 
-        careProvider = this.userRepo.retrieveCareProviderById(userId);
+        careProvider = userRepo.retrieveCareProviderById(userId);
 
         if (careProvider != null) {
+
+            ContextTree tree = this.context.getContextTree();
+            tree.push(ContextTreeComponentFactory.getContextComponent(careProvider));
+
             this.mainThread.post(new Runnable() {
 
                 @Override

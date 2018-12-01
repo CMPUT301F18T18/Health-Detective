@@ -1,6 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.model.Photo;
+import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
 
 public class GridViewAdapter extends BaseAdapter {
 
     private Context mContext;
     private int testIMAGES;
+    private String images;
+    private ProblemOnClickListener listener;
 
     public GridViewAdapter(Context context, int testImages){
         mContext = context;
         testIMAGES = testImages;
+        this.images = images;
     }
 
     @Override
@@ -41,7 +47,10 @@ public class GridViewAdapter extends BaseAdapter {
             View gridView;
             gridView = inflater.inflate(R.layout.body_image_view, null);
             ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
-            imageView.setImageResource(R.drawable.editpencil);
+            imageView.setImageResource(R.drawable.ic_launcher_background);
+        //Photo photo = new Photo();
+        //Bitmap bitmap = photo.toBitmap(images);
+            //imageView.setImageBitmap(bitmap);
         return gridView;
     }
 }

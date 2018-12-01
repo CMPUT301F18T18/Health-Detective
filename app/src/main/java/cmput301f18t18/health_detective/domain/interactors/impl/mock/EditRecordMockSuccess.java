@@ -6,6 +6,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
@@ -22,7 +23,7 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
                                   EditRecord.Callback callback, RecordRepo recordRepo,
                                   Record recordToEdit, String title, String comment, Date date)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.recordRepo = recordRepo;
         this.recordtoEdit = recordToEdit;
@@ -44,4 +45,5 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
             }
         });
     }
+
 }

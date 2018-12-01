@@ -68,13 +68,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
             problemDesc.setText(problemContext.getDescription());
         }
 
-        problemAddEditPresenter = new ProblemAddEditPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        problemAddEditPresenter = new ProblemAddEditPresenter(this);
 
         TextView cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);
@@ -115,6 +109,9 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
                     problemDateTime = new Date();
                 }
                 if (type){
+                    if (problemDateTime == null){
+                        problemDateTime = problemContext.getStartDate();
+                    }
                     problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, problemDateTime);
                 }
                 else {

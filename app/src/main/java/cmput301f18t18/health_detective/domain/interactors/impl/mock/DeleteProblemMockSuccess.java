@@ -17,7 +17,7 @@ public class DeleteProblemMockSuccess extends AbstractInteractor implements Dele
                                     DeleteProblem.Callback callback, ProblemRepo problemRepo,
                                     Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
         this.problemRepo = problemRepo;
         this.problem = problem;

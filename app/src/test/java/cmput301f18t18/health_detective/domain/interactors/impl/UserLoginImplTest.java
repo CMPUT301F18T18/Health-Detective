@@ -58,10 +58,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginPatient(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 "Patient1"
         );
         command.execute();
@@ -79,10 +76,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginCareProvider(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 "CareProvider"
         );
         command.execute();
@@ -100,10 +94,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginNullUserId(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 null
         );
         command.execute();
@@ -114,10 +105,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginBlankUserId(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 ""
         );
         command.execute();
@@ -128,10 +116,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginSevenDigitUserId(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 "seven12"
         );
         command.execute();
@@ -142,10 +127,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginUserIdWithWhitespace(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 "seven 12"
         );
         command.execute();
@@ -156,10 +138,7 @@ public class UserLoginImplTest {
     @Test
     public void testLoginUserIdNoneExsistant(){
         UserLogin command = new UserLoginImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
                 "IdontExistUser"
         );
         command.execute();

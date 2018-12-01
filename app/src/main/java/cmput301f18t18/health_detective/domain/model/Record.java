@@ -4,60 +4,48 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
+import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
+import cmput301f18t18.health_detective.domain.util.Id;
 
 /**
  * The class to store data and methods related to individual records.
  */
 public class Record implements Searchable, Serializable {
     private static final long serialVersionUID = 2L;
-    public int recordId;
+    private String recordId;
     private String title;
     private String comment;
     private Date date;
-    // Body location
-    // geolocation
-    // photo's
+    private ArrayList<String> photos;
+    private Geolocation geolocation;
 
     public Record() {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
+        DomainContext context = DomainContext.getInstance();
+        String newId = Id.genUniqueId(context.getSecureRandom());
+
+        this.recordId = newId;
         this.setTitle(null);
         this.setComment(null);
-        this.setDate(createDate);
-    }
-
-    public Record(String title, String comment) {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
-        this.setTitle(title);
-        this.setComment(comment);
-        this.setDate(createDate);
-    }
-
-    public Record(int recordId, String title, String comment) {
-        this.recordId = recordId;
-        this.setTitle(title);
-        this.setComment(comment);
         this.setDate(new Date());
     }
 
+    public Record(String title, String comment) {
+        this.setTitle(title);
+        this.setComment(comment);
+    }
+
     public Record(String title, String comment, Date date) {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
-        this.setTitle(title);
-        this.setComment(comment);
+        this(title, comment);
         this.setDate(date);
     }
 
-    public Record(int recordId, String title, String comment, Date date) {
+    public Record(String recordId, String title, String comment, Date date) {
+        this(title, comment, date);
         this.recordId = recordId;
-        this.setTitle(title);
-        this.setComment(comment);
-        this.setDate(date);
     }
 
-    public int getRecordId() {
+    public String getRecordId() {
         return recordId;
     }
 
@@ -105,6 +93,26 @@ public class Record implements Searchable, Serializable {
             return false;
 
         Record record = (Record) o;
-        return (this.recordId ==  record.getRecordId());
+        return (this.recordId.equals(record.getRecordId()));
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void insertPhoto(DomainImage image) {
+        photos.add(image.getImageId());
+    }
+
+    public void deletePhoto(DomainImage image) {
+        photos.remove(image.getImageId());
+    }
+
+    public Geolocation getGeolocation() {
+        return geolocation;
+    }
+
+    public void setGeolocation(Geolocation geolocation) {
+        this.geolocation = geolocation;
     }
 }

@@ -40,7 +40,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      *
      * @return reference to this object
      */
-    public static ElasticSearchController getInstance() {
+    public static synchronized ElasticSearchController getInstance() {
         setClient();
         return ourInstance;
     }
@@ -67,14 +67,14 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * Returns a problem's unique _ID out of elastic search based on a problem ID.
      * Used in deletion.
      *
-     * @param problemID A unique integer to a specific problem that we can to get
+     * @param problemId A unique integer to a specific problem that we can to get
      * @return          The problem's _ID from elasticsearch
      */
-    private String getProblemElasticSearchId(Integer problemID) {
+    private String getProblemElasticSearchId(String problemId) {
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"problemId\": " + problemID.toString() + "\n" +
+                "      \"problemId\": " + problemId + "\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
@@ -145,7 +145,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * @return          The problem associated with problemId
      */
     @Override
-    public Problem retrieveProblemById(Integer problemId) {
+    public Problem retrieveProblemById(String problemId) {
         String elasticSearchId = getProblemElasticSearchId(problemId);
         Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Problem")
@@ -171,10 +171,10 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * @return          A list of associated problem ids
      */
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<Integer> problemId) {
+    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
         ArrayList<Problem> problems = new ArrayList<>();
 
-        for (Integer id : problemId) {
+        for (String id : problemId) {
             problems.add(retrieveProblemById(id));
         }
 
@@ -188,7 +188,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      */
     @Override
     public void deleteProblem(Problem problem) {
-        String elasticSearchId = getProblemElasticSearchId(problem.getProblemID());
+        String elasticSearchId = getProblemElasticSearchId(problem.getProblemId());
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
@@ -212,11 +212,11 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * @param recordID A unique integer to a specific problem that we can to get
      * @return          The record's _ID from elasticsearch
      */
-    private String getRecordElasticSearchId(Integer recordID) {
+    private String getRecordElasticSearchId(String recordID) {
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"recordId\": " + recordID.toString() + "\n" +
+                "      \"recordId\": " + recordID + "\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
@@ -288,7 +288,7 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * @return          The record associated with recordID
      */
     @Override
-    public Record retrieveRecordById(Integer recordID) {
+    public Record retrieveRecordById(String recordID) {
         String elasticSearchId = getRecordElasticSearchId(recordID);
         Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Record")
@@ -314,10 +314,10 @@ public class ElasticSearchController implements ProblemRepo, RecordRepo, UserRep
      * @return          A list of associated record ids
      */
     @Override
-    public ArrayList<Record> retrieveRecordsById(ArrayList<Integer> recordID) {
+    public ArrayList<Record> retrieveRecordsById(ArrayList<String> recordID) {
         ArrayList<Record> records = new ArrayList<>();
 
-        for (Integer id : recordID) {
+        for (String id : recordID) {
             records.add(retrieveRecordById(id));
         }
 

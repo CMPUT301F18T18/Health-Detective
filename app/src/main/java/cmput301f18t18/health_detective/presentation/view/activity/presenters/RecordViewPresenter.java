@@ -14,9 +14,6 @@ import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 public class RecordViewPresenter implements EditRecord.Callback{
 
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private RecordRepo recordRepo;
     private View view;
 
     public interface View {
@@ -24,11 +21,8 @@ public class RecordViewPresenter implements EditRecord.Callback{
     }
 
 
-    public RecordViewPresenter(View view, ThreadExecutor threadExecutor, MainThread mainThread, RecordRepo recordRepo){
+    public RecordViewPresenter(View view){
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.recordRepo = recordRepo;
     }
 
     /**
@@ -40,14 +34,12 @@ public class RecordViewPresenter implements EditRecord.Callback{
      */
     public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate){
         EditRecord editRecord = new EditRecordImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.recordRepo,
                 record,
                 recordTitle,
                 recordComment,
-                recordDate
+                recordDate,
+                null
         );
         editRecord.execute();
     }
@@ -69,8 +61,12 @@ public class RecordViewPresenter implements EditRecord.Callback{
     }
 
     @Override
-    public void onERFail() {
+    public void onERNoGeolocationProvided() {
 
     }
 
+    @Override
+    public void onERInvalidPermissions() {
+
+    }
 }

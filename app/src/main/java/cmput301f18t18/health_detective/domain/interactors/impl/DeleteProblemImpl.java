@@ -6,6 +6,8 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
@@ -16,30 +18,17 @@ import cmput301f18t18.health_detective.domain.repository.UserRepo;
 public class DeleteProblemImpl extends AbstractInteractor implements DeleteProblem {
 
     private DeleteProblem.Callback callback;
-    private UserRepo userRepo;
-    private ProblemRepo problemRepo;
-    private Patient patient;
     private Problem problem;
 
     /**
      * Constructor for DeleteProblemImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param userRepo the repository where users are stored
-     * @param problemRepo the repository where problems are stored
-     * @param patient the patient the problem being deleted belonged to
      * @param problem the problem being deleted
      */
-    public DeleteProblemImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                             DeleteProblem.Callback callback, UserRepo userRepo, ProblemRepo problemRepo,
-                             Patient patient, Problem problem)
+    public DeleteProblemImpl(DeleteProblem.Callback callback, Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.userRepo = userRepo;
-        this.problemRepo = problemRepo;
-        this.patient = patient;
         this.problem = problem;
     }
 
@@ -58,6 +47,15 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
      */
     @Override
     public void run() {
+        final UserRepo userRepo = this.context.getUserRepo();
+        final ProblemRepo problemRepo = this.context.getProblemRepo();
+        final Patient patient;
+
+        ContextTree tree = context.getContextTree();
+        ContextTreeParser treeParser = new ContextTreeParser(tree);
+
+        patient = treeParser.getCurrentPatientContext();
+
         // Patient cannot be found
         if(userRepo.retrievePatientById(patient.getUserId()) == null){
             this.mainThread.post(new Runnable() {
@@ -70,7 +68,7 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
             return;
         }
         // Problem cannot be found
-        if(problemRepo.retrieveProblemById(problem.getProblemID()) == null){
+        if(problemRepo.retrieveProblemById(problem.getProblemId()) == null){
             this.mainThread.post(new Runnable() {
                 @Override
                 public void run() {
@@ -90,8 +88,8 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
         });
 
         //Delete problem
-        this.problemRepo.deleteProblem(problem);
-        this.patient.removeProblem(problem);
-        this.userRepo.updateUser(patient);
+        problemRepo.deleteProblem(problem);
+        patient.removeProblem(problem);
+        userRepo.updateUser(patient);
     }
 }

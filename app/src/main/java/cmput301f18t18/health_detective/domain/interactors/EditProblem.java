@@ -8,5 +8,6 @@ public interface EditProblem extends Interactor {
         void onEPSuccess(Problem problem);
         void onEPEmptyTitle();
         void onEPNoStartDateProvided();
+        void onEPInvalidPermissions();
     }
 }

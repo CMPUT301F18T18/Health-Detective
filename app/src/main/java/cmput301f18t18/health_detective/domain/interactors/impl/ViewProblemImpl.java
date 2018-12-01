@@ -3,39 +3,32 @@ package cmput301f18t18.health_detective.domain.interactors.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
-import cmput301f18t18.health_detective.domain.interactors.GetRecords;
+import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.domain.model.context.component.factory.ContextTreeComponentFactory;
+import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 /**
  * The GetRecordImpl class is a class intended to handle the retrieval of
  * a problem's record list.
  */
-public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
+public class ViewProblemImpl extends AbstractInteractor implements ViewProblem {
 
-    private GetRecords.Callback callback;
-    private RecordRepo recordRepo;
+    private ViewProblem.Callback callback;
     private Problem problem;
 
     /**
      * Constructor for GetRecordsImpl
-     * @param threadExecutor
-     * @param mainThread
      * @param callback
-     * @param recordRepo the repository where records are stored
      * @param problem the problem who's list of records is retrieved
      */
-    public GetRecordsImpl(ThreadExecutor threadExecutor, MainThread mainThread,
-                          GetRecords.Callback callback, RecordRepo recordRepo,
-                          Problem problem)
+    public ViewProblemImpl(ViewProblem.Callback callback, Problem problem)
     {
-        super(threadExecutor, mainThread);
+        super();
         this.callback = callback;
-        this.recordRepo = recordRepo;
         this.problem = problem;
     }
 
@@ -51,6 +44,9 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
      */
     @Override
     public void run() {
+        RecordRepo recordRepo = this.context.getRecordRepo();
+        ContextTree tree = this.context.getContextTree();
+        tree.push(ContextTreeComponentFactory.getContextComponent(problem));
 
         if (problem.isRecordsEmpty()) {
             this.mainThread.post(new Runnable() {
@@ -63,8 +59,8 @@ public class GetRecordsImpl extends AbstractInteractor implements GetRecords {
             return;
         }
 
-        ArrayList<Integer> recordIds = problem.getRecordIds();
-        ArrayList<Record> records = this.recordRepo.retrieveRecordsById(recordIds);
+        ArrayList<String> recordIds = problem.getRecordIds();
+        ArrayList<Record> records = recordRepo.retrieveRecordsById(recordIds);
 
         records.sort(new Comparator<Record>() {
             @Override

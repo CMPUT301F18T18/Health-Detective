@@ -1,31 +1,17 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
-import android.content.Context;
-
 import java.util.ArrayList;
-import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
-import cmput301f18t18.health_detective.domain.interactors.GetProblems;
-import cmput301f18t18.health_detective.domain.interactors.impl.CreateProblemImpl;
+import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
-import cmput301f18t18.health_detective.domain.interactors.impl.GetProblemsImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
-import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
-public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback{
+public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback{
 
     private View view;
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private ProblemRepo problemRepo;
-    private UserRepo userRepo;
 
 
     public interface View {
@@ -33,13 +19,8 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
         void onProblemDeleted(Problem problem);
     }
 
-    public ProblemsListPresenter (View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                                  ProblemRepo problemRepo, UserRepo userRepo) {
+    public ProblemsListPresenter (View view) {
         this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.problemRepo = problemRepo;
-        this.userRepo = userRepo;
     }
 
     /**
@@ -49,12 +30,7 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
      */
     public void deleteProblem(Patient patientContext, Problem problem){
         DeleteProblem command = new DeleteProblemImpl(
-                this.threadExecutor,
-                this.mainThread,
                 this,
-                this.userRepo,
-                this.problemRepo,
-                patientContext,
                 problem
         );
 
@@ -66,13 +42,9 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
      * @param patient current user (patitent)
      */
     public void getProblems(Patient patient){
-        GetProblems command = new GetProblemsImpl(
-                this.threadExecutor,
-                this.mainThread,
+        ViewPatient command = new ViewPatientImpl(
                 this,
-                this.problemRepo,
-                patient
-        );
+                patient);
 
         command.execute();
     }
