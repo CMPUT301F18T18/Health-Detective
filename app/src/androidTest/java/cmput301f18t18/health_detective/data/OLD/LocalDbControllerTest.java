@@ -25,12 +25,12 @@ public class LocalDbControllerTest {
 
     @Test
     public void testInsertRetrieveProblem() {
-        Problem problem = new Problem(1001, "TestInsert", "Stay", new Date());
-        problem.addRecord(new Record(1, "a", "b"));
-        problem.addRecord(new Record(2, "c", "d"));
-        problem.addRecord(new Record(3, "e", "f"));
+        Problem problem = new Problem("1001", "TestInsert", "Stay", new Date());
+        problem.addRecord(new Record("1", "a", "b", new Date()));
+        problem.addRecord(new Record("2", "c", "d", new Date()));
+        problem.addRecord(new Record("3", "e", "f", new Date()));
         localDbController.insertProblem(problem);
-        Problem ret = localDbController.retrieveProblemById(1001);
+        Problem ret = localDbController.retrieveProblemById("1001");
 
         assertEquals(problem, ret);
 

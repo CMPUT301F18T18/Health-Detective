@@ -8,6 +8,8 @@ import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
 import cmput301f18t18.health_detective.data.transaction.ProblemRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.RecordRepoImpl;
 import cmput301f18t18.health_detective.data.transaction.UserRepoImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
@@ -30,6 +32,10 @@ public abstract class RepoFactory {
     public static AbstractRepo build(JestDroidClient client, SQLiteDatabase db, Class clazz, String id) {
         if (clazz == Problem.class)
             return new ProblemRepoImpl(client, db, id);
+        if (clazz == Record.class)
+            return new RecordRepoImpl(client, db, id);
+        if (clazz == Patient.class || clazz == CareProvider.class || clazz == User.class)
+            return new UserRepoImpl(client, db, id);
 
         return null;
     }

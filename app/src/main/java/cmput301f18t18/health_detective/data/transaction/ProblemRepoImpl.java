@@ -112,7 +112,7 @@ public class ProblemRepoImpl extends AbstractRepo {
      *
      * @return          The problem associated with problemId
      */
-    public Problem retrieveProblemById() {
+    public Problem retrieve() {
         String elasticSearchId = getProblemElasticSearchId();
         Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Problem")
@@ -142,7 +142,7 @@ public class ProblemRepoImpl extends AbstractRepo {
 
         for (String id : problemId) {
             this.problemId = id;
-            problems.add(retrieveProblemById());
+            problems.add(retrieve());
         }
 
         return problems;
