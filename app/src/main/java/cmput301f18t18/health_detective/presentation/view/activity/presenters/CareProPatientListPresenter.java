@@ -25,7 +25,7 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
     public interface View {
         void onAddPatientSuccess();
         void onAddPatientFailure();
-        void onDeletePatientSuccess();
+        void onDeletePatientSuccess(Patient patient);
         void onGetPatientSuccess(ArrayList<Patient> assignedPatients);
         void noPatients();
         void onGetUser(CareProvider careProvider);
@@ -90,7 +90,7 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
 
     @Override
     public void onRAPSuccess(Patient removedPatient) {
-        this.view.onDeletePatientSuccess();
+        this.view.onDeletePatientSuccess(removedPatient);
 
     }
 

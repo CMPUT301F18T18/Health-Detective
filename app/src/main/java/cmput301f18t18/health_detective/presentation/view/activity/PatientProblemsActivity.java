@@ -35,14 +35,14 @@ import cmput301f18t18.health_detective.presentation.view.activity.listeners.Prob
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
 public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener,
-                                                                          ProblemsListPresenter.View, ProblemOnClickListener,
-                                                                            GetLoggedInUser.Callback{
+                                                                          ProblemsListPresenter.View, ProblemOnClickListener{
 
     ListView listView;
     ProblemListAdapter adapter;
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
     Patient patientContext;
+    CareProvider cpContext;
 
 
     @Override
@@ -59,11 +59,12 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
 
-        Intent intent = this.getIntent();
-        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
+        //Intent intent = this.getIntent();
+        //this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
         UserRepoMock mockUser = new UserRepoMock();
         mockUser.retrievePatientById("12345678");
         ProblemRepoMock mockProblem = new ProblemRepoMock();
+        //patientContext = mockUser.retrievePatientById("dnallen1234");
         mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
 
@@ -158,6 +159,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         this.adapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onDeleteClicked(final Problem problem) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -195,23 +197,20 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         startActivity(recordsIntent);
     }
 
-    @Override
-    public void onGLIUNoUserLoggedIn() {
 
+    @Override
+    public void getPatientUser(Patient patient) {
+        patientContext = patient;
+        this.problemsListPresenter.getProblems(patient);
     }
 
     @Override
-    public void onGLIUPatient(Patient patient) {
-
-    }
-
-    @Override
-    public void onGLIUCareProvider(CareProvider careProvider) {
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-
+    public void getCPUser(CareProvider careProvider) {
+//        cpContext = careProvider;
+//        Window window = this.getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+//        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
     }
 }

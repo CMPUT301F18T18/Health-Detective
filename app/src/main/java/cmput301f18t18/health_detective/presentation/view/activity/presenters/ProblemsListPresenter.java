@@ -3,24 +3,32 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 import java.util.ArrayList;
 
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import io.searchbox.core.Get;
 
-public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback{
+public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback, GetLoggedInUser.Callback{
 
     private View view;
+
 
 
     public interface View {
         void onProblemListUpdate(ArrayList<Problem> problemList);
         void onProblemDeleted(Problem problem);
+        void getPatientUser(Patient patient);
+        void getCPUser(CareProvider careProvider);
     }
 
     public ProblemsListPresenter (View view) {
         this.view = view;
+        new GetLoggedInUserImpl(this).execute();
     }
 
     /**
@@ -78,6 +86,21 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
     @Override
     public void onGPNoProblems() {
         this.view.onProblemListUpdate(new ArrayList<Problem>());
+    }
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+        this.view.getPatientUser(patient);
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        this.view.getCPUser(careProvider);
     }
 
 }
