@@ -1,5 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,6 +11,7 @@ import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 
@@ -52,14 +55,14 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
      * @param recordDate record date
      * @param userId current user that is adding the new record
      */
-    public void createUserRecord(Problem problem, String recordTitle, String recordComment, Date recordDate, String userId){
+    public void createUserRecord(Problem problem, String recordTitle, String recordComment, Date recordDate, String userId, Geolocation geoLocation){
 
         CreateRecord createRecord = new CreateRecordImpl(
                 this,
                 recordTitle,
                 recordComment,
                 recordDate,
-                userId
+                geoLocation
         );
 
         createRecord.execute();
@@ -107,10 +110,10 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     }
 
     @Override
-    public void onCRFail() {
-        this.view.onCreateRecordFail();
+    public void onCRNoGeolocationProvided() {
 
     }
+
 
     @Override
     public void onDRSuccess(Record record) {

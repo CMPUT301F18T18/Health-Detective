@@ -22,6 +22,9 @@ import java.util.Date;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
+import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemAddEditPresenter;
@@ -34,6 +37,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     ProblemAddEditPresenter problemAddEditPresenter;
     Boolean type;
     Date problemDateTime;
+    Geolocation geoLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

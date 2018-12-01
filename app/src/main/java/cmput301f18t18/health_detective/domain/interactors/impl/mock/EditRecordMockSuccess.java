@@ -46,13 +46,4 @@ public class EditRecordMockSuccess extends AbstractInteractor implements EditRec
         });
     }
 
-    @Override
-    public void insertPhoto(DomainImage image) {
-        
-    }
-
-    @Override
-    public void deletePhoto(DomainImage image) {
-
-    }
 }

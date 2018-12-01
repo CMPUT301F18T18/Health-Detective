@@ -9,9 +9,7 @@ public interface EditRecord extends Interactor {
         void onERSuccess(Record record);
         void onEREmptyTitle();
         void onERNoDateProvided();
+        void onERNoGeolocationProvided();
         void onERInvalidPermissions();
     }
-
-    void insertPhoto(DomainImage image);
-    void deletePhoto(DomainImage image);
 }

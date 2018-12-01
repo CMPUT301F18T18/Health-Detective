@@ -74,7 +74,7 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camara);
-
+      
         Intent newIntent = this.getIntent();
         this.record = (Record) newIntent.getSerializableExtra("RECORD");
         this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
@@ -107,7 +107,6 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         };
         button.setOnClickListener(listener);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,14 +153,14 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         verifyPermission(this);
 
         String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
-
+      
         File imageFile = new File(folder, "imagetest.jpg");
         imageFileUri = Uri.fromFile(imageFile);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
-
+  
     private void toGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, FROM_GALLERY);

@@ -89,7 +89,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.menu_tab, menu);
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
@@ -104,11 +104,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             case R.id.app_bar_search:
                 Intent searchIntent = new Intent(this,SearchActivity.class);
                 startActivity(searchIntent);
-                return true;
-
-            case R.id.Map_option:
-                Intent mapIntent = new Intent(this,MapActivity.class);
-                startActivity(mapIntent);
                 return true;
 
             case R.id.Logout_option:

@@ -4,10 +4,12 @@ import cmput301f18t18.health_detective.domain.interactors.AddPhoto;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;
+import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
@@ -28,8 +30,10 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
     @Override
     public void run() {
         final ImageRepo imageRepo = context.getImageRepo();
+        final RecordRepo recordRepo = context.getRecordRepo();
         final Patient patient;
         final User loggedInUser;
+        final Record recordContext;
         final DomainImage newImage;
 
         ContextTree tree = context.getContextTree();
@@ -37,8 +41,9 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
         loggedInUser = treeParser.getLoggedInUser();
         patient = treeParser.getCurrentPatientContext();
+        recordContext = treeParser.getCurrentRecordContext();
 
-        if (patient == null || !patient.equals(loggedInUser)) {
+        if (patient == null || !patient.equals(loggedInUser) || recordContext == null) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
@@ -67,7 +72,7 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
             return;
         }
 
-        newImage = new DomainImage(patient.getUserId(), image);
+        newImage = new DomainImage(image);
 
         if (label != null && label != "")
             newImage.setLabel(label);
@@ -83,6 +88,8 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
             }
         });
 
+        recordContext.insertPhoto(newImage);
+        recordRepo.updateRecord(recordContext);
         imageRepo.insertImage(newImage);
     }
 }

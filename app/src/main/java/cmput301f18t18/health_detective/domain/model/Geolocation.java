@@ -1,9 +1,11 @@
 package cmput301f18t18.health_detective.domain.model;
 
+import java.io.Serializable;
+
 /**
  * Class to store info and methods relating to geolocations
  */
-public class Geolocation {
+public class Geolocation implements Serializable{
     private double latitude;
     private double longitude;
 
