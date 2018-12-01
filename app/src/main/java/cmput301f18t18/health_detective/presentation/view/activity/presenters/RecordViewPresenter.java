@@ -8,6 +8,7 @@ import cmput301f18t18.health_detective.domain.executor.MainThread;
 import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditRecordImpl;
+import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
@@ -32,14 +33,15 @@ public class RecordViewPresenter implements EditRecord.Callback{
      * @param recordComment new record comment
      * @param recordDate new record date
      */
-    public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate){
+    public void editUserRecord(Record record, String recordTitle, String recordComment, Date recordDate, Geolocation geoLocation){
         EditRecord editRecord = new EditRecordImpl(
                 this,
                 record,
                 recordTitle,
                 recordComment,
                 recordDate,
-                null
+                geoLocation
+
         );
         editRecord.execute();
     }

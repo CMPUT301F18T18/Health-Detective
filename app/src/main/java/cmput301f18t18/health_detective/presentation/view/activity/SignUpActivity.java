@@ -122,14 +122,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onCreatePatient(Patient patient) {
         Intent intent = new Intent(this, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
+        //intent.putExtra("PATIENT", patient);
         Toast.makeText(this, "Accounted created, logging in", Toast.LENGTH_SHORT).show();
         this.startActivity(intent);
     }
 
     @Override
     public void onCreateCareProvider(CareProvider careProvider) {
-
+        Intent intent = new Intent(this, CareProPatientListActivity.class);
+        //intent.putExtra("PATIENT", careProvider);
+        startActivity(intent);
+        Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
     }
 
     @Override

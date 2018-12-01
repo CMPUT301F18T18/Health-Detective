@@ -1,0 +1,131 @@
+package cmput301f18t18.health_detective.presentation.view.activity.presenters;
+
+import android.text.GetChars;
+import android.view.View;
+
+import java.util.ArrayList;
+
+import cmput301f18t18.health_detective.domain.interactors.AddAssignedPatient;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
+import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
+import cmput301f18t18.health_detective.domain.interactors.impl.AddAssignedPatientImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.RemoveAssignedPatientImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.ViewCareProviderImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
+import cmput301f18t18.health_detective.domain.model.Patient;
+
+public class CareProPatientListPresenter implements AddAssignedPatient.Callback, RemoveAssignedPatient.Callback, ViewCareProvider.Callback, GetLoggedInUser.Callback{
+
+    private View view;
+
+
+
+    public interface View {
+        void onAddPatientSuccess();
+        void onAddPatientFailure();
+        void onDeletePatientSuccess();
+        void onGetPatientSuccess(ArrayList<Patient> assignedPatients);
+        void noPatients();
+        void onGetUser(CareProvider careProvider);
+    }
+
+    public CareProPatientListPresenter(View view) {
+        this.view = view;
+        new GetLoggedInUserImpl(this).execute();
+    }
+
+    public void addNewPatient(String patientId){
+        AddAssignedPatient command = new AddAssignedPatientImpl(
+                this,
+                null,
+                patientId
+        );
+
+        command.execute();
+    }
+
+    public void deletePatient(CareProvider careProvider, Patient patient){
+        RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
+                this,
+                careProvider,
+                patient
+        );
+
+        command.execute();
+    }
+
+    public void getAssignedPatients(CareProvider careProvider) {
+        ViewCareProvider command = new ViewCareProviderImpl(
+                this,
+                careProvider
+        );
+        command.execute();
+    }
+
+    @Override
+    public void onAAPSuccess() {
+        this.view.onAddPatientSuccess();
+    }
+
+    @Override
+    public void onAAPNotValidUserId() {this.view.onAddPatientFailure();}
+
+
+    @Override
+    public void onAAPPatientAlreadyAssigned() {
+
+    }
+
+    @Override
+    public void onAAPPatientDoesNotExist() {
+
+    }
+
+    @Override
+    public void onAAPLoggedInUserNotACareProvider() {
+
+    }
+
+    @Override
+    public void onRAPSuccess(Patient removedPatient) {
+        this.view.onDeletePatientSuccess();
+
+    }
+
+    @Override
+    public void onRAPPatientNotAssigned() {
+
+    }
+
+    @Override
+    public void onRAPInvalidPermissions() {
+
+    }
+
+    @Override
+    public void onGAPSuccess(ArrayList<Patient> assignedPatients) {
+        this.view.onGetPatientSuccess(assignedPatients);
+    }
+
+    @Override
+    public void onGAPNoPatients() {
+        this.view.noPatients();
+    }
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        this.view.onGetUser(careProvider);
+    }
+}

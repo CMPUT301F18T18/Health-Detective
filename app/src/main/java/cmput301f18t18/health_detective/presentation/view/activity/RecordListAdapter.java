@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class RecordListAdapter extends ArrayAdapter{
 
         Record record = recordList.get(postition);
 
-        TextView recordTitle = rowView.findViewById(R.id.titleView);
+        TextView recordTitle = rowView.findViewById(R.id.problemTitle);
         recordTitle.setText(record.getTitle());
 
         TextView recordUser = rowView.findViewById(R.id.userIdView);

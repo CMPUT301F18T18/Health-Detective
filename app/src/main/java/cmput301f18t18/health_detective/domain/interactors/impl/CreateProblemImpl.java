@@ -24,7 +24,6 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
     private CreateProblem.Callback callback;
     private String problemTitle;
     private String problemDescription;
-    private Geolocation geolocation;
     private Date startDate;
 
     /**
@@ -35,13 +34,12 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
      * @param startDate the date chosen for the created problem
      */
     public CreateProblemImpl(CreateProblem.Callback callback,
-                             String problemTitle, String problemDescription, Date startDate, Geolocation geolocation)
+                             String problemTitle, String problemDescription, Date startDate)
     {
         super();
         this.callback = callback;
         this.problemTitle = problemTitle;
         this.problemDescription = problemDescription;
-        this.geolocation = geolocation;
         this.startDate = startDate;
     }
 

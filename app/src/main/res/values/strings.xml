@@ -28,5 +28,6 @@
     <string name="blFront">BL Tag</string>
     <string name="blBack">BL Tag</string>
     <string name="add_date">Add Date</string>
+    <string name="cap_Problem">PROBLEMS</string>
 
 </resources>
