@@ -11,18 +11,21 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.PatientOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CareProPatientListPresenter;
 
 
-public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View{
+public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View, GetLoggedInUser.Callback{
 
     ListView listView;
     PatientListAdapter adapter;
     ArrayList<Patient> patientList = new ArrayList<>();
     CareProPatientListPresenter careProPatientListPresenter;
     Patient patientContext;
+    CareProvider cpContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         listView = findViewById(R.id.patientListView);
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
+
 
     }
 
@@ -61,5 +65,26 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         //startActivity(intent);
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    public void onDeletePatientSuccess() {
+
+    }
+
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        cpContext = careProvider;
     }
 }
