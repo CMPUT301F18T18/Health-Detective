@@ -1,5 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
+
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,7 +17,6 @@ import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 
 public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.Callback, DeleteRecord.Callback, GetLoggedInUser.Callback {
@@ -78,6 +79,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     public void onCRNoGeolocationProvided() {
 
     }
+
 
     @Override
     public void onDRSuccess(Record record) {

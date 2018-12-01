@@ -38,6 +38,7 @@ public class Record implements Searchable, Serializable {
     }
 
     public Record(String title, String comment) {
+        this();
         this.setTitle(title);
         this.setComment(comment);
     }

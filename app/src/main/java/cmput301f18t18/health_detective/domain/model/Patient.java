@@ -53,6 +53,6 @@ public class Patient extends User {
             problems.add(problemId);
         }
 
-        return  problems;
+        return problems;
     }
 }

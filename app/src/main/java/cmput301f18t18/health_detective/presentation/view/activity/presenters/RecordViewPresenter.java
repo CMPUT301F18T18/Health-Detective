@@ -1,22 +1,18 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
-import android.view.View;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
 import cmput301f18t18.health_detective.domain.interactors.ViewRecord;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditRecordImpl;
-import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewRecordImpl;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
 
 public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Callback{
@@ -59,6 +55,7 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
      * @param recordComment new record comment
      * @param recordDate new record date
      */
+
     public void editUserRecord(String recordTitle, String recordComment, Date recordDate, Geolocation geolocation){
         EditRecord editRecord = new EditRecordImpl(
                 this,

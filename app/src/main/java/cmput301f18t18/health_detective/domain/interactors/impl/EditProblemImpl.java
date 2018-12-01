@@ -34,11 +34,10 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
      * @param startDate the date assigned to the problem being edited
      */
     public EditProblemImpl(EditProblem.Callback callback,
-                           Problem problemToEdit, String title, String description, Date startDate)
+                           String title, String description, Date startDate)
     {
         super();
         this.callback = callback;
-        this.problemToEdit = problemToEdit;
         this.title = title;
         this.description = description;
         this.startDate = startDate;

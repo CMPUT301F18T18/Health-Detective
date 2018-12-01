@@ -112,6 +112,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
 
         //Add record to recordRepo
         recordRepo.insertRecord(newRecord);
+
         problem.addRecord(newRecord);
         problemRepo.updateProblem(problem);
 
