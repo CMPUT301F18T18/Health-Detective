@@ -62,6 +62,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Date date;
     private Geolocation currentGeoLocation;
     private Boolean LocationPermissionsGranted = false;
+    private AddDialog exampleDialog;
 
 
     @Override
@@ -178,7 +179,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     private void openDialog() {
-        AddDialog exampleDialog = new AddDialog();
+        exampleDialog = new AddDialog(currentGeoLocation);
         exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
@@ -244,8 +245,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
+
+        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
+
 
     }
 
@@ -267,8 +269,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        Log.d("abcdefgh",Double.toString(currentGeoLocation.getlatitude()));
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
+        exampleDialog.changeTime(date);
+
+        //recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
 
     }
 
@@ -288,7 +291,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                             Location currentLocation = (Location) task.getResult();
                             //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
                             currentGeoLocation = new Geolocation(currentLocation.getLongitude(),currentLocation.getLatitude());
-                            Log.d("abcdefg",Double.toString(currentGeoLocation.getlatitude()));
 
                         }
                     }
@@ -315,4 +317,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     }
 
+    @Override
+    public void applyDate() {
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "date picker");
+    }
 }
