@@ -293,7 +293,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                         if (task.isSuccessful()) {
                             Location currentLocation = (Location) task.getResult();
                             //LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-                            currentGeoLocation = new Geolocation(currentLocation.getLongitude(),currentLocation.getLatitude());
+                            currentGeoLocation = new Geolocation(currentLocation.getLatitude(),currentLocation.getLongitude());
 
                         }
                     }
@@ -326,23 +326,24 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         datePicker.show(getSupportFragmentManager(), "date picker");
     }
 
-    public void getAddress(){
+    public Address getAddress() throws IOException {
         Geocoder gcd = new Geocoder(this, Locale.getDefault());
         Double lat = currentGeoLocation.getlatitude();
         Double lng = currentGeoLocation.getlongitude();
         List<Address> addresses = null;
-//        try {
-//            addresses = gcd.getFromLocation(lat, lng, 1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Address address;
-//        if (addresses.size() > 0) {
-//            address = addresses.get(0);
-//        }
-//        else {
-//            address = new Address(Locale.getDefault());
-//        }
 
+        try {
+            addresses = gcd.getFromLocation(lat, lng, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address;
+        if (addresses.size() > 0) {
+            address = addresses.get(0);
+        }
+        else {
+            address = new Address(Locale.getDefault());
+        }
+        return address;
     }
 }

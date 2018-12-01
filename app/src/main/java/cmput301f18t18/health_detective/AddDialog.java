@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,6 +32,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
     private Button addDate, addGeo;
     private Geolocation geolocation;
     private Date updateDate = new Date();
+    private Address address;
 
     public AddDialog() {
         this.geolocation = null;
@@ -70,10 +72,13 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
         currentDate = view.findViewById(R.id.add_record_date);
         currentLocation = view.findViewById(R.id.add_record_geo);
         Calendar c = Calendar.getInstance();
-        Date nowDate = new Date();
-        nowDate = c.getTime();
-        listener.getAddress();
-        currentLocation.setText("");//address.getAddressLine(0)+" "+ address.getCountryName());
+        Date nowDate = c.getTime();
+        try {
+            address = listener.getAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentLocation.setText(address.getAddressLine(0));
         currentDate.setText(nowDate.toString());
 
         addDate = view.findViewById(R.id.addDateRecordBtn);
@@ -131,7 +136,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
     public interface AddDialogListener{
         void applyEdit(String title, String comment);
         void applyDate();
-        void getAddress();
+        Address getAddress() throws IOException;
 
     }
 
