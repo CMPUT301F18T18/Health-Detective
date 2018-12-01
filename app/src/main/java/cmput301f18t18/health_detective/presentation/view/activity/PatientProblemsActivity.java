@@ -103,8 +103,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
                 return true;
 
             case R.id.Logout_option:
-                Intent logoutIntent = new Intent(this,MainActivity.class);
-                startActivity(logoutIntent);
+                problemsListPresenter.onLogout();
                 return true;
 
             case R.id.userId:
@@ -158,6 +157,12 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
         problemsIntent.putExtra("TYPE", (Boolean) true);
         startActivity(problemsIntent);
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
     }
 
     @Override

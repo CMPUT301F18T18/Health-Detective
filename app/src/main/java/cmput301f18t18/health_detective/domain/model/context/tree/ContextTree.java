@@ -36,6 +36,11 @@ public class ContextTree {
         removeDuplicateTypes(context.next(), context);
     }
 
+    public synchronized void nuke() {
+        this.head = null;
+        this.tail = null;
+    }
+
     private void removeDuplicateTypes(ContextTreeComponent contextToCheck, ContextTreeComponent reference) {
         // Leaf Reached
         if (contextToCheck == null)

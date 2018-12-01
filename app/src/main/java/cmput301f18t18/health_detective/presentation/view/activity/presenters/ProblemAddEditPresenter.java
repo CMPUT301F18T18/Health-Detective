@@ -2,20 +2,44 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.interactors.EditProblem;
+import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateProblemImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditProblemImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
+import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 
-public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProblem.Callback{
+public class ProblemAddEditPresenter implements ViewProblem.Callback,CreateProblem.Callback, EditProblem.Callback{
 
     private ProblemAddEditPresenter.AddView addView;
+
+    @Override
+    public void onVPSuccess(ArrayList<Record> records) {
+
+    }
+
+    @Override
+    public void onVPSuccessDetails(String title, String description, Date date) {
+        addView.onProblemDetails(title, description, date);
+    }
+
+    @Override
+    public void onVPNoRecords() {
+
+    }
+
+    @Override
+    public void onVPNoContext() {
+
+    }
 
     /**
      * Interface that updates the view inside the activity
@@ -23,6 +47,7 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
     public interface AddView {
         void onCreateProblem();
         void onEditProblem();
+        void onProblemDetails(String title, String description, Date date);
     }
 
     /**
@@ -31,6 +56,8 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
      */
     public ProblemAddEditPresenter (ProblemAddEditPresenter.AddView view) {
         this.addView = view;
+
+        new ViewProblemImpl(this).execute();
     }
 
     /**

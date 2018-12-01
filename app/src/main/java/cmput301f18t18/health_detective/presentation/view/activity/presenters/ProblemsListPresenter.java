@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
 import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -62,6 +63,7 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
         void onProblemDeleted(Problem problem);
         void onViewProblem();
         void onEditProblem();
+        void onLogout();
     }
 
     public ProblemsListPresenter (View view) {
@@ -101,6 +103,12 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
         new PutContext(problem).execute();
 
         view.onViewProblem();
+    }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
     }
 
 }
