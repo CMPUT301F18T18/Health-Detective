@@ -66,7 +66,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_record_view);
 
-        getLocationPermission();
+
 
         if (image == null){
             testImages = 0;
@@ -209,6 +209,11 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         this.comment = comment;
         this.date = date;
         this.geolocation = geolocation;
+        if (geolocation!=null){
+            getLocationPermission();
+        }
+
+
 
         setTextViews();
     }
@@ -278,7 +283,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", patientContext);
                 mapIntent.putExtra("type",1);
-                //mapIntent.putExtra("location", record.getGeolocation());
+                if (geolocation == null){
+                    Double lat = 53.5444;
+                    Double lng = -113.491;
+                    geolocation = new Geolocation(lat,lng);
+                }
+                mapIntent.putExtra("location", geolocation);
                 startActivityForResult(mapIntent,REQUEST_CODE);
         }
     }
