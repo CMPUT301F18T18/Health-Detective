@@ -16,6 +16,7 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
 
     public interface View {
         void onAddPatientSuccess();
+        void onAddPatientFailure();
         void onDeletePatientSuccess();
     }
 
@@ -47,9 +48,8 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
     }
 
     @Override
-    public void onAAPNotValidUserId() {
+    public void onAAPNotValidUserId() {this.view.onAddPatientFailure();}
 
-    }
 
     @Override
     public void onAAPPatientAlreadyAssigned() {

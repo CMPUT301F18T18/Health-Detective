@@ -106,11 +106,17 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     }
 
     @Override
+    public void onAddPatientFailure() {
+        Toast toast = Toast.makeText(this, "Patient Not added", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
     public void applyEdit(String patient) {
         // add the patient done here
         Toast toast = Toast.makeText(this, patient, Toast.LENGTH_SHORT);
         toast.show();
-        this.careProPatientListPresenter.addNewPatient(patient);
+        careProPatientListPresenter.addNewPatient(patient);
     }
 
 
