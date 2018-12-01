@@ -13,7 +13,6 @@ import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import io.searchbox.core.Get;
 
 public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback, GetLoggedInUser.Callback {
 

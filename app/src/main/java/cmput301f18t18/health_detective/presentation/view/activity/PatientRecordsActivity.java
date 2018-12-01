@@ -73,10 +73,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
 
-        this.recordListPresenter = new RecordListPresenter(this);
-
         getLocationPermission();
         getDeviceLocation();
+
+        this.recordListPresenter = new RecordListPresenter(this);
 
         ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
@@ -100,6 +100,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
+
+
         this.recordListPresenter.getUserRecords();
     }
 
@@ -133,7 +135,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this, MapActivity.class);
-                mapIntent.putExtra("PATIENT", patientContext);
+                //mapIntent.putExtra("PATIENT", null);
                 mapIntent.putExtra("type",0);
                 mapIntent.putExtra("location", currentGeoLocation);
                 startActivity(mapIntent);
@@ -227,7 +229,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.title = newTitle;
         this.desc = newComment;
 
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test",currentGeoLocation);
+        recordListPresenter.createUserRecord(this.title, this.desc, this.date, currentGeoLocation);
 
 
     }
@@ -324,7 +326,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void openMapDialog() {
         Intent mapIntent = new Intent(this, MapActivity.class);
-        mapIntent.putExtra("PATIENT", patientContext);
+        //mapIntent.putExtra("PATIENT", null);
         mapIntent.putExtra("type",1);
         mapIntent.putExtra("location",currentGeoLocation);
         startActivityForResult(mapIntent,REQUEST_CODE);
