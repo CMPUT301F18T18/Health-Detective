@@ -59,7 +59,7 @@ public class ViewProblemImpl extends AbstractInteractor implements ViewProblem {
             return;
         }
 
-        ArrayList<Integer> recordIds = problem.getRecordIds();
+        ArrayList<String> recordIds = problem.getRecordIds();
         ArrayList<Record> records = recordRepo.retrieveRecordsById(recordIds);
 
         records.sort(new Comparator<Record>() {

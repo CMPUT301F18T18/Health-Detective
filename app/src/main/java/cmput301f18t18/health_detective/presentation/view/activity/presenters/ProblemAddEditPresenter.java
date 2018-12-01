@@ -4,9 +4,6 @@ import android.content.Context;
 
 import java.util.Date;
 
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.interactors.EditProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateProblemImpl;
@@ -14,9 +11,6 @@ import cmput301f18t18.health_detective.domain.interactors.impl.EditProblemImpl;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
-import cmput301f18t18.health_detective.domain.repository.RecordRepo;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
 public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProblem.Callback{
 
@@ -57,7 +51,8 @@ public class ProblemAddEditPresenter implements CreateProblem.Callback, EditProb
                 this,
                 problemTitle,
                 problemDescription,
-                startDate
+                startDate,
+                null
         );
         createProblem.execute();
     }
