@@ -31,13 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UserRepoMock mockUser = new UserRepoMock();
         mockUser.insertUser(new Patient("12345678", "(250) 575-9089", "a@a.a"));
 
-//        this.loginPresenter = new LoginPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                ElasticSearchController.getInstance()
-//                //mockUser
-//        );
         this.loginPresenter = new LoginPresenter(this);
 
         Button loginButton = findViewById(R.id.loginButton);
@@ -69,37 +62,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.signUpText:
                 Intent signUpIntent = new Intent(this,SignUpActivity.class);
-                changeActivity(signUpIntent);
+                startActivity(signUpIntent);
                 break;
 
         }
     }
 
-    public void changeActivity(Intent intent){
+    @Override
+    public void onLoginPatient() {
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onLoginPatient(Patient patient) {
-        // Not sure what you do with this information but here it is
-        Intent intent = new Intent(this, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
-        Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show();
-        this.startActivity(intent);
-    }
-
-    @Override
-    public void onLoginCareProvider(CareProvider careProvider) {
+    public void onLoginCareProvider() {
 
     }
 
     @Override
-    public void onInvalidUserId() {
-        Toast.makeText(this, "Invalid UserId", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onUserDoesNotExist() {
-        Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
+    public void makeToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

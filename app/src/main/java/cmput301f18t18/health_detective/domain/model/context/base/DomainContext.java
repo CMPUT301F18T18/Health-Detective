@@ -25,7 +25,7 @@ public class DomainContext {
 
     private ContextTree contextTree;
 
-    public static DomainContext getInstance() {
+    public synchronized static DomainContext getInstance() {
         if (ourInstance == null) {
             ourInstance = new DomainContext();
         }

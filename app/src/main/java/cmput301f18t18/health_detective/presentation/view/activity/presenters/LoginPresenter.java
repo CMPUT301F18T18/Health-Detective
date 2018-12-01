@@ -1,28 +1,19 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.widget.Toast;
-
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
 import cmput301f18t18.health_detective.domain.interactors.UserLogin;
+import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.UserLoginImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.User;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
-import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
 public class LoginPresenter implements UserLogin.Callback {
 
     private View view;
 
     public interface View {
-        void onLoginPatient(Patient patient);
-        void onLoginCareProvider(CareProvider careProvider);
-        void onInvalidUserId();
-        void onUserDoesNotExist();
+        void onLoginPatient();
+        void onLoginCareProvider();
+        void makeToast(String msg);
     }
 
     public LoginPresenter(View view)
@@ -44,22 +35,28 @@ public class LoginPresenter implements UserLogin.Callback {
 
     @Override
     public void onLoginPatientSuccess(Patient patient) {
-        this.view.onLoginPatient(patient);
+        new PutContext(patient).execute();
+
+        this.view.makeToast("Logging In");
+        this.view.onLoginPatient();
     }
 
     @Override
     public void onLoginCareProviderSuccess(CareProvider careProvider) {
-        this.view.onLoginCareProvider(careProvider);
+        new PutContext(careProvider).execute();
+
+        this.view.makeToast("Logging In");
+        this.view.onLoginCareProvider();
     }
 
     @Override
     public void onLoginInvalidUserId() {
-        this.view.onInvalidUserId();
+        this.view.makeToast("Invalid UserId");
     }
 
     @Override
     public void onLoginUserDoesNotExist() {
-        this.view.onUserDoesNotExist();
+        this.view.makeToast("User does not exist");
     }
 
     @Override

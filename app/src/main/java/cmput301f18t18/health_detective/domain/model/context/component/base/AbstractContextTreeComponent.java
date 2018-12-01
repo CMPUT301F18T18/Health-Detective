@@ -6,33 +6,33 @@ import cmput301f18t18.health_detective.domain.model.context.component.ContextTre
 public class AbstractContextTreeComponent implements ContextTreeComponent, Cloneable{
 
     private Class<? extends AbstractInteractor> commandType;
-    private ContextTreeComponent child;
-    private ContextTreeComponent parent;
+    private ContextTreeComponent next;
+    private ContextTreeComponent prev;
 
 
     public AbstractContextTreeComponent() {
-        this.parent = null;
-        this.child = null;
+        this.prev = null;
+        this.next = null;
     }
 
     @Override
-    public ContextTreeComponent stepForward() {
-        return child;
+    public ContextTreeComponent next() {
+        return next;
     }
 
     @Override
-    public ContextTreeComponent stepBackward() {
-        return parent;
+    public ContextTreeComponent prev() {
+        return prev;
     }
 
     @Override
-    public void setChild(ContextTreeComponent child) {
-        this.child = child;
+    public void setNext(ContextTreeComponent next) {
+        this.next = next;
     }
 
     @Override
-    public void setParent(ContextTreeComponent parent) {
-        this.parent = parent;
+    public void setPrev(ContextTreeComponent prev) {
+        this.prev = prev;
     }
 
     @Override

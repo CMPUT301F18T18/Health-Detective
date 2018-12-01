@@ -8,7 +8,7 @@ import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 
-class GetLoggedInUserImpl extends AbstractInteractor implements GetLoggedInUser {
+public class GetLoggedInUserImpl extends AbstractInteractor implements GetLoggedInUser {
 
     private Callback callback;
 

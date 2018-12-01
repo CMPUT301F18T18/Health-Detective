@@ -38,12 +38,11 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Rec
 
 public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
 
+    String userId = "";
     ListView listView;
     RecordListAdapter adapter;
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
-    Problem problemContext;
-    Patient patientContext;
     int currentPosition;
     private String title, desc;
     private Date date;
@@ -55,30 +54,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_records);
 
-        Intent newIntent = this.getIntent();
-        this.problemContext = (Problem) newIntent.getSerializableExtra("PROBLEM");
-        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
-        RecordRepoMock mockRecord = new RecordRepoMock();
-        mockRecord.insertRecord(new Record("test", "test", new Date()));
-        ProblemRepoMock mockProblem = new ProblemRepoMock();
-        mockProblem.insertProblem(new Problem("test", "test", new Date()));
-
-//        this.recordListPresenter = new RecordListPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                ElasticSearchController.getInstance(),
-//                //mockProblem,
-//                ElasticSearchController.getInstance()
-//                //mockRecord
-//        );
-
         this.recordListPresenter = new RecordListPresenter(this);
 
-
-
-        adapter = new RecordListAdapter(this, recordList, patientContext.getUserId(), this);
-
+        adapter = new RecordListAdapter(this, recordList, this);
 
         ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
@@ -87,27 +65,23 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView = findViewById(R.id.recordListView);
 
 
-        adapter = new RecordListAdapter(this, this.recordList, patientContext.getUserId(), this);
+        adapter = new RecordListAdapter(this, this.recordList, this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentPosition = position;
-                Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
-                intent.putExtra("RECORD", recordList.get(position));
-                intent.putExtra("USER", patientContext);
-                changeActivity(intent);
+                recordListPresenter.onView(recordList.get(position));
             }
         });
 
-        this.recordListPresenter.getUserRecords(this.problemContext);
+        this.recordListPresenter.getUserRecords();
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        this.recordListPresenter.getUserRecords(this.problemContext);
+        this.recordListPresenter.getUserRecords();
     }
 
     @Override
@@ -121,8 +95,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(patientContext.getUserId());
-
+        userIdMenu.setTitle(userId);
 
         return true;
     }
@@ -137,7 +110,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                userIdIntent.putExtra("PATIENT", patientContext);
                 startActivity(userIdIntent);
                 return true;
             default:
@@ -174,11 +146,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        recordListPresenter.deleteUserRecords(problemContext, record);
+                        recordListPresenter.deleteUserRecords(record);
                     }
                 });
         AlertDialog dialog = alert.create();
         dialog.show();
+    }
+
+    @Override
+    public void onRecordView() {
+        Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
+        changeActivity(intent);
     }
 
     @Override
@@ -195,17 +173,15 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCreateRecord(Record record) {
+    public void onCreateRecord() {
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        intent.putExtra("USER", patientContext);
-        intent.putExtra("RECORD", record);
         this.startActivity(intent);
     }
 
     @Override
-    public void onCreateRecordFail() {
-        Toast toast = Toast.makeText(this, "Record Not Added", Toast.LENGTH_SHORT);
-        toast.show();
+    public void onRecordListUserId(String userId) {
+        this.userId = userId;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -242,7 +218,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.MINUTE,minute);
         date = c.getTime();
         Log.d("abcdefgh", date.toString());
-        recordListPresenter.createUserRecord(problemContext, this.title, this.desc, this.date, "test");
+        recordListPresenter.createUserRecord(this.title, this.desc, this.date, null);
 
     }
 }

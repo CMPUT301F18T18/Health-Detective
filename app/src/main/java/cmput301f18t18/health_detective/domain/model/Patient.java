@@ -36,7 +36,7 @@ public class Patient extends User {
         problemIds.remove(problem.getProblemId());
     }
 
-    public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
+    public void removeProblem(String problemId) { problemIds.remove(problemId); }
 
     public boolean isProblemsEmpty() {
         return problemIds.isEmpty();

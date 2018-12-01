@@ -65,7 +65,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         if (patient != null) {
 
             ContextTree tree = this.context.getContextTree();
-            tree.push(ContextTreeComponentFactory.getContextComponent(patient));
+            tree.push(ContextTreeComponentFactory.getContextComponent(patient, tree));
 
             this.mainThread.post(new Runnable() {
 
@@ -83,7 +83,7 @@ public class UserLoginImpl extends AbstractInteractor implements UserLogin {
         if (careProvider != null) {
 
             ContextTree tree = this.context.getContextTree();
-            tree.push(ContextTreeComponentFactory.getContextComponent(careProvider));
+            tree.push(ContextTreeComponentFactory.getContextComponent(careProvider, tree));
 
             this.mainThread.post(new Runnable() {
 

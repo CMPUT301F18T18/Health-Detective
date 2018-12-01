@@ -114,6 +114,9 @@ public class RecordRepoImpl extends AbstractRepo {
      * @return          The record associated with recordID
      */
     public Record retrieve() {
+        if (recordId == null)
+            return null;
+
         String elasticSearchId = getRecordElasticSearchId();
         Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
                 .type("Record")
@@ -143,7 +146,12 @@ public class RecordRepoImpl extends AbstractRepo {
 
         for (String id : recordID) {
             this.recordId = id;
-            records.add(retrieve());
+            Record record = retrieve();
+
+            if (record == null)
+                continue;
+
+            records.add(record);
         }
 
         return records;

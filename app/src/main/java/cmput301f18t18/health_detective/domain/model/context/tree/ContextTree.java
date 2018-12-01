@@ -18,47 +18,44 @@ public class ContextTree {
     }
 
     public synchronized void push(ContextTreeComponent context) {
-        ContextTreeComponent parent;
 
         if (context == null)
             return;
 
-        // If tree is empty add to tree set head and tail to point at it
-        if (head == null) {
-            head = context;
+        context.setNext(head);
+        context.setPrev(null);
+
+        if (head != null)
+            head.setPrev(context);
+
+        if (tail == null)
             tail = context;
-            context.setChild(null);
-            context.setParent(null);
 
-            return;
-        }
-
-        parent = head;
         head = context;
 
-        parent.setChild(head);
-        context.setParent(parent);
-        context.setChild(null);
+        removeDuplicateTypes(context.next(), context);
     }
 
-    public synchronized ContextTreeComponent pop() {
-        ContextTreeComponent poppedComponent;
+    private void removeDuplicateTypes(ContextTreeComponent contextToCheck, ContextTreeComponent reference) {
+        // Leaf Reached
+        if (contextToCheck == null)
+            return;
 
-        // Tree Empty
-        if (head == null)
-            return null;
-
-        // Tree not empty get heads child
-        poppedComponent = head;
-        head = head.stepBackward();
-
-        // popped value last item in tree
-        if (head == null) {
-            tail = null;
+        if (contextToCheck.getClass().equals(reference.getClass())) {
+            remove(contextToCheck);
         }
 
-        head.setChild(null);
+        removeDuplicateTypes(contextToCheck.next(), reference);
+    }
 
-        return poppedComponent;
+    private void remove(ContextTreeComponent context) {
+        ContextTreeComponent prev = context.prev();
+        ContextTreeComponent next = context.next();
+
+        if (prev != null)
+            prev.setNext(next);
+
+        if (next != null)
+            next.setPrev(prev);
     }
 }

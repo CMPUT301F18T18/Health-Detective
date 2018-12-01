@@ -19,6 +19,7 @@ public class Record implements Searchable, Serializable {
     private Date date;
     private ArrayList<String> photos;
     private Geolocation geolocation;
+    private String author;
 
     public Record() {
         DomainContext context = DomainContext.getInstance();
@@ -28,6 +29,12 @@ public class Record implements Searchable, Serializable {
         this.setTitle(null);
         this.setComment(null);
         this.setDate(new Date());
+        this.setAuthor("");
+    }
+
+    public Record(String id) {
+        this();
+        this.recordId = id;
     }
 
     public Record(String title, String comment) {
@@ -40,9 +47,16 @@ public class Record implements Searchable, Serializable {
         this.setDate(date);
     }
 
-    public Record(String recordId, String title, String comment, Date date) {
+    public Record(String title, String comment, String author) {
+        this(title, comment);
+        this.setAuthor(author);
+    }
+
+    public Record(String recordId, String title, String comment, String author, Date date, Geolocation geolocation) {
         this(title, comment, date);
         this.recordId = recordId;
+        setAuthor(author);
+        setGeolocation(geolocation);
     }
 
     public String getRecordId() {
@@ -114,5 +128,13 @@ public class Record implements Searchable, Serializable {
 
     public void setGeolocation(Geolocation geolocation) {
         this.geolocation = geolocation;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

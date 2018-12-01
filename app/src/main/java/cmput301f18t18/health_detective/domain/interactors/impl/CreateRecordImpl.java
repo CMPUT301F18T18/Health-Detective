@@ -32,7 +32,6 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
      * @param recordTitle the title of the created record
      * @param recordComment the description of the created record
      * @param date the date chosen for the created record
-     * @param authorId the author that created the record
      */
     public CreateRecordImpl(CreateRecord.Callback callback,
                             String recordTitle, String recordComment, Date date, Geolocation geolocation)
@@ -93,7 +92,7 @@ public class CreateRecordImpl extends AbstractInteractor implements CreateRecord
         if(recordComment == null)
             recordComment = "";
 
-        Record newRecord = new Record(recordTitle,recordComment);
+        Record newRecord = new Record(recordTitle, recordComment, author.getUserId());
 
         if(this.date != null){
             newRecord.setDate(this.date);

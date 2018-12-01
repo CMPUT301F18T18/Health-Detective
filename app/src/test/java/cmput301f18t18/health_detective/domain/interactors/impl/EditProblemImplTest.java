@@ -65,7 +65,7 @@ public class EditProblemImplTest {
         assertEquals("description", problem.getDescription());
 
         // Check problem repo has been updated
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()).getProblemID(), problem.getProblemID());
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()).getProblemId(), problem.getProblemId());
     }
 
     // Testing problem is correctly created
@@ -98,7 +98,7 @@ public class EditProblemImplTest {
         assertEquals("", problem.getDescription());
 
         // Check problem repo has been updated
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()).getProblemID(), problem.getProblemID());
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()).getProblemId(), problem.getProblemId());
     }
 
     // Testing null title
@@ -186,5 +186,10 @@ class EditProblemMockPresenter implements EditProblem.Callback {
     @Override
     public void onEPNoStartDateProvided() {
         this.noDate = true;
+    }
+
+    @Override
+    public void onEPInvalidPermissions() {
+
     }
 }
