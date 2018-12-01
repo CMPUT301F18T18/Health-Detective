@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class Patient extends User {
     private static final long serialVersionUID = 4L;
 
-    private HashSet<Integer> problemIds;
+    private HashSet<String> problemIds;
 
     public Patient() {
         super();
@@ -27,13 +27,13 @@ public class Patient extends User {
     }
 
     public void addProblem(Problem problem) {
-        problemIds.add(problem.getProblemID());
+        problemIds.add(problem.getProblemId());
     }
 
-    public void addProblem(Integer problemID) { problemIds.add(problemID); }
+    public void addProblem(String problemID) { problemIds.add(problemID); }
 
     public void removeProblem(Problem problem) {
-        problemIds.remove(problem.getProblemID());
+        problemIds.remove(problem.getProblemId());
     }
 
     public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
@@ -42,14 +42,14 @@ public class Patient extends User {
         return problemIds.isEmpty();
     }
 
-    public ArrayList<Integer> getProblemIds() {
-        ArrayList<Integer> problems = new ArrayList<>();
+    public ArrayList<String> getProblemIds() {
+        ArrayList<String> problems = new ArrayList<>();
 
         if (this.isProblemsEmpty()) {
             return problems;
         }
 
-        for (Integer problemId: this.problemIds) {
+        for (String problemId: this.problemIds) {
             problems.add(problemId);
         }
 

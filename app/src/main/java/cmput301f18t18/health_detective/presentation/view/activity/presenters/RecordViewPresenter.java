@@ -41,6 +41,7 @@ public class RecordViewPresenter implements EditRecord.Callback{
                 recordComment,
                 recordDate,
                 geoLocation
+
         );
         editRecord.execute();
     }
