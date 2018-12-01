@@ -6,7 +6,6 @@ import android.util.Log;
 import com.searchly.jestdroid.JestDroidClient;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +21,17 @@ import io.searchbox.core.SearchResult;
 
 public class PhotoRepoImpl extends AbstractRepo {
 
-    DomainImage image;
-    String imageId;
+    private DomainImage image;
+    private String imageId;
 
-    public PhotoRepoImpl(JestDroidClient client, SQLiteDatabase db, DomainImage image) {
-        super(client, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, DomainImage image) {
+        super(client, index, db);
         this.image = image;
         this.imageId = image.getImageId();
     }
 
-    public PhotoRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
-        super(client, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
+        super(client, index, db);
         this.imageId = id;
     }
 
@@ -47,7 +46,7 @@ public class PhotoRepoImpl extends AbstractRepo {
                 "}";
         Log.d("ESC:getImageElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test")
+                .addIndex(elasticIndex)
                 .addType("DomainImage")
                 .build();
         try {
@@ -74,7 +73,7 @@ public class PhotoRepoImpl extends AbstractRepo {
         if (image == null)
             return;
         Index index = new Index.Builder(image)
-                .index("cmput301f18t18test")
+                .index(elasticIndex)
                 .type(image.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -100,7 +99,7 @@ public class PhotoRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test")
+                .index(elasticIndex)
                 .type(image.getClass().getSimpleName())
                 .build();
         try {
@@ -115,7 +114,7 @@ public class PhotoRepoImpl extends AbstractRepo {
 
     public DomainImage retrieve() {
         String elasticSearchId = getImageElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test", elasticSearchId)
+        Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("DomainImage")
                 .build();
         try {

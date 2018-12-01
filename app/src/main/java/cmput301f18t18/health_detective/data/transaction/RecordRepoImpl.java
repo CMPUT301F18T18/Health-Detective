@@ -24,14 +24,14 @@ public class RecordRepoImpl extends AbstractRepo {
     private Record record;
     private String recordId;
 
-    public RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, Record record) {
-        super(client, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Record record) {
+        super(client, index, db);
         this.record = record;
         this.recordId = record.getRecordId();
     }
 
-    public RecordRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
-        super(client, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
+        super(client, index, db);
         this.recordId = id;
     }
 
@@ -51,7 +51,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 "}";
         Log.d("ESC:getRecordElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test2")
+                .addIndex(elasticIndex)
                 .addType("Record")
                 .build();
         try {
@@ -82,7 +82,7 @@ public class RecordRepoImpl extends AbstractRepo {
     @Override
     public void insert() {
         Index index = new Index.Builder(record)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(record.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -118,7 +118,7 @@ public class RecordRepoImpl extends AbstractRepo {
             return null;
 
         String elasticSearchId = getRecordElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
+        Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("Record")
                 .build();
         try {
@@ -167,7 +167,7 @@ public class RecordRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(record.getClass().getSimpleName())
                 .build();
         try {

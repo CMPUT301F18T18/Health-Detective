@@ -26,14 +26,14 @@ public class ProblemRepoImpl extends AbstractRepo {
     private Problem problem;
     private String problemId;
 
-    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, Problem problem) {
-        super(client, db);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Problem problem) {
+        super(client, index, db);
         this.problem = problem;
         this.problemId = problem.getProblemId();
     }
 
-    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
-        super(client, db);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
+        super(client, index, db);
         this.problemId = id;
     }
 
@@ -53,7 +53,7 @@ public class ProblemRepoImpl extends AbstractRepo {
                 "}";
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test2")
+                .addIndex(elasticIndex)
                 .addType("Problem")
                 .build();
         try {
@@ -85,7 +85,7 @@ public class ProblemRepoImpl extends AbstractRepo {
         if (problem == null)
             return;
         Index index = new Index.Builder(problem)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -138,7 +138,7 @@ public class ProblemRepoImpl extends AbstractRepo {
      */
     public Problem retrieve() {
         String elasticSearchId = getProblemElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
+        Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("Problem")
                 .build();
         try {
@@ -182,7 +182,7 @@ public class ProblemRepoImpl extends AbstractRepo {
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
