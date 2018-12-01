@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -331,10 +332,19 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
             LatLng location = new LatLng(record.getGeolocation().getlatitude(),record.getGeolocation().getlongitude());
             moveCamera(location, 15f);
+            createMarker(location,record.getTitle());
         }
     }
 
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+    }
+
+    private void createMarker( LatLng currentLatLng,String title){
+
+        mMap.addMarker(new MarkerOptions()
+                .position(currentLatLng)
+                .anchor(0.5f, 0.5f)
+                .title(title));
     }
 }
