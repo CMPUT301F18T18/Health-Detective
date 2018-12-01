@@ -1,7 +1,14 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
+import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +16,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -16,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
@@ -24,7 +35,8 @@ import cmput301f18t18.health_detective.presentation.view.activity.listeners.Prob
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
 public class PatientProblemsActivity extends AppCompatActivity implements View.OnClickListener,
-                                                                          ProblemsListPresenter.View, ProblemOnClickListener {
+                                                                          ProblemsListPresenter.View, ProblemOnClickListener,
+                                                                            GetLoggedInUser.Callback{
 
     ListView listView;
     ProblemListAdapter adapter;
@@ -39,6 +51,13 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_patient_problems);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //ActionBar b = getActionBar();
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+
+//        Window window = this.getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
 
         Intent intent = this.getIntent();
         this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
@@ -48,15 +67,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         mockProblem.insertProblem(new Problem("test", "test", new Date()));
 
 
-//        this.problemsListPresenter = new ProblemsListPresenter(
-//                this,
-//                ThreadExecutorImpl.getInstance(),
-//                MainThreadImpl.getInstance(),
-//                //mockProblem,
-//                ElasticSearchController.getInstance(),
-//                //mockUser
-//                ElasticSearchController.getInstance()
-//        );
 
         this.problemsListPresenter = new ProblemsListPresenter(this);
 
@@ -90,6 +100,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.logout_menu, menu);
+
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
@@ -184,4 +195,23 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         startActivity(recordsIntent);
     }
 
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+
+    }
 }
