@@ -55,7 +55,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .addType("Record")
                 .build();
         try {
-            SearchResult result = client.execute(search);
+            SearchResult result = getClient().execute(search);
             List<SearchResult.Hit<Record, Void>> records = result.getHits(Record.class);
 
             Log.d("ESC:getRecordElasticSearchId", "Result succeeded");
@@ -87,7 +87,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .refresh(true)
                 .build();
         try {
-            DocumentResult result = client.execute(index);
+            DocumentResult result = getClient().execute(index);
             if (result.isSucceeded()) {
                 Log.d("ESC:insertRecord", "Record inserted");
                 Log.d("ESC:insertRecord", result.getId());
@@ -122,7 +122,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .type("Record")
                 .build();
         try {
-            JestResult result = client.execute(get);
+            JestResult result = getClient().execute(get);
             if (result.isSucceeded()) {
                 return result.getSourceAsObject(Record.class);
             }
@@ -171,7 +171,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .type(record.getClass().getSimpleName())
                 .build();
         try {
-            DocumentResult result = client.execute(delete);
+            DocumentResult result = getClient().execute(delete);
             if (result.isSucceeded()) {
                 Log.d("ESC:deleteRecord", "Deleted" + result.getId());
             }

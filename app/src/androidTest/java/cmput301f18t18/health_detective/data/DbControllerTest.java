@@ -44,7 +44,7 @@ public class DbControllerTest {
 
     @Test
     public void testInsertRetrieveRecord() {
-        Record record = new Record("2001", "TestInsert", "Stay", new Date());
+        Record record = new Record("2001", "TestInsert", "Stay", null, new Date(), null);
 
         dbController.insertRecord(record);
         Record ret = dbController.retrieveRecordById("2001");
@@ -60,7 +60,7 @@ public class DbControllerTest {
         // Will fail once retrieveRecordById is implemented
         // Basically to remove we must be first able to check if get works
 
-        Record record = new Record("2002", "TestInsert", "Stay", new Date());
+        Record record = new Record("2002", "TestInsert", "Stay", null, new Date(), null);
 
         dbController.insertRecord(record);
         dbController.deleteRecord(record);
@@ -73,7 +73,7 @@ public class DbControllerTest {
         ArrayList<Record> records = new ArrayList<>();
         ArrayList<String> recordIds = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            record = new Record(Integer.toString(2003+i),"","",null);
+            record = new Record(Integer.toString(2003+i),"","",null, null, null);
             recordIds.add(record.getRecordId());
             records.add(record);
             dbController.insertRecord(record);

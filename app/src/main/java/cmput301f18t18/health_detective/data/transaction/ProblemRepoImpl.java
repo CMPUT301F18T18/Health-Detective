@@ -1,14 +1,17 @@
 package cmput301f18t18.health_detective.data.transaction;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.searchly.jestdroid.JestDroidClient;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cmput301f18t18.health_detective.data.transaction.base.AbstractRepo;
@@ -57,7 +60,7 @@ public class ProblemRepoImpl extends AbstractRepo {
                 .addType("Problem")
                 .build();
         try {
-            SearchResult result = client.execute(search);
+            SearchResult result = getClient().execute(search);
             List<SearchResult.Hit<Problem, Void>> problems = result.getHits(Problem.class);
 
             Log.d("ESC:getProblemElasticSearchId", "Result succeeded");
@@ -90,7 +93,7 @@ public class ProblemRepoImpl extends AbstractRepo {
                 .refresh(true)
                 .build();
         try {
-            DocumentResult result = client.execute(index);
+            DocumentResult result = getClient().execute(index);
             if (result.isSucceeded()) {
                 Log.d("ESC:insertProblem", "Problem inserted");
                 Log.d("ESC:insertProblem", result.getId());
@@ -98,9 +101,12 @@ public class ProblemRepoImpl extends AbstractRepo {
         } catch (IOException e) {
             Log.d("ESC:insertProblem", "IOException", e);
         }
+        insertLocal();
+    }
 
+    private void insertLocal() {
         ContentValues values = new ContentValues();
-        values.put("problemId", problemId);
+        values.put("problemId", problem.getProblemId());
         values.put("title", problem.getTitle());
         values.put("description", problem.getDescription());
         values.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(problem.getStartDate()));
@@ -117,7 +123,7 @@ public class ProblemRepoImpl extends AbstractRepo {
 
         values.put("recordIds", recordIds);
 
-        db.insert("Problems", null, values);
+        getDb().insert("Problems", null, values);
     }
 
     /**
@@ -142,19 +148,55 @@ public class ProblemRepoImpl extends AbstractRepo {
                 .type("Problem")
                 .build();
         try {
-            JestResult result = client.execute(get);
+            JestResult result = getClient().execute(get);
             if (result.isSucceeded()) {
-                return result.getSourceAsObject(Problem.class);
+                problem = result.getSourceAsObject(Problem.class);
             }
             else {
                 Log.d("ESC:retrieveProblemById", "result not succeeded");
             }
         } catch (IOException e) {
             Log.d("ESC:retrieveProblemById", "IOException", e);
+            return retrieveLocal();
         }
-        return null;
+
+        if (retrieveLocal() == null) {
+            insertLocal();
+        }
+
+        return problem;
     }
 
+    private Problem retrieveLocal() {
+        Cursor cursor = getDb().query(
+                "Problem",
+                null,
+                "problemId = \"?\"",
+                new String[] {problemId},
+                null,
+                null,
+                null);
+        cursor.moveToNext();
+        Problem ret;
+        try {
+            String problemId = cursor.getString(0);
+            String problemTitle = cursor.getString(1);
+            String problemDesc = cursor.getString(2);
+            Date problemDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(3));
+
+            ret = new Problem(problemId, problemTitle, problemDesc, problemDate);
+
+            for (String recordId : cursor.getString(4).split(",")) {
+                ret.addRecord(recordId);
+            }
+        }
+        catch (ParseException e) {
+            Log.d("DBC:retrieveProblemById", "Parse exception", e);
+            ret = null;
+        }
+        cursor.close();
+        return ret;
+    }
     /**
      * Gets a list of problems from a list of problem IDs
      *
@@ -186,16 +228,19 @@ public class ProblemRepoImpl extends AbstractRepo {
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
-            DocumentResult result = client.execute(delete);
+            DocumentResult result = getClient().execute(delete);
             if (result.isSucceeded()) {
                 Log.d("ESC:deleteProblem", "Deleted" + result.getId());
             }
         } catch (IOException e) {
             Log.d("ESC:deleteProblem", "IOException", e);
         }
+        deleteLocal();
+    }
 
-        db.delete("Problems",
-                "problemId = ?",
+    private void deleteLocal() {
+        getDb().delete("Problems",
+                "problemId = \"?\"",
                 new String[] {problemId}
         );
     }
