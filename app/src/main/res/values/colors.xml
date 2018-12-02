@@ -8,10 +8,10 @@
     <color name="colorCareProvider">#9c27b0</color>
     <color name="colorCareProviderDark">#6a0080</color>
     <color name="cpLight">#ffc046</color>
-    <color name="primary">#03A9F4</color>
+    <color name="primary">#03a9f4</color>
     <color name="primary_dark">#0288D1</color>
     <color name="primary_light">#B3E5FC</color>
-    <color name="accent">#00BCD4</color>
+    <color name="accent">#00bcd4</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#ffffff</color>

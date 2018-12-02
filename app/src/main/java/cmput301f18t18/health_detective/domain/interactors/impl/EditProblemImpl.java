@@ -105,6 +105,8 @@ public class EditProblemImpl extends AbstractInteractor implements EditProblem {
         problemToEdit.setDescription(this.description);
         problemToEdit.setStartDate(this.startDate);
 
+        new PutContext(problemToEdit).execute();
+
         problemRepo.updateProblem(problemToEdit);
 
         // Problem added

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,7 +55,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     LinearLayout bodyPhotoScroll;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    Button editMap;
     ImageView frontBL, backBL, addNPhoto;
     byte[] image;
     String userId = "";
@@ -88,40 +90,17 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
-        editMap = findViewById(R.id.mapEdit);
+        editMap = findViewById(R.id.editmapbut);
 
         editMap.setOnClickListener(this);
         addNPhoto.setOnClickListener(this);
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
 
-        RecordRepoMock mockRecord = new RecordRepoMock();
-        mockRecord.insertRecord(new Record("test", "test", new Date()));
-
         recordViewPresenter = new RecordViewPresenter(this);
-
-        //stuff for all photos section
-//        GridViewAdapter adapter = new GridViewAdapter(this, 1);
-//        GridView gridView = (GridView) findViewById(R.id.allPhotosView);
-//
-//        gridView.setAdapter(adapter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
-//                toast.show();
-//                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
 
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
-        ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        setAllPhotoScroll();
-
         bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,9 +131,11 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         Intent returnIntent = new Intent(this,PatientRecordsActivity.class);
         startActivity(returnIntent);
 
+        finish();
     }
 
 
@@ -195,13 +176,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         }
     }
 
-    private void setAllPhotoScroll(){
-        ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        bodyPhotoScroll.addView(testImg);
-        bodyPhotoScroll.invalidate();
-    }
-
     public void setTextViews(){
         recordTitle.setText(title);
         recordDate.setText(date.toString());
@@ -210,16 +184,22 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void onRecordImages(ArrayList<DomainImage> images) {
+        bodyPhotoScroll.removeAllViews();
+
         for (DomainImage image: images) {
             String stringImage = image.getImage();
             Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
             
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
+            frontBL.setImageBitmap(bitmap);
+            backBL.setImageBitmap(bitmap);
             bodyPhotoScroll.addView(imageView);
         }
 
         bodyPhotoScroll.invalidate();
+        frontBL.invalidate();
+        backBL.invalidate();
     }
 
     @Override
@@ -305,7 +285,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
                 break;
-            case R.id.mapEdit:
+            case R.id.editmapbut:
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", patientContext);
                 mapIntent.putExtra("type",1);
