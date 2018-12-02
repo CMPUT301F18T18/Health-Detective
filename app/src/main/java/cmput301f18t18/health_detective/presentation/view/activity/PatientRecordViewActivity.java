@@ -37,6 +37,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,6 +74,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     private GoogleMap mMap;
     private int REQUEST_CODE = 1212;
     Boolean userType;
+    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +217,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     public void setTextViews(){
         recordTitle.setText(title);
-        recordDate.setText(date.toString());
+        recordDate.setText(dateFormat.format(date));
         recordDesc.setText(comment);
     }
 

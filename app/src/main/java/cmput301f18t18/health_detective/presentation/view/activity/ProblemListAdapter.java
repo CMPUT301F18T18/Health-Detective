@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class ProblemListAdapter extends ArrayAdapter {
     private List<Problem> problemList = new ArrayList<>();
     private ProblemOnClickListener listener;
     Boolean userType;
+    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
 
     public ProblemListAdapter(@NonNull Activity context, ArrayList<Problem> list, ProblemOnClickListener listener, Boolean type) {
         super(context, R.layout.ind_problem_view, list);
@@ -61,7 +64,7 @@ public class ProblemListAdapter extends ArrayAdapter {
         Problem data = problemList.get(postition);
         titleText.setText(data.getTitle());
         descText.setText(data.getDescription());
-        dateText.setText(data.getStartDate().toString());
+        dateText.setText(dateFormat.format(data.getStartDate()));
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override

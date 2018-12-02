@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class RecordListAdapter extends ArrayAdapter{
     private RecordOnClickListener listener;
     private Boolean userType;
     private String currentUser;
+    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
 
 
     public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user, String cUser) {
@@ -55,7 +58,7 @@ public class RecordListAdapter extends ArrayAdapter{
         recordDescription.setText(record.getComment());
 
         TextView recordDate = rowView.findViewById(R.id.recordDate);
-        recordDate.setText(record.getDate().toString());
+        recordDate.setText(dateFormat.format(record.getDate()));
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
