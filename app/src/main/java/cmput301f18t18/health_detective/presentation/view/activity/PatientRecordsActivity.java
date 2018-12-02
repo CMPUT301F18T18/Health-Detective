@@ -173,7 +173,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     private void openDialog() {
         myLocation = currentGeoLocation;
-        userType = true;
         if (userType){
               careRecord = new CareRecordDialog();
               careRecord.show(getSupportFragmentManager(), "Care Dialog");
@@ -406,11 +405,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void applyCareRecord(String comment) {
         // Add the care record here
+        recordListPresenter.createUserRecord(this.title, comment, this.date, myLocation);
     }
 
     public void init(){
         listView = findViewById(R.id.recordListView);
-        adapter = new RecordListAdapter(this, this.recordList, this, userType);
+        adapter = new RecordListAdapter(this, this.recordList, this, userType, userId);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
