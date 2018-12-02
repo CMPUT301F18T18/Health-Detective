@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -21,6 +22,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -46,7 +49,9 @@ import cmput301f18t18.health_detective.CareRecordDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
@@ -67,6 +72,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Geolocation myLocation;
     private int REQUEST_CODE = 1212;
     private Address myAddress;
+    private Boolean userType;
+    private ImageView addRecBtn;
 
 
     @Override
@@ -79,23 +86,23 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
         this.recordListPresenter = new RecordListPresenter(this);
 
-        ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
+        addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
 
-        final Context context = PatientRecordsActivity.this;
-        listView = findViewById(R.id.recordListView);
+        //final Context context = PatientRecordsActivity.this;
+        //listView = findViewById(R.id.recordListView);
 
 
-        adapter = new RecordListAdapter(this, this.recordList, this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recordListPresenter.onView(recordList.get(position));
-            }
-        });
+        //adapter = new RecordListAdapter(this, this.recordList, this);
+        //listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                recordListPresenter.onView(recordList.get(position));
+//            }
+//        });
 
-        this.recordListPresenter.getUserRecords();
+        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
@@ -232,6 +239,24 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onCPView(CareProvider careProvider) {
+        userType = true;
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+        addRecBtn.setImageResource(R.drawable.cp_circle);
+        init();
+    }
+
+    @Override
+    public void onPView(Patient patient) {
+        userType = false;
+        init();
+    }
+
+    @Override
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
@@ -365,8 +390,26 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+
     @Override
     public void applyCareRecord(String comment) {
         // Add the care record here
     }
+
+    public void init(){
+        listView = findViewById(R.id.recordListView);
+
+
+        adapter = new RecordListAdapter(this, this.recordList, this, userType);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                recordListPresenter.onView(recordList.get(position));
+            }
+        });
+        this.recordListPresenter.getUserRecords();
+    }
+
+
 }

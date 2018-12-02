@@ -75,17 +75,17 @@ class AddBodyLocationImpl extends AbstractInteractor implements AddBodyLocation 
 
         // We have ensured that we have the appropriate parameter's at this point
         // Generate new body image object
-        bodyLocation = new BodyLocation(patient.getUserId(), label, frontImage, backImage);
+//        bodyLocation = new BodyLocation(patient.getUserId(), label, frontImage, backImage);
 
         // Return object to main thread so it does not have to wait on database
-        mainThread.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.onABLSuccess(bodyLocation);
-            }
-        });
+//        mainThread.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                callback.onABLSuccess(bodyLocation);
+//            }
+//        });
 
         // Store new body location
-        bodyLocationRepo.insertBodyLocation(bodyLocation);
+//        bodyLocationRepo.insertBodyLocation(bodyLocation);
     }
 }

@@ -6,11 +6,13 @@ import com.searchly.jestdroid.JestDroidClient;
 
 public abstract class AbstractRepo {
     protected JestDroidClient client;
+    protected String elasticIndex;
     protected SQLiteDatabase db;
 
-    public AbstractRepo(JestDroidClient client, SQLiteDatabase db) {
+    public AbstractRepo(JestDroidClient client, String index, SQLiteDatabase db) {
         this.client = client;
         this.db = db;
+        this.elasticIndex = index;
     }
 
     public abstract void insert();
