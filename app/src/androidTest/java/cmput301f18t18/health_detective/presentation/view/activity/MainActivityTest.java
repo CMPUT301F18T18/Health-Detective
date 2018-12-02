@@ -54,10 +54,13 @@ public class MainActivityTest {
 
     //Making sure the login button logs in correct user and launches correct activity
     @Test
-    public void MainAcceptTest() {
+    public void MainLogInTest() {
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
+        onView(withText("Logging in"))
+                .inRoot(withDecorView(not(mainActivityTestRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
         intended(hasComponent(PatientProblemsActivity.class.getName()));
     }
 }

@@ -15,6 +15,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -92,11 +94,10 @@ public class SignUpActivityTest {
         onView(withId(R.id.phoneNumEdit))
                 .perform(replaceText("(780) 222-2222"),closeSoftKeyboard());
         onView(withId(R.id.signUpBtn)).perform(click());
-        /*
-        Have to use withText instead of withID because view is in menu bar.
-        This also ensure we are in right activity because this would not be
-        in the view if we were not in the correct activity
-        */
-        onView(withText(userID)).check(matches(withText(userID)));
+
+        onView(withText("Accounted created, logging in"))
+                .inRoot(withDecorView(not(suActivityTestRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+        intended(hasComponent(PatientProblemsActivity.class.getName()));
     }
 }
