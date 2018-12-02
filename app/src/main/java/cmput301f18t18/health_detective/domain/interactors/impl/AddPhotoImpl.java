@@ -11,15 +11,15 @@ import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreePars
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
-class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
+public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
     private Callback callback;
     private String label;
-    private byte[] image;
+    private String image;
     private Integer xPos;
     private Integer yPos;
 
-    public AddPhotoImpl(Callback callback, String label, byte[] image, Integer xPos, Integer yPos) {
+    public AddPhotoImpl(Callback callback, String label, String image, Integer xPos, Integer yPos) {
         this.callback = callback;
         this.label = label;
         this.image = image;
@@ -80,6 +80,10 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
         if (xPos != null && yPos != null)
             newImage.setPos(xPos, yPos);
 
+        recordContext.insertPhoto(newImage);
+        recordRepo.updateRecord(recordContext);
+        imageRepo.insertImage(newImage);
+
         mainThread.post(new Runnable() {
             @Override
             public void run() {
@@ -88,8 +92,5 @@ class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
             }
         });
 
-        recordContext.insertPhoto(newImage);
-        recordRepo.updateRecord(recordContext);
-        imageRepo.insertImage(newImage);
     }
 }

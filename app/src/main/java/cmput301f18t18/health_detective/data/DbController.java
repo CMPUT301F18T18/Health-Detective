@@ -35,7 +35,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     static private JestDroidClient client = null;
     static private SQLiteDatabase db = null;
 
-    static private final String elasticIndex = "cmput301f18t18test2";
+    static private final String elasticIndex = "cmput301f18t18test3";
 
     /**
      * Allows other classes to get a reference to the singleton
@@ -66,6 +66,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
         if (client == null) {
             DroidClientConfig config = new DroidClientConfig
                     .Builder("http://cmput301.softwareprocess.es:8080/")
+                    .readTimeout(10000)
                     .build();
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);

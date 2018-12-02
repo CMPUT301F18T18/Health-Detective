@@ -31,7 +31,7 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
 
     @Override
     public void onVRSuccessImages(ArrayList<DomainImage> images) {
-
+        view.onRecordImages(images);
     }
 
     @Override
@@ -40,6 +40,7 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
     }
 
     public interface View {
+        void onRecordImages(ArrayList<DomainImage> images);
         void onRecordDetails(String title, String comment, Date date, Geolocation geolocation);
         void makeToast(String msg, int length);
     }
