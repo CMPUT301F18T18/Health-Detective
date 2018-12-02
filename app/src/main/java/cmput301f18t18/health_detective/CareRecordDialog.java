@@ -25,7 +25,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_add_record_dialog, null);
+        View view = inflater.inflate(R.layout.layout_care_record_add, null);
 
 
         builder.setView(view)

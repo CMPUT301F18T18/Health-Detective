@@ -69,6 +69,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Geolocation currentGeoLocation;
     private Boolean LocationPermissionsGranted = false;
     private AddDialog exampleDialog;
+    private CareRecordDialog careRecord;
     private Geolocation myLocation;
     private int REQUEST_CODE = 1212;
     private Address myAddress;
@@ -172,8 +173,15 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     private void openDialog() {
         myLocation = currentGeoLocation;
-        exampleDialog = new AddDialog(currentGeoLocation);
-        exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
+        userType = true;
+        if (userType){
+              careRecord = new CareRecordDialog();
+              careRecord.show(getSupportFragmentManager(), "Care Dialog");
+        } else {
+            exampleDialog = new AddDialog(currentGeoLocation);
+            exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
+        }
+
     }
 
     public void changeActivity(Intent intent) {
@@ -284,7 +292,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        exampleDialog.changeTime(date);
+        if (userType){
+            careRecord.changeTime(date);
+        } else {
+            exampleDialog.changeTime(date);
+        }
     }
 
 
@@ -398,8 +410,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public void init(){
         listView = findViewById(R.id.recordListView);
-
-
         adapter = new RecordListAdapter(this, this.recordList, this, userType);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
