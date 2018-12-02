@@ -39,6 +39,7 @@ public class PatientProblemsActivityTest {
     //Making sure correct activity is launched when add problem button is pressed
     @Test
     public void PPAddProblemTest() {
+        // WHY THE FUCK ISNT THIS WORKING?!?!?
         onView(withId(R.id.addProbBtn)).perform(click());
         intended(hasComponent(ProblemEditAddActivity.class.getName()));
     }
