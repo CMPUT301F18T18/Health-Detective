@@ -32,4 +32,5 @@
     <string name="add_geo">Add Geolocation</string>
     <string name="edit_geo">Edit Geolocation</string>
     <string name="Phon_constraint">(xxx) xxx-xxxx</string>
+    <string name="cpRecordTitle">Care Provider Comment</string>
 </resources>

@@ -55,7 +55,6 @@ public class ProblemListAdapter extends ArrayAdapter {
         if (userType){
             deleteImg.setVisibility(View.GONE);
             editImg.setVisibility(View.GONE);
-            titleText.setTextColor(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             recordBut.setTextColor(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
 
