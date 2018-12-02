@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +60,9 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         listView.setAdapter(adapter);
         this.careProPatientListPresenter.getAssignedPatients();
 
+        if (patientList.size() == 0){
+            Log.d("abcdefg", "no patietns");
+        }
 
     }
 
@@ -70,7 +74,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle("test");
+        userIdMenu.setTitle(cpContext.getUserId());
 
         return true;
     }

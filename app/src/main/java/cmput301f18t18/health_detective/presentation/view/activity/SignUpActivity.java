@@ -38,7 +38,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         phoneText.setText("(111) 111-1111");
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
-        patientCheck.setChecked(true);
+        //patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
 
@@ -165,6 +165,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         userText.setFocusable(false);
         phoneText.setText(user.getPhoneNumber());
         emailText.setText(user.getEmailAddress());
+        careCheck.setEnabled(false);
+        patientCheck.setEnabled(false);
         signUp.setText(R.string.saveBtn);
 
         init();

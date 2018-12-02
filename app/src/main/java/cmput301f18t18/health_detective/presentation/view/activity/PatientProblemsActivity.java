@@ -51,6 +51,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_problems);
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         //ActionBar b = getActionBar();
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
@@ -213,6 +214,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void getCPUser(CareProvider careProvider) {
         userType = true;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
