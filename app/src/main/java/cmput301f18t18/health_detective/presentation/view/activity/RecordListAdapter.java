@@ -24,14 +24,16 @@ public class RecordListAdapter extends ArrayAdapter{
     private List<Record> recordList = new ArrayList<>();
     private RecordOnClickListener listener;
     private Boolean userType;
+    private String currentUser;
 
 
-    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user) {
+    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user, String cUser) {
         super(context, R.layout.ind_record_view, list);
         mContext = context;
         recordList = list;
         this.listener = listener;
         this.userType = user;
+        this.currentUser = cUser;
     }
 
     @Override
@@ -63,7 +65,10 @@ public class RecordListAdapter extends ArrayAdapter{
         if (userType){
             deleteImg.setVisibility(View.INVISIBLE);
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
-
+        }
+        if (currentUser != record.getAuthor()){
+            deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
 
         deleteImg.setOnClickListener(new View.OnClickListener() {

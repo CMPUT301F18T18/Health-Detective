@@ -410,7 +410,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public void init(){
         listView = findViewById(R.id.recordListView);
-        adapter = new RecordListAdapter(this, this.recordList, this, userType);
+        adapter = new RecordListAdapter(this, this.recordList, this, userType, userId);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
