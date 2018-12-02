@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -146,8 +147,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        Intent returnIntent = new Intent(this,PatientRecordsActivity.class);
+        startActivity(returnIntent);
+
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -375,10 +380,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                 double[] doubleArrayExtra = data.getDoubleArrayExtra("result");
                 geolocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
-                moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
-                createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),"record");
-                // edit records geo
                 recordViewPresenter.editUserRecord(title , comment, date, geolocation);
+                mMap.clear();
+                moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
+                createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),title);
+                // edit records geo
+
             }
             if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
                 //Write your code if there's no result

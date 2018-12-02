@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cmput301f18t18.health_detective.AddDialog;
+import cmput301f18t18.health_detective.CareRecordDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
@@ -50,7 +51,7 @@ import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, CareRecordDialog.CareAddDialogListener {
 
     String userId = "";
     ListView listView;
@@ -108,7 +109,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        Intent returnIntent = new Intent(this, PatientProblemsActivity.class);
+        startActivity(returnIntent);
     }
 
     @Override
@@ -137,6 +139,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", null);
                 mapIntent.putExtra("type",0);
+                if (currentGeoLocation == null){
+                    Double lat = 53.5444;
+                    Double lng = -113.491;
+                    currentGeoLocation = new Geolocation(lat,lng);
+                }
                 mapIntent.putExtra("location", currentGeoLocation);
                 startActivity(mapIntent);
                 return true;
@@ -229,7 +236,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         this.title = newTitle;
         this.desc = newComment;
 
-        recordListPresenter.createUserRecord(this.title, this.desc, this.date, currentGeoLocation);
+        recordListPresenter.createUserRecord(this.title, this.desc, this.date, myLocation);
 
 
     }
@@ -304,6 +311,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public Address getAddress() throws IOException {
         Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        if (myLocation == null){
+            Double lat = 53.5444;
+            Double lng = -113.491;
+            myLocation = new Geolocation(lat,lng);
+        }
         Double lat = myLocation.getlatitude();
         Double lng = myLocation.getlongitude();
         List<Address> addresses = null;
@@ -353,4 +365,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+    @Override
+    public void applyCareRecord(String comment) {
+        // Add the care record here
+    }
 }
