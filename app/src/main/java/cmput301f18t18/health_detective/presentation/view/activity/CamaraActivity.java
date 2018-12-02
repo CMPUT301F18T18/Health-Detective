@@ -167,6 +167,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
             if (resultCode == RESULT_OK) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 256, 256, false);
                     presenter.onImage(bitmap);
                     takenPhoto.setImageBitmap(bitmap);
                     //byte[] tempArray = toByteArray(bitmap);
@@ -179,7 +180,10 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 //                    p.setAntiAlias(true);
 //                    p.setColor(Color.RED);
 //                    canvas.drawCircle(60, 50, 5,p);
-//                    takenPhoto.setImageBitmap(tempBitmap);
+//                    Bitmap bmOverlay = Bitmap.createBitmap(takenPhoto.getWidth(),
+//                            takenPhoto.getHeight(),
+//                            Bitmap.Config.ARGB_8888);
+//                    takenPhoto.setImageBitmap(tempbitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -196,37 +200,47 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
             String text = "You click at x = " + event.getX() + " and y = " + event.getY();
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 
-            Drawable tempDraw = takenPhoto.getDrawable();
-            Rect imageBounds = tempDraw.getBounds();
+            //Drawable tempDraw = takenPhoto.getDrawable();
+            //Rect imageBounds = tempDraw.getBounds();
 
-            int ih = tempDraw.getIntrinsicHeight();
-            int iW = tempDraw.getIntrinsicWidth();
-            int sh = imageBounds.height();
-            int sw = imageBounds.width();
-            float hr = ih/sh;
-            float wr = iW/sw;
-
-            float siox = event.getX() - imageBounds.left;
-            float soiy = event.getY() - imageBounds.right;
+            DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+            int width = metrics.widthPixels;
+            int height = metrics.heightPixels;
+            Canvas canvas = new Canvas();
 
 
+            Rect frameToDraw = new Rect(0,0,width, height);
+            RectF whereToDraw = new RectF(0, 0, width, height-300);
+            canvas.drawBitmap(bitmap, frameToDraw, whereToDraw, null);
 
-            int imHeight = takenPhoto.getHeight();
-            int newHight = (imHeight - bitmap.getHeight())/2;
-            int newY = (int) event.getY() - newHight;
-
-            Bitmap bmOverlay = Bitmap.createBitmap(bitmap.getWidth(),
-                    bitmap.getHeight(),
-                    bitmap.getConfig());
-            Canvas canvas = new Canvas(bmOverlay);
+            int ai = event.getActionIndex();
             Paint p = new Paint();
             p.setAntiAlias(true);
             p.setColor(Color.RED);
             p.setStrokeWidth(50);
             p.setStyle(Paint.Style.STROKE);
-            canvas.drawBitmap(bitmap,new Matrix(),null);
-            canvas.drawCircle(event.getX(), newY, 100, p);
-            takenPhoto.setImageBitmap(bmOverlay);
+            canvas.drawCircle(event.getX(ai), event.getY(ai), 10, p);
+            takenPhoto.setImageBitmap(bitmap);
+
+
+
+//            Bitmap bmOverlay = Bitmap.createBitmap(takenPhoto.getWidth(),
+//                    takenPhoto.getHeight(),
+//                    Bitmap.Config.ARGB_8888);
+//            Bitmap temp = Bitmap.createBitmap(bitmap.getWidth(),
+//                    bitmap.getHeight(),
+//                    bitmap.getConfig());
+//            Canvas canvas = new Canvas(temp);
+//            Paint p = new Paint();
+//            p.setAntiAlias(true);
+//            p.setColor(Color.RED);
+//            p.setStrokeWidth(50);
+//            p.setStyle(Paint.Style.STROKE);
+//            //canvas.drawBitmap(temp,new Matrix(),null);
+//            canvas.drawBitmap(temp, frameToDraw, whereToDraw, null);
+//            canvas.drawCircle(event.getX(), event.getY(), 100, p);
+            //canvas.drawCircle(event.getX(), newY, 100, p);
+            //takenPhoto.setImageBitmap(temp);
 
         }
         return true;

@@ -15,7 +15,7 @@ public class DomainImage {
     private String label;
     private Integer xPos;
     private Integer yPos;
-    private byte[] image;
+    private String image;
 
     public DomainImage() {
         DomainContext context = DomainContext.getInstance();
@@ -27,16 +27,16 @@ public class DomainImage {
         }
 
         this.setImageId(newId);
-        this.setImage(new byte[]{});
+        this.setImage("");
     }
 
-    public DomainImage(byte[] image) {
+    public DomainImage(String image) {
         this();
 
         this.setImage(image);
     }
 
-    public DomainImage(String id, byte[] image) {
+    public DomainImage(String id, String image) {
         this(image);
 
         this.setImageId(id);
@@ -46,7 +46,7 @@ public class DomainImage {
         this.imageId = imageId;
     }
 
-    private void setImage(byte[] image) {
+    private void setImage(String image) {
         this.image = image;
     }
 
@@ -54,7 +54,7 @@ public class DomainImage {
         return  this.imageId;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return this.image;
     }
 

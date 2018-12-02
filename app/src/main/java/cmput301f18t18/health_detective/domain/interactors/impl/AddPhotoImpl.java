@@ -15,11 +15,11 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
     private Callback callback;
     private String label;
-    private byte[] image;
+    private String image;
     private Integer xPos;
     private Integer yPos;
 
-    public AddPhotoImpl(Callback callback, String label, byte[] image, Integer xPos, Integer yPos) {
+    public AddPhotoImpl(Callback callback, String label, String image, Integer xPos, Integer yPos) {
         this.callback = callback;
         this.label = label;
         this.image = image;

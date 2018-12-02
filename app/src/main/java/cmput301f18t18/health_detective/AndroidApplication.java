@@ -12,6 +12,11 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 
 public class AndroidApplication extends Application {
+
+    UserRepoMock mockUR = new UserRepoMock();
+    ProblemRepoMock mockPR = new ProblemRepoMock();
+    RecordRepoMock mockRR = new RecordRepoMock();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,8 +29,11 @@ public class AndroidApplication extends Application {
         DomainContext.init_ONLY_CALL_START(
                 ThreadExecutorImpl.getInstance(),
                 MainThreadImpl.getInstance(),
+                //mockUR,
                 DbController.getInstance(),
+                //mockPR,
                 DbController.getInstance(),
+                //mockRR,
                 DbController.getInstance(),
                 null,
                 DbController.getInstance());

@@ -2,6 +2,7 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
@@ -13,6 +14,19 @@ import cmput301f18t18.health_detective.domain.model.DomainImage;
 public class CameraPresenter implements AddPhoto.Callback {
 
     private View view;
+
+    public static Bitmap toBitmap(String base64String){
+        byte[] decodedBytes = Base64.decode(
+                base64String,
+                Base64.DEFAULT
+        );
+
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    public static String byteArrayToString(byte [] byteArray){
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
 
     @Override
     public void onAPhInvalidPermissions() {
@@ -39,8 +53,9 @@ public class CameraPresenter implements AddPhoto.Callback {
 
     public void onImage(Bitmap image) {
         byte[] byteImage = toByteArray(image);
+        String base64String = byteArrayToString(byteImage);
 
-        new AddPhotoImpl(this, "", byteImage, null, null).execute();
+        new AddPhotoImpl(this, "", base64String, null, null).execute();
     }
 
     public void onSave() {

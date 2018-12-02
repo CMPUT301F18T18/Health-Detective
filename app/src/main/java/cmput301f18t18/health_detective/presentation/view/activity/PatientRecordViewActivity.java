@@ -46,6 +46,7 @@ import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
 public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
@@ -205,11 +206,10 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public void onRecordImages(ArrayList<DomainImage> images) {
         for (DomainImage image: images) {
-            byte[] byteImage = image.getImage();
-
+            String stringImage = image.getImage();
+            Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+            
             ImageView imageView = new ImageView(this);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
-
             imageView.setImageBitmap(bitmap);
             bodyPhotoScroll.addView(imageView);
         }
