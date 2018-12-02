@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,12 +62,15 @@ public class RecordListAdapter extends ArrayAdapter{
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
+        Toast.makeText(mContext, currentUser, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, record.getAuthor(), Toast.LENGTH_SHORT).show();
         //userType = true;
         if (userType){
             deleteImg.setVisibility(View.INVISIBLE);
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
-        if (currentUser != record.getAuthor()){
+        if (!currentUser.equals(record.getAuthor())){
+            recordImg.setVisibility(View.GONE);
             deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }

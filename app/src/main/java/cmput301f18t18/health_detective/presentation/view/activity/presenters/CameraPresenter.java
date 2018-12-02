@@ -14,6 +14,8 @@ import cmput301f18t18.health_detective.domain.model.DomainImage;
 public class CameraPresenter implements AddPhoto.Callback {
 
     private View view;
+    private boolean type;
+    private boolean leftRight;
 
     public static Bitmap toBitmap(String base64String){
         byte[] decodedBytes = Base64.decode(
@@ -47,15 +49,17 @@ public class CameraPresenter implements AddPhoto.Callback {
         void onDone();
     }
 
-    public CameraPresenter(View view) {
+    public CameraPresenter(View view, boolean type, boolean leftRight) {
         this.view = view;
+        this.type = type;
+        this.leftRight = leftRight;
     }
 
     public void onImage(Bitmap image) {
         byte[] byteImage = toByteArray(image);
         String base64String = byteArrayToString(byteImage);
 
-        new AddPhotoImpl(this, "", base64String, null, null).execute();
+        new AddPhotoImpl(this, "This Is a Label", base64String, type, leftRight).execute();
     }
 
     public void onSave() {

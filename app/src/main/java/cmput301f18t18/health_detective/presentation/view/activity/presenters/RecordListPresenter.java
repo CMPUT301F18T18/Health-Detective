@@ -166,6 +166,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
 
     public void onView(Record record) {
         new PutContext(record).execute();
+        new GetLoggedInUserImpl(this).execute();
 
         view.onRecordView();
     }

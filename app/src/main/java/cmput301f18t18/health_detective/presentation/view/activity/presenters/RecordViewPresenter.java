@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.interactors.EditRecord;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.interactors.ViewRecord;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditRecordImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewRecordImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
+import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 
 
-public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Callback{
+public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Callback, GetLoggedInUser.Callback {
 
     private View view;
 
@@ -35,6 +39,16 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
     }
 
     @Override
+    public void onVRBodyOne(DomainImage bodylocationOne) {
+        view.displayBodyimageOne(bodylocationOne);
+    }
+
+    @Override
+    public void onVRBodyTwo(DomainImage bodylocationTwo) {
+        view.displayBodyimageTwo(bodylocationTwo);
+    }
+
+    @Override
     public void onVRNoImages() {
 
     }
@@ -43,10 +57,15 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
         void onRecordImages(ArrayList<DomainImage> images);
         void onRecordDetails(String title, String comment, Date date, Geolocation geolocation);
         void makeToast(String msg, int length);
+        void onGetPatient(Patient patient);
+        void onGetCP(CareProvider careProvider);
+        void displayBodyimageOne(DomainImage image);
+        void displayBodyimageTwo(DomainImage image);
     }
 
 
     public RecordViewPresenter(View view){
+        new GetLoggedInUserImpl(this).execute();
         this.view = view;
     }
 
@@ -57,13 +76,15 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
      * @param recordDate new record date
      */
 
-    public void editUserRecord(String recordTitle, String recordComment, Date recordDate, Geolocation geolocation){
+    public void editUserRecord(String recordTitle, String recordComment, Date recordDate, Geolocation geolocation, DomainImage bodylocationOne, DomainImage bodylocationTwo){
         EditRecord editRecord = new EditRecordImpl(
                 this,
                 recordTitle,
                 recordComment,
                 recordDate,
-                geolocation
+                geolocation,
+                bodylocationOne,
+                bodylocationTwo
         );
         editRecord.execute();
     }
@@ -96,5 +117,20 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
     @Override
     public void onERInvalidPermissions() {
 
+    }
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+        this.view.onGetPatient(patient);
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        this.view.onGetCP(careProvider);
     }
 }

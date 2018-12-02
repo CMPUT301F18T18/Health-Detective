@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -18,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,7 +37,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +45,8 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -51,7 +55,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
+public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback {
 
     LinearLayout bodyPhotoScroll;
     RecordViewPresenter recordViewPresenter;
@@ -64,10 +68,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     String comment;
     Date date;
     Geolocation geolocation = null;
+    DomainImage bodylocationOne = null;
+    DomainImage bodylocationTwo = null;
     int testImages;
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
     private int REQUEST_CODE = 1212;
+    Boolean userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,15 +108,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
-        bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
-                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
-                startActivity(intent);
-            toast.show();
-            }
-        });
     }
 
     @Override
@@ -122,9 +120,14 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
-        MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(userId);
+        if (userType){
+            getMenuInflater().inflate(R.menu.edit_menu, menu);
+            MenuItem userIdMenu = menu.findItem(R.id.userId);
+            userIdMenu.setTitle(userId);
+        }
+//        getMenuInflater().inflate(R.menu.edit_menu, menu);
+//        MenuItem userIdMenu = menu.findItem(R.id.userId);
+//        userIdMenu.setTitle(userId);
         return true;
     }
 
@@ -186,20 +189,25 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     public void onRecordImages(ArrayList<DomainImage> images) {
         bodyPhotoScroll.removeAllViews();
 
-        for (DomainImage image: images) {
-            String stringImage = image.getImage();
+        for (int i = 0; i < images.size(); i++) {
+            String stringImage = images.get(i).getImage();
             Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
             
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
-            frontBL.setImageBitmap(bitmap);
-            backBL.setImageBitmap(bitmap);
+            imageView.setTag(i);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = (int) v.getTag();
+                    onPhotoClick(index);
+                }
+            });
+
             bodyPhotoScroll.addView(imageView);
         }
 
         bodyPhotoScroll.invalidate();
-        frontBL.invalidate();
-        backBL.invalidate();
     }
 
     @Override
@@ -228,6 +236,22 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         toast.show();
     }
 
+    @Override
+    public void onGetPatient(Patient patient) {
+        userType = false;
+    }
+
+    @Override
+    public void onGetCP(CareProvider careProvider) {
+        userType = true;
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+        addNPhoto.setVisibility(View.GONE);
+    }
+
     private void openDialog(String prompt,int type,String recordInfo){
         EditDialog exampleDialog = new EditDialog(prompt,type,recordInfo);
         exampleDialog.show(getSupportFragmentManager(), "Edit Dialog");
@@ -236,12 +260,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void applyEditTitle(String editedText) {
-        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation);
+        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation, bodylocationOne, bodylocationTwo);
     }
 
     @Override
     public void applyEditDesc(String editedComment) {
-        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation);
+        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation, bodylocationOne, bodylocationTwo);
     }
 
 
@@ -264,7 +288,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
         date = c.getTime();
-        recordViewPresenter.editUserRecord(title, comment, date, geolocation);
+        recordViewPresenter.editUserRecord(title, comment, date, geolocation,bodylocationOne, bodylocationTwo);
 
     }
 
@@ -272,32 +296,53 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addNPhoto:
-                Intent photoIntent = new Intent(this, CamaraActivity.class);
-                startActivity(photoIntent);
+                if (userType){}
+                else {
+                    Intent photoIntent = new Intent(this, CamaraActivity.class);
+                    startActivity(photoIntent);
+                }
                 break;
             case R.id.frontBL:
-                Intent camaraIntent = new Intent(this, CamaraActivity.class);
-                startActivity(camaraIntent);
+                if (userType){}
+                else {
+                    Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                    camaraIntent.putExtra("TYPE", true);
+                    startActivity(camaraIntent);
+                }
                 //dialog box for add new front body location photo
                 break;
             case R.id.backBL:
-                Intent backBlIntent = new Intent(this, CamaraActivity.class);
-                startActivity(backBlIntent);
+                if (userType) {}
+                else {
+                    Intent backBlIntent = new Intent(this, CamaraActivity.class);
+                    backBlIntent.putExtra("TYPE", true);
+                    backBlIntent.putExtra("LEFTRIGHT", true);
+                    startActivity(backBlIntent);
+                }
                 //dialog box for add new back body location photo
                 break;
             case R.id.editmapbut:
-                Intent mapIntent = new Intent(this, MapActivity.class);
-                //mapIntent.putExtra("PATIENT", patientContext);
-                mapIntent.putExtra("type",1);
-                if (geolocation == null){
-                    Double lat = 53.5444;
-                    Double lng = -113.491;
-                    geolocation = new Geolocation(lat,lng);
+                if (userType){}
+                else {
+                    Intent mapIntent = new Intent(this, MapActivity.class);
+                    //mapIntent.putExtra("PATIENT", patientContext);
+                    mapIntent.putExtra("type", 1);
+                    if (geolocation == null) {
+                        Double lat = 53.5444;
+                        Double lng = -113.491;
+                        geolocation = new Geolocation(lat, lng);
+                    }
+                    mapIntent.putExtra("location", geolocation);
+                    startActivityForResult(mapIntent, REQUEST_CODE);
                 }
-                mapIntent.putExtra("location", geolocation);
-                startActivityForResult(mapIntent,REQUEST_CODE);
                 break;
         }
+    }
+
+    private void onPhotoClick(int index) {
+        Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+        intent.putExtra("SELECTED_PHOTO", index);
+        startActivity(intent);
     }
 
     private void getLocationPermission(){
@@ -382,7 +427,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                 double[] doubleArrayExtra = data.getDoubleArrayExtra("result");
                 geolocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
-                recordViewPresenter.editUserRecord(title , comment, date, geolocation);
+                recordViewPresenter.editUserRecord(title , comment, date, geolocation, bodylocationOne, bodylocationTwo);
                 mMap.clear();
                 moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
                 createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),title);
@@ -394,4 +439,39 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
         }
     }
+
+    @Override
+    public void displayBodyimageOne(DomainImage image) {
+        if (image == null)
+            return;
+
+        String stringImage = image.getImage();
+        Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        if (image.getLabel() != null)
+            frontBLTag.setText(image.getLabel());
+
+        frontBL.setImageBitmap(bitmap);
+        frontBL.invalidate();
+    }
+
+    @Override
+    public void displayBodyimageTwo(DomainImage image) {
+        if (image == null)
+            return;
+
+        String stringImage = image.getImage();
+        Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        if (image.getLabel() != null)
+            backBLTag.setText(image.getLabel());
+
+        backBL.setImageBitmap(bitmap);
+        backBL.invalidate();
+    }
+
+    private void init(){
+
+    }
+
 }

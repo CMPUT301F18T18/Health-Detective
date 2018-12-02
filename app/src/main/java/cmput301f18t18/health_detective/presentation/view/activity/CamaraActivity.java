@@ -40,6 +40,9 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         setContentView(R.layout.activity_camara);
 
         Intent newIntent = this.getIntent();
+        boolean type = newIntent.getBooleanExtra("TYPE", false);
+        boolean leftRight = newIntent.getBooleanExtra("LEFTRIGHT", false);
+
         takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
 
         Button saveBtn = findViewById(R.id.saveBtn);
@@ -57,7 +60,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 
         verifyPermission(this);
 
-        this.presenter = new CameraPresenter(this);
+        this.presenter = new CameraPresenter(this, type, leftRight);
 
         takeAPhoto();
     }
