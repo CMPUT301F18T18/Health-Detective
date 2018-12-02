@@ -11,6 +11,7 @@ import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.interactors.ViewRecord;
 import cmput301f18t18.health_detective.domain.interactors.impl.EditRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewRecordImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
@@ -49,6 +50,7 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
         void makeToast(String msg, int length);
         void onGetPatient(Patient patient);
         void onGetCP(CareProvider careProvider);
+        void onLogout();
     }
 
 
@@ -119,4 +121,11 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
     public void onGLIUCareProvider(CareProvider careProvider) {
         this.view.onGetCP(careProvider);
     }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
+    }
+
 }

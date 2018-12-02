@@ -38,7 +38,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
     private Geolocation geolocation;
     private Date updateDate = new Date();
     private Address address;
-    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
 
     public AddDialog() {
@@ -86,7 +86,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
             e.printStackTrace();
         }
         updateAddress(address);
-        currentDate.setText(dateFormat.format(nowDate));
+        currentDate.setText(dateFormat.format(nowDate).replace("AM","am").replace("PM","pm"));
 
         addDate = view.findViewById(R.id.addDateRecordBtn);
         addGeo = view.findViewById(R.id.addGeoRecordBtn);
@@ -136,7 +136,7 @@ public class AddDialog extends AppCompatDialogFragment implements View.OnClickLi
 
     public void changeTime(Date date){
         this.updateDate = date;
-        this.currentDate.setText(dateFormat.format(updateDate));
+        this.currentDate.setText(dateFormat.format(updateDate).replace("AM","am").replace("PM","pm"));
     }
 
 
