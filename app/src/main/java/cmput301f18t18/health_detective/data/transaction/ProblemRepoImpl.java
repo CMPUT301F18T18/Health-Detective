@@ -1,11 +1,13 @@
 package cmput301f18t18.health_detective.data.transaction;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.searchly.jestdroid.JestDroidClient;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,14 +26,14 @@ public class ProblemRepoImpl extends AbstractRepo {
     private Problem problem;
     private String problemId;
 
-    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, Problem problem) {
-        super(client, db);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Problem problem) {
+        super(client, index, db);
         this.problem = problem;
         this.problemId = problem.getProblemId();
     }
 
-    public ProblemRepoImpl(JestDroidClient client, SQLiteDatabase db, String id) {
-        super(client, db);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
+        super(client, index, db);
         this.problemId = id;
     }
 
@@ -51,7 +53,7 @@ public class ProblemRepoImpl extends AbstractRepo {
                 "}";
         Log.d("ESC:getProblemElasticSearchId", query);
         Search search = new Search.Builder(query)
-                .addIndex("cmput301f18t18test2")
+                .addIndex(elasticIndex)
                 .addType("Problem")
                 .build();
         try {
@@ -78,11 +80,12 @@ public class ProblemRepoImpl extends AbstractRepo {
      * Function to push a problem into elastic search.
      *
      */
+    @Override
     public void insert() {
         if (problem == null)
             return;
         Index index = new Index.Builder(problem)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(problem.getClass().getSimpleName())
                 .refresh(true)
                 .build();
@@ -95,6 +98,26 @@ public class ProblemRepoImpl extends AbstractRepo {
         } catch (IOException e) {
             Log.d("ESC:insertProblem", "IOException", e);
         }
+
+        ContentValues values = new ContentValues();
+        values.put("problemId", problemId);
+        values.put("title", problem.getTitle());
+        values.put("description", problem.getDescription());
+        values.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(problem.getStartDate()));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String id : problem.getRecordIds()) {
+            stringBuilder.append(id).append(",");
+        }
+
+        String recordIds = stringBuilder.toString();
+        if (stringBuilder.length() > 2) { // Trim trailing ","
+            recordIds = recordIds.substring(0, recordIds.length()-1);
+        }
+
+        values.put("recordIds", recordIds);
+
+        db.insert("Problems", null, values);
     }
 
     /**
@@ -102,6 +125,7 @@ public class ProblemRepoImpl extends AbstractRepo {
      * Currently done by deleting then re-inserting problem.
      *
      */
+    @Override
     public void update() {
         delete();
         insert();
@@ -114,7 +138,7 @@ public class ProblemRepoImpl extends AbstractRepo {
      */
     public Problem retrieve() {
         String elasticSearchId = getProblemElasticSearchId();
-        Get get = new Get.Builder("cmput301f18t18test2", elasticSearchId)
+        Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("Problem")
                 .build();
         try {
@@ -152,12 +176,13 @@ public class ProblemRepoImpl extends AbstractRepo {
      * Used to remove a problem from elasticsearch
      *
      */
+    @Override
     public void delete() {
         String elasticSearchId = getProblemElasticSearchId();
         if (elasticSearchId == null)
             return;
         Delete delete = new Delete.Builder(elasticSearchId)
-                .index("cmput301f18t18test2")
+                .index(elasticIndex)
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
@@ -168,5 +193,10 @@ public class ProblemRepoImpl extends AbstractRepo {
         } catch (IOException e) {
             Log.d("ESC:deleteProblem", "IOException", e);
         }
+
+        db.delete("Problems",
+                "problemId = ?",
+                new String[] {problemId}
+        );
     }
 }

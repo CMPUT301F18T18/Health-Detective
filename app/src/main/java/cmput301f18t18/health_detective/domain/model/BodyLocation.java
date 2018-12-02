@@ -11,22 +11,22 @@ public class BodyLocation {
     private String id;
     private String user;
     private String label;
-    private DomainImage frontImage;
-    private DomainImage backImage;
+    private String frontImageId;
+    private String backImageId;
 
 
-    public BodyLocation(String user, String label, DomainImage frontImage, DomainImage backImage) {
+    public BodyLocation(String user, String label, String frontImage, String backImage) {
         DomainContext context = DomainContext.getInstance();
         String newId = Id.genUniqueId(context.getSecureRandom());
 
         this.user = user;
         this.setId(newId);
         this.setLabel(label);
-        this.setFrontImage(frontImage);
-        this.setBackImage(backImage);
+        this.setFrontImageId(frontImage);
+        this.setBackImageId(backImage);
     }
 
-    public BodyLocation(String user, String id, String label, DomainImage frontImage, DomainImage backImage) {
+    public BodyLocation(String user, String id, String label, String frontImage, String backImage) {
         this(user, label, frontImage, backImage);
 
         this.setId(id);
@@ -52,27 +52,24 @@ public class BodyLocation {
         this.label = label;
     }
 
-    public byte[] getFrontImage() {
-        byte[] image = this.frontImage.getImage();
-
-        return image;
-    }
-
-    public byte[] getBackImage() {
-        byte[] image = this.backImage.getImage();
-
-        return image;
-    }
-
-    public void setFrontImage(DomainImage frontImage) {
-        this.frontImage = frontImage;
-    }
-
-    public void setBackImage(DomainImage backImage) {
-        this.backImage = backImage;
-    }
 
     public String getUser() {
         return user;
+    }
+
+    public String getFrontImageId() {
+        return frontImageId;
+    }
+
+    public void setFrontImageId(String frontImageId) {
+        this.frontImageId = frontImageId;
+    }
+
+    public String getBackImageId() {
+        return backImageId;
+    }
+
+    public void setBackImageId(String backImageId) {
+        this.backImageId = backImageId;
     }
 }
