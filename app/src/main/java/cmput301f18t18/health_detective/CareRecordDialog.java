@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,14 +19,14 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
     private EditText addDesc;
     private TextView currentDate;
     private CareAddDialogListener listener;
-    private Date updateDate;
+    private Button DateBtn;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_add_record_dialog, null);
+        View view = inflater.inflate(R.layout.layout_care_record_add, null);
 
 
         builder.setView(view)
@@ -43,10 +44,11 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
                         listener.applyCareRecord(desc);
                     }
                 });
-
-            currentDate = view.findViewById(R.id.care_add_comment_record);
+            DateBtn = view.findViewById(R.id.CareaddDateRecordBtn);
+            DateBtn.setOnClickListener(this);
+            currentDate = view.findViewById(R.id.care_add_record_date);
             currentDate.setText(new Date().toString());
-            addDesc = view.findViewById(R.id.care_add_record_date);
+            addDesc = view.findViewById(R.id.care_add_comment_record);
 
         return builder.create();
     }
@@ -61,7 +63,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.addDateRecordBtn) {
+        if (v.getId() == R.id.CareaddDateRecordBtn) {
             listener.applyDate();
         }
     }
@@ -72,8 +74,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
 
     }
     public void changeTime(Date date){
-        this.updateDate = date;
-        this.currentDate.setText(updateDate.toString());
+        this.currentDate.setText(date.toString());
     }
 
 }
