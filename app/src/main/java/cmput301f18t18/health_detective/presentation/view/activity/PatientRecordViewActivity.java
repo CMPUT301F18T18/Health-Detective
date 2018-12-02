@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +45,8 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
@@ -50,7 +55,7 @@ import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
-public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback{
+public class PatientRecordViewActivity extends AppCompatActivity implements View.OnClickListener, RecordViewPresenter.View, EditDialog.ExampleDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OnMapReadyCallback {
 
     LinearLayout bodyPhotoScroll;
     RecordViewPresenter recordViewPresenter;
@@ -66,6 +71,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
     private int REQUEST_CODE = 1212;
+    Boolean userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +101,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
 
-        RecordRepoMock mockRecord = new RecordRepoMock();
-        mockRecord.insertRecord(new Record("test", "test", new Date()));
 
         recordViewPresenter = new RecordViewPresenter(this);
 
@@ -143,9 +147,14 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
-        MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(userId);
+        if (userType){
+            getMenuInflater().inflate(R.menu.edit_menu, menu);
+            MenuItem userIdMenu = menu.findItem(R.id.userId);
+            userIdMenu.setTitle(userId);
+        }
+//        getMenuInflater().inflate(R.menu.edit_menu, menu);
+//        MenuItem userIdMenu = menu.findItem(R.id.userId);
+//        userIdMenu.setTitle(userId);
         return true;
     }
 
@@ -248,6 +257,22 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         toast.show();
     }
 
+    @Override
+    public void onGetPatient(Patient patient) {
+        userType = false;
+    }
+
+    @Override
+    public void onGetCP(CareProvider careProvider) {
+        userType = true;
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
+        addNPhoto.setVisibility(View.GONE);
+    }
+
     private void openDialog(String prompt,int type,String recordInfo){
         EditDialog exampleDialog = new EditDialog(prompt,type,recordInfo);
         exampleDialog.show(getSupportFragmentManager(), "Edit Dialog");
@@ -292,30 +317,42 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addNPhoto:
-                Intent photoIntent = new Intent(this, CamaraActivity.class);
-                startActivity(photoIntent);
+                if (userType){}
+                else {
+                    Intent photoIntent = new Intent(this, CamaraActivity.class);
+                    startActivity(photoIntent);
+                }
                 break;
             case R.id.frontBL:
-                Intent camaraIntent = new Intent(this, CamaraActivity.class);
-                startActivity(camaraIntent);
+                if (userType){}
+                else {
+                    Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                    startActivity(camaraIntent);
+                }
                 //dialog box for add new front body location photo
                 break;
             case R.id.backBL:
-                Intent backBlIntent = new Intent(this, CamaraActivity.class);
-                startActivity(backBlIntent);
+                if (userType) {}
+                else {
+                    Intent backBlIntent = new Intent(this, CamaraActivity.class);
+                    startActivity(backBlIntent);
+                }
                 //dialog box for add new back body location photo
                 break;
             case R.id.mapEdit:
-                Intent mapIntent = new Intent(this, MapActivity.class);
-                //mapIntent.putExtra("PATIENT", patientContext);
-                mapIntent.putExtra("type",1);
-                if (geolocation == null){
-                    Double lat = 53.5444;
-                    Double lng = -113.491;
-                    geolocation = new Geolocation(lat,lng);
+                if (userType){}
+                else {
+                    Intent mapIntent = new Intent(this, MapActivity.class);
+                    //mapIntent.putExtra("PATIENT", patientContext);
+                    mapIntent.putExtra("type", 1);
+                    if (geolocation == null) {
+                        Double lat = 53.5444;
+                        Double lng = -113.491;
+                        geolocation = new Geolocation(lat, lng);
+                    }
+                    mapIntent.putExtra("location", geolocation);
+                    startActivityForResult(mapIntent, REQUEST_CODE);
                 }
-                mapIntent.putExtra("location", geolocation);
-                startActivityForResult(mapIntent,REQUEST_CODE);
                 break;
         }
     }
@@ -414,4 +451,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
         }
     }
+
+    private void init(){
+
+    }
+
 }

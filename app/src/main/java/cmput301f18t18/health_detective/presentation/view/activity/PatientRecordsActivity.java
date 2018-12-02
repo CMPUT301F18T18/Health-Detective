@@ -109,8 +109,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
-
-
         this.recordListPresenter.getUserRecords();
     }
 
@@ -405,7 +403,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void applyCareRecord(String comment) {
         // Add the care record here
-        recordListPresenter.createUserRecord(this.title, comment, this.date, myLocation);
+        recordListPresenter.createUserRecord("test", comment, this.date, myLocation);
     }
 
     public void init(){
