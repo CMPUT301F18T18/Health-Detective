@@ -174,6 +174,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         Button signUp = findViewById(R.id.signUpBtn);
         TextView cancelBtn = findViewById(R.id.cancelBtn);
 
+
         signUp.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
     }

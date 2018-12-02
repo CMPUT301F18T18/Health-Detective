@@ -65,8 +65,6 @@ public class RecordListAdapter extends ArrayAdapter{
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
-        Toast.makeText(mContext, currentUser, Toast.LENGTH_SHORT).show();
-        Toast.makeText(mContext, record.getAuthor(), Toast.LENGTH_SHORT).show();
         //userType = true;
         if (userType){
             //deleteImg.setVisibility(View.INVISIBLE);
@@ -88,6 +86,14 @@ public class RecordListAdapter extends ArrayAdapter{
             }
 
         }
+
+        recordUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onUserClicked(recordList.get(postition));
+            }
+
+        });
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override

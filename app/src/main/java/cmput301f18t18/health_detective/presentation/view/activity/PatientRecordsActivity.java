@@ -125,7 +125,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(userId);
-
         return true;
     }
 
@@ -206,6 +205,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 });
         AlertDialog dialog = alert.create();
         dialog.show();
+    }
+
+    @Override
+    public void onUserClicked(Record record) {
+
     }
 
     @Override
@@ -432,14 +436,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 } else if (recordAuthor.equals(userId)){
                     recordListPresenter.onView(recordList.get(position));
                 }
-//                if (recordAuthor.equals(userId)){
-//                    recordListPresenter.onView(recordList.get(position));
-//                } else if (userType){
-//                    if (recordAuthor.equals(userId)){}
-//                    else {
-//                        recordListPresenter.onView(recordList.get(position));
-//                    }
-//                }
 
             }
         });

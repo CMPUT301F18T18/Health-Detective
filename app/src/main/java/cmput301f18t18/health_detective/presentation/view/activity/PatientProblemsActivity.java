@@ -52,26 +52,10 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_patient_problems);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        //ActionBar b = getActionBar();
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-
-//        Window window = this.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
-
-        //userType = false;
         problemsListPresenter = new ProblemsListPresenter(this);
-        //adapter = new ProblemListAdapter(this, this.problemList, this, userType);
 
         addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
-
-//        listView = findViewById(R.id.problemListView);
-//        listView.setAdapter(adapter);
-//
-//        this.problemsListPresenter.getProblems();
-
     }
 
     @Override
@@ -89,6 +73,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
+
         getMenuInflater().inflate(R.menu.logout_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
@@ -141,8 +126,8 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onProblemListUserId(String userId) {
-        this.userId = userId;
-        invalidateOptionsMenu();
+        //this.userId = userId;
+        //invalidateOptionsMenu();
     }
 
     @Override

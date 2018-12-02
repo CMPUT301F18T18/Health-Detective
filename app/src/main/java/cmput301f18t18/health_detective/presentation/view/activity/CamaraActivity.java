@@ -283,4 +283,5 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
         startActivity(intent);
     }
+
 }
