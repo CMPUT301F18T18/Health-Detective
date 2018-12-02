@@ -77,15 +77,17 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         Intent intent = this.getIntent();
         this.type = (int) intent.getSerializableExtra("type");
         this.startLocation = (Geolocation) intent.getSerializableExtra("location");
-
+        Cancel = findViewById(R.id.MapCancel);
+        Save = findViewById(R.id.MapSave);
         if (type == 0) {
+            Save.setVisibility(View.INVISIBLE);
+            Cancel.setVisibility(View.INVISIBLE);
             new ViewProblemImpl(this).execute();
         }
 
         searchText = findViewById(R.id.input_search);
 
-        Cancel = findViewById(R.id.MapCancel);
-        Save = findViewById(R.id.MapSave);
+
         Cancel.setOnClickListener(this);
         Save.setOnClickListener(this);
 
