@@ -6,6 +6,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,12 +55,48 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         ImageView addPatient = findViewById(R.id.addPatientBtn);
         addPatient.setOnClickListener(this);
         listView = findViewById(R.id.patientListView);
-        //patientList.add(new Patient("12345678", "12345678", "123455663424"));
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
         this.careProPatientListPresenter.getAssignedPatients();
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // being able to use the menu at the top of the app
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        MenuItem userIdMenu = menu.findItem(R.id.userId);
+        userIdMenu.setTitle("test");
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_search:
+                Intent searchIntent = new Intent(this,SearchActivity.class);
+                startActivity(searchIntent);
+                return true;
+
+            case R.id.Logout_option:
+                careProPatientListPresenter.onLogout();
+                return true;
+
+            case R.id.userId:
+                Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                startActivity(userIdIntent);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -154,6 +193,12 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onClickPatient() {
         Intent intent = new Intent(this, PatientProblemsActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
     }
 
 }

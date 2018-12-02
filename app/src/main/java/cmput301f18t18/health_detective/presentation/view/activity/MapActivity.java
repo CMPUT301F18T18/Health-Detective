@@ -3,6 +3,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -17,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,9 +71,11 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     private String userID = "user";
     private ArrayList<Record> recordlist = new ArrayList<Record>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private Boolean userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         new GetLoggedInUserImpl(this).execute();
@@ -329,7 +334,13 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
+        userType = false;
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
 
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
     }
 
     @Override

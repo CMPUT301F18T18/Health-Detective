@@ -147,7 +147,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        if (userType){
+        if (userType){ }
+        else {
             getMenuInflater().inflate(R.menu.edit_menu, menu);
             MenuItem userIdMenu = menu.findItem(R.id.userId);
             userIdMenu.setTitle(userId);
@@ -271,6 +272,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addNPhoto.setVisibility(View.GONE);
+        editMap.setVisibility(View.GONE);
     }
 
     private void openDialog(String prompt,int type,String recordInfo){
