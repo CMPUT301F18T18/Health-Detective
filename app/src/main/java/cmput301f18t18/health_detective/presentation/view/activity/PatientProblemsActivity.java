@@ -208,7 +208,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public void getPatientUser(Patient patient) {
         userType = false;
         init();
-        //adapter = new ProblemListAdapter(this, this.problemList, this, false);
     }
 
     @Override
@@ -221,12 +220,13 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addProblem.setImageResource(R.drawable.cp_circle);
         init();
-        //adapter = new ProblemListAdapter(this, this.problemList, this, true);
     }
 
     public void init(){
 
-
+        if (userType){
+            addProblem.setVisibility(View.GONE);
+        }
         adapter = new ProblemListAdapter(this, this.problemList, this, userType);
         listView = findViewById(R.id.problemListView);
         listView.setAdapter(adapter);

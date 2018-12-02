@@ -3,6 +3,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,15 @@ public class RecordListAdapter extends ArrayAdapter{
     private Context mContext;
     private List<Record> recordList = new ArrayList<>();
     private RecordOnClickListener listener;
+    private Boolean userType;
 
 
-    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener) {
+    public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user) {
         super(context, R.layout.ind_record_view, list);
         mContext = context;
         recordList = list;
         this.listener = listener;
+        this.userType = user;
     }
 
     @Override
@@ -52,9 +55,16 @@ public class RecordListAdapter extends ArrayAdapter{
         recordDate.setText(record.getDate().toString());
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
+        ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
+        //userType = true;
+        if (userType){
+            deleteImg.setVisibility(View.INVISIBLE);
+            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+
+        }
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
