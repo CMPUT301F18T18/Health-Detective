@@ -132,10 +132,10 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
+                //Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
                 startActivity(intent);
-            toast.show();
+            //toast.show();
             }
         });
     }
@@ -218,9 +218,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     private void setAllPhotoScroll(){
         ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        bodyPhotoScroll.addView(testImg);
-        bodyPhotoScroll.invalidate();
+        //testImg.setImageResource(R.drawable.ic_launcher_background);
+        //bodyPhotoScroll.addView(testImg);
+        //bodyPhotoScroll.invalidate();
     }
 
     public void setTextViews(){
@@ -471,8 +471,5 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         }
     }
 
-    private void init(){
-
-    }
 
 }

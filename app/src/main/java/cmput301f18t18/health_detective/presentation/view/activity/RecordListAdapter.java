@@ -2,6 +2,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.List;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 public class RecordListAdapter extends ArrayAdapter{
 
@@ -65,6 +67,12 @@ public class RecordListAdapter extends ArrayAdapter{
 
         ImageView recordImg = rowView.findViewById(R.id.recordImg);
         recordImg.setImageResource(R.drawable.ic_launcher_background);
+
+        //String stringImage = record.getImage();
+        //Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        //ImageView imageView = new ImageView(mContext);
+        //imageView.setImageBitmap(bitmap);
         //userType = true;
         if (userType){
             //deleteImg.setVisibility(View.INVISIBLE);

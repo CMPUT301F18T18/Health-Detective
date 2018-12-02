@@ -127,7 +127,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         AlertDialog dialog = alert.create();
         dialog.show();
 
-
     }
     private void openDialog() {
         PatientDialog exampleDialog = new PatientDialog();
