@@ -33,7 +33,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     private Date problemDateTime;
     private String title = "";
     private String comment = "";
-    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         problemDate.setFocusable(false);
 
         // time default set
-        problemDate.setText(dateFormat.format(new Date()));
+        problemDate.setText(dateFormat.format(new Date()).replace("AM","am").replace("PM","pm"));
 
 
 
@@ -134,7 +134,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
             problemTitle.setText(title);
             problemDesc.setText(comment);
-            problemDate.setText(dateFormat.format(problemDateTime));
+            problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
         }
     }
 
@@ -156,6 +156,6 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
         problemDateTime = c.getTime();
-        problemDate.setText(dateFormat.format(problemDateTime));
+        problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
     }
 }

@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CareRecordDialog extends AppCompatDialogFragment implements View.OnClickListener {
@@ -20,6 +22,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
     private TextView currentDate;
     private CareAddDialogListener listener;
     private Button DateBtn;
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
             DateBtn = view.findViewById(R.id.CareaddDateRecordBtn);
             DateBtn.setOnClickListener(this);
             currentDate = view.findViewById(R.id.care_add_record_date);
-            currentDate.setText(new Date().toString());
+            currentDate.setText(dateFormat.format(new Date()).replace("AM","am").replace("PM","pm"));
             addDesc = view.findViewById(R.id.care_add_comment_record);
 
         return builder.create();
@@ -74,7 +77,7 @@ public class CareRecordDialog extends AppCompatDialogFragment implements View.On
 
     }
     public void changeTime(Date date){
-        this.currentDate.setText(date.toString());
+        this.currentDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
     }
 
 }

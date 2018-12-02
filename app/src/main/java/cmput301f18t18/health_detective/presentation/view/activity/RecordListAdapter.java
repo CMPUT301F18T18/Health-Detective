@@ -28,7 +28,7 @@ public class RecordListAdapter extends ArrayAdapter{
     private RecordOnClickListener listener;
     private Boolean userType;
     private String currentUser;
-    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
 
     public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user, String cUser) {
@@ -58,7 +58,7 @@ public class RecordListAdapter extends ArrayAdapter{
         recordDescription.setText(record.getComment());
 
         TextView recordDate = rowView.findViewById(R.id.recordDate);
-        recordDate.setText(dateFormat.format(record.getDate()));
+        recordDate.setText(dateFormat.format(record.getDate()).replace("AM","am").replace("PM","pm"));
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);

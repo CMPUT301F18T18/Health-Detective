@@ -74,7 +74,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     private GoogleMap mMap;
     private int REQUEST_CODE = 1212;
     Boolean userType;
-    private DateFormat dateFormat = new SimpleDateFormat("hh:mma dd MMMM YYYY");
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        if (userType){ }
+        if (userType){
+            getMenuInflater().inflate(R.menu.logout_menu, menu);
+        }
         else {
             getMenuInflater().inflate(R.menu.edit_menu, menu);
             MenuItem userIdMenu = menu.findItem(R.id.userId);
@@ -200,6 +202,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
                 startActivity(userIdIntent);
                 return true;
+            case R.id.logout_edit:
+                recordViewPresenter.onLogout();
+                return true;
+            case R.id.Logout_option:
+                recordViewPresenter.onLogout();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -217,7 +225,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     public void setTextViews(){
         recordTitle.setText(title);
-        recordDate.setText(dateFormat.format(date));
+        recordDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
         recordDesc.setText(comment);
     }
 
@@ -276,6 +284,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addNPhoto.setVisibility(View.GONE);
         editMap.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
     }
 
     private void openDialog(String prompt,int type,String recordInfo){
