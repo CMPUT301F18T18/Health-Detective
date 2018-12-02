@@ -12,6 +12,7 @@ import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
@@ -113,6 +114,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
         void onDeleteRecordFail();
         void onCPView(CareProvider careProvider);
         void onPView(Patient patient);
+        void onLogout();
     }
 
     public RecordListPresenter(View view)
@@ -169,5 +171,11 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
         new GetLoggedInUserImpl(this).execute();
 
         view.onRecordView();
+    }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
     }
 }

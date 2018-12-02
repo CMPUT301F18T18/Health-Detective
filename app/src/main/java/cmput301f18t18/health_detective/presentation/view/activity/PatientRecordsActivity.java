@@ -157,6 +157,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
                 startActivity(userIdIntent);
                 return true;
+            case R.id.Logout_option:
+                recordListPresenter.onLogout();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -227,8 +229,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        this.startActivity(intent);
+        if (userType){}
+        else {
+            Intent intent = new Intent(this, PatientRecordViewActivity.class);
+            this.startActivity(intent);
+        }
     }
 
     @Override
@@ -259,6 +264,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onPView(Patient patient) {
         userType = false;
         init();
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
     }
 
     @Override

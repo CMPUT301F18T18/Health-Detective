@@ -66,13 +66,24 @@ public class RecordListAdapter extends ArrayAdapter{
         Toast.makeText(mContext, record.getAuthor(), Toast.LENGTH_SHORT).show();
         //userType = true;
         if (userType){
-            deleteImg.setVisibility(View.INVISIBLE);
+            //deleteImg.setVisibility(View.INVISIBLE);
+            if (currentUser.equals(record.getAuthor())){
+                deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            }
+            else {
+                deleteImg.setVisibility(View.INVISIBLE);
+            }
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
         if (!currentUser.equals(record.getAuthor())){
             recordImg.setVisibility(View.GONE);
-            deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            if (userType){}
+            else {
+                deleteImg.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         deleteImg.setOnClickListener(new View.OnClickListener() {

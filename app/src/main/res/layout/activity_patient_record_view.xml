@@ -166,23 +166,37 @@
             android:background="@drawable/signup_border"
             android:text="@string/problemDesc" />
 
-        <TextView
-            android:id="@+id/mapTitle"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:text="@string/mapTitle"
-            android:textColor="@color/primary_text"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardElevation="0dp">
 
-        <TextView
-            android:id="@+id/mapEdit"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_geo"
-            android:textColor="@color/primary_text"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/mapTitle"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mapTitle"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mapEdit"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_geo"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/mapTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
