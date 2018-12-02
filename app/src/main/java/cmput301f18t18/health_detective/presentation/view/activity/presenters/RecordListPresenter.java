@@ -51,11 +51,13 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     @Override
     public void onGLIUPatient(Patient patient) {
         this.view.onRecordListUserId(patient.getUserId());
+        this.view.onPView(patient);
     }
 
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
         this.view.onRecordListUserId(careProvider.getUserId());
+        this.view.onCPView(careProvider);
     }
 
     @Override
@@ -109,6 +111,8 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
         void onCreateRecord();
         void onRecordListUserId(String userId);
         void onDeleteRecordFail();
+        void onCPView(CareProvider careProvider);
+        void onPView(Patient patient);
     }
 
     public RecordListPresenter(View view)

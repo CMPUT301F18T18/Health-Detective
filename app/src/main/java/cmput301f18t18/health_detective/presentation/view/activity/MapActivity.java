@@ -37,20 +37,25 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.Manifest;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
+import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 
-public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Callback, OnMapReadyCallback, View.OnClickListener{
+public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, ViewProblem.Callback, GetLoggedInUser.Callback, OnMapReadyCallback, View.OnClickListener{
 
     private float ZOOM = 15f;
 
@@ -61,17 +66,23 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
     private Geolocation myLocation, startLocation;
     private Button Cancel, Save;
     private String userID = "user";
-
+    private ArrayList<Record> recordlist = new ArrayList<Record>();
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        searchText = findViewById(R.id.input_search);
-
+        new GetLoggedInUserImpl(this).execute();
         Intent intent = this.getIntent();
         this.type = (int) intent.getSerializableExtra("type");
         this.startLocation = (Geolocation) intent.getSerializableExtra("location");
+
+        if (type == 0) {
+            new ViewProblemImpl(this).execute();
+        }
+
+        searchText = findViewById(R.id.input_search);
 
         Cancel = findViewById(R.id.MapCancel);
         Save = findViewById(R.id.MapSave);
@@ -79,11 +90,15 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
         Save.setOnClickListener(this);
 
 
-        getLocationPermission();
 
-        new GetLoggedInUserImpl(this).execute();
+        if (type == 1){
+            getLocationPermission();
+        }
 
     }
+
+
+
 
     private void init(){
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -103,8 +118,10 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                mMap.clear();
-                createMarker(latLng,"new record");
+                if (type == 1) {
+                    mMap.clear();
+                    createMarker(latLng, "new record");
+                }
             }
         });
     }
@@ -171,35 +188,26 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
         LatLng startLatLng = new LatLng(startLocation.getlatitude(), startLocation.getlongitude());
         moveCamera(startLatLng, ZOOM);
         if (type == 1) {
-            createMarker(startLatLng, "title");
+            createMarker(startLatLng, "Location");
+        }
+        if (type == 0){
+            if (this.recordlist == null){
+                new ViewProblemImpl(this).execute();
+            }
+
+            for (int i = 0; i < this.recordlist.size();i++){
+                Marker marker = createMarker(new LatLng(
+                        recordlist.get(i).getGeolocation().getlatitude(),
+                        recordlist.get(i).getGeolocation().getlongitude()),
+                        recordlist.get(i).getTitle());
+                markers.add(marker);
+
+            }
         }
     }
 
 
-//        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//
-//        try{
-//            if(LocationPermissionsGranted){
-//
-//                Task location = fusedLocationProviderClient.getLastLocation();
-//                location.addOnCompleteListener(new OnCompleteListener() {
-//                    @Override
-//                    public void onComplete(@NonNull Task task) {
-//                        if (task.isSuccessful()) {
-//                            Location currentLocation = (Location) task.getResult();
-//                            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-//                            moveCamera(currentLatLng,ZOOM);
-//                            createMarker(currentLatLng,"title");
-//                        }
-//                        else{
-//                            Toast.makeText(MapActivity.this,"cant get location",Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//            }
-//        }catch(SecurityException ignored){
-//
-//        }
+
 
 
     private void moveCamera(LatLng latLng, float zoom){
@@ -264,7 +272,6 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
         mMap = googleMap;
 
         if(LocationPermissionsGranted) {
-            getDeviceLocation();
 
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -273,21 +280,22 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
+            mMap.setOnMarkerClickListener(this);
+            getDeviceLocation();
             init();
         }
 
     }
 
-    private void createMarker( LatLng currentLatLng,String title){
-        mMap.addMarker(new MarkerOptions()
+    private Marker createMarker( LatLng currentLatLng,String title){
+        Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(currentLatLng)
                 .anchor(0.5f, 0.5f)
                 .title(title));
 
         myLocation = new Geolocation(currentLatLng.latitude,currentLatLng.longitude);
 
-
+        return marker;
     }
 
 
@@ -297,10 +305,12 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
             finish();
         }
         if(v.getId()==R.id.MapSave){
-            Intent returnIntent = new Intent();
-            double[] array = new double[]{myLocation.getlatitude(), myLocation.getlongitude()};
-            returnIntent.putExtra("result",array);
-            setResult(PatientRecordsActivity.RESULT_OK,returnIntent);
+            if (type == 1) {
+                Intent returnIntent = new Intent();
+                double[] array = new double[]{myLocation.getlatitude(), myLocation.getlongitude()};
+                returnIntent.putExtra("result", array);
+                setResult(PatientRecordsActivity.RESULT_OK, returnIntent);
+            }
             finish();
         }
     }
@@ -318,5 +328,40 @@ public class MapActivity extends AppCompatActivity implements GetLoggedInUser.Ca
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
 
+    }
+
+    @Override
+    public void onVPSuccess(ArrayList<Record> records) {
+        this.recordlist = records;
+
+        getLocationPermission();
+
+    }
+
+    @Override
+    public void onVPSuccessDetails(String title, String description, Date date) {
+
+    }
+
+    @Override
+    public void onVPNoRecords() {
+
+    }
+
+    @Override
+    public void onVPNoContext() {
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (this.markers.contains(marker)) {
+            int index = this.markers.indexOf(marker);
+            new PutContext(this.recordlist.get(index)).execute();
+            Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
+            changeActivity(intent);
+        }
+
+        return false;
     }
 }

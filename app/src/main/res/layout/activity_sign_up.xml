@@ -35,7 +35,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorPrimaryDark"
         android:ems="10"
-        android:hint="@string/user_phoneNum"
+        android:hint="@string/Phon_constraint"
         android:inputType="textPersonName|number"
         android:singleLine="true"
         android:textColor="@color/primary_text"

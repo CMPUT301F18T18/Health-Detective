@@ -46,6 +46,10 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         problemDesc = findViewById(R.id.problemDesc);
         problemDate.setFocusable(false);
 
+        // time default set
+        problemDate.setText(new Date().toString());
+
+
 
 
         problemAddEditPresenter = new ProblemAddEditPresenter(this);

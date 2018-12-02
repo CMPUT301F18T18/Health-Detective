@@ -124,6 +124,8 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         recordtoEdit.setDate(this.date);
         recordtoEdit.setGeolocation(this.geolocation);
 
+        new PutContext(recordtoEdit);
+
         recordRepo.updateRecord(recordtoEdit);
 
         // Record added
