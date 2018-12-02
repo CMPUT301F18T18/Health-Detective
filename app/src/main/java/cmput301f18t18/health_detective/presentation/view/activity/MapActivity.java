@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     private String userID = "user";
     private ArrayList<Record> recordlist = new ArrayList<Record>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private ArrayList<Integer> testclick = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +153,6 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.menu_tab, menu);
-
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
@@ -202,6 +203,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
                         recordlist.get(i).getGeolocation().getlatitude(),
                         recordlist.get(i).getGeolocation().getlongitude()),
                         recordlist.get(i).getTitle());
+                testclick.add(0);
                 markers.add(marker);
 
             }
@@ -359,11 +361,23 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public boolean onMarkerClick(Marker marker) {
         if (this.markers.contains(marker)) {
             int index = this.markers.indexOf(marker);
-            new PutContext(this.recordlist.get(index)).execute();
-            Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
-            changeActivity(intent);
+
+            if (testclick.get(index) == 1) {
+                new PutContext(this.recordlist.get(index)).execute();
+                Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
+                changeActivity(intent);
+            }
+
+            else {
+                for( int j = 0; j < testclick.size(); j++){
+                    testclick.set(j,0);
+                }
+                testclick.set(index, 1);
+            }
+
         }
 
         return false;
     }
+
 }
