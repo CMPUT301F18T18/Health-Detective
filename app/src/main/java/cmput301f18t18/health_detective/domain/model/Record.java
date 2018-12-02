@@ -17,7 +17,7 @@ public class Record implements Searchable, Serializable {
     private String title;
     private String comment;
     private Date date;
-    private ArrayList<String> photos;
+    private ArrayList<String> photos = new ArrayList<>();
     private Geolocation geolocation;
     private String author;
 

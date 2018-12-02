@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -31,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +41,7 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
@@ -199,6 +203,21 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onRecordImages(ArrayList<DomainImage> images) {
+        for (DomainImage image: images) {
+            byte[] byteImage = image.getImage();
+
+            ImageView imageView = new ImageView(this);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+
+            imageView.setImageBitmap(bitmap);
+            bodyPhotoScroll.addView(imageView);
+        }
+
+        bodyPhotoScroll.invalidate();
+    }
+
+    @Override
     public void onRecordDetails(String title, String comment, Date date, Geolocation geolocation) {
         if (title == null)
             title = "";
@@ -268,17 +287,19 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addNPhoto:
-                // go to camera activity, but make sure that it gets rid of add body location selection
-                this.onBackPressed();
+                Intent photoIntent = new Intent(this, CamaraActivity.class);
+                startActivity(photoIntent);
+                break;
             case R.id.frontBL:
                 Intent camaraIntent = new Intent(this, CamaraActivity.class);
                 startActivity(camaraIntent);
                 //dialog box for add new front body location photo
+                break;
             case R.id.backBL:
                 Intent backBlIntent = new Intent(this, CamaraActivity.class);
                 startActivity(backBlIntent);
                 //dialog box for add new back body location photo
-
+                break;
             case R.id.mapEdit:
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", patientContext);
@@ -290,6 +311,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 }
                 mapIntent.putExtra("location", geolocation);
                 startActivityForResult(mapIntent,REQUEST_CODE);
+                break;
         }
     }
 

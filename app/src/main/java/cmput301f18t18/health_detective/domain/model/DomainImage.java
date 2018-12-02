@@ -31,6 +31,8 @@ public class DomainImage {
     }
 
     public DomainImage(byte[] image) {
+        this();
+
         this.setImage(image);
     }
 

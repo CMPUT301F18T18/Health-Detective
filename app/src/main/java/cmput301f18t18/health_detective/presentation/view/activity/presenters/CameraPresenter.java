@@ -1,19 +1,51 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 
-public class CameraPresenter {
+import cmput301f18t18.health_detective.domain.interactors.AddPhoto;
+import cmput301f18t18.health_detective.domain.interactors.impl.AddPhotoImpl;
+import cmput301f18t18.health_detective.domain.model.DomainImage;
 
+public class CameraPresenter implements AddPhoto.Callback {
 
+    private View view;
 
+    @Override
+    public void onAPhInvalidPermissions() {
 
+    }
 
+    @Override
+    public void onAPhNoImage() {
 
+    }
 
+    @Override
+    public void onAPhSuccess(DomainImage image) {
+        view.onDone();
+    }
 
+    public interface View {
+        void onDone();
+    }
 
+    public CameraPresenter(View view) {
+        this.view = view;
+    }
+
+    public void onImage(Bitmap image) {
+        byte[] byteImage = toByteArray(image);
+
+        new AddPhotoImpl(this, "", byteImage, null, null).execute();
+    }
+
+    public void onSave() {
+
+    }
 
     //TODO: this will convert to the byte array if that's how you want to store it
     private byte[] toByteArray(Bitmap bitmap){

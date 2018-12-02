@@ -42,11 +42,13 @@ import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Photo;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 import static cmput301f18t18.health_detective.presentation.view.activity.PermissionRequest.verifyPermission;
 
-public class CamaraActivity extends AppCompatActivity implements OnTouchListener, View.OnClickListener{
+public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, OnTouchListener, View.OnClickListener{
 
+    private CameraPresenter presenter;
     Uri imageFileUri;
     int angle = 0;
     ImageView takenPhoto;
@@ -63,12 +65,9 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
     Float x;
     Float y;
 
-
     // These matrices will be used to scale points of the image
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
-    Record record;
-    Patient patientContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +75,6 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
         setContentView(R.layout.activity_camara);
       
         Intent newIntent = this.getIntent();
-        this.record = (Record) newIntent.getSerializableExtra("RECORD");
-        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
-
-
-
         takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
 
 
@@ -106,6 +100,8 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             }
         };
         button.setOnClickListener(listener);
+
+        this.presenter = new CameraPresenter(this);
     }
 
     @Override
@@ -171,17 +167,19 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             if (resultCode == RESULT_OK) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
+                    presenter.onImage(bitmap);
+                    takenPhoto.setImageBitmap(bitmap);
                     //byte[] tempArray = toByteArray(bitmap);
-                    //TODO: pass bitmap to presenter and in presenter you convert to byte array
-                    Bitmap tempBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-                    Canvas canvas = new Canvas(tempBitmap);
-                    //takenPhoto.draw(canvas);
-//                    canvas.drawBitmap(bitmap, null, null);
-                    Paint p = new Paint();
-                    p.setAntiAlias(true);
-                    p.setColor(Color.RED);
-                    canvas.drawCircle(60, 50, 5,p);
-                    takenPhoto.setImageBitmap(tempBitmap);
+//                    //TODO: pass bitmap to presenter and in presenter you convert to byte array
+//                    Bitmap tempBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+//                    Canvas canvas = new Canvas(tempBitmap);
+//                    //takenPhoto.draw(canvas);
+////                    canvas.drawBitmap(bitmap, null, null);
+//                    Paint p = new Paint();
+//                    p.setAntiAlias(true);
+//                    p.setColor(Color.RED);
+//                    canvas.drawCircle(60, 50, 5,p);
+//                    takenPhoto.setImageBitmap(tempBitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -230,8 +228,6 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
             canvas.drawCircle(event.getX(), newY, 100, p);
             takenPhoto.setImageBitmap(bmOverlay);
 
-
-
         }
         return true;
     }
@@ -239,11 +235,7 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.saveBtn){
-            Intent intent = new Intent(this, PatientRecordViewActivity.class);
-            intent.putExtra("RECORD", record);
-            intent.putExtra("USER", patientContext);
-            //intent.putExtra("PHOTO", temp);
-            startActivity(intent);
+            presenter.onImage(bitmap);
         }
     }
 
@@ -270,5 +262,11 @@ public class CamaraActivity extends AppCompatActivity implements OnTouchListener
 
     public String byteArrayToString(byte [] byteArray){
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    @Override
+    public void onDone() {
+        Intent intent = new Intent(this, PatientRecordViewActivity.class);
+        startActivity(intent);
     }
 }
