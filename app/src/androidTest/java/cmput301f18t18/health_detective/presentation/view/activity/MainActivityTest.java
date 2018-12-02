@@ -32,7 +32,7 @@ public class MainActivityTest {
     public IntentsTestRule<MainActivity> mainActivityTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
-    //Making sure invalid Id invokes correct toast and does not change activities
+    // Making sure invalid Id invokes correct toast and does not change activities
     @Test
     public void MainInvalidDataTest() {
         //Checking invalid ID
@@ -45,14 +45,14 @@ public class MainActivityTest {
 
     }
 
-    //Making sure Sign up button is working properly and launching correct activity
+    // Making sure Sign up button is working properly and launching correct activity
     @Test
     public void MainSignUpButtonTest() {
         onView(withId(R.id.signUpText)).perform(click());
         intended(hasComponent(SignUpActivity.class.getName()));
     }
 
-    //Making sure the login button logs in correct user and launches correct activity
+    // Making sure the login button logs in correct user and launches correct activity
     @Test
     public void MainLogInTest() {
         onView(withId(R.id.userIdLogin))

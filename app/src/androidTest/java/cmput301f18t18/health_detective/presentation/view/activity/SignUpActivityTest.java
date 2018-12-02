@@ -33,10 +33,10 @@ public class SignUpActivityTest {
     public IntentsTestRule<SignUpActivity> suActivityTestRule =
             new IntentsTestRule<>(SignUpActivity.class);
 
-    //Making sure invalid data invokes correct toast and does not change activities
+    // Making sure invalid data invokes correct toast and does not change activities
     @Test
     public void SUInvalidDataTest() {
-        //Checking invalid ID
+        // Checking invalid ID
         onView(withId(R.id.userEdit))
                 .perform(replaceText("walker"),closeSoftKeyboard());
         onView(withId(R.id.emailEdit))
@@ -48,7 +48,7 @@ public class SignUpActivityTest {
                 .inRoot(withDecorView(not(suActivityTestRule.getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-        //Checking invalid Email
+        // Checking invalid Email
         onView(withId(R.id.userEdit))
                 .perform(replaceText("spongebob99"),closeSoftKeyboard());
         onView(withId(R.id.emailEdit))
@@ -60,7 +60,7 @@ public class SignUpActivityTest {
                 .inRoot(withDecorView(not(suActivityTestRule .getActivity().getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-        //Checking invalid phone number
+        // Checking invalid phone number
         onView(withId(R.id.userEdit))
                 .perform(replaceText("spongebob99"),closeSoftKeyboard());
         onView(withId(R.id.emailEdit))
@@ -74,14 +74,14 @@ public class SignUpActivityTest {
 
     }
 
-    //Making sure cancel button is working properly
+    // Making sure cancel button is working properly
     @Test
     public void SUCancelTest() {
         onView(withId(R.id.cancelBtn)).perform(click());
         assertTrue(suActivityTestRule.getActivity().isFinishing());
     }
 
-    //Making sure the sign up button stores info and sends you to correct activity
+    // Making sure the sign up button stores info and sends you to correct activity
     @Test
     public void SUAcceptTest() {
         //Generating random string for userID (for uniqueness)
