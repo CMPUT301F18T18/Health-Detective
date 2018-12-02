@@ -43,6 +43,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
     ImageView addProblem;
+    Boolean userType;
 
 
     @Override
@@ -59,16 +60,17 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
 
+        //userType = false;
         problemsListPresenter = new ProblemsListPresenter(this);
-        adapter = new ProblemListAdapter(this, this.problemList, this);
+        //adapter = new ProblemListAdapter(this, this.problemList, this, userType);
 
         addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
 
-        listView = findViewById(R.id.problemListView);
-        listView.setAdapter(adapter);
-
-        this.problemsListPresenter.getProblems();
+//        listView = findViewById(R.id.problemListView);
+//        listView.setAdapter(adapter);
+//
+//        this.problemsListPresenter.getProblems();
 
     }
 
@@ -204,17 +206,33 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void getPatientUser(Patient patient) {
-
+        userType = false;
+        init();
+        //adapter = new ProblemListAdapter(this, this.problemList, this, false);
     }
 
     @Override
     public void getCPUser(CareProvider careProvider) {
+        userType = true;
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addProblem.setImageResource(R.drawable.cp_circle);
+        init();
+        //adapter = new ProblemListAdapter(this, this.problemList, this, true);
     }
+
+    public void init(){
+
+
+        adapter = new ProblemListAdapter(this, this.problemList, this, userType);
+        listView = findViewById(R.id.problemListView);
+        listView.setAdapter(adapter);
+
+        this.problemsListPresenter.getProblems();
+    }
+
 
 }

@@ -11,6 +11,7 @@ import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
 import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
 import cmput301f18t18.health_detective.domain.interactors.impl.AddAssignedPatientImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.RemoveAssignedPatientImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewCareProviderImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
@@ -48,6 +49,7 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
         void onGetPatientSuccess(ArrayList<Patient> assignedPatients);
         void noPatients();
         void onGetUser(CareProvider careProvider);
+        void onClickPatient();
     }
 
     public CareProPatientListPresenter(View view) {
@@ -82,9 +84,14 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
         command.execute();
     }
 
+    public void clickOnPatient(Patient patient){
+        new PutContext(patient).execute();
+        this.view.onClickPatient();
+    }
+
     @Override
     public void onAAPSuccess() {
-
+        //new PutContext(patient).execute();
         this.view.onAddPatientSuccess();
     }
 

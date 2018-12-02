@@ -63,8 +63,9 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onPatientClicked(Patient patient) {
-        Intent intent = new Intent(this, PatientProblemsActivity.class);
-        startActivity(intent);
+        this.careProPatientListPresenter.clickOnPatient(patient);
+//        Intent intent = new Intent(this, PatientProblemsActivity.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -147,6 +148,12 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onGetUser(CareProvider careProvider) {
         cpContext = careProvider;
         this.careProPatientListPresenter.getAssignedPatients();
+    }
+
+    @Override
+    public void onClickPatient() {
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        startActivity(intent);
     }
 
 }
