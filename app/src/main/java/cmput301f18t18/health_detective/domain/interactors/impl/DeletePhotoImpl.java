@@ -34,8 +34,7 @@ public class DeletePhotoImpl extends AbstractInteractor implements DeleteRecordP
 
         recordContext.deletePhoto(image);
 
-        new PutContext(recordContext);
-
         context.getRecordRepo().insertRecord(recordContext);
+        context.getImageRepo().deleteImage(image);
     }
 }

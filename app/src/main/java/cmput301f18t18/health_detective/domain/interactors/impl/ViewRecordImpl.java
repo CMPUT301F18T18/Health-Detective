@@ -73,13 +73,15 @@ public class ViewRecordImpl extends AbstractInteractor implements ViewRecord {
 
         images = imageRepo.retrieveImagesByIds(record.getPhotos());
 
-        if (images.isEmpty()) {
+        if (images == null || images.isEmpty()) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
                     callback.onVRNoImages();
                 }
             });
+
+            return;
         }
 
         mainThread.post(new Runnable() {

@@ -133,8 +133,6 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         if (this.bodylocation2 != null)
             recordtoEdit.setBodyloaction2(bodylocation2);
 
-        new PutContext(recordtoEdit);
-
         recordRepo.updateRecord(recordtoEdit);
 
         // Record added

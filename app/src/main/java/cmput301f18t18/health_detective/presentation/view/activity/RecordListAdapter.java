@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class RecordListAdapter extends ArrayAdapter{
     private RecordOnClickListener listener;
     private Boolean userType;
     private String currentUser;
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
 
     public RecordListAdapter(@NonNull Activity context, ArrayList<Record> list, RecordOnClickListener listener, Boolean user, String cUser) {
@@ -55,7 +58,7 @@ public class RecordListAdapter extends ArrayAdapter{
         recordDescription.setText(record.getComment());
 
         TextView recordDate = rowView.findViewById(R.id.recordDate);
-        recordDate.setText(record.getDate().toString());
+        recordDate.setText(dateFormat.format(record.getDate()).replace("AM","am").replace("PM","pm"));
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
@@ -66,13 +69,24 @@ public class RecordListAdapter extends ArrayAdapter{
         Toast.makeText(mContext, record.getAuthor(), Toast.LENGTH_SHORT).show();
         //userType = true;
         if (userType){
-            deleteImg.setVisibility(View.INVISIBLE);
+            //deleteImg.setVisibility(View.INVISIBLE);
+            if (currentUser.equals(record.getAuthor())){
+                deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            }
+            else {
+                deleteImg.setVisibility(View.INVISIBLE);
+            }
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
         if (!currentUser.equals(record.getAuthor())){
             recordImg.setVisibility(View.GONE);
-            deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            if (userType){}
+            else {
+                deleteImg.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         deleteImg.setOnClickListener(new View.OnClickListener() {

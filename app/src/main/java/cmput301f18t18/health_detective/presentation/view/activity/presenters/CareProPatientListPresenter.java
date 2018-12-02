@@ -11,6 +11,7 @@ import cmput301f18t18.health_detective.domain.interactors.RemoveAssignedPatient;
 import cmput301f18t18.health_detective.domain.interactors.ViewCareProvider;
 import cmput301f18t18.health_detective.domain.interactors.impl.AddAssignedPatientImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.RemoveAssignedPatientImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewCareProviderImpl;
@@ -50,6 +51,7 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
         void noPatients();
         void onGetUser(CareProvider careProvider);
         void onClickPatient();
+        void onLogout();
     }
 
     public CareProPatientListPresenter(View view) {
@@ -87,6 +89,12 @@ public class CareProPatientListPresenter implements AddAssignedPatient.Callback,
     public void clickOnPatient(Patient patient){
         new PutContext(patient).execute();
         this.view.onClickPatient();
+    }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
     }
 
     @Override

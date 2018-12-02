@@ -139,7 +139,11 @@ public class PhotoRepoImpl extends AbstractRepo {
 
         for (String id : ids) {
             this.imageId = id;
-            images.add(retrieve());
+
+            DomainImage image = retrieve();
+
+            if (image != null)
+                images.add(image);
         }
 
         return images;

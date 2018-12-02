@@ -3,6 +3,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -17,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -68,9 +72,12 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     private String userID = "user";
     private ArrayList<Record> recordlist = new ArrayList<Record>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private ArrayList<Integer> testclick = new ArrayList<Integer>();
+    private Boolean userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         new GetLoggedInUserImpl(this).execute();
@@ -151,7 +158,6 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.menu_tab, menu);
-
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
@@ -202,6 +208,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
                         recordlist.get(i).getGeolocation().getlatitude(),
                         recordlist.get(i).getGeolocation().getlongitude()),
                         recordlist.get(i).getTitle());
+                testclick.add(0);
                 markers.add(marker);
 
             }
@@ -329,7 +336,13 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
+        userType = false;
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
 
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
     }
 
     @Override
@@ -359,11 +372,23 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public boolean onMarkerClick(Marker marker) {
         if (this.markers.contains(marker)) {
             int index = this.markers.indexOf(marker);
-            new PutContext(this.recordlist.get(index)).execute();
-            Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
-            changeActivity(intent);
+
+            if (testclick.get(index) == 1) {
+                new PutContext(this.recordlist.get(index)).execute();
+                Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
+                changeActivity(intent);
+            }
+
+            else {
+                for( int j = 0; j < testclick.size(); j++){
+                    testclick.set(j,0);
+                }
+                testclick.set(index, 1);
+            }
+
         }
 
         return false;
     }
+
 }

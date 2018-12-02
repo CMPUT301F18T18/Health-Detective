@@ -157,6 +157,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
                 startActivity(userIdIntent);
                 return true;
+            case R.id.Logout_option:
+                recordListPresenter.onLogout();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -227,8 +229,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        this.startActivity(intent);
+        if (userType){}
+        else {
+            Intent intent = new Intent(this, PatientRecordViewActivity.class);
+            this.startActivity(intent);
+        }
     }
 
     @Override
@@ -259,6 +264,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onPView(Patient patient) {
         userType = false;
         init();
+    }
+
+    @Override
+    public void onLogout() {
+        Intent logoutIntent = new Intent(this,MainActivity.class);
+        startActivity(logoutIntent);
     }
 
     @Override
@@ -403,7 +414,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void applyCareRecord(String comment) {
         // Add the care record here
-        recordListPresenter.createUserRecord("test", comment, this.date, myLocation);
+        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
     }
 
     public void init(){
@@ -413,7 +424,23 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                recordListPresenter.onView(recordList.get(position));
+                String recordAuthor = recordList.get(position).getAuthor();
+                if (userType) {
+                    if (recordAuthor.equals(userId)) {} else {
+                        recordListPresenter.onView(recordList.get(position));
+                    }
+                } else if (recordAuthor.equals(userId)){
+                    recordListPresenter.onView(recordList.get(position));
+                }
+//                if (recordAuthor.equals(userId)){
+//                    recordListPresenter.onView(recordList.get(position));
+//                } else if (userType){
+//                    if (recordAuthor.equals(userId)){}
+//                    else {
+//                        recordListPresenter.onView(recordList.get(position));
+//                    }
+//                }
+
             }
         });
         this.recordListPresenter.getUserRecords();
