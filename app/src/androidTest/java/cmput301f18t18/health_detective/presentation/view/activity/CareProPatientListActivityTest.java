@@ -46,6 +46,11 @@ public class CareProPatientListActivityTest {
         // Assuming reklaw2018 is a user, which it should be
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("reklaw2018"), closeSoftKeyboard());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.loginButton)).perform(click());
         try {
             Thread.sleep(1000);
@@ -97,6 +102,11 @@ public class CareProPatientListActivityTest {
                 .onChildView(withText("PROBLEMS"))
                 .perform(click());
         intended(hasComponent(PatientProblemsActivity.class.getName()));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withText("OKAY")).perform(click());
         onView(withText("OKAY")).perform(click());
         onView(withContentDescription("Navigate up")).perform(click());

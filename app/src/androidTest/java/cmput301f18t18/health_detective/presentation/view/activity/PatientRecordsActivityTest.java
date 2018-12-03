@@ -29,6 +29,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -50,7 +51,7 @@ public class PatientRecordsActivityTest {
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -93,10 +94,20 @@ public class PatientRecordsActivityTest {
     // Making sure correct dialog is launched when add record button is pressed
     @Test
     public void PRAddRecordTest() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.addRecordsBtn)).perform(click());
         onView(withText("Add Record")).check(matches(isDisplayed()));
         onView(withText("CANCEL")).perform(click());
         pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Making sure the logout button is working as intended
@@ -134,13 +145,13 @@ public class PatientRecordsActivityTest {
                 .perform(replaceText("TestRecord"));
         onView(withText("SAVE")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        pressBack();
+        onView(withContentDescription("Navigate up")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -153,15 +164,14 @@ public class PatientRecordsActivityTest {
                 .perform(click());
         onView(withText("CONFIRM")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         onView(withText("TestRecord")).check(doesNotExist());
-        pressBack();
-        pressBack();
+        onView(withContentDescription("Navigate up")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
