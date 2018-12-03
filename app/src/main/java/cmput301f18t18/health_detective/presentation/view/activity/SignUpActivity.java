@@ -1,6 +1,7 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
+import android.os.CpuUsageInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,12 +24,15 @@ import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements GetUser.Callback, View.OnClickListener, SignUpPresenter.View {
-    private TextView userText, phoneText, emailText;
+    private TextView userText, phoneText, emailText,cancelBtn;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
     private Boolean activityType;
     private String user;
     private int type;
+    private Button signUp;
+    private int CP;
+
 
 
     @Override
@@ -39,26 +43,33 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
 
         Intent intent = this.getIntent();
         type = (int) intent.getSerializableExtra("type");
+
         if (type == 2) {
             user = (String) intent.getSerializableExtra("id");
-            new GetUserImpl(this,user).execute();
+            new GetUserImpl(this, user).execute();
         }
 
 
 
+
+        signUp = findViewById(R.id.signUpBtn);
+        cancelBtn = findViewById(R.id.cancelBtn);
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
         //patientCheck.setChecked(true);
-        careCheck.setOnClickListener(this);
-        patientCheck.setOnClickListener(this);
+        if (type == 0) {
+            careCheck.setOnClickListener(this);
+            patientCheck.setOnClickListener(this);
+        }
 
         ImageView image = findViewById(R.id.imageView2);
         image.setImageResource(R.drawable.logo_transparent_background);
-
-        signUpPresenter = new SignUpPresenter(this);
+        if (type != 2) {
+            signUpPresenter = new SignUpPresenter(this);
+        }
     }
 
     @Override
@@ -95,17 +106,22 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
             case R.id.signUpBtn:
                 // if sign up completed set type to false if patient, true if CP
                 // call presenter method createNewUser
-                Boolean type = false;
-                if (careCheck.isChecked()) {
-                    type = true;
+                if (type == 2){
+                    finish();
                 }
-                String user = userText.getText().toString();
-                String phone = phoneText.getText().toString();
-                String email = emailText.getText().toString();
-                if (activityType){
-                    signUpPresenter.editUserInfo(email, phone);
-                } else {
-                    signUpPresenter.createNewUser(user, email, phone, type);
+                else {
+                    Boolean type1 = false;
+                    if (careCheck.isChecked()) {
+                        type1 = true;
+                    }
+                    String user = userText.getText().toString();
+                    String phone = phoneText.getText().toString();
+                    String email = emailText.getText().toString();
+                    if (activityType) {
+                        signUpPresenter.editUserInfo(email, phone);
+                    } else {
+                        signUpPresenter.createNewUser(user, email, phone, type1);
+                    }
                 }
                 break;
             case R.id.cancelBtn:
@@ -121,6 +137,8 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
 
     @Override
     public void onIsEditCareProvider(CareProvider careProvider) {
+        user = careProvider.getUserId();
+        new GetUserImpl(this, user).execute();
         activityType = true;
         careCheck.setChecked(true);
         editInit(careProvider);
@@ -128,6 +146,8 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
 
     @Override
     public void onIsEditPatient(Patient patient) {
+        user = patient.getUserId();
+        new GetUserImpl(this, user).execute();
         activityType = true;
         patientCheck.setChecked(true);
         editInit(patient);
@@ -164,45 +184,72 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
 
     @Override
     public void onEditUserSuccess() {
-        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        Intent intent;
+        if (CP == 0) {
+            Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, PatientProblemsActivity.class);
+        }
+        else{
+            Toast.makeText(this, "testing intent", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this,CareProPatientListActivity.class);
+        }
         startActivity(intent);
-        Toast.makeText(this, "User Profile Edited", Toast.LENGTH_SHORT).show();
+
     }
 
     private void editInit(User user) {
-        Button signUp = findViewById(R.id.signUpBtn);
 
+        if (type == 2){
+            signUp.setText("back");
+        }
+        if (type == 1){
+            signUp.setText("save");
+        }
         userText.setText(user.getUserId());
         userText.setFocusable(false);
         phoneText.setText(user.getPhoneNumber());
         emailText.setText(user.getEmailAddress());
         careCheck.setEnabled(false);
         patientCheck.setEnabled(false);
-        signUp.setText(R.string.saveBtn);
+
+        if (type == 2){
+            phoneText.setFocusable(false);
+            emailText.setFocusable(false);
+        }
+
 
         init();
     }
 
     private void  init() {
-        Button signUp = findViewById(R.id.signUpBtn);
-        TextView cancelBtn = findViewById(R.id.cancelBtn);
-
 
         signUp.setOnClickListener(this);
-        cancelBtn.setOnClickListener(this);
+        if (type != 2) {
+            cancelBtn.setOnClickListener(this);
+        }
+        else {
+//            signUp.setVisibility(View.INVISIBLE);
+            cancelBtn.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void onGetUserPatientSuccess(Patient patient) {
+        CP = 0;
         Log.d("abcdefg",patient.getUserId());
-        onIsEditPatient(patient);
+        if (type == 2) {
+            editInit(patient);
+        }
 
     }
 
     @Override
     public void onGetUserProviderSuccess(CareProvider careProvider) {
+        CP = 1;
         Log.d("abcdefg",careProvider.getUserId());
-        onIsEditCareProvider(careProvider);
+        if (type == 2) {
+            editInit(careProvider);
+        }
     }
 
     @Override
