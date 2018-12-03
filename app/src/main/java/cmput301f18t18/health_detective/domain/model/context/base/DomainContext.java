@@ -11,6 +11,10 @@ import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 import cmput301f18t18.health_detective.domain.repository.UserRepo;
 
+
+/**
+ * Singleton that stores database objects that need to be injected into the domain
+ */
 public class DomainContext {
     private static DomainContext ourInstance = null;
     private SecureRandom secureRandom = null;
@@ -33,6 +37,18 @@ public class DomainContext {
 
     private DomainContext() {}
 
+
+    /**
+     * Stores database objects to be used within the domain, can only be called on start.
+     * as creates a secure random number generator to be used for generating id's
+     *
+     * @param threadExecutor
+     * @param mainThread
+     * @param userRepo
+     * @param problemRepo
+     * @param recordRepo
+     * @param imageRepo
+     */
     public static void init_ONLY_CALL_START(ThreadExecutor threadExecutor, MainThread mainThread,
                                      UserRepo userRepo, ProblemRepo problemRepo, RecordRepo recordRepo, ImageRepo imageRepo) {
         // If already initilized return

@@ -4,6 +4,9 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.context.component.base.AbstractContextTreeComponent;
 
+/**
+ * Careprovider context tree component, stores a careprovider in the context tree
+ */
 public class CareProviderContext extends AbstractContextTreeComponent {
     private final CareProvider careProvider;
 

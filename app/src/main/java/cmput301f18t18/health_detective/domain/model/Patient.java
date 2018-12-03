@@ -46,6 +46,7 @@ public class Patient extends User {
             return problems;
         }
 
+        // Iterate through problems to convert hashset to arraylist
         for (String problemId: this.problemIds) {
             problems.add(problemId);
         }

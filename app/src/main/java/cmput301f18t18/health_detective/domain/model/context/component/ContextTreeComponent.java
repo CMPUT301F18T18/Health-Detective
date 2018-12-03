@@ -7,5 +7,4 @@ public interface ContextTreeComponent extends Cloneable {
     ContextTreeComponent prev();
     void setNext(ContextTreeComponent next);
     void setPrev(ContextTreeComponent prev);
-    Class<? extends AbstractInteractor> getCommandContext();
 }
