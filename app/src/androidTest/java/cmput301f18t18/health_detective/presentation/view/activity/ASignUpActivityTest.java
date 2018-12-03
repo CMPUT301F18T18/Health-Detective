@@ -99,9 +99,6 @@ public class ASignUpActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withText("Accounted created, logging in"))
-                .inRoot(withDecorView(not(suActivityTestRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
         intended(hasComponent(PatientProblemsActivity.class.getName()));
     }
 }

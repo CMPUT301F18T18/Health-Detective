@@ -47,6 +47,8 @@ public class ProblemEditAddActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addProbBtn)).perform(click());
     }
 

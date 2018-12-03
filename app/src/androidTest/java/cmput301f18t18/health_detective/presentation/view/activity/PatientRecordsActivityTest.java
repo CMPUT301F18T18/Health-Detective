@@ -54,6 +54,8 @@ public class PatientRecordsActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addProbBtn)).perform(click());
         onView(withId(R.id.problemTitle))
                 .perform(replaceText("RecordTest problem"));
@@ -71,6 +73,8 @@ public class PatientRecordsActivityTest {
                 .atPosition(0)
                 .onChildView(withId(R.id.recordsBut))
                 .perform(click());
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
     }
 
     @After
@@ -114,18 +118,13 @@ public class PatientRecordsActivityTest {
         onView(withText("Map")).perform(click());
         intended(hasComponent(MapActivity.class.getName()));
         pressBack();
+        onView(withText("OKAY")).perform(click());
         pressBack();
-    }
-
-    // Making sure search bar launches correct activity
-    @Test
-    public void PRSearchBarTest() {
-        onView(withId(R.id.app_bar_search)).perform(click());
-        intended(hasComponent(SearchActivity.class.getName()));
-        closeSoftKeyboard();
-        pressBack();
-        pressBack();
-        pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Making sure view is updated when record added/deleted

@@ -58,6 +58,8 @@ public class PatientProblemsActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
     }
 
     // Making sure correct activity is launched when add problem button is pressed
@@ -74,13 +76,6 @@ public class PatientProblemsActivityTest {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText("Logout")).perform(click());
         intended(hasComponent(MainActivity.class.getName()));
-    }
-
-    // Making sure search bar launches correct activity
-    @Test
-    public void PPSearchBarTest() {
-        onView(withId(R.id.app_bar_search)).perform(click());
-        intended(hasComponent(SearchActivity.class.getName()));
     }
 
     // Making user profile button launches correct activity

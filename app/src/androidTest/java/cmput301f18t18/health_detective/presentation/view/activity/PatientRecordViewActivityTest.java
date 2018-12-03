@@ -53,6 +53,8 @@ public class PatientRecordViewActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addProbBtn)).perform(click());
         onView(withId(R.id.problemTitle))
                 .perform(replaceText("RecordTest problem"));
@@ -70,6 +72,8 @@ public class PatientRecordViewActivityTest {
                 .atPosition(0)
                 .onChildView(withId(R.id.recordsBut))
                 .perform(click());
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addRecordsBtn)).perform(click());
         onView(withHint("Title"))
                 .perform(replaceText("TestRecord"));
@@ -123,7 +127,17 @@ public class PatientRecordViewActivityTest {
         }
         onView(withId(R.id.editmapbut)).perform(click());
         intended(hasComponent(MapActivity.class.getName()));
-        pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withText("CANCEL")).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         pressBack();
         pressBack();
         try {
