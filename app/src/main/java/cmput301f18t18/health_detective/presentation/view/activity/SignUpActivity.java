@@ -110,7 +110,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onIsEditCareProvider(CareProvider careProvider) {
         activityType = true;
         careCheck.setChecked(true);
-
         editInit(careProvider);
     }
 
@@ -175,6 +174,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void  init() {
         Button signUp = findViewById(R.id.signUpBtn);
         TextView cancelBtn = findViewById(R.id.cancelBtn);
+
 
         signUp.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
