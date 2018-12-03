@@ -55,7 +55,7 @@ public class ProblemListAdapter extends ArrayAdapter {
         deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
 
 
-        if (userType){
+        if (userType){ // if care provider, hide the edit and delete buttons
             deleteImg.setVisibility(View.GONE);
             editImg.setVisibility(View.GONE);
             recordBut.setTextColor(ContextCompat.getColor(mContext, R.color.colorCareProvider));

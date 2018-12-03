@@ -184,13 +184,12 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         dialog.show();
     }
 
+    //This is for when the user clicks on a username on the record (it can be patient of care provider)
     @Override
     public void onUserClicked(Record record) {
-        //TODO: JORDAN THIS SECTION FOR YOU! MAKE ON INTENT TO GO TO LOGIN!!!!!! THIS IS WHEN YOU
-        //TODO: CLICK ON A USER!!!!
         Intent userIdIntent = new Intent(this, SignUpActivity.class);
-        userIdIntent.putExtra("type",2);
-        userIdIntent.putExtra("id",record.getAuthor());
+        userIdIntent.putExtra("type",2); //means that you are only viewing the user info
+        userIdIntent.putExtra("id",record.getAuthor()); //passing the record author
         startActivity(userIdIntent);
     }
 
@@ -215,10 +214,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        if (userType){
+        if (userType){ // if careprovider, only show new record comment
             recordListPresenter.getUserRecords();
         }
-        else {
+        else { // if patient, go to long record view page
             Intent intent = new Intent(this, PatientRecordViewActivity.class);
             this.startActivity(intent);
         }
@@ -236,6 +235,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         toast.show();
     }
 
+    // Only gets called when the current user is a care provider
+    // Sets the color scheme to purple
     @Override
     public void onCPView(CareProvider careProvider) {
         userType = true;
@@ -248,6 +249,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         init();
     }
 
+    // Only gets called when current user is a patient
+    // Default color scheme matches patient view
     @Override
     public void onPView(Patient patient) {
         userType = false;
@@ -260,6 +263,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         startActivity(logoutIntent);
     }
 
+    // creates a dialog that tells you how to add a new record
+    // Only gets called when the record list is empty
     @Override
     public void noRecords() {
         if (exampleDialog == null) {
@@ -276,11 +281,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+    // creating a new record
     @Override
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
-
         recordListPresenter.createUserRecord(this.title, this.desc, this.date, myLocation);
 
 
@@ -393,10 +398,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         startActivityForResult(mapIntent,REQUEST_CODE);
     }
 
-
+    // Coming back from the map view
+    // Returns the double array of LatLon from the map
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == REQUEST_CODE) {
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                  double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
@@ -417,9 +422,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void applyCareRecord(String comment) {
-        // Add the care record here
         recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
-
     }
 
     public void init(){
@@ -430,14 +433,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String recordAuthor = recordList.get(position).getAuthor();
-                if (userType) {
-                    if (recordAuthor.equals(userId)) {} else {
+                if (userType) { // if care provider
+                    if (recordAuthor.equals(userId)) {} //if it is a care provider comment
+                    else {
+                        // if care provider clicks on patient record, they can view the entire record
                         recordListPresenter.onView(recordList.get(position));
                     }
+                    // if the current user matches the author (patient), they can view the entire record
+                    // for patient
                 } else if (recordAuthor.equals(userId)){
                     recordListPresenter.onView(recordList.get(position));
                 }
-
             }
         });
         this.recordListPresenter.getUserRecords();
