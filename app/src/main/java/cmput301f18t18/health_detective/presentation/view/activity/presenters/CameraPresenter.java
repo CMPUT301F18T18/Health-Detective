@@ -55,15 +55,14 @@ public class CameraPresenter implements AddPhoto.Callback {
         this.leftRight = leftRight;
     }
 
-    public void onImage(Bitmap image) {
+    public void onImage(Bitmap image, String blLabel) {
         byte[] byteImage = toByteArray(image);
         String base64String = byteArrayToString(byteImage);
 
-        new AddPhotoImpl(this, "This Is a Label", base64String, type, leftRight).execute();
+        new AddPhotoImpl(this, blLabel, base64String, type, leftRight).execute();
     }
 
     public void onSave() {
-
     }
 
     //TODO: this will convert to the byte array if that's how you want to store it
@@ -76,4 +75,5 @@ public class CameraPresenter implements AddPhoto.Callback {
         return byteArray;
 
     }
+
 }
