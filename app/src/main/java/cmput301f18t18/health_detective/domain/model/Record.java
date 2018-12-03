@@ -1,18 +1,15 @@
 package cmput301f18t18.health_detective.domain.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
-import cmput301f18t18.health_detective.domain.model.interfaces.Searchable;
 import cmput301f18t18.health_detective.domain.util.Id;
 
 /**
  * The class to store data and methods related to individual records.
  */
-public class Record implements Searchable, Serializable {
-    private static final long serialVersionUID = 2L;
+public class Record {
     private String recordId;
     private String title;
     private String comment;
@@ -89,16 +86,6 @@ public class Record implements Searchable, Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    @Override
-    public boolean containsBodyPart(BodyPart bodyPart) {
-        return false;
-    }
-
-    @Override
-    public boolean containsKeyword(ArrayList<String> keywords) {
-        return false;
     }
 
     @Override

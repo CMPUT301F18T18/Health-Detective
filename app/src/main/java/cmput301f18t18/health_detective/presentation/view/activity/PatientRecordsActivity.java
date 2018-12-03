@@ -434,6 +434,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void applyCareRecord(String comment) {
         // Add the care record here
         recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
+
     }
 
     public void init(){

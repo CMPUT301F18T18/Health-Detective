@@ -1,12 +1,10 @@
 package cmput301f18t18.health_detective.domain.model.context.component.factory;
 
-import cmput301f18t18.health_detective.domain.model.BodyLocation;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
-import cmput301f18t18.health_detective.domain.model.context.component.impl.BodyLocationContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.CareProviderContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.PatientContext;
 import cmput301f18t18.health_detective.domain.model.context.component.ContextTreeComponent;
@@ -40,9 +38,6 @@ public class ContextTreeComponentFactory {
         }
         else if (contextData instanceof Record) {
             return new RecordContext((Record) contextData);
-        }
-        else if (contextData instanceof BodyLocation) {
-            return new BodyLocationContext((BodyLocation) contextData);
         }
 
         return null;
