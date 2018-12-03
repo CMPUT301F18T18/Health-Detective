@@ -20,12 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import cmput301f18t18.health_detective.PatientDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 import static cmput301f18t18.health_detective.presentation.view.activity.PermissionRequest.verifyPermission;
 
-public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, View.OnClickListener{
+public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, View.OnClickListener, PatientDialog.AddPatientDialogListener{
 
     private CameraPresenter presenter;
     private Uri imageFileUri;
@@ -153,10 +154,16 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         if (v.getId() == R.id.saveBtn){
             if (bitmap != null)
                 presenter.onImage(bitmap);
+            openDialog();
         }
         else if (v.getId() == R.id.cancelBtn) {
             onBackPressed();
         }
+    }
+
+    private void openDialog() {
+        SingleAddDialog exampleDialog = new SingleAddDialog();
+        exampleDialog.show(getSupportFragmentManager(), "Add Patient");
     }
 
     public Bitmap toBitmap(String base64String){
@@ -178,4 +185,8 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         startActivity(intent);
     }
 
+    @Override
+    public void applyEdit(String patient) {
+
+    }
 }

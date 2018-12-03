@@ -128,8 +128,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onPatientClicked(Patient patient) {
         this.careProPatientListPresenter.clickOnPatient(patient);
-//        Intent intent = new Intent(this, PatientProblemsActivity.class);
-//        startActivity(intent);
     }
 
     @Override
