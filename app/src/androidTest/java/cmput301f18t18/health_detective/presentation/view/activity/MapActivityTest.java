@@ -5,6 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -74,7 +75,6 @@ public class MapActivityTest {
                 .onChildView(withId(R.id.recordsBut))
                 .perform(click());
         onView(withText("OKAY")).perform(click());
-        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addRecordsBtn)).perform(click());
         onView(withHint("Title")).perform(replaceText("TestRecord"));
         onView(withText("SAVE")).perform(click());
@@ -83,6 +83,22 @@ public class MapActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void DeleteTestProblem() {
+        pressBack();
+        pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onData(anything()).inAdapterView((withId(R.id.problemListView)))
+                .atPosition(0)
+                .onChildView(withId(R.id.deleteImg))
+                .perform(click());
+        onView(withText("CONFIRM")).perform(click());
     }
 
     // Making sure cancel button is working properly

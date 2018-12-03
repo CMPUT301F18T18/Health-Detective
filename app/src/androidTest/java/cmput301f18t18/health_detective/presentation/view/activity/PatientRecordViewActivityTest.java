@@ -73,7 +73,6 @@ public class PatientRecordViewActivityTest {
                 .onChildView(withId(R.id.recordsBut))
                 .perform(click());
         onView(withText("OKAY")).perform(click());
-        onView(withText("OKAY")).perform(click());
         onView(withId(R.id.addRecordsBtn)).perform(click());
         onView(withHint("Title"))
                 .perform(replaceText("TestRecord"));

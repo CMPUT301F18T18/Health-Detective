@@ -74,11 +74,15 @@ public class PatientRecordsActivityTest {
                 .onChildView(withId(R.id.recordsBut))
                 .perform(click());
         onView(withText("OKAY")).perform(click());
-        onView(withText("OKAY")).perform(click());
     }
 
     @After
     public void DeleteTestProblem() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onData(anything()).inAdapterView((withId(R.id.problemListView)))
                 .atPosition(0)
                 .onChildView(withId(R.id.deleteImg))
@@ -118,13 +122,7 @@ public class PatientRecordsActivityTest {
         onView(withText("Map")).perform(click());
         intended(hasComponent(MapActivity.class.getName()));
         pressBack();
-        onView(withText("OKAY")).perform(click());
         pressBack();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     // Making sure view is updated when record added/deleted
