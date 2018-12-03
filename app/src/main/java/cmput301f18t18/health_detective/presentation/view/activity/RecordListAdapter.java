@@ -65,8 +65,8 @@ public class RecordListAdapter extends ArrayAdapter{
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
 
-        ImageView recordImg = rowView.findViewById(R.id.recordImg);
-        recordImg.setImageResource(R.drawable.ic_launcher_background);
+        //ImageView recordImg = rowView.findViewById(R.id.recordImg);
+        //recordImg.setImageResource(R.drawable.ic_launcher_background);
 
         //String stringImage = record.getImage();
         //Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
@@ -85,7 +85,7 @@ public class RecordListAdapter extends ArrayAdapter{
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
         if (!currentUser.equals(record.getAuthor())){
-            recordImg.setVisibility(View.GONE);
+            //recordImg.setVisibility(View.GONE);
             //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             if (userType){}

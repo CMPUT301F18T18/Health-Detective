@@ -70,7 +70,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle("test");
+        //userIdMenu.setTitle("test");
 
         return true;
     }

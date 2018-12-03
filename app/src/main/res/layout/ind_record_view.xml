@@ -21,11 +21,10 @@
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="76dp"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recordImg"
                 app:srcCompat="@color/colorPrimary" />
 
             <ImageView
@@ -46,15 +45,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/recTitle"
                 android:textColor="@color/icons"
                 android:textSize="25dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/recordDate"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recordImg" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/recordDate"
@@ -129,19 +126,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recordDate" />
-
-            <ImageView
-                android:id="@+id/recordImg"
-                android:layout_width="0dp"
-                android:layout_height="@android:dimen/thumbnail_height"
-                android:scaleType="centerCrop"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/problemTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/login_background" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
