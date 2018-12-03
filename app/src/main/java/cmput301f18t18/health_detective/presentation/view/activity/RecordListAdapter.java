@@ -2,6 +2,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import java.util.List;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
+import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 public class RecordListAdapter extends ArrayAdapter{
 
@@ -63,10 +65,14 @@ public class RecordListAdapter extends ArrayAdapter{
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
 
-        ImageView recordImg = rowView.findViewById(R.id.recordImg);
-        recordImg.setImageResource(R.drawable.ic_launcher_background);
-        Toast.makeText(mContext, currentUser, Toast.LENGTH_SHORT).show();
-        Toast.makeText(mContext, record.getAuthor(), Toast.LENGTH_SHORT).show();
+        //ImageView recordImg = rowView.findViewById(R.id.recordImg);
+        //recordImg.setImageResource(R.drawable.ic_launcher_background);
+
+        //String stringImage = record.getImage();
+        //Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        //ImageView imageView = new ImageView(mContext);
+        //imageView.setImageBitmap(bitmap);
         //userType = true;
         if (userType){
             //deleteImg.setVisibility(View.INVISIBLE);
@@ -79,7 +85,7 @@ public class RecordListAdapter extends ArrayAdapter{
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
         if (!currentUser.equals(record.getAuthor())){
-            recordImg.setVisibility(View.GONE);
+            //recordImg.setVisibility(View.GONE);
             //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             if (userType){}
@@ -88,6 +94,14 @@ public class RecordListAdapter extends ArrayAdapter{
             }
 
         }
+
+        recordUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onUserClicked(recordList.get(postition));
+            }
+
+        });
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override
