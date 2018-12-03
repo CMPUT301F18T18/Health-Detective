@@ -52,9 +52,6 @@ public class ContextTreeParser {
             else if (treeComponent instanceof CareProviderContext) {
                 return ((CareProviderContext) treeComponent).getCareProvider();
             }
-            else if (treeComponent instanceof PatientContext) {
-                return ((PatientContext) treeComponent).getPatient();
-            }
 
             treeComponent = treeComponent.next();
         }

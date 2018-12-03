@@ -12,6 +12,7 @@ import cmput301f18t18.health_detective.domain.interactors.ViewProblem;
 import cmput301f18t18.health_detective.domain.interactors.impl.CreateRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteRecordImpl;
 import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
 import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
 import cmput301f18t18.health_detective.domain.interactors.impl.ViewProblemImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
@@ -36,6 +37,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     @Override
     public void onVPNoRecords() {
         this.view.onRecordListUpdate(new ArrayList<Record>());
+        this.view.noRecords();
     }
 
     @Override
@@ -51,11 +53,13 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     @Override
     public void onGLIUPatient(Patient patient) {
         this.view.onRecordListUserId(patient.getUserId());
+        this.view.onPView(patient);
     }
 
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
         this.view.onRecordListUserId(careProvider.getUserId());
+        this.view.onCPView(careProvider);
     }
 
     @Override
@@ -109,6 +113,10 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
         void onCreateRecord();
         void onRecordListUserId(String userId);
         void onDeleteRecordFail();
+        void onCPView(CareProvider careProvider);
+        void onPView(Patient patient);
+        void onLogout();
+        void noRecords();
     }
 
     public RecordListPresenter(View view)
@@ -162,7 +170,14 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
 
     public void onView(Record record) {
         new PutContext(record).execute();
+        new GetLoggedInUserImpl(this).execute();
 
         view.onRecordView();
+    }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
     }
 }

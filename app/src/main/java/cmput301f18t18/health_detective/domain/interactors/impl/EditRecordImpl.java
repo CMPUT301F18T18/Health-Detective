@@ -28,7 +28,8 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
     private String comment;
     private Date date;
     private Geolocation geolocation;
-
+    private DomainImage bodylocation1;
+    private DomainImage bodylocation2;
 
     /**
      * First constructor for EditRecordImpl
@@ -38,7 +39,7 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
      * @param date the date assigned to the record being edited
      */
     public EditRecordImpl(EditRecord.Callback callback,
-                          String title, String comment, Date date, Geolocation geolocation)
+                          String title, String comment, Date date, Geolocation geolocation, DomainImage bodylocation1, DomainImage bodylocation2)
     {
         super();
         this.callback = callback;
@@ -46,6 +47,8 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         this.comment = comment;
         this.date = date;
         this.geolocation = geolocation;
+        this.bodylocation1 = bodylocation1;
+        this.bodylocation2 = bodylocation2;
     }
 
     /**
@@ -122,7 +125,13 @@ public class EditRecordImpl extends AbstractInteractor implements EditRecord {
         recordtoEdit.setTitle(this.title);
         recordtoEdit.setComment(this.comment);
         recordtoEdit.setDate(this.date);
-        recordtoEdit.setGeolocation(geolocation);
+        recordtoEdit.setGeolocation(this.geolocation);
+
+        if (this.bodylocation1 != null)
+            recordtoEdit.setBodyloaction1(bodylocation1);
+
+        if (this.bodylocation2 != null)
+            recordtoEdit.setBodyloaction2(bodylocation2);
 
         recordRepo.updateRecord(recordtoEdit);
 

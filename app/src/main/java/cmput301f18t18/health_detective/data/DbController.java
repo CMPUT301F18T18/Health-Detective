@@ -37,8 +37,9 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     static private JestDroidClient client = null;
     static private SQLiteDatabase db = null;
 
-    static private final String elasticIndex = "cmput301f18t18test2";
+    static private final String elasticIndex = "cmput301f18t18test3";
     static private final String elasticURL = "http://cmput301.softwareprocess.es:8080/";
+  //static private final String elasticURL =  "http://es2.softwareprocess.ca:8080/";
 
     private static boolean online = true;
 
@@ -72,6 +73,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     private static void setClient() {
         if (client == null) {
             DroidClientConfig config = new DroidClientConfig
+                    .readTimeout(10000)
                     .Builder(elasticURL)
                     .build();
             JestClientFactory factory = new JestClientFactory();

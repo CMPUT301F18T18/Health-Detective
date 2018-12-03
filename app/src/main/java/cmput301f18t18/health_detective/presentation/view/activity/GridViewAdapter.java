@@ -48,9 +48,6 @@ public class GridViewAdapter extends BaseAdapter {
             gridView = inflater.inflate(R.layout.body_image_view, null);
             ImageView imageView = (ImageView) gridView.findViewById(R.id.imageView);
             imageView.setImageResource(R.drawable.ic_launcher_background);
-        //Photo photo = new Photo();
-        //Bitmap bitmap = photo.toBitmap(images);
-            //imageView.setImageBitmap(bitmap);
         return gridView;
     }
 }

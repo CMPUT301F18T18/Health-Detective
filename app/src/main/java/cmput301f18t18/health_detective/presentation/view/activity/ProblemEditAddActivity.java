@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
     private Date problemDateTime;
     private String title = "";
     private String comment = "";
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,10 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         problemDate = findViewById(R.id.problemDate);
         problemDesc = findViewById(R.id.problemDesc);
         problemDate.setFocusable(false);
+
+        // time default set
+        problemDate.setText(dateFormat.format(new Date()).replace("AM","am").replace("PM","pm"));
+
 
 
 
@@ -128,7 +134,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
             problemTitle.setText(title);
             problemDesc.setText(comment);
-            problemDate.setText(problemDateTime.toString());
+            problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
         }
     }
 
@@ -138,28 +144,18 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        Date currentDate = c.getTime();
-        problemDateTime = currentDate;
-        problemDate.setText((CharSequence) currentDate.toString());
+        problemDateTime = c.getTime();
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Date theSameDate = null;
-        String date = problemDate.getText().toString();
-        try {
-            theSameDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         Calendar c = Calendar.getInstance();
-        c.setTime(theSameDate);
+        c.setTime(problemDateTime);
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
-        Date currentDate = c.getTime();
-        problemDateTime = currentDate;
-        problemDate.setText((CharSequence) currentDate.toString());
+        problemDateTime = c.getTime();
+        problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
     }
 }

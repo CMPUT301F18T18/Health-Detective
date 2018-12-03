@@ -19,10 +19,17 @@
         android:id="@+id/edit_photo"
         android:title="Edit Photo"
         app:showAsAction="never"></item>
+
+    <item
+        android:id="@+id/logout_edit"
+        android:title="@string/logout"
+        app:showAsAction="never"></item>
+
     <item
         android:id="@+id/userId"
         android:title="@string/user_id"
         app:showAsAction="always"></item>
+
 
 
 </menu>

@@ -9,21 +9,18 @@ import java.util.HashSet;
 public class Patient extends User {
     private static final long serialVersionUID = 4L;
 
-    private HashSet<String> problemIds;
+    private HashSet<String> problemIds = new HashSet<>();
 
     public Patient() {
         super();
-        this.problemIds = new HashSet<>();
     }
 
     public Patient(String userId) {
         super(userId);
-        this.problemIds = new HashSet<>();
     }
 
     public Patient(String userId, String phoneNumber, String emailAddress) {
         super(userId, phoneNumber, emailAddress);
-        this.problemIds = new HashSet<>();
     }
 
     public void addProblem(Problem problem) {
