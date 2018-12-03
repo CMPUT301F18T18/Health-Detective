@@ -12,6 +12,8 @@ public interface ViewRecord extends Interactor {
         void onVRInvalidRecord();
         void onVRSuccessDetails(String title, String comment, Date date, Geolocation geolocation);
         void onVRSuccessImages(ArrayList<DomainImage> images);
+        void onVRBodyOne(DomainImage bodylocationOne);
+        void onVRBodyTwo(DomainImage bodylocationTwo);
         void onVRNoImages();
     }
 }

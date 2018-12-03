@@ -22,7 +22,7 @@ public class AndroidApplication extends Application {
         super.onCreate();
 
         UserRepoMock users = new UserRepoMock();
-        users.insertUser(new Patient("dalinriches", "(780) 318-0749", "email@.ca"));
+        mockUR.insertUser(new Patient("dalinriches", "(780) 318-0749", "email@.ca"));
 
         DbController.getInstance().init_ONLY_CALL_START(getApplicationContext()); // May or may not work, we'll see
 
@@ -37,6 +37,7 @@ public class AndroidApplication extends Application {
                 DbController.getInstance(),
                 null,
                 DbController.getInstance());
+                //new ImageRepoMock());
     }
 
     @Override

@@ -38,6 +38,8 @@ public class ViewRecordImpl extends AbstractInteractor implements ViewRecord {
                     callback.onVRInvalidRecord();
                 }
             });
+
+            return;
         }
 
         mainThread.post(new Runnable() {
@@ -47,15 +49,39 @@ public class ViewRecordImpl extends AbstractInteractor implements ViewRecord {
             }
         });
 
+        DomainImage bodyLoc1 = imageRepo.retrieveImageById(record.getBodyloaction1Id());
+
+        if (bodyLoc1 != null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onVRBodyOne(bodyLoc1);
+                }
+            });
+        }
+
+        DomainImage bodyLoc2 = imageRepo.retrieveImageById(record.getBodyloaction2Id());
+
+        if (bodyLoc2 != null) {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onVRBodyTwo(bodyLoc2);
+                }
+            });
+        }
+
         images = imageRepo.retrieveImagesByIds(record.getPhotos());
 
-        if (images.isEmpty()) {
+        if (images == null || images.isEmpty()) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
                     callback.onVRNoImages();
                 }
             });
+
+            return;
         }
 
         mainThread.post(new Runnable() {

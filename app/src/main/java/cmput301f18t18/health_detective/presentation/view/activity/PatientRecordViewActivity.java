@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
@@ -61,7 +62,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     LinearLayout bodyPhotoScroll;
     RecordViewPresenter recordViewPresenter;
-    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag, editMap;
+    TextView recordTitle, recordDate, recordDesc, backBLTag, frontBLTag;
+    Button editMap;
     ImageView frontBL, backBL, addNPhoto;
     byte[] image;
     String userId = "";
@@ -69,6 +71,8 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     String comment;
     Date date;
     Geolocation geolocation = null;
+    DomainImage bodylocationOne = null;
+    DomainImage bodylocationTwo = null;
     int testImages;
     private boolean LocationPermissionsGranted;
     private GoogleMap mMap;
@@ -97,47 +101,17 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordTitle = findViewById(R.id.recTitle);
         recordDate = findViewById(R.id.recordDate);
         recordDesc = findViewById(R.id.commentView);
-        editMap = findViewById(R.id.mapEdit);
+        editMap = findViewById(R.id.editmapbut);
 
         editMap.setOnClickListener(this);
         addNPhoto.setOnClickListener(this);
         frontBL.setOnClickListener(this);
         backBL.setOnClickListener(this);
 
-
         recordViewPresenter = new RecordViewPresenter(this);
-
-        //stuff for all photos section
-//        GridViewAdapter adapter = new GridViewAdapter(this, 1);
-//        GridView gridView = (GridView) findViewById(R.id.allPhotosView);
-//
-//        gridView.setAdapter(adapter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
-//                toast.show();
-//                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
 
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
-        ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        setAllPhotoScroll();
-
-        bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
-                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
-                startActivity(intent);
-            toast.show();
-            }
-        });
     }
 
     @Override
@@ -167,9 +141,11 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         Intent returnIntent = new Intent(this,PatientRecordsActivity.class);
         startActivity(returnIntent);
 
+        finish();
     }
 
 
@@ -216,13 +192,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         }
     }
 
-    private void setAllPhotoScroll(){
-        ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        bodyPhotoScroll.addView(testImg);
-        bodyPhotoScroll.invalidate();
-    }
-
     public void setTextViews(){
         recordTitle.setText(title);
         recordDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
@@ -231,12 +200,23 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void onRecordImages(ArrayList<DomainImage> images) {
-        for (DomainImage image: images) {
-            String stringImage = image.getImage();
+        bodyPhotoScroll.removeAllViews();
+
+        for (int i = 0; i < images.size(); i++) {
+            String stringImage = images.get(i).getImage();
             Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
             
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
+            imageView.setTag(i);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = (int) v.getTag();
+                    onPhotoClick(index);
+                }
+            });
+
             bodyPhotoScroll.addView(imageView);
         }
 
@@ -292,6 +272,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         startActivity(logoutIntent);
     }
 
+    @Override
+    public void noImages() {
+        bodyPhotoScroll.removeAllViews();
+        bodyPhotoScroll.invalidate();
+    }
+
     private void openDialog(String prompt,int type,String recordInfo){
         EditDialog exampleDialog = new EditDialog(prompt,type,recordInfo);
         exampleDialog.show(getSupportFragmentManager(), "Edit Dialog");
@@ -300,12 +286,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
     @Override
     public void applyEditTitle(String editedText) {
-        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation);
+        recordViewPresenter.editUserRecord(editedText, comment, date, geolocation, bodylocationOne, bodylocationTwo);
     }
 
     @Override
     public void applyEditDesc(String editedComment) {
-        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation);
+        recordViewPresenter.editUserRecord(title, editedComment, date, geolocation, bodylocationOne, bodylocationTwo);
     }
 
 
@@ -328,7 +314,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
         date = c.getTime();
-        recordViewPresenter.editUserRecord(title, comment, date, geolocation);
+        recordViewPresenter.editUserRecord(title, comment, date, geolocation,bodylocationOne, bodylocationTwo);
 
     }
 
@@ -346,6 +332,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 if (userType){}
                 else {
                     Intent camaraIntent = new Intent(this, CamaraActivity.class);
+                    camaraIntent.putExtra("TYPE", true);
                     startActivity(camaraIntent);
                 }
                 //dialog box for add new front body location photo
@@ -354,11 +341,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 if (userType) {}
                 else {
                     Intent backBlIntent = new Intent(this, CamaraActivity.class);
+                    backBlIntent.putExtra("TYPE", true);
+                    backBlIntent.putExtra("LEFTRIGHT", true);
                     startActivity(backBlIntent);
                 }
                 //dialog box for add new back body location photo
                 break;
-            case R.id.mapEdit:
+            case R.id.editmapbut:
                 if (userType){}
                 else {
                     Intent mapIntent = new Intent(this, MapActivity.class);
@@ -374,6 +363,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 }
                 break;
         }
+    }
+
+    private void onPhotoClick(int index) {
+        Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+        intent.putExtra("SELECTED_PHOTO", index);
+        startActivity(intent);
     }
 
     private void getLocationPermission(){
@@ -458,7 +453,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                 double[] doubleArrayExtra = data.getDoubleArrayExtra("result");
                 geolocation = new Geolocation(doubleArrayExtra[0],doubleArrayExtra[1]);
-                recordViewPresenter.editUserRecord(title , comment, date, geolocation);
+                recordViewPresenter.editUserRecord(title , comment, date, geolocation, bodylocationOne, bodylocationTwo);
                 mMap.clear();
                 moveCamera(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),15f);
                 createMarker(new LatLng(geolocation.getlatitude(),geolocation.getlongitude()),title);
@@ -470,6 +465,36 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                 Log.d("abcdefghi","failed");
             }
         }
+    }
+
+    @Override
+    public void displayBodyimageOne(DomainImage image) {
+        if (image == null)
+            return;
+
+        String stringImage = image.getImage();
+        Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        if (image.getLabel() != null)
+            frontBLTag.setText(image.getLabel());
+
+        frontBL.setImageBitmap(bitmap);
+        frontBL.invalidate();
+    }
+
+    @Override
+    public void displayBodyimageTwo(DomainImage image) {
+        if (image == null)
+            return;
+
+        String stringImage = image.getImage();
+        Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
+
+        if (image.getLabel() != null)
+            backBLTag.setText(image.getLabel());
+
+        backBL.setImageBitmap(bitmap);
+        backBL.invalidate();
     }
 
     private void init(){

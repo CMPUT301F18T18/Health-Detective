@@ -40,8 +40,18 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
     }
 
     @Override
-    public void onVRNoImages() {
+    public void onVRBodyOne(DomainImage bodylocationOne) {
+        view.displayBodyimageOne(bodylocationOne);
+    }
 
+    @Override
+    public void onVRBodyTwo(DomainImage bodylocationTwo) {
+        view.displayBodyimageTwo(bodylocationTwo);
+    }
+
+    @Override
+    public void onVRNoImages() {
+        view.noImages();
     }
 
     public interface View {
@@ -50,7 +60,10 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
         void makeToast(String msg, int length);
         void onGetPatient(Patient patient);
         void onGetCP(CareProvider careProvider);
+        void displayBodyimageOne(DomainImage image);
+        void displayBodyimageTwo(DomainImage image);
         void onLogout();
+        void noImages();
     }
 
 
@@ -66,13 +79,15 @@ public class RecordViewPresenter implements ViewRecord.Callback, EditRecord.Call
      * @param recordDate new record date
      */
 
-    public void editUserRecord(String recordTitle, String recordComment, Date recordDate, Geolocation geolocation){
+    public void editUserRecord(String recordTitle, String recordComment, Date recordDate, Geolocation geolocation, DomainImage bodylocationOne, DomainImage bodylocationTwo){
         EditRecord editRecord = new EditRecordImpl(
                 this,
                 recordTitle,
                 recordComment,
                 recordDate,
-                geolocation
+                geolocation,
+                bodylocationOne,
+                bodylocationTwo
         );
         editRecord.execute();
     }
