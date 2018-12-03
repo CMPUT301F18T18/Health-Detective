@@ -39,11 +39,12 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
 
         Intent intent = this.getIntent();
         type = (int) intent.getSerializableExtra("type");
-        if (type == 1) {
+        if (type == 2) {
             user = (String) intent.getSerializableExtra("id");
+            new GetUserImpl(this,user).execute();
         }
 
-        new GetUserImpl(this,user).execute();
+
 
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
@@ -194,11 +195,14 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
     @Override
     public void onGetUserPatientSuccess(Patient patient) {
         Log.d("abcdefg",patient.getUserId());
+        onIsEditPatient(patient);
+
     }
 
     @Override
     public void onGetUserProviderSuccess(CareProvider careProvider) {
         Log.d("abcdefg",careProvider.getUserId());
+        onIsEditCareProvider(careProvider);
     }
 
     @Override
