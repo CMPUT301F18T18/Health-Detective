@@ -5,13 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
     <EditText
         android:id="@+id/care_add_comment_record"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Comment"
-        android:maxLength="30"
+        android:maxLength="300"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -112,6 +112,20 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
+
+        //ImageView testImg = new ImageView(this);
+        //testImg.setImageResource(R.drawable.ic_launcher_background);
+        //setAllPhotoScroll();
+
+        bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
+                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
+                startActivity(intent);
+            //toast.show();
+            }
+        });
     }
 
     @Override
@@ -191,7 +205,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         }
     }
-
+//    private void setAllPhotoScroll(){
+//        ImageView testImg = new ImageView(this);
+//        //testImg.setImageResource(R.drawable.ic_launcher_background);
+//        //bodyPhotoScroll.addView(testImg);
+//        //bodyPhotoScroll.invalidate();
+//    }
     public void setTextViews(){
         recordTitle.setText(title);
         recordDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
@@ -408,7 +427,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                         }
                     }
                     LocationPermissionsGranted = true;
-                    initMap();
+                    //initMap();
                 }
         }
     }
@@ -462,6 +481,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
             if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
                 //Write your code if there's no result
+                Log.d("abcdefghi","failed");
             }
         }
     }

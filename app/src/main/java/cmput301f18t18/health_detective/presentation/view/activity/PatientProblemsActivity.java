@@ -51,27 +51,12 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_problems);
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        //ActionBar b = getActionBar();
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-
-//        Window window = this.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
-
-        //userType = false;
         problemsListPresenter = new ProblemsListPresenter(this);
-        //adapter = new ProblemListAdapter(this, this.problemList, this, userType);
 
         addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
-
-//        listView = findViewById(R.id.problemListView);
-//        listView.setAdapter(adapter);
-//
-//        this.problemsListPresenter.getProblems();
-
     }
 
     @Override
@@ -89,6 +74,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
+
         getMenuInflater().inflate(R.menu.logout_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
@@ -102,9 +88,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this,SearchActivity.class);
-                startActivity(searchIntent);
+            case R.id.home:
+                Intent careprovider = new Intent(this, CareProPatientListActivity.class);
+                startActivity(careprovider);
                 return true;
 
             case R.id.Logout_option:
@@ -141,7 +127,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onProblemListUserId(String userId) {
-        this.userId = userId;
+        if(!userType) {
+            this.userId = userId;
+        }
         invalidateOptionsMenu();
     }
 
@@ -213,13 +201,30 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void getCPUser(CareProvider careProvider) {
         userType = true;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.userId = careProvider.getUserId();
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addProblem.setImageResource(R.drawable.cp_circle);
+
         init();
+    }
+
+    @Override
+    public void noProblems() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setCancelable(true)
+                .setTitle("No problems click bottom plus button to add")
+                .setPositiveButton("okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
     public void init(){

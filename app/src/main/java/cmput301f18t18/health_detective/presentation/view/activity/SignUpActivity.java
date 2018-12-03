@@ -25,6 +25,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private SignUpPresenter signUpPresenter;
     private Boolean activityType;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +35,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
-        emailText.setText("a@a.a");
-        phoneText.setText("(111) 111-1111");
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
-        patientCheck.setChecked(true);
+        //patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
 
@@ -110,7 +109,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onIsEditCareProvider(CareProvider careProvider) {
         activityType = true;
         careCheck.setChecked(true);
-
         editInit(careProvider);
     }
 
@@ -118,7 +116,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     public void onIsEditPatient(Patient patient) {
         activityType = true;
         patientCheck.setChecked(true);
-
         editInit(patient);
     }
 
@@ -165,6 +162,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         userText.setFocusable(false);
         phoneText.setText(user.getPhoneNumber());
         emailText.setText(user.getEmailAddress());
+        careCheck.setEnabled(false);
+        patientCheck.setEnabled(false);
         signUp.setText(R.string.saveBtn);
 
         init();
@@ -173,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private void  init() {
         Button signUp = findViewById(R.id.signUpBtn);
         TextView cancelBtn = findViewById(R.id.cancelBtn);
+
 
         signUp.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);

@@ -6,7 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +18,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cmput301f18t18.health_detective.PatientDialog;
+import cmput301f18t18.health_detective.SingleAddDialog;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.PatientOnClickListener;
@@ -28,13 +27,12 @@ import cmput301f18t18.health_detective.presentation.view.activity.presenters.Car
 
 
 
-public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,PatientDialog.AddPatientDialogListener{
+public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,SingleAddDialog.AddPatientDialogListener{
 
     ListView listView;
     PatientListAdapter adapter;
     ArrayList<Patient> patientList = new ArrayList<>();
     CareProPatientListPresenter careProPatientListPresenter;
-    Patient patientContext;
     CareProvider cpContext;
 
     @Override
@@ -48,8 +46,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        //Toast.makeText(CareProPatientListActivity.this,"Bet you wished this actually deleted",Toast.LENGTH_SHORT).show();
-
         this.careProPatientListPresenter = new CareProPatientListPresenter(this);
 
         ImageView addPatient = findViewById(R.id.addPatientBtn);
@@ -59,7 +55,13 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         listView.setAdapter(adapter);
         this.careProPatientListPresenter.getAssignedPatients();
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        this.careProPatientListPresenter.getAssignedPatients();
     }
 
     @Override
@@ -68,9 +70,8 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         getMenuInflater().inflate(R.menu.logout_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle("test");
+        userIdMenu.setTitle(cpContext.getUserId());
 
         return true;
     }
@@ -103,8 +104,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onPatientClicked(Patient patient) {
         this.careProPatientListPresenter.clickOnPatient(patient);
-//        Intent intent = new Intent(this, PatientProblemsActivity.class);
-//        startActivity(intent);
     }
 
     @Override
@@ -127,10 +126,9 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         AlertDialog dialog = alert.create();
         dialog.show();
 
-
     }
     private void openDialog() {
-        PatientDialog exampleDialog = new PatientDialog();
+        SingleAddDialog exampleDialog = new SingleAddDialog("Add patient");
         exampleDialog.show(getSupportFragmentManager(), "Add Patient");
     }
 
@@ -179,8 +177,16 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void noPatients() {
-        Toast toast = Toast.makeText(this, "NO PATIENTS", Toast.LENGTH_SHORT);
-        toast.show();
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setCancelable(true)
+                .setTitle("No patients click bottom plus button to add")
+                .setPositiveButton("okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
     @Override
@@ -200,5 +206,4 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         Intent logoutIntent = new Intent(this,MainActivity.class);
         startActivity(logoutIntent);
     }
-
 }

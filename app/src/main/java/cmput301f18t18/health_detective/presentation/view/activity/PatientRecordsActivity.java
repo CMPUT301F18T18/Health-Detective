@@ -125,7 +125,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(userId);
-
         return true;
     }
 
@@ -136,10 +135,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 // this takes the user 'back', as if they pressed the left-facing triangle icon on the main android toolbar.
                 // if this doesn't work as desired, another possibility is to call `finish()` here.
                 this.onBackPressed();
-                return true;
-            case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivity(searchIntent);
                 return true;
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this, MapActivity.class);
@@ -209,6 +204,14 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onUserClicked(Record record) {
+        //TODO: JORDAN THIS SECTION FOR YOU! MAKE ON INTENT TO GO TO LOGIN!!!!!! THIS IS WHEN YOU
+        //TODO: CLICK ON A USER!!!!
+        Toast toast = Toast.makeText(this, record.getAuthor(), Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
     public void onRecordView() {
         Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
         changeActivity(intent);
@@ -270,6 +273,22 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onLogout() {
         Intent logoutIntent = new Intent(this,MainActivity.class);
         startActivity(logoutIntent);
+    }
+
+    @Override
+    public void noRecords() {
+        if (exampleDialog == null) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setCancelable(true)
+                    .setTitle("No records click plus button to add")
+                    .setPositiveButton("okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+        }
     }
 
     @Override
@@ -432,14 +451,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 } else if (recordAuthor.equals(userId)){
                     recordListPresenter.onView(recordList.get(position));
                 }
-//                if (recordAuthor.equals(userId)){
-//                    recordListPresenter.onView(recordList.get(position));
-//                } else if (userType){
-//                    if (recordAuthor.equals(userId)){}
-//                    else {
-//                        recordListPresenter.onView(recordList.get(position));
-//                    }
-//                }
 
             }
         });
