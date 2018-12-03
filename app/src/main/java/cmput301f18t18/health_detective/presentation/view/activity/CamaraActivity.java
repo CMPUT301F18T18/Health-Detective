@@ -34,6 +34,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     private Uri imageFileUri;
     private ImageView takenPhoto;
     private Bitmap bitmap;
+    boolean type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         setContentView(R.layout.activity_camara);
 
         Intent newIntent = this.getIntent();
-        boolean type = newIntent.getBooleanExtra("TYPE", false);
+        type = newIntent.getBooleanExtra("TYPE", false);
         boolean leftRight = newIntent.getBooleanExtra("LEFTRIGHT", false);
 
         takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
@@ -149,8 +150,12 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     public void onClick(View v) {
         if (v.getId() == R.id.saveBtn){
             if (bitmap != null)
+                if (type)
                 //presenter.onImage(bitmap);
                 openDialog();
+                else {
+                    presenter.onImage(bitmap, null);
+                }
         }
         else if (v.getId() == R.id.cancelBtn) {
             onBackPressed();
@@ -177,7 +182,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 
     @Override
     public void onDone() {
-        openDialog();
+        //openDialog();
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
         startActivity(intent);
     }
