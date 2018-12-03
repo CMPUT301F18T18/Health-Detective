@@ -64,6 +64,10 @@ public class ProblemListAdapter extends ArrayAdapter {
         Problem data = problemList.get(postition);
         titleText.setText(data.getTitle());
         descText.setText(data.getDescription());
+
+        if ( data.getDescription() == null || data.getDescription() == "")
+            descText.setVisibility(View.GONE);
+
         dateText.setText(dateFormat.format(data.getStartDate()).replace("AM","am").replace("PM","pm"));
 
         deleteImg.setOnClickListener(new View.OnClickListener() {

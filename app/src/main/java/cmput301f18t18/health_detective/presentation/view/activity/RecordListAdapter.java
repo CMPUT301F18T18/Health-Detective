@@ -59,23 +59,16 @@ public class RecordListAdapter extends ArrayAdapter{
         TextView recordDescription = rowView.findViewById(R.id.recordDesc);
         recordDescription.setText(record.getComment());
 
+        if (record.getComment() == null || record.getComment() == "")
+            recordDescription.setVisibility(View.GONE);
+
         TextView recordDate = rowView.findViewById(R.id.recordDate);
         recordDate.setText(dateFormat.format(record.getDate()).replace("AM","am").replace("PM","pm"));
 
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
 
-        //ImageView recordImg = rowView.findViewById(R.id.recordImg);
-        //recordImg.setImageResource(R.drawable.ic_launcher_background);
-
-        //String stringImage = record.getImage();
-        //Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
-
-        //ImageView imageView = new ImageView(mContext);
-        //imageView.setImageBitmap(bitmap);
-        //userType = true;
         if (userType){
-            //deleteImg.setVisibility(View.INVISIBLE);
             if (currentUser.equals(record.getAuthor())){
                 deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             }
@@ -85,8 +78,6 @@ public class RecordListAdapter extends ArrayAdapter{
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
         }
         if (!currentUser.equals(record.getAuthor())){
-            //recordImg.setVisibility(View.GONE);
-            //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
             if (userType){}
             else {
