@@ -22,13 +22,17 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.not;
 
 
 @LargeTest
@@ -83,7 +87,8 @@ public class MapActivityTest {
 
     // Making sure cancel button is working properly
     @Test
-    public void MAPCancelButtonTest() {
+    public void MAPEditButtonsTest() {
+        // Making sure cancel button is working properly
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -92,6 +97,16 @@ public class MapActivityTest {
         onView(withId(R.id.editmapbut)).perform(click());
         onView(withText("CANCEL")).perform(click());
         intended(hasComponent(PatientRecordViewActivity.class.getName()));
+        onView(withId(R.id.editmapbut)).perform(click());
+        onView(withText("SAVE")).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withText("Record is edited"))
+                .inRoot(withDecorView(not(mapActivityTestRule.getActivity()
+                        .getWindow().getDecorView()))).check(matches(isDisplayed()));
     }
 
 }
