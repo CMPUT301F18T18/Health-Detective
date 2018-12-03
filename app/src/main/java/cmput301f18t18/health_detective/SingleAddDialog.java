@@ -1,5 +1,6 @@
 package cmput301f18t18.health_detective;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,10 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-public class PatientDialog extends AppCompatDialogFragment {
+public class SingleAddDialog extends AppCompatDialogFragment {
     private AddPatientDialogListener addPatientDialogListener;
     private EditText addPatient;
+    private String title;
 
+    public SingleAddDialog(){
+        this.title = "Add patient";
+    }
+
+    @SuppressLint("ValidFragment")
+    public SingleAddDialog(String title){
+        this.title = title;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -23,7 +33,7 @@ public class PatientDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.layout_add_patient_dialog, null);
 
         builder.setView(view)
-                .setTitle("Add patient")
+                .setTitle(title)
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

@@ -1,13 +1,11 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,18 +18,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cmput301f18t18.health_detective.PatientDialog;
+import cmput301f18t18.health_detective.SingleAddDialog;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.PatientOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CareProPatientListPresenter;
 
 
 
-public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,PatientDialog.AddPatientDialogListener{
+public class CareProPatientListActivity extends AppCompatActivity implements View.OnClickListener , PatientOnClickListener, CareProPatientListPresenter.View,SingleAddDialog.AddPatientDialogListener{
 
     ListView listView;
     PatientListAdapter adapter;
@@ -125,7 +121,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     }
     private void openDialog() {
-        PatientDialog exampleDialog = new PatientDialog();
+        SingleAddDialog exampleDialog = new SingleAddDialog("Add patient");
         exampleDialog.show(getSupportFragmentManager(), "Add Patient");
     }
 
