@@ -62,7 +62,8 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".BodyLocationManagerActivity"></activity>
+        <activity android:name=".BodyLocationManagerActivity" />
+        <activity android:name=".presentation.view.activity.BodyLocationChooseActivity"></activity>
     </application>
 
 </manifest>

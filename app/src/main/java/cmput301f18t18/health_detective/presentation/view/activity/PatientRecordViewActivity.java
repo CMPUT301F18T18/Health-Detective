@@ -113,9 +113,9 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         // Stuff for body location photos section
         bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
 
-        ImageView testImg = new ImageView(this);
-        testImg.setImageResource(R.drawable.ic_launcher_background);
-        setAllPhotoScroll();
+        //ImageView testImg = new ImageView(this);
+        //testImg.setImageResource(R.drawable.ic_launcher_background);
+        //setAllPhotoScroll();
 
         bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,12 +205,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         }
     }
-    private void setAllPhotoScroll(){
-        ImageView testImg = new ImageView(this);
-        //testImg.setImageResource(R.drawable.ic_launcher_background);
-        //bodyPhotoScroll.addView(testImg);
-        //bodyPhotoScroll.invalidate();
-    }
+//    private void setAllPhotoScroll(){
+//        ImageView testImg = new ImageView(this);
+//        //testImg.setImageResource(R.drawable.ic_launcher_background);
+//        //bodyPhotoScroll.addView(testImg);
+//        //bodyPhotoScroll.invalidate();
+//    }
     public void setTextViews(){
         recordTitle.setText(title);
         recordDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
