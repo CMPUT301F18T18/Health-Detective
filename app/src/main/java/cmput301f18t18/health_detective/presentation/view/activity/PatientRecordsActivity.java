@@ -137,10 +137,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 // if this doesn't work as desired, another possibility is to call `finish()` here.
                 this.onBackPressed();
                 return true;
-            case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this, SearchActivity.class);
-                startActivity(searchIntent);
-                return true;
             case R.id.Map_option:
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", null);

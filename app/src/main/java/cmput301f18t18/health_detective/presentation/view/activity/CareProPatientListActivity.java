@@ -37,7 +37,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     PatientListAdapter adapter;
     ArrayList<Patient> patientList = new ArrayList<>();
     CareProPatientListPresenter careProPatientListPresenter;
-    Patient patientContext;
     CareProvider cpContext;
 
     @Override
@@ -51,8 +50,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        //Toast.makeText(CareProPatientListActivity.this,"Bet you wished this actually deleted",Toast.LENGTH_SHORT).show();
-
         this.careProPatientListPresenter = new CareProPatientListPresenter(this);
 
         ImageView addPatient = findViewById(R.id.addPatientBtn);
@@ -62,22 +59,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         listView.setAdapter(adapter);
         this.careProPatientListPresenter.getAssignedPatients();
 
-//        if (patientList.size() == 0){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setCancelable(true)
-//                    .setTitle("Are you sure you want to delete?")
-//                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//                        }
-//                    });
-//            AlertDialog dialog = alert.create();
-//            dialog.show();
-//
-//            Log.d("abcdefg", "no patietns");
-//        }
-
     }
 
     @Override
@@ -86,7 +67,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         getMenuInflater().inflate(R.menu.logout_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(cpContext.getUserId());
 
@@ -121,8 +101,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onPatientClicked(Patient patient) {
         this.careProPatientListPresenter.clickOnPatient(patient);
-//        Intent intent = new Intent(this, PatientProblemsActivity.class);
-//        startActivity(intent);
     }
 
     @Override

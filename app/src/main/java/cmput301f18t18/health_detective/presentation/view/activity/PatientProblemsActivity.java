@@ -98,11 +98,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this,SearchActivity.class);
-                startActivity(searchIntent);
-                return true;
-
             case R.id.home:
                 finish();
                 return true;
