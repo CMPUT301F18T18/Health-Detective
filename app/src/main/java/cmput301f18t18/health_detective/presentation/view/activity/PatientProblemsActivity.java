@@ -1,20 +1,11 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,15 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.mock.ProblemRepoMock;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.ProblemOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemsListPresenter;
 
@@ -52,17 +38,18 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_patient_problems);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false); //gets rid of back arrow on top bar if patient
         problemsListPresenter = new ProblemsListPresenter(this);
 
         addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
     }
 
+    //This method gets called when you go back to this activity
+    // It gets all the current problems
     @Override
     public void onResume() {
         super.onResume();
-
         this.problemsListPresenter.getProblems();
     }
 
@@ -75,14 +62,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-
         getMenuInflater().inflate(R.menu.logout_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(userId);
-
         return true;
     }
 
@@ -114,7 +96,12 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addProbBtn){
+            // this is when you click add a problem
             Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
+            /*
+            The same acitivy is used for creating and editing a problem. TYPE tells that activity
+            if you are adding a new problem or editing an existing one
+             */
             problemsIntent.putExtra("TYPE", (Boolean) false);
             startActivity(problemsIntent);
         }
@@ -141,13 +128,14 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         this.adapter.notifyDataSetChanged();
     }
 
-
+    //This gets called when you click on a user problem to view the records
     @Override
     public void onViewProblem() {
         Intent recordsIntent = new Intent(this, PatientRecordsActivity.class);
         startActivity(recordsIntent);
     }
 
+    // this gets called when you are editing a problem
     @Override
     public void onEditProblem() {
         Intent problemsIntent = new Intent(this,ProblemEditAddActivity.class);
@@ -161,6 +149,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         startActivity(logoutIntent);
     }
 
+    //This is a confirmation dialog box when the user clicks delete
     @Override
     public void onDeleteClicked(final Problem problem) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -183,23 +172,27 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     }
 
+    // This edits the problem chosen and puts it into elastic search
     @Override
     public void onEditClicked(Problem problem) {
         problemsListPresenter.onEdit(problem);
     }
 
+    // updates the presenter to tell them you are moving to the record section
     @Override
     public void onRecordsClicked(Problem problem) {
         problemsListPresenter.onView(problem);
     }
 
-
+    //This function only gets returned if the current user is a patient
     @Override
     public void getPatientUser(Patient patient) {
         userType = false;
         init();
     }
 
+    //This function only gets returned if the current user is a care provider
+    // Changes the color scheme to be purple
     @Override
     public void getCPUser(CareProvider careProvider) {
         userType = true;
@@ -211,7 +204,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
         addProblem.setImageResource(R.drawable.cp_circle);
-
         init();
     }
 
@@ -230,15 +222,15 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     }
 
     public void init(){
-
         if (userType){
-            addProblem.setVisibility(View.GONE);
+            addProblem.setVisibility(View.GONE); // if care provider, set the add problem button to be invisible
         }
+        //creating adapter for a problem list
         adapter = new ProblemListAdapter(this, this.problemList, this, userType);
         listView = findViewById(R.id.problemListView);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter); // setting the problem list
 
-        this.problemsListPresenter.getProblems();
+        this.problemsListPresenter.getProblems(); //getting all the problems associated with the patient
     }
 
 

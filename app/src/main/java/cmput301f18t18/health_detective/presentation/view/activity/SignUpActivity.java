@@ -80,13 +80,14 @@ public class SignUpActivity extends AppCompatActivity implements GetUser.Callbac
     // back returns to last activity or mainactivity if signing up
     @Override
     public void onBackPressed() {
-        if (activityType) {
-            finish();
-            return;
-        }
-        else {
-            Intent intent = new Intent(this, MainActivity.class);
-            this.startActivity(intent);
+        if(type != 2) {
+            if (activityType) {
+                finish();
+                return;
+            } else {
+                Intent intent = new Intent(this, MainActivity.class);
+                this.startActivity(intent);
+            }
         }
     }
 

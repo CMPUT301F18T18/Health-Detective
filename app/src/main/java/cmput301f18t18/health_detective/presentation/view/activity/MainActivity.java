@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-
+        // we don't want the bottom back arrow to work in app
+        // this invalidates it
     }
 
     @Override
@@ -69,12 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onLoginPatient() {
+        // if the user is a patient, login to this
         Intent intent = new Intent(this, PatientProblemsActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onLoginCareProvider() {
+        // if the user is a care provider, login to this
         Intent intent = new Intent(this, CareProPatientListActivity.class);
         Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show();
         this.startActivity(intent);

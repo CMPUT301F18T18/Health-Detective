@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,8 +27,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-//TODO: Make the all photo section increase with each photo addition
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +34,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,13 +44,10 @@ import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.EditDialog;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Record;
-import cmput301f18t18.health_detective.domain.repository.mock.RecordRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordViewPresenter;
 
@@ -86,13 +79,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_patient_record_view);
 
 
-
-        if (image == null){
-            testImages = 0;
-        } else {
-            testImages = 1;
-        }
-
         frontBL = findViewById(R.id.frontBL);
         backBL = findViewById(R.id.backBL);
         backBLTag = findViewById(R.id.backTag);
@@ -111,19 +97,13 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         recordViewPresenter = new RecordViewPresenter(this);
 
         // Stuff for body location photos section
-        bodyPhotoScroll = (LinearLayout) findViewById(R.id.root);
-
-        //ImageView testImg = new ImageView(this);
-        //testImg.setImageResource(R.drawable.ic_launcher_background);
-        //setAllPhotoScroll();
+        bodyPhotoScroll = findViewById(R.id.root);
 
         bodyPhotoScroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast toast = Toast.makeText(PatientRecordViewActivity.this, "BL Click", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
                 startActivity(intent);
-            //toast.show();
             }
         });
     }
@@ -138,7 +118,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-        if (userType){
+        if (userType){ //if care provider, disable edit bar, and only have logout
             getMenuInflater().inflate(R.menu.logout_menu, menu);
         }
         else {
@@ -146,19 +126,14 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             MenuItem userIdMenu = menu.findItem(R.id.userId);
             userIdMenu.setTitle(userId);
         }
-//        getMenuInflater().inflate(R.menu.edit_menu, menu);
-//        MenuItem userIdMenu = menu.findItem(R.id.userId);
-//        userIdMenu.setTitle(userId);
         return true;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent returnIntent = new Intent(this,PatientRecordsActivity.class);
         startActivity(returnIntent);
-
         finish();
     }
 
@@ -206,12 +181,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
 
         }
     }
-//    private void setAllPhotoScroll(){
-//        ImageView testImg = new ImageView(this);
-//        //testImg.setImageResource(R.drawable.ic_launcher_background);
-//        //bodyPhotoScroll.addView(testImg);
-//        //bodyPhotoScroll.invalidate();
-//    }
+
     public void setTextViews(){
         recordTitle.setText(title);
         recordDate.setText(dateFormat.format(date).replace("AM","am").replace("PM","pm"));
@@ -257,9 +227,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         if (geolocation!=null){
             getLocationPermission();
         }
-
-
-
         setTextViews();
     }
 
@@ -269,11 +236,15 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         toast.show();
     }
 
+    // only gets called when the current user is a patient
     @Override
     public void onGetPatient(Patient patient) {
         userType = false;
     }
 
+    // only gets called when the current user is a care provider
+    // changes the color scheme to purple
+    // hides the adding photos
     @Override
     public void onGetCP(CareProvider careProvider) {
         userType = true;
@@ -292,6 +263,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         startActivity(logoutIntent);
     }
 
+    // removes the body scroll if there are no normal photos
     @Override
     public void noImages() {
         bodyPhotoScroll.removeAllViews();
@@ -322,7 +294,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         date = c.getTime();
-        // recordViewPresenter.editUserRecord(title, comment, currentDate, geolocation);
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
     }
@@ -335,7 +306,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         c.set(Calendar.MINUTE,minute);
         date = c.getTime();
         recordViewPresenter.editUserRecord(title, comment, date, geolocation,bodylocationOne, bodylocationTwo);
-
     }
 
     @Override
@@ -385,6 +355,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         }
     }
 
+    //clicking on a normal photo will go to the slideshow view
     private void onPhotoClick(int index) {
         Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
         intent.putExtra("SELECTED_PHOTO", index);
@@ -428,7 +399,6 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                         }
                     }
                     LocationPermissionsGranted = true;
-                    //initMap();
                 }
         }
     }
@@ -482,11 +452,12 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
             if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
                 //Write your code if there's no result
-                Log.d("abcdefghi","failed");
+                Log.d("abcdefghi","failed"); //used for testing
             }
         }
     }
 
+    // displaying the first body image photo and location
     @Override
     public void displayBodyimageOne(DomainImage image) {
         if (image == null)
@@ -502,6 +473,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         frontBL.invalidate();
     }
 
+    // displaying second body photo and location
     @Override
     public void displayBodyimageTwo(DomainImage image) {
         if (image == null)
@@ -517,8 +489,5 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
         backBL.invalidate();
     }
 
-    private void init(){
-
-    }
 
 }

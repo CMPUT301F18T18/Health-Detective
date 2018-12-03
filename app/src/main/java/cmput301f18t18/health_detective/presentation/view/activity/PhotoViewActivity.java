@@ -164,9 +164,7 @@ public class PhotoViewActivity extends AppCompatActivity implements DeleteRecord
     }
 
     @Override
-    public void onDone() {
-
-    }
+    public void onDone() {}
 
     @Override
     public void onPView() {
