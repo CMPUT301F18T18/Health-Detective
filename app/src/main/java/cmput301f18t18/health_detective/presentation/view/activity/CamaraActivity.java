@@ -20,19 +20,21 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import cmput301f18t18.health_detective.AddDialog;
+import cmput301f18t18.health_detective.CareRecordDialog;
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.SingleAddDialog;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 import static cmput301f18t18.health_detective.presentation.view.activity.PermissionRequest.verifyPermission;
 
-public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, View.OnClickListener{
+public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, View.OnClickListener, SingleAddDialog.AddPatientDialogListener {
 
     private CameraPresenter presenter;
     private Uri imageFileUri;
-    private int angle = 0;
     private ImageView takenPhoto;
-    private int FROM_GALLERY = 2;
     private Bitmap bitmap;
+    boolean type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         setContentView(R.layout.activity_camara);
 
         Intent newIntent = this.getIntent();
-        boolean type = newIntent.getBooleanExtra("TYPE", false);
+        type = newIntent.getBooleanExtra("TYPE", false);
         boolean leftRight = newIntent.getBooleanExtra("LEFTRIGHT", false);
 
         takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
@@ -75,8 +77,8 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.camera_menu, menu);
-        MenuItem rotatePhoto = menu.findItem(R.id.rotate);
+        //getMenuInflater().inflate(R.menu.camera_menu, menu);
+        //MenuItem rotatePhoto = menu.findItem(R.id.rotate);
 
         return true;
     }
@@ -84,7 +86,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.rotate:
-                takenPhoto.setRotation(angle);
+                //takenPhoto.setRotation(angle);
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -122,11 +124,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
-  
-    private void toGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, FROM_GALLERY);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -152,11 +150,21 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     public void onClick(View v) {
         if (v.getId() == R.id.saveBtn){
             if (bitmap != null)
-                presenter.onImage(bitmap);
+                if (type)
+                //presenter.onImage(bitmap);
+                openDialog();
+                else {
+                    presenter.onImage(bitmap, null);
+                }
         }
         else if (v.getId() == R.id.cancelBtn) {
             onBackPressed();
         }
+    }
+
+    private void openDialog() {
+            SingleAddDialog bodyLocation = new SingleAddDialog();
+            bodyLocation.show(getSupportFragmentManager(), "Care Dialog");
     }
 
     public Bitmap toBitmap(String base64String){
@@ -174,8 +182,13 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 
     @Override
     public void onDone() {
+        //openDialog();
         Intent intent = new Intent(this, PatientRecordViewActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public void applyEdit(String patient) {
+        presenter.onImage(bitmap, patient);
+    }
 }

@@ -109,7 +109,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
-        this.recordListPresenter.getUserRecords();
+        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
