@@ -58,6 +58,13 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        this.careProPatientListPresenter.getAssignedPatients();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.logout_menu, menu);
@@ -198,11 +205,5 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onLogout() {
         Intent logoutIntent = new Intent(this,MainActivity.class);
         startActivity(logoutIntent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("abcdef", String.valueOf(this.patientList.size()));
     }
 }

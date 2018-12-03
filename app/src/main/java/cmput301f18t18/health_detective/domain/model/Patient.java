@@ -10,7 +10,6 @@ public class Patient extends User {
     private static final long serialVersionUID = 4L;
 
     private HashSet<String> problemIds = new HashSet<>();
-    private HashSet<String> bodylocations = new HashSet<>();
 
     public Patient() {
         super();
@@ -40,10 +39,6 @@ public class Patient extends User {
         return problemIds.isEmpty();
     }
 
-    public boolean isBodylocationsEmpty() {
-        return bodylocations.isEmpty();
-    }
-
     public ArrayList<String> getProblemIds() {
         ArrayList<String> problems = new ArrayList<>();
 
@@ -56,27 +51,5 @@ public class Patient extends User {
         }
 
         return problems;
-    }
-
-    public void addBodylocation(DomainImage image) {
-        bodylocations.add(image.getImageId());
-    }
-
-    public void removeBodylocation(DomainImage image) {
-        bodylocations.remove(image);
-    }
-
-    public ArrayList<String> getBodylocationIds() {
-        ArrayList<String> bodylocations = new ArrayList<>();
-
-        if (this.isProblemsEmpty()) {
-            return bodylocations;
-        }
-
-        for (String bodylocation: this.bodylocations) {
-            bodylocations.add(bodylocation);
-        }
-
-        return bodylocations;
     }
 }

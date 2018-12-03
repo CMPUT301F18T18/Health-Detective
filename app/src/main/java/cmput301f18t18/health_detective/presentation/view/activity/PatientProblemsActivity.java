@@ -89,9 +89,9 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                finish();
+                Intent careprovider = new Intent(this, CareProPatientListActivity.class);
+                startActivity(careprovider);
                 return true;
-
 
             case R.id.Logout_option:
                 problemsListPresenter.onLogout();
