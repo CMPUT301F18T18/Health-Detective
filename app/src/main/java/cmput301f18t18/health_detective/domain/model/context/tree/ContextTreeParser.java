@@ -1,13 +1,10 @@
 package cmput301f18t18.health_detective.domain.model.context.tree;
 
-import cmput301f18t18.health_detective.domain.model.BodyLocation;
-import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.domain.model.context.component.ContextTreeComponent;
-import cmput301f18t18.health_detective.domain.model.context.component.impl.BodyLocationContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.CareProviderContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.PatientContext;
 import cmput301f18t18.health_detective.domain.model.context.component.impl.ProblemContext;
@@ -128,23 +125,4 @@ public class ContextTreeParser {
         }
     }
 
-    public BodyLocation getCurrentBodyLocationContext() {
-        // Start at the head
-        ContextTreeComponent treeComponent = tree.getHead();
-
-        // Needs a Patient context to exist
-        if (getCurrentPatientContext() == null)
-            return null;
-
-        // Step through until first BodyLocation is found
-        while (true) {
-            if (treeComponent == null)
-                return null;
-            else if (treeComponent instanceof BodyLocationContext) {
-                return ((BodyLocationContext) treeComponent).getBodyLocation();
-            }
-
-            treeComponent = treeComponent.next();
-        }
-    }
 }

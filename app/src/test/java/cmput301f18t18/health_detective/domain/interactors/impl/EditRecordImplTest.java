@@ -63,6 +63,8 @@ public class EditRecordImplTest {
                 title,
                 description,
                 date,
+                null,
+                null,
                 null
         );
         command.execute();
@@ -98,6 +100,8 @@ public class EditRecordImplTest {
                 title,
                 description,
                 date,
+                null,
+                null,
                 null
         );
         command.execute();
@@ -131,6 +135,8 @@ public class EditRecordImplTest {
                 title,
                 description,
                 date,
+                null,
+                null,
                 null
         );
         command.execute();
@@ -153,6 +159,8 @@ public class EditRecordImplTest {
                 title,
                 description,
                 date,
+                null,
+                null,
                 null
         );
         command.execute();
