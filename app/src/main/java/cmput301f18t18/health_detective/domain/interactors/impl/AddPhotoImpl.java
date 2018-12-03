@@ -77,8 +77,7 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
         if (type) {
             if (label != null && label != "")
                 newImage.setLabel(label);
-
-            patient.addBodylocation(newImage);
+            
             context.getUserRepo().updateUser(patient);
 
             if (recordContext != null) {
