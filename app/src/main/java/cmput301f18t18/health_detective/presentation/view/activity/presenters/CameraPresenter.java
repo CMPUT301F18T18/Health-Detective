@@ -3,7 +3,6 @@ package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 
@@ -35,14 +34,10 @@ public class CameraPresenter implements AddPhoto.Callback, GetLoggedInUser.Callb
     }
 
     @Override
-    public void onAPhInvalidPermissions() {
-
-    }
+    public void onAPhInvalidPermissions() {}
 
     @Override
-    public void onAPhNoImage() {
-
-    }
+    public void onAPhNoImage() {}
 
     @Override
     public void onAPhSuccess(DomainImage image) {
@@ -69,10 +64,6 @@ public class CameraPresenter implements AddPhoto.Callback, GetLoggedInUser.Callb
         new AddPhotoImpl(this, blLabel, base64String, type, leftRight).execute();
     }
 
-    public void onSave() {
-    }
-
-    //TODO: this will convert to the byte array if that's how you want to store it
     private byte[] toByteArray(Bitmap bitmap){
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -84,9 +75,7 @@ public class CameraPresenter implements AddPhoto.Callback, GetLoggedInUser.Callb
     }
 
     @Override
-    public void onGLIUNoUserLoggedIn() {
-
-    }
+    public void onGLIUNoUserLoggedIn() {}
 
     @Override
     public void onGLIUPatient(Patient patient) {
