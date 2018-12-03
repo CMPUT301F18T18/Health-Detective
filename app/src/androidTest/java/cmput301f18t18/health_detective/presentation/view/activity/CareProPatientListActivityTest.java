@@ -16,6 +16,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -24,6 +25,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -64,6 +66,7 @@ public class CareProPatientListActivityTest {
     }
 
     // Making sure view is updated when patient added/deleted
+    // This test also makes sure clicking on the patients problems works
     @Test
     public void CPUpdatePatientsTest() {
         // Making sure cancel button is working properly
@@ -88,7 +91,21 @@ public class CareProPatientListActivityTest {
             e.printStackTrace();
         }
         onView(withText("walker2018")).check(matches(isDisplayed()));
+        // Making sure problems button works
+        onData(anything()).inAdapterView((withId(R.id.patientListView)))
+                .atPosition(0)
+                .onChildView(withText("PROBLEMS"))
+                .perform(click());
+        intended(hasComponent(PatientProblemsActivity.class.getName()));
+        onView(withText("OKAY")).perform(click());
+        onView(withText("OKAY")).perform(click());
+        onView(withContentDescription("Navigate up")).perform(click());
         // Making sure delete patient button is working properly
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onData(anything()).inAdapterView((withId(R.id.patientListView)))
                 .atPosition(0)
                 .onChildView(withId(R.id.deleteImg))
@@ -101,4 +118,13 @@ public class CareProPatientListActivityTest {
         }
         onView(withText("walker2018")).check(doesNotExist());
     }
+
+    // Making sure user profile button is working
+    @Test
+    public void CPUserProfButtonTest() {
+        onView(withText("reklaw2018")).perform(click());
+        intended(hasComponent(SignUpActivity.class.getName()));
+    }
+
+    // Making s
 }
