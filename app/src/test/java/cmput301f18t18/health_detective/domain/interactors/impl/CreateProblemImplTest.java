@@ -52,12 +52,7 @@ public class CreateProblemImplTest {
         Date date = new Date();
 
         CreateProblem command = new CreateProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
-                users.retrievePatientById("Patient1"),
                 title,
                 description,
                 date
@@ -75,10 +70,10 @@ public class CreateProblemImplTest {
         assertEquals("description", problem.getDescription());
 
         // Check problem repo has been updated
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()).getProblemID(), problem.getProblemID());
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()).getProblemId(), problem.getProblemId());
 
         // Check problem has been added to user
-        assertTrue(users.retrievePatientById("Patient1").getProblemIds().contains(problem.getProblemID()));
+        assertTrue(users.retrievePatientById("Patient1").getProblemIds().contains(problem.getProblemId()));
     }
 
     // Testing null title
@@ -88,12 +83,7 @@ public class CreateProblemImplTest {
         String description = "description";
         Date date = new Date();
         CreateProblem command = new CreateProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
-                users.retrievePatientById("Patient1"),
                 title,
                 description,
                 date
@@ -138,5 +128,10 @@ class CreateProblemMockPresenter implements CreateProblem.Callback {
 
     @Override
     public void onCPFail() {
+    }
+
+    @Override
+    public void onCPNoPatientInScope() {
+
     }
 }

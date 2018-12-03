@@ -13,10 +13,6 @@
         android:title="Search"
         app:showAsAction="always"></item>
 
-    <item
-        android:id="@+id/List_option"
-        android:title="@string/list"
-        app:showAsAction="never"></item>
 
     <item
         android:id="@+id/Map_option"

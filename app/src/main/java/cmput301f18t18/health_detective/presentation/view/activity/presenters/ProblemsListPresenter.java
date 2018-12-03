@@ -1,82 +1,44 @@
 package cmput301f18t18.health_detective.presentation.view.activity.presenters;
 
-import android.content.Context;
-
 import java.util.ArrayList;
-import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.executor.MainThread;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.interactors.CreateProblem;
 import cmput301f18t18.health_detective.domain.interactors.DeleteProblem;
-import cmput301f18t18.health_detective.domain.interactors.GetProblems;
-import cmput301f18t18.health_detective.domain.interactors.impl.CreateProblemImpl;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
+import cmput301f18t18.health_detective.domain.interactors.ViewPatient;
 import cmput301f18t18.health_detective.domain.interactors.impl.DeleteProblemImpl;
-import cmput301f18t18.health_detective.domain.interactors.impl.GetProblemsImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.Logout;
+import cmput301f18t18.health_detective.domain.interactors.impl.PutContext;
+import cmput301f18t18.health_detective.domain.interactors.impl.ViewPatientImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.ProblemRepo;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
-import cmput301f18t18.health_detective.presentation.view.activity.PatientProblemsActivity;
 
-public class ProblemsListPresenter implements GetProblems.Callback, DeleteProblem.Callback{
+public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProblem.Callback, GetLoggedInUser.Callback {
 
     private View view;
-    private ThreadExecutor threadExecutor;
-    private MainThread mainThread;
-    private ProblemRepo problemRepo;
-    private UserRepo userRepo;
 
-
-    public interface View {
-        void onProblemListUpdate(ArrayList<Problem> problemList);
-        void onProblemDeleted(Problem problem);
+    @Override
+    public void onVPaSuccess(ArrayList<Problem> patientProblems) {
+        this.view.onProblemListUpdate(patientProblems);
     }
 
-    public ProblemsListPresenter (View view, ThreadExecutor threadExecutor, MainThread mainThread,
-                                  ProblemRepo problemRepo, UserRepo userRepo) {
-        this.view = view;
-        this.threadExecutor = threadExecutor;
-        this.mainThread = mainThread;
-        this.problemRepo = problemRepo;
-        this.userRepo = userRepo;
+    @Override
+    public void onVPaSuccessDetails(String userId, String email, String phone) {
+        this.view.onProblemListUserId(userId);
     }
 
-    /**
-     * Method that calls on interactor that will delete problem
-     * @param patientContext current user that is deleting the problem
-     * @param problem current problem getting deleted
-     */
-    public void deleteProblem(Patient patientContext, Problem problem){
-        DeleteProblem command = new DeleteProblemImpl(
-                this.threadExecutor,
-                this.mainThread,
-                this,
-                this.userRepo,
-                this.problemRepo,
-                patientContext,
-                problem
-        );
+    @Override
+    public void onVPaNoProblems() {
 
-        command.execute();
+        this.view.onProblemListUpdate(new ArrayList<Problem>());
+        this.view.noProblems();
     }
 
-    /**
-     * Method that calls on the interactor that gets all the problems for the current user
-     * @param patient current user (patitent)
-     */
-    public void getProblems(Patient patient){
-        GetProblems command = new GetProblemsImpl(
-                this.threadExecutor,
-                this.mainThread,
-                this,
-                this.problemRepo,
-                patient
-        );
+    @Override
+    public void onVPaNoContext() {
 
-        command.execute();
     }
-
 
     @Override
     public void onDPSuccess(Problem problem) {
@@ -98,14 +60,79 @@ public class ProblemsListPresenter implements GetProblems.Callback, DeleteProble
 
     }
 
-    @Override
-    public void onGPSuccess(ArrayList<Problem> patientProblems) {
-        this.view.onProblemListUpdate(patientProblems);
+
+
+    public interface View {
+        void onProblemListUpdate(ArrayList<Problem> problemList);
+        void onProblemListUserId(String userId);
+        void onProblemDeleted(Problem problem);
+        void onViewProblem();
+        void onEditProblem();
+        void onLogout();
+        void getPatientUser(Patient patient);
+        void getCPUser(CareProvider careProvider);
+        void noProblems();
+    }
+
+    public ProblemsListPresenter (View view) {
+        this.view = view;
+        new GetLoggedInUserImpl(this).execute();
+    }
+
+    /**
+     * Method that calls on interactor that will delete problem
+     * @param problem current problem getting deleted
+     */
+    public void deleteProblem(Problem problem){
+        DeleteProblem command = new DeleteProblemImpl(
+                this,
+                problem
+        );
+
+        command.execute();
+    }
+
+    /**
+     * Method that calls on the interactor that gets all the problems for the current user
+     */
+    public void getProblems(){
+        ViewPatient command = new ViewPatientImpl(
+                this);
+
+        command.execute();
+    }
+
+    public void onEdit(Problem problem) {
+        new PutContext(problem).execute();
+
+        view.onEditProblem();
+    }
+
+    public void onView(Problem problem) {
+        new PutContext(problem).execute();
+
+        view.onViewProblem();
+    }
+
+    public void onLogout() {
+        new Logout().execute();
+
+        view.onLogout();
     }
 
     @Override
-    public void onGPNoProblems() {
-        this.view.onProblemListUpdate(new ArrayList<Problem>());
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+        this.view.getPatientUser(patient);
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        this.view.getCPUser(careProvider);
     }
 
 }

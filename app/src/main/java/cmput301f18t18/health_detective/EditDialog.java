@@ -13,6 +13,9 @@ import android.widget.EditText;
 
 import cmput301f18t18.health_detective.R;
 
+/**
+ * The EditDialog program creates a edit Dialog box that gets user input and updates a record
+ */
 public class EditDialog extends AppCompatDialogFragment {
     private EditText editText;
     private ExampleDialogListener listener;
@@ -25,6 +28,12 @@ public class EditDialog extends AppCompatDialogFragment {
         this.recordInfo = "";
     }
 
+    /**
+     *
+     * @param prompt - is the message the dialog box will display
+     * @param type - an int used to determine which variable is being edited
+     * @param recordInfo - a string representing what we are editing i.e current title or description
+     */
     @SuppressLint("ValidFragment")
     public EditDialog(String prompt, int type, String recordInfo) {
         this.dialogPrompt = prompt;
@@ -77,6 +86,9 @@ public class EditDialog extends AppCompatDialogFragment {
         }
     }
 
+    // ExampleDialogListener is an interface, implemented by our listener/activity
+    // applyEditTitle - edits the title of a record
+    // applyEditDesc - edits the desc of a record
     public interface ExampleDialogListener{
         void applyEditTitle(String editedTitle);
         void applyEditDesc(String editedTitle);

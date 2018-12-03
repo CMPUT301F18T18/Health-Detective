@@ -88,10 +88,7 @@ public class RemoveAssignedPatientImplTest {
         Patient patientToRemove = userRepo.retrievePatientById("testPatient4");
 
         RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                userRepo,
                 careProviderToTest,
                 patientToRemove
         );
@@ -108,10 +105,7 @@ public class RemoveAssignedPatientImplTest {
         Patient patientToRemove = userRepo.retrievePatientById("testPatient2");
 
         RemoveAssignedPatient command = new RemoveAssignedPatientImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                userRepo,
                 careProviderToTest,
                 patientToRemove
         );
@@ -158,5 +152,10 @@ class RemoveAssignedPatientMockPresenter implements RemoveAssignedPatient.Callba
     @Override
     public void onRAPPatientNotAssigned() {
         this.rapPatientNotAssigned = true;
+    }
+
+    @Override
+    public void onRAPInvalidPermissions() {
+
     }
 }

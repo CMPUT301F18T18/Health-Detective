@@ -3,7 +3,6 @@ package cmput301f18t18.health_detective.domain.model;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -158,15 +157,15 @@ public class CareProviderTest {
     public void getProblemIds() {
         Patient patient = new Patient();
 
-        patient.addProblem(1);
-        patient.addProblem(2000);
-        patient.addProblem(100);
+        patient.addProblem("1");
+        patient.addProblem("2000");
+        patient.addProblem("100");
 
-        ArrayList<Integer> patientsProblemIds = patient.getProblemIds();
+        ArrayList<String> patientsProblemIds = patient.getProblemIds();
 
-        assertTrue(patientsProblemIds.contains(1));
-        assertTrue(patientsProblemIds.contains(2000));
-        assertTrue(patientsProblemIds.contains(100));
+        assertTrue(patientsProblemIds.contains("1"));
+        assertTrue(patientsProblemIds.contains("2000"));
+        assertTrue(patientsProblemIds.contains("100"));
     }
 
     @Test

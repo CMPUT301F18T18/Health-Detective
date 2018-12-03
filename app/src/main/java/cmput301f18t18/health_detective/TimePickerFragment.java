@@ -10,6 +10,7 @@ import android.text.format.DateFormat;
 
 import java.util.Calendar;
 
+//The TimePickerFragment program creates a time picker dialog and prompts the user to select a time
 public class TimePickerFragment extends DialogFragment {
 
     @NonNull

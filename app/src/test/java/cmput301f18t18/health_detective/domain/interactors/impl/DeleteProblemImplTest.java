@@ -47,13 +47,13 @@ public class DeleteProblemImplTest {
         users.insertUser(patient1);
         Date date = new Date();
         Problem problem1 = new Problem(
-                1234,
+                "1234",
                 "title1",
                 "description1",
                 date
         );
         Problem problem2 = new Problem(
-                4321,
+                "4321",
                 "title2",
                 "description2",
                 date
@@ -69,13 +69,8 @@ public class DeleteProblemImplTest {
     public void testDPProblem() {
 
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
-                users.retrievePatientById("Patient1"),
-                problems.retrieveProblemById(1234)
+                problems.retrieveProblemById("1234")
         );
         command.execute();
 
@@ -88,13 +83,13 @@ public class DeleteProblemImplTest {
         assertNotNull(problem);
 
         // Check to make sure problem has been removed from repo
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()), null);
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()), null);
 
         // Check problem has been removed from patient
         assertFalse(users.retrievePatientById("Patient1").getProblemIds().contains(1234));
 
         // Check to make sure non-deleted problem is still in repo
-        assertFalse(problems.retrieveProblemById(4321).equals(null));
+        assertFalse(problems.retrieveProblemById("4321").equals(null));
 
         // Check to make sure non-deleted problem is still in patient's list
         assertTrue(users.retrievePatientById("Patient1").getProblemIds().contains(4321));
@@ -107,13 +102,8 @@ public class DeleteProblemImplTest {
 
         Patient patient = new Patient("HelloThere");
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
-                patient,
-                problems.retrieveProblemById(1234)
+                problems.retrieveProblemById("1234")
         );
         command.execute();
 
@@ -126,18 +116,13 @@ public class DeleteProblemImplTest {
 
         Date date = new Date();
         Problem problem = new Problem(
-                1111,
+                "1111",
                 "Title",
                 "Description",
                  date
         );
         DeleteProblem command = new DeleteProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                users,
-                problems,
-                users.retrievePatientById("Patient1"),
                 problem
         );
         command.execute();

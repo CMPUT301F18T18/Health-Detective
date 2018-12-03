@@ -37,7 +37,7 @@ public class EditRecordImplTest {
         Date date = new Date();
 
         Problem problem1 = new Problem(
-                1234567,
+                "1234567",
                 "title",
                 "description",
                 date
@@ -59,14 +59,13 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null,
+                null,
+                null
         );
         command.execute();
 
@@ -97,14 +96,13 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null,
+                null,
+                null
         );
         command.execute();
 
@@ -133,14 +131,13 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null,
+                null,
+                null
         );
         command.execute();
 
@@ -158,14 +155,13 @@ public class EditRecordImplTest {
         String authorId = "Me";
 
         EditRecord command = new EditRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                records,
-                recordBefore,
                 title,
                 description,
-                date
+                date,
+                null,
+                null,
+                null
         );
         command.execute();
 
@@ -215,7 +211,12 @@ class EditRecordMockPresenter implements EditRecord.Callback {
     }
 
     @Override
-    public void onERFail() {
-        
+    public void onERNoGeolocationProvided() {
+
+    }
+
+    @Override
+    public void onERInvalidPermissions() {
+
     }
 }

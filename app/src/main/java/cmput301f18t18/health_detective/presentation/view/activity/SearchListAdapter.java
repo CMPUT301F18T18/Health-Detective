@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +38,7 @@ public class SearchListAdapter extends ArrayAdapter{
         ImageView deleteImg = (ImageView) rowView.findViewById(R.id.deleteImg);
         ImageView editImg = (ImageView) rowView.findViewById(R.id.editImg);
         String data = testList.get(postition);
-        TextView titleText = rowView.findViewById(R.id.titleView);
+        TextView titleText = rowView.findViewById(R.id.problemTitle);
         titleText.setText(data);
 
         TextView userIdText = rowView.findViewById(R.id.userIdView);

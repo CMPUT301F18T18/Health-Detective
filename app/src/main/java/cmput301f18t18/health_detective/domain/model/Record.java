@@ -1,63 +1,65 @@
 package cmput301f18t18.health_detective.domain.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import cmput301f18t18.health_detective.domain.model.Interfaces.Searchable;
+import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
+import cmput301f18t18.health_detective.domain.util.Id;
 
 /**
  * The class to store data and methods related to individual records.
  */
-public class Record implements Searchable, Serializable {
-    private static final long serialVersionUID = 2L;
-    public int recordId;
+public class Record {
+    private String recordId;
     private String title;
     private String comment;
     private Date date;
-    // Body location
-    // geolocation
-    // photo's
+    private String bodyloaction1;
+    private String bodyloaction2;
+    private ArrayList<String> photos = new ArrayList<>();
+    private Geolocation geolocation;
+    private String author;
 
     public Record() {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
+        DomainContext context = DomainContext.getInstance();
+        String newId = Id.genUniqueId(context.getSecureRandom());
+
+        this.recordId = newId;
         this.setTitle(null);
         this.setComment(null);
-        this.setDate(createDate);
+        this.setDate(new Date());
+        this.setAuthor("");
+    }
+
+    public Record(String id) {
+        this();
+        this.recordId = id;
     }
 
     public Record(String title, String comment) {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
+        this();
         this.setTitle(title);
         this.setComment(comment);
-        this.setDate(createDate);
-    }
-
-    public Record(int recordId, String title, String comment) {
-        this.recordId = recordId;
-        this.setTitle(title);
-        this.setComment(comment);
-        this.setDate(new Date());
     }
 
     public Record(String title, String comment, Date date) {
-        Date createDate = new Date();
-        this.recordId = createDate.hashCode();
-        this.setTitle(title);
-        this.setComment(comment);
+        this(title, comment);
         this.setDate(date);
     }
 
-    public Record(int recordId, String title, String comment, Date date) {
+    public Record(String title, String comment, String author) {
+        this(title, comment);
+        this.setAuthor(author);
+    }
+
+    public Record(String recordId, String title, String comment, String author, Date date, Geolocation geolocation) {
+        this(title, comment, date);
         this.recordId = recordId;
-        this.setTitle(title);
-        this.setComment(comment);
-        this.setDate(date);
+        setAuthor(author);
+        setGeolocation(geolocation);
     }
 
-    public int getRecordId() {
+    public String getRecordId() {
         return recordId;
     }
 
@@ -87,16 +89,6 @@ public class Record implements Searchable, Serializable {
     }
 
     @Override
-    public boolean containsBodyPart(BodyPart bodyPart) {
-        return false;
-    }
-
-    @Override
-    public boolean containsKeyword(ArrayList<String> keywords) {
-        return false;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -105,6 +97,61 @@ public class Record implements Searchable, Serializable {
             return false;
 
         Record record = (Record) o;
-        return (this.recordId ==  record.getRecordId());
+        return (this.recordId.equals(record.getRecordId()));
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void insertPhoto(DomainImage image) {
+        photos.add(image.getImageId());
+    }
+
+    public void deletePhoto(DomainImage image) {
+        if (image.getImageId() == bodyloaction1)
+            bodyloaction1 = null;
+        if (image.getImageId() == bodyloaction2)
+            bodyloaction2 = null;
+
+        photos.remove(image.getImageId());
+    }
+
+    public Geolocation getGeolocation() {
+        return geolocation;
+    }
+
+    public void setGeolocation(Geolocation geolocation) {
+        this.geolocation = geolocation;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getBodyloaction1Id() {
+        return bodyloaction1;
+    }
+
+    public void setBodyloaction1(DomainImage bodyloaction1) {
+        if (bodyloaction1 == null)
+            this.bodyloaction1 = null;
+
+        this.bodyloaction1 = bodyloaction1.getImageId();
+    }
+
+    public String getBodyloaction2Id() {
+        return bodyloaction2;
+    }
+
+    public void setBodyloaction2(DomainImage bodyloaction2) {
+        if (bodyloaction2 == null)
+            this.bodyloaction2 = null;
+
+        this.bodyloaction2 = bodyloaction2.getImageId();
     }
 }

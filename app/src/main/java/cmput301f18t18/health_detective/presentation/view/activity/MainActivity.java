@@ -10,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.ThreadExecutor;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.User;
+import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.LoginPresenter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
@@ -31,12 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        this.loginPresenter = new LoginPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance()
-        );
+        this.loginPresenter = new LoginPresenter(this);
 
         Button loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUpText);
@@ -55,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-
+        // we don't want the bottom back arrow to work in app
+        // this invalidates it
     }
 
     @Override
@@ -67,37 +61,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.signUpText:
                 Intent signUpIntent = new Intent(this,SignUpActivity.class);
-                changeActivity(signUpIntent);
+                signUpIntent.putExtra("type", 0);
+                startActivity(signUpIntent);
                 break;
 
         }
     }
 
-    public void changeActivity(Intent intent){
+    @Override
+    public void onLoginPatient() {
+        // if the user is a patient, login to this
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onLoginPatient(Patient patient) {
-        // Not sure what you do with this information but here it is
-        Intent intent = new Intent(this, PatientProblemsActivity.class);
-        intent.putExtra("PATIENT", patient);
+    public void onLoginCareProvider() {
+        // if the user is a care provider, login to this
+        Intent intent = new Intent(this, CareProPatientListActivity.class);
         Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show();
         this.startActivity(intent);
-    }
-
-    @Override
-    public void onLoginCareProvider(CareProvider careProvider) {
 
     }
 
     @Override
-    public void onInvalidUserId() {
-        Toast.makeText(this, "Invalid UserId", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onUserDoesNotExist() {
-        Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
+    public void makeToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

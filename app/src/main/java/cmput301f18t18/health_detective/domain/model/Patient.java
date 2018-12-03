@@ -9,50 +9,48 @@ import java.util.HashSet;
 public class Patient extends User {
     private static final long serialVersionUID = 4L;
 
-    private HashSet<Integer> problemIds;
+    private HashSet<String> problemIds = new HashSet<>();
 
     public Patient() {
         super();
-        this.problemIds = new HashSet<>();
     }
 
     public Patient(String userId) {
         super(userId);
-        this.problemIds = new HashSet<>();
     }
 
     public Patient(String userId, String phoneNumber, String emailAddress) {
         super(userId, phoneNumber, emailAddress);
-        this.problemIds = new HashSet<>();
     }
 
     public void addProblem(Problem problem) {
-        problemIds.add(problem.getProblemID());
+        problemIds.add(problem.getProblemId());
     }
 
-    public void addProblem(Integer problemID) { problemIds.add(problemID); }
+    public void addProblem(String problemID) { problemIds.add(problemID); }
 
     public void removeProblem(Problem problem) {
-        problemIds.remove(problem.getProblemID());
+        problemIds.remove(problem.getProblemId());
     }
 
-    public void removeProblem(Integer problemId) { problemIds.remove(problemId); }
+    public void removeProblem(String problemId) { problemIds.remove(problemId); }
 
     public boolean isProblemsEmpty() {
         return problemIds.isEmpty();
     }
 
-    public ArrayList<Integer> getProblemIds() {
-        ArrayList<Integer> problems = new ArrayList<>();
+    public ArrayList<String> getProblemIds() {
+        ArrayList<String> problems = new ArrayList<>();
 
         if (this.isProblemsEmpty()) {
             return problems;
         }
 
-        for (Integer problemId: this.problemIds) {
+        // Iterate through problems to convert hashset to arraylist
+        for (String problemId: this.problemIds) {
             problems.add(problemId);
         }
 
-        return  problems;
+        return problems;
     }
 }

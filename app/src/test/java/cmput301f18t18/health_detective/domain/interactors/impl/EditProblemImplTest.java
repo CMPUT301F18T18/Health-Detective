@@ -46,11 +46,7 @@ public class EditProblemImplTest {
         Date date = new Date();
 
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -68,7 +64,7 @@ public class EditProblemImplTest {
         assertEquals("description", problem.getDescription());
 
         // Check problem repo has been updated
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()).getProblemID(), problem.getProblemID());
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()).getProblemId(), problem.getProblemId());
     }
 
     // Testing problem is correctly created
@@ -82,11 +78,7 @@ public class EditProblemImplTest {
         Date date = new Date();
 
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -104,7 +96,7 @@ public class EditProblemImplTest {
         assertEquals("", problem.getDescription());
 
         // Check problem repo has been updated
-        assertEquals(problems.retrieveProblemById(problem.getProblemID()).getProblemID(), problem.getProblemID());
+        assertEquals(problems.retrieveProblemById(problem.getProblemId()).getProblemId(), problem.getProblemId());
     }
 
     // Testing null title
@@ -117,11 +109,7 @@ public class EditProblemImplTest {
         String description = "description";
         Date date = new Date();
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -142,11 +130,7 @@ public class EditProblemImplTest {
         String description = "description";
         Date date = null;
         EditProblem command = new EditProblemImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -198,5 +182,10 @@ class EditProblemMockPresenter implements EditProblem.Callback {
     @Override
     public void onEPNoStartDateProvided() {
         this.noDate = true;
+    }
+
+    @Override
+    public void onEPInvalidPermissions() {
+
     }
 }

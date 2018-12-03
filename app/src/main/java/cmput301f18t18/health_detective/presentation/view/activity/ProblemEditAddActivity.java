@@ -10,87 +10,70 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import cmput301f18t18.health_detective.DatePickerFragment;
-import cmput301f18t18.health_detective.MainThreadImpl;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.data.repository.ElasticSearchController;
-import cmput301f18t18.health_detective.domain.executor.impl.ThreadExecutorImpl;
-import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Problem;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
-import cmput301f18t18.health_detective.domain.repository.mock.UserRepoMock;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.ProblemAddEditPresenter;
 
 public class ProblemEditAddActivity extends AppCompatActivity implements View.OnClickListener, ProblemAddEditPresenter.AddView, DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
-    Patient patientContext;
-    Problem problemContext;
     private TextView problemTitle, problemDate, problemDesc;
-    ProblemAddEditPresenter problemAddEditPresenter;
-    Boolean type;
-    Date problemDateTime;
+    private ProblemAddEditPresenter problemAddEditPresenter;
+    private Boolean type;
+    private Date problemDateTime;
+    private String title = "";
+    private String comment = "";
+    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problem_edit_add);
 
+        // get type
+        // true - editing
+        // false - adding
         Intent intent = getIntent();
-        this.patientContext = (Patient) intent.getSerializableExtra("PATIENT");
-        problemContext = (Problem) intent.getSerializableExtra("PROBLEM");
+        type = (Boolean) intent.getSerializableExtra("TYPE");
 
-        //true if editing problem, false if creating new problem
-        if (patientContext == null){
-            type = true;
-        } else {
-            type = false;
-        }
-
+        // set view id's
         problemTitle = findViewById(R.id.problemTitle);
         problemDate = findViewById(R.id.problemDate);
         problemDesc = findViewById(R.id.problemDesc);
         problemDate.setFocusable(false);
-        if (type){
-            problemTitle.setText(problemContext.getTitle());
-            problemDate.setText(problemContext.getStartDate().toString());
-            problemDesc.setText(problemContext.getDescription());
-        }
-
-        problemAddEditPresenter = new ProblemAddEditPresenter(
-                this,
-                ThreadExecutorImpl.getInstance(),
-                MainThreadImpl.getInstance(),
-                ElasticSearchController.getInstance(),
-                ElasticSearchController.getInstance()
-        );
-
         TextView cancelBtn = findViewById(R.id.cancelBtn);
         Button saveBtn = findViewById(R.id.saveBtn);
         Button addDateBtn = findViewById(R.id.addDateBtn);
 
+        // time default set
+        problemDate.setText(dateFormat.format(new Date()).replace("AM","am").replace("PM","pm"));
+        // create problem presenter
+        problemAddEditPresenter = new ProblemAddEditPresenter(this);
+
+        // set on click listeners for buttons
         cancelBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
         addDateBtn.setOnClickListener(this);
     }
 
+    // on back button pressed return to last activity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
 
+    // on click for options items
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -104,26 +87,27 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         }
     }
 
+    // on click for our buttons
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            // on save button click, edit or create new problem based on type
             case R.id.saveBtn:
-                String probTitle = problemTitle.getText().toString();
-                String probDesc = problemDesc.getText().toString();
-                String probDate = problemDate.getText().toString();
-                if (probDate == null){
-                    problemDateTime = new Date();
-                }
+                title = problemTitle.getText().toString();
+                comment = problemDesc.getText().toString();
+
                 if (type){
-                    problemAddEditPresenter.editUserProblem(problemContext, probTitle, probDesc, problemDateTime);
+                    problemAddEditPresenter.editUserProblem(title, comment, problemDateTime);
                 }
                 else {
-                    problemAddEditPresenter.createNewProblem(patientContext, probTitle, probDesc, problemDateTime);
+                    problemAddEditPresenter.createNewProblem(title, comment, problemDateTime);
                 }
                 break;
+            // on cancel return go to last activity
             case R.id.cancelBtn:
                 finish();
                 break;
+            // on add date click, open time picker fragment
             case R.id.addDateBtn:
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(),"date picker");
@@ -131,14 +115,16 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         }
     }
 
+    // on successful creation change activity
     @Override
-    public void onCreateProblem(Problem problem) {
-            Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
-            problemListIntent.putExtra("PATIENT", patientContext);
-            this.startActivity(problemListIntent);
-
+    public void onCreateProblem() {
+        Toast toast = Toast.makeText(this, "Problem Created", Toast.LENGTH_SHORT);
+        toast.show();
+        Intent problemListIntent = new Intent(this, PatientProblemsActivity.class);
+        this.startActivity(problemListIntent);
     }
 
+    // on successful edit change activity
     @Override
     public void onEditProblem() {
         Toast toast = Toast.makeText(this, "Problem Edited", Toast.LENGTH_SHORT);
@@ -146,35 +132,44 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         finish();
     }
 
+    // get problem details, for editing problem
+    @Override
+    public void onProblemDetails(String title, String description, Date date) {
+        if (type){
+            this.title = title;
+            this.comment = description;
+            this.problemDateTime = date;
+            if (problemDateTime != null) {
+                this.problemDateTime = new Date();
+            }
+            problemTitle.setText(title);
+            problemDesc.setText(comment);
+            // set date text using our date format
+            problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
+        }
+    }
+
+    // after successful date selection method is called, updates date
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        Date currentDate = c.getTime();
-        problemDateTime = currentDate;
-        problemDate.setText((CharSequence) currentDate.toString());
+        problemDateTime = c.getTime();
+        // call timepicker after date has been selected
         DialogFragment timePicker = new TimePickerFragment();
         timePicker.show(getSupportFragmentManager(), "time picker");
     }
 
+    // after successful time selection method is called, updates time
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Date theSameDate = null;
-        String date = problemDate.getText().toString();
-        try {
-            theSameDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         Calendar c = Calendar.getInstance();
-        c.setTime(theSameDate);
+        c.setTime(problemDateTime);
         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
         c.set(Calendar.MINUTE,minute);
-        Date currentDate = c.getTime();
-        problemDateTime = currentDate;
-        problemDate.setText((CharSequence) currentDate.toString());
-
+        problemDateTime = c.getTime();
+        problemDate.setText(dateFormat.format(problemDateTime).replace("AM","am").replace("PM","pm"));
     }
 }

@@ -38,7 +38,7 @@ public class DeleteRecordImplTest {
 
         Date date = new Date();
         Problem problem1 = new Problem(
-                1234,
+                "1234",
                 "title1",
                 "description1",
                 date
@@ -46,16 +46,20 @@ public class DeleteRecordImplTest {
         problems.insertProblem(problem1);
 
         Record record1 = new Record(
-                1111,
-                "title1",
-                "description1",
-                date
-        );
-        Record record2 = new Record(
-                2222,
+                "2222",
                 "title2",
                 "description2",
-                date
+                "author",
+                date,
+                null
+        );
+        Record record2 = new Record(
+                "2222",
+                "title2",
+                "description2",
+                "author",
+                date,
+                null
         );
         records.insertRecord(record1);
         records.insertRecord(record2);
@@ -68,13 +72,8 @@ public class DeleteRecordImplTest {
     public void testDRRecord() {
 
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
-                problems.retrieveProblemById(1234),
-                records.retrieveRecordById(1111)
+                records.retrieveRecordById("1111")
         );
         command.execute();
 
@@ -90,13 +89,13 @@ public class DeleteRecordImplTest {
         assertEquals(records.retrieveRecordById(record.getRecordId()), null);
 
         // Check record has been removed from problem
-        assertFalse(problems.retrieveProblemById(1234).getRecordIds().contains(1111));
+        assertFalse(problems.retrieveProblemById("1234").getRecordIds().contains(1111));
 
         // Check to make sure non-deleted record is still in repo
-        assertFalse(records.retrieveRecordById(2222).equals(null));
+        assertFalse(records.retrieveRecordById("2222").equals(null));
 
         // Check to make sure non-deleted record is still in problem's list
-        assertTrue(problems.retrieveProblemById(1234).getRecordIds().contains(2222));
+        assertTrue(problems.retrieveProblemById("1234").getRecordIds().contains(2222));
     }
 
     // Testing to make sure cannot find problem check is working
@@ -105,19 +104,14 @@ public class DeleteRecordImplTest {
 
         Date date = new Date();
         Problem problem = new Problem(
-                3333,
+                "3333",
                 "Title",
                 "Description",
                 date
         );
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
-                problem,
-                records.retrieveRecordById(1111)
+                records.retrieveRecordById("1111")
         );
         command.execute();
 
@@ -130,18 +124,15 @@ public class DeleteRecordImplTest {
 
         Date date = new Date();
         Record record = new Record(
-                4444,
+                "4444",
                 "title2",
                 "description2",
-                date
+                "author",
+                date,
+                null
         );
         DeleteRecord command = new DeleteRecordImpl(
-                threadExecutor,
-                mainThread,
                 callback,
-                problems,
-                records,
-                problems.retrieveProblemById(1234),
                 record
         );
         command.execute();
