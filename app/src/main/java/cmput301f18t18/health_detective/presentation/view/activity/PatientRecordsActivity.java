@@ -71,6 +71,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Address myAddress;
     private Boolean userType;
     private ImageView addRecBtn;
+    private Geolocation hospital = new Geolocation(53.521331248, -113.521331248);
 
 
     @Override
@@ -422,7 +423,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void applyCareRecord(String comment) {
-        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, new Geolocation(53.521331248, -113.521331248));
+        // Add the care record here
+        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, hospital);
     }
 
     public void init(){
