@@ -87,6 +87,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
 
@@ -149,12 +150,14 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         this.careProPatientListPresenter.getAssignedPatients(); // updating this list to show the new patient
     }
 
+    // method for when the patient is not added. Only shows a test
     @Override
     public void onAddPatientFailure() {
         Toast toast = Toast.makeText(this, "Patient Not added", Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    // when you are adding in a new patient as a care provider (method name is misleading)
     @Override
     public void applyEdit(String patient) {
         // add the patient done here
@@ -165,12 +168,13 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
 
     public void onDeletePatientSuccess(Patient patient) {
-        this.patientList.remove(patient);
-        adapter.notifyDataSetChanged();
+        this.patientList.remove(patient); // deleting patient from list
+        adapter.notifyDataSetChanged(); // showing the deletion in the list
         Toast toast = Toast.makeText(this, "Delete Patient", Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    //getting the list of patients from elastic search and updating the listview
     @Override
     public void onGetPatientSuccess(ArrayList<Patient> assignedPatients) {
         this.patientList.clear();
@@ -178,6 +182,8 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         this.adapter.notifyDataSetChanged();
     }
 
+    //displays an alert dialog that tells you what to click on the plus button
+    // this only gets called when the data list is empty (ie: no patients)
     @Override
     public void noPatients() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -192,10 +198,11 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         dialog.show();
     }
 
+    // this method gets the current user logged in
     @Override
     public void onGetUser(CareProvider careProvider) {
-        cpContext = careProvider;
-        this.careProPatientListPresenter.getAssignedPatients();
+        cpContext = careProvider; // sets the context to care provider
+        this.careProPatientListPresenter.getAssignedPatients(); // gets assigned patients for current care provider
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+// SingleAddDialog is a dialog that adds one string to a database
 public class SingleAddDialog extends AppCompatDialogFragment {
     private AddPatientDialogListener addPatientDialogListener;
     private EditText addPatient;
@@ -52,7 +53,7 @@ public class SingleAddDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-
+    // assign listener to dialog
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -64,11 +65,8 @@ public class SingleAddDialog extends AppCompatDialogFragment {
         }
     }
 
-
-
-
-
-
+    // AddPatientDialogListener is implemented by listener/activity
+    // applyEdit - applys the edit to database
     public interface AddPatientDialogListener{
         void applyEdit(String patient);
 

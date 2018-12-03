@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +24,6 @@ import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.model.Photo;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
 
 public class PhotoViewActivity extends AppCompatActivity implements DeleteRecordPhoto.Callback, ViewRecord.Callback, GetLoggedInUser.Callback, CameraPresenter.View {
@@ -166,9 +164,7 @@ public class PhotoViewActivity extends AppCompatActivity implements DeleteRecord
     }
 
     @Override
-    public void onDone() {
-
-    }
+    public void onDone() {}
 
     @Override
     public void onPView() {

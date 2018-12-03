@@ -65,29 +65,17 @@ public class RecordListAdapter extends ArrayAdapter{
         ImageView deleteImg = rowView.findViewById(R.id.deleteImg);
         ImageView uglyBlueString = rowView.findViewById(R.id.imageView7);
 
-        //ImageView recordImg = rowView.findViewById(R.id.recordImg);
-        //recordImg.setImageResource(R.drawable.ic_launcher_background);
-
-        //String stringImage = record.getImage();
-        //Bitmap bitmap = CameraPresenter.toBitmap(stringImage);
-
-        //ImageView imageView = new ImageView(mContext);
-        //imageView.setImageBitmap(bitmap);
-        //userType = true;
-        if (userType){
-            //deleteImg.setVisibility(View.INVISIBLE);
-            if (currentUser.equals(record.getAuthor())){
-                deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+        if (userType){ // if care provider
+            if (currentUser.equals(record.getAuthor())){ // if the current user is the same as the record author
+                deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider)); //set the delete img to purple
             }
-            else {
+            else { //otherwise hide the delete img
                 deleteImg.setVisibility(View.INVISIBLE);
             }
-            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider)); // set record to purple
         }
-        if (!currentUser.equals(record.getAuthor())){
-            //recordImg.setVisibility(View.GONE);
-            //deleteImg.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
-            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider));
+        if (!currentUser.equals(record.getAuthor())){ // if the current user doesn't match the record author
+            uglyBlueString.setColorFilter(ContextCompat.getColor(mContext, R.color.colorCareProvider)); // sets care provider comments in patient list as purple
             if (userType){}
             else {
                 deleteImg.setVisibility(View.INVISIBLE);

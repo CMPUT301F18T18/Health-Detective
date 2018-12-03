@@ -1,23 +1,20 @@
 package cmput301f18t18.health_detective.domain.model;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-
-import java.io.ByteArrayOutputStream;
-
 import cmput301f18t18.health_detective.domain.model.context.base.DomainContext;
 import cmput301f18t18.health_detective.domain.util.Id;
 
+
+/**
+ *  Stores an image with a label in base 64 string
+ */
 public class DomainImage {
 
     private String imageId;
     private String label;
-    private Integer xPos;
-    private Integer yPos;
     private String image;
 
     public DomainImage() {
+        // Generate unique userid
         DomainContext context = DomainContext.getInstance();
         String newId = Id.genUniqueId(context.getSecureRandom());
 
@@ -62,27 +59,12 @@ public class DomainImage {
         return label;
     }
 
-    public void setPos(Integer xPos, Integer yPos) {
-        if (xPos < 0) {
-            xPos = 0;
-        }
-        else if (yPos < 0) {
-            yPos = 0;
-        }
-
-        this.xPos = xPos;
-        this.yPos = yPos;
-    }
-
-    public Integer getxPos() {
-        return xPos;
-    }
-
-    public Integer getyPos() {
-        return yPos;
-    }
-
     public void setLabel(String label) {
+        if (label == null) {
+            this.label = "";
+            return;
+        }
+
         this.label = label;
     }
 }

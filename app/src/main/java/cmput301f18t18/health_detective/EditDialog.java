@@ -14,7 +14,7 @@ import android.widget.EditText;
 import cmput301f18t18.health_detective.R;
 
 /**
- * The EditDialog program creates a edit Dialog box that gets user input and updates database
+ * The EditDialog program creates a edit Dialog box that gets user input and updates a record
  */
 public class EditDialog extends AppCompatDialogFragment {
     private EditText editText;
@@ -86,9 +86,9 @@ public class EditDialog extends AppCompatDialogFragment {
         }
     }
 
-    /**
-     * ExampleDialogListener is an interface that our activity implements, and they must define applyEditTitle and applyEditDesc
-     */
+    // ExampleDialogListener is an interface, implemented by our listener/activity
+    // applyEditTitle - edits the title of a record
+    // applyEditDesc - edits the desc of a record
     public interface ExampleDialogListener{
         void applyEditTitle(String editedTitle);
         void applyEditDesc(String editedTitle);

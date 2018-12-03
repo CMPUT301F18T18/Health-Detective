@@ -8,20 +8,15 @@ public final class Id {
 
     private static final char[] HEX_CHARACTERS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-
     private Id() {}
 
-    public static String genUniqueId() {
-        try {
-            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-
-            return genUniqueId(secureRandom);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    /**
+     * Generates an id string from a secure random by creating a hash from a secure random. chance
+     * of collision is negligible
+     *
+     * @param secureRandom
+     * @return
+     */
     public static String genUniqueId(SecureRandom secureRandom) {
         // Verify that secure random has been init'd
         if (secureRandom == null) {
@@ -46,6 +41,14 @@ public final class Id {
         }
     }
 
+    /**
+     * Takes a byte array and converts it into a HexString
+     *  ex. 0 -> "00"
+     *      15 -> "FF"
+     *
+     * @param bytes
+     * @return String
+     */
     private static String byteArrayToHexString(byte[] bytes) {
         if (bytes == null) {
             return "";

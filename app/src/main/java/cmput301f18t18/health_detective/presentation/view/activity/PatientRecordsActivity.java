@@ -3,7 +3,6 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +31,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -63,7 +60,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     RecordListAdapter adapter;
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
-    int currentPosition;
     private String title, desc;
     private Date date;
     private Geolocation currentGeoLocation;
@@ -86,30 +82,13 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         getDeviceLocation();
 
         this.recordListPresenter = new RecordListPresenter(this);
-
         addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
-
-        //final Context context = PatientRecordsActivity.this;
-        //listView = findViewById(R.id.recordListView);
-
-
-        //adapter = new RecordListAdapter(this, this.recordList, this);
-        //listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                recordListPresenter.onView(recordList.get(position));
-//            }
-//        });
-
-        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
@@ -150,6 +129,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
             case R.id.Logout_option:
@@ -159,6 +139,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+    //creating a dialog that adds a new record to to a problem
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordsBtn) {
@@ -203,12 +184,13 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         dialog.show();
     }
 
+    //This is for when the user clicks on a username on the record (it can be patient of care provider)
     @Override
     public void onUserClicked(Record record) {
-        //TODO: JORDAN THIS SECTION FOR YOU! MAKE ON INTENT TO GO TO LOGIN!!!!!! THIS IS WHEN YOU
-        //TODO: CLICK ON A USER!!!!
-        Toast toast = Toast.makeText(this, record.getAuthor(), Toast.LENGTH_SHORT);
-        toast.show();
+        Intent userIdIntent = new Intent(this, SignUpActivity.class);
+        userIdIntent.putExtra("type",2); //means that you are only viewing the user info
+        userIdIntent.putExtra("id",record.getAuthor()); //passing the record author
+        startActivity(userIdIntent);
     }
 
     @Override
@@ -232,10 +214,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        if (userType){
+        if (userType){ // if careprovider, only show new record comment
             recordListPresenter.getUserRecords();
         }
-        else {
+        else { // if patient, go to long record view page
             Intent intent = new Intent(this, PatientRecordViewActivity.class);
             this.startActivity(intent);
         }
@@ -253,6 +235,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         toast.show();
     }
 
+    // Only gets called when the current user is a care provider
+    // Sets the color scheme to purple
     @Override
     public void onCPView(CareProvider careProvider) {
         userType = true;
@@ -265,6 +249,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         init();
     }
 
+    // Only gets called when current user is a patient
+    // Default color scheme matches patient view
     @Override
     public void onPView(Patient patient) {
         userType = false;
@@ -277,6 +263,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         startActivity(logoutIntent);
     }
 
+    // creates a dialog that tells you how to add a new record
+    // Only gets called when the record list is empty
     @Override
     public void noRecords() {
         if (exampleDialog == null) {
@@ -293,11 +281,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+    // creating a new record
     @Override
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
-
         recordListPresenter.createUserRecord(this.title, this.desc, this.date, myLocation);
 
 
@@ -410,10 +398,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         startActivityForResult(mapIntent,REQUEST_CODE);
     }
 
-
+    // Coming back from the map view
+    // Returns the double array of LatLon from the map
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == REQUEST_CODE) {
             if(resultCode == PatientRecordsActivity.RESULT_OK){
                  double[] doubleArrayExtra =data.getDoubleArrayExtra("result");
@@ -434,9 +422,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void applyCareRecord(String comment) {
-        // Add the care record here
-        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
-
+        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, new Geolocation(53.521331248, -113.521331248));
     }
 
     public void init(){
@@ -447,14 +433,17 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String recordAuthor = recordList.get(position).getAuthor();
-                if (userType) {
-                    if (recordAuthor.equals(userId)) {} else {
+                if (userType) { // if care provider
+                    if (recordAuthor.equals(userId)) {} //if it is a care provider comment
+                    else {
+                        // if care provider clicks on patient record, they can view the entire record
                         recordListPresenter.onView(recordList.get(position));
                     }
+                    // if the current user matches the author (patient), they can view the entire record
+                    // for patient
                 } else if (recordAuthor.equals(userId)){
                     recordListPresenter.onView(recordList.get(position));
                 }
-
             }
         });
         this.recordListPresenter.getUserRecords();
