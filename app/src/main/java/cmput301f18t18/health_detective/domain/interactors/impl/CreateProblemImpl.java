@@ -99,8 +99,6 @@ public class CreateProblemImpl extends AbstractInteractor implements CreateProbl
         patient.addProblem(newProblem);
         userRepo.updateUser(patient);
 
-        new PutContext(patient).execute();
-
         // Return problem so UI can proceed
         this.mainThread.post(new Runnable(){
 

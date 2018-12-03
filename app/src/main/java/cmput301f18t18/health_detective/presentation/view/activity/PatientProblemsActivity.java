@@ -4,11 +4,9 @@ import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -42,8 +40,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     ProblemListAdapter adapter;
     ArrayList<Problem> problemList = new ArrayList<>();
     ProblemsListPresenter problemsListPresenter;
-    ImageView addProblem;
-    Boolean userType;
 
 
     @Override
@@ -51,12 +47,26 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_problems);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        problemsListPresenter = new ProblemsListPresenter(this);
+        //ActionBar b = getActionBar();
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
 
-        addProblem = findViewById(R.id.addProbBtn);
+//        Window window = this.getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setStatusBarColor(getResources().getColor(R.color.colorCareProvider));
+
+        problemsListPresenter = new ProblemsListPresenter(this);
+        adapter = new ProblemListAdapter(this, this.problemList, this);
+
+        ImageView addProblem = findViewById(R.id.addProbBtn);
         addProblem.setOnClickListener(this);
+
+        listView = findViewById(R.id.problemListView);
+        listView.setAdapter(adapter);
+
+        this.problemsListPresenter.getProblems();
+
     }
 
     @Override
@@ -74,7 +84,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
-
         getMenuInflater().inflate(R.menu.logout_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
@@ -91,11 +100,6 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
             case R.id.app_bar_search:
                 Intent searchIntent = new Intent(this,SearchActivity.class);
                 startActivity(searchIntent);
-                return true;
-
-            case R.id.home:
-                Intent careprovider = new Intent(this, CareProPatientListActivity.class);
-                startActivity(careprovider);
                 return true;
 
             case R.id.Logout_option:
@@ -132,9 +136,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onProblemListUserId(String userId) {
-        if(!userType) {
-            this.userId = userId;
-        }
+        this.userId = userId;
         invalidateOptionsMenu();
     }
 
@@ -199,50 +201,16 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
     @Override
     public void getPatientUser(Patient patient) {
-        userType = false;
-        init();
+
     }
 
     @Override
     public void getCPUser(CareProvider careProvider) {
-        userType = true;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        this.userId = careProvider.getUserId();
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-        addProblem.setImageResource(R.drawable.cp_circle);
-
-        init();
     }
-
-    @Override
-    public void noProblems() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setCancelable(true)
-                .setTitle("No problems click bottom plus button to add")
-                .setPositiveButton("okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-        AlertDialog dialog = alert.create();
-        dialog.show();
-    }
-
-    public void init(){
-
-        if (userType){
-            addProblem.setVisibility(View.GONE);
-        }
-        adapter = new ProblemListAdapter(this, this.problemList, this, userType);
-        listView = findViewById(R.id.problemListView);
-        listView.setAdapter(adapter);
-
-        this.problemsListPresenter.getProblems();
-    }
-
 
 }

@@ -30,9 +30,7 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
 
     @Override
     public void onVPaNoProblems() {
-
         this.view.onProblemListUpdate(new ArrayList<Problem>());
-        this.view.noProblems();
     }
 
     @Override
@@ -71,7 +69,6 @@ public class ProblemsListPresenter implements ViewPatient.Callback, DeleteProble
         void onLogout();
         void getPatientUser(Patient patient);
         void getCPUser(CareProvider careProvider);
-        void noProblems();
     }
 
     public ProblemsListPresenter (View view) {

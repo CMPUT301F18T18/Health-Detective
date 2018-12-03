@@ -1,8 +1,18 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -10,45 +20,84 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
+import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+import android.view.View.OnTouchListener;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 import cmput301f18t18.health_detective.R;
-import cmput301f18t18.health_detective.presentation.view.activity.presenters.CameraPresenter;
+import cmput301f18t18.health_detective.domain.model.Patient;
+import cmput301f18t18.health_detective.domain.model.Photo;
+import cmput301f18t18.health_detective.domain.model.Problem;
+import cmput301f18t18.health_detective.domain.model.Record;
 
 import static cmput301f18t18.health_detective.presentation.view.activity.PermissionRequest.verifyPermission;
 
-public class CamaraActivity extends AppCompatActivity implements CameraPresenter.View, View.OnClickListener{
+public class CamaraActivity extends AppCompatActivity implements OnTouchListener, View.OnClickListener{
 
-    private CameraPresenter presenter;
-    private Uri imageFileUri;
-    private int angle = 0;
-    private ImageView takenPhoto;
+    Uri imageFileUri;
+    int angle = 0;
+    ImageView takenPhoto;
     private int FROM_GALLERY = 2;
-    private Bitmap bitmap;
+    private static final String TAG = "Touch";
+    String base;
+    byte[] temp;
+    Bitmap bitmap;
+    Canvas canvas;
+
+    // adding in trying to draw a goddamn circle
+    private Paint pTouch;
+    int radius = 5;
+    Float x;
+    Float y;
+
+
+    // These matrices will be used to scale points of the image
+    Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
+    Record record;
+    Patient patientContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camara);
-
+      
         Intent newIntent = this.getIntent();
-        boolean type = newIntent.getBooleanExtra("TYPE", false);
-        boolean leftRight = newIntent.getBooleanExtra("LEFTRIGHT", false);
+        this.record = (Record) newIntent.getSerializableExtra("RECORD");
+        this.patientContext = (Patient) newIntent.getSerializableExtra("USER");
+
+
 
         takenPhoto = (ImageView) findViewById(R.id.photoPlacer);
 
+
         Button saveBtn = findViewById(R.id.saveBtn);
-        Button cancelBtn = findViewById(R.id.cancelBtn);
-        cancelBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
+
+        //adding circule shit
+        pTouch = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // pTouch.setXfermode(new PorterDuffXfermode(Mode.SRC_OUT));
+        pTouch.setColor(Color.RED);
+        pTouch.setStyle(Paint.Style.STROKE);
+
+        pTouch.setStrokeWidth(5);
+
+
+
+        takenPhoto.setOnTouchListener(this);
 
         ImageView button = (ImageView) findViewById(R.id.TakeAPhoto);
         View.OnClickListener listener = new View.OnClickListener() {
@@ -57,20 +106,6 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
             }
         };
         button.setOnClickListener(listener);
-
-        verifyPermission(this);
-
-        this.presenter = new CameraPresenter(this, type, leftRight);
-
-        takeAPhoto();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -84,7 +119,10 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.rotate:
-                takenPhoto.setRotation(angle);
+                //https://stackoverflow.com/questions/8981845/android-rotate-image-in-imageview-by-an-angle
+                //angle = angle + 90;
+                //takenPhoto.setRotation(angle);
+                //toGallery();
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -128,36 +166,98 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         startActivityForResult(intent, FROM_GALLERY);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
-                    int newWidth = 256;
-                    int newHeight = 256;
-
-                    bitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
-                    takenPhoto.setImageBitmap(bitmap);
+                    //byte[] tempArray = toByteArray(bitmap);
+                    //TODO: pass bitmap to presenter and in presenter you convert to byte array
+                    Bitmap tempBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                    Canvas canvas = new Canvas(tempBitmap);
+                    //takenPhoto.draw(canvas);
+//                    canvas.drawBitmap(bitmap, null, null);
+                    Paint p = new Paint();
+                    p.setAntiAlias(true);
+                    p.setColor(Color.RED);
+                    canvas.drawCircle(60, 50, 5,p);
+                    takenPhoto.setImageBitmap(tempBitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //takenPhoto.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
             }
         }
     }
 
 
     @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            String text = "You click at x = " + event.getX() + " and y = " + event.getY();
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+
+            Drawable tempDraw = takenPhoto.getDrawable();
+            Rect imageBounds = tempDraw.getBounds();
+
+            int ih = tempDraw.getIntrinsicHeight();
+            int iW = tempDraw.getIntrinsicWidth();
+            int sh = imageBounds.height();
+            int sw = imageBounds.width();
+            float hr = ih/sh;
+            float wr = iW/sw;
+
+            float siox = event.getX() - imageBounds.left;
+            float soiy = event.getY() - imageBounds.right;
+
+
+
+            int imHeight = takenPhoto.getHeight();
+            int newHight = (imHeight - bitmap.getHeight())/2;
+            int newY = (int) event.getY() - newHight;
+
+            Bitmap bmOverlay = Bitmap.createBitmap(bitmap.getWidth(),
+                    bitmap.getHeight(),
+                    bitmap.getConfig());
+            Canvas canvas = new Canvas(bmOverlay);
+            Paint p = new Paint();
+            p.setAntiAlias(true);
+            p.setColor(Color.RED);
+            p.setStrokeWidth(50);
+            p.setStyle(Paint.Style.STROKE);
+            canvas.drawBitmap(bitmap,new Matrix(),null);
+            canvas.drawCircle(event.getX(), newY, 100, p);
+            takenPhoto.setImageBitmap(bmOverlay);
+
+
+
+        }
+        return true;
+    }
+
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.saveBtn){
-            if (bitmap != null)
-                presenter.onImage(bitmap);
-        }
-        else if (v.getId() == R.id.cancelBtn) {
-            onBackPressed();
+            Intent intent = new Intent(this, PatientRecordViewActivity.class);
+            intent.putExtra("RECORD", record);
+            intent.putExtra("USER", patientContext);
+            //intent.putExtra("PHOTO", temp);
+            startActivity(intent);
         }
     }
+
+    // converting photo stuff
+    //https://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
+//    public byte[] toByteArray(Bitmap bitmap){
+//
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+//        byte[] byteArray = outputStream.toByteArray();
+//
+//        return byteArray;
+//
+//    }
 
     public Bitmap toBitmap(String base64String){
         byte[] decodedBytes = Base64.decode(
@@ -171,11 +271,4 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     public String byteArrayToString(byte [] byteArray){
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
-
-    @Override
-    public void onDone() {
-        Intent intent = new Intent(this, PatientRecordViewActivity.class);
-        startActivity(intent);
-    }
-
 }

@@ -2,9 +2,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,15 +22,13 @@ public class ProblemListAdapter extends ArrayAdapter {
     private Context mContext;
     private List<Problem> problemList = new ArrayList<>();
     private ProblemOnClickListener listener;
-    Boolean userType;
-    private DateFormat dateFormat = new SimpleDateFormat("dd MMMM YYYY hh:mma");
 
-    public ProblemListAdapter(@NonNull Activity context, ArrayList<Problem> list, ProblemOnClickListener listener, Boolean type) {
+
+    public ProblemListAdapter(@NonNull Activity context, ArrayList<Problem> list, ProblemOnClickListener listener) {
         super(context, R.layout.ind_problem_view, list);
         this.mContext = context;
         this.problemList = list;
         this.listener = listener;
-        this.userType = type;
     }
 
     @Override
@@ -54,17 +48,10 @@ public class ProblemListAdapter extends ArrayAdapter {
         editImg.setImageResource(R.drawable.baseline_create_black_48);
         deleteImg.setImageResource(R.drawable.baseline_delete_black_48);
 
-
-        if (userType){
-            deleteImg.setVisibility(View.GONE);
-            editImg.setVisibility(View.GONE);
-            recordBut.setTextColor(ContextCompat.getColor(mContext, R.color.colorCareProvider));
-        }
-
         Problem data = problemList.get(postition);
         titleText.setText(data.getTitle());
         descText.setText(data.getDescription());
-        dateText.setText(dateFormat.format(data.getStartDate()).replace("AM","am").replace("PM","pm"));
+        dateText.setText(data.getStartDate().toString());
 
         deleteImg.setOnClickListener(new View.OnClickListener() {
             @Override

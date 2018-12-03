@@ -90,9 +90,6 @@ public class DeleteProblemImpl extends AbstractInteractor implements DeleteProbl
         //Delete problem
         problemRepo.deleteProblem(problem);
         patient.removeProblem(problem);
-
-        new PutContext(patient).execute();
-
         userRepo.updateUser(patient);
     }
 }

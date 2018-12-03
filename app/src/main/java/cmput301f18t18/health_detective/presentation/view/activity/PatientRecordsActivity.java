@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -22,8 +21,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -45,18 +42,15 @@ import java.util.List;
 import java.util.Locale;
 
 import cmput301f18t18.health_detective.AddDialog;
-import cmput301f18t18.health_detective.CareRecordDialog;
 import cmput301f18t18.health_detective.DatePickerFragment;
 import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.TimePickerFragment;
-import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Geolocation;
-import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.Record;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.RecordOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.RecordListPresenter;
 
-public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, CareRecordDialog.CareAddDialogListener {
+public class PatientRecordsActivity extends AppCompatActivity implements View.OnClickListener, RecordListPresenter.View, RecordOnClickListener, AddDialog.AddDialogListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     String userId = "";
     ListView listView;
@@ -69,12 +63,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     private Geolocation currentGeoLocation;
     private Boolean LocationPermissionsGranted = false;
     private AddDialog exampleDialog;
-    private CareRecordDialog careRecord;
     private Geolocation myLocation;
     private int REQUEST_CODE = 1212;
     private Address myAddress;
-    private Boolean userType;
-    private ImageView addRecBtn;
 
 
     @Override
@@ -87,36 +78,37 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
         this.recordListPresenter = new RecordListPresenter(this);
 
-        addRecBtn = findViewById(R.id.addRecordsBtn);
+        ImageView addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
 
-        //final Context context = PatientRecordsActivity.this;
-        //listView = findViewById(R.id.recordListView);
+        final Context context = PatientRecordsActivity.this;
+        listView = findViewById(R.id.recordListView);
 
 
-        //adapter = new RecordListAdapter(this, this.recordList, this);
-        //listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                recordListPresenter.onView(recordList.get(position));
-//            }
-//        });
+        adapter = new RecordListAdapter(this, this.recordList, this);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                recordListPresenter.onView(recordList.get(position));
+            }
+        });
 
-        //this.recordListPresenter.getUserRecords();
+        this.recordListPresenter.getUserRecords();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+
         this.recordListPresenter.getUserRecords();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent returnIntent = new Intent(this, PatientProblemsActivity.class);
-        startActivity(returnIntent);
+        finish();
     }
 
     @Override
@@ -125,6 +117,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         getMenuInflater().inflate(R.menu.menu_tab, menu);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(userId);
+
         return true;
     }
 
@@ -144,11 +137,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 Intent mapIntent = new Intent(this, MapActivity.class);
                 //mapIntent.putExtra("PATIENT", null);
                 mapIntent.putExtra("type",0);
-                if (currentGeoLocation == null){
-                    Double lat = 53.5444;
-                    Double lng = -113.491;
-                    currentGeoLocation = new Geolocation(lat,lng);
-                }
                 mapIntent.putExtra("location", currentGeoLocation);
                 startActivity(mapIntent);
                 return true;
@@ -156,8 +144,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
                 startActivity(userIdIntent);
                 return true;
-            case R.id.Logout_option:
-                recordListPresenter.onLogout();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -172,14 +158,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     private void openDialog() {
         myLocation = currentGeoLocation;
-        if (userType){
-              careRecord = new CareRecordDialog();
-              careRecord.show(getSupportFragmentManager(), "Care Dialog");
-        } else {
-            exampleDialog = new AddDialog(currentGeoLocation);
-            exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
-        }
-
+        exampleDialog = new AddDialog(currentGeoLocation);
+        exampleDialog.show(getSupportFragmentManager(), "Add Dialog");
     }
 
     public void changeActivity(Intent intent) {
@@ -208,11 +188,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onUserClicked(Record record) {
-
-    }
-
-    @Override
     public void onRecordView() {
         Intent intent = new Intent(PatientRecordsActivity.this, PatientRecordViewActivity.class);
         changeActivity(intent);
@@ -233,11 +208,8 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        if (userType){}
-        else {
-            Intent intent = new Intent(this, PatientRecordViewActivity.class);
-            this.startActivity(intent);
-        }
+        Intent intent = new Intent(this, PatientRecordViewActivity.class);
+        this.startActivity(intent);
     }
 
     @Override
@@ -253,51 +225,11 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onCPView(CareProvider careProvider) {
-        userType = true;
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-        addRecBtn.setImageResource(R.drawable.cp_circle);
-        init();
-    }
-
-    @Override
-    public void onPView(Patient patient) {
-        userType = false;
-        init();
-    }
-
-    @Override
-    public void onLogout() {
-        Intent logoutIntent = new Intent(this,MainActivity.class);
-        startActivity(logoutIntent);
-    }
-
-    @Override
-    public void noRecords() {
-        if (exampleDialog == null) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setCancelable(true)
-                    .setTitle("No records click plus button to add")
-                    .setPositiveButton("okay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-            AlertDialog dialog = alert.create();
-            dialog.show();
-        }
-    }
-
-    @Override
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;
 
-        recordListPresenter.createUserRecord(this.title, this.desc, this.date, myLocation);
+        recordListPresenter.createUserRecord(this.title, this.desc, this.date, currentGeoLocation);
 
 
     }
@@ -320,11 +252,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         date = c.getTime();
-        if (userType){
-            careRecord.changeTime(date);
-        } else {
-            exampleDialog.changeTime(date);
-        }
+        exampleDialog.changeTime(date);
     }
 
 
@@ -376,11 +304,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     public Address getAddress() throws IOException {
         Geocoder gcd = new Geocoder(this, Locale.getDefault());
-        if (myLocation == null){
-            Double lat = 53.5444;
-            Double lng = -113.491;
-            myLocation = new Geolocation(lat,lng);
-        }
         Double lat = myLocation.getlatitude();
         Double lng = myLocation.getlongitude();
         List<Address> addresses = null;
@@ -429,34 +352,5 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
             }
         }
     }
-
-
-    @Override
-    public void applyCareRecord(String comment) {
-        // Add the care record here
-        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
-    }
-
-    public void init(){
-        listView = findViewById(R.id.recordListView);
-        adapter = new RecordListAdapter(this, this.recordList, this, userType, userId);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String recordAuthor = recordList.get(position).getAuthor();
-                if (userType) {
-                    if (recordAuthor.equals(userId)) {} else {
-                        recordListPresenter.onView(recordList.get(position));
-                    }
-                } else if (recordAuthor.equals(userId)){
-                    recordListPresenter.onView(recordList.get(position));
-                }
-
-            }
-        });
-        this.recordListPresenter.getUserRecords();
-    }
-
 
 }

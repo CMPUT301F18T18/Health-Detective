@@ -1,16 +1,11 @@
 package cmput301f18t18.health_detective.presentation.view.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,7 +20,6 @@ import cmput301f18t18.health_detective.R;
 import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
-import cmput301f18t18.health_detective.domain.repository.UserRepo;
 import cmput301f18t18.health_detective.presentation.view.activity.listeners.PatientOnClickListener;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.CareProPatientListPresenter;
 
@@ -58,78 +52,19 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         ImageView addPatient = findViewById(R.id.addPatientBtn);
         addPatient.setOnClickListener(this);
         listView = findViewById(R.id.patientListView);
+        //patientList.add(new Patient("12345678", "12345678", "123455663424"));
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
-        this.careProPatientListPresenter.getAssignedPatients();
+        //this.careProPatientListPresenter.getAssignedPatients(this.cpContext);
 
-//        if (patientList.size() == 0){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//            alert.setCancelable(true)
-//                    .setTitle("Are you sure you want to delete?")
-//                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//                        }
-//                    });
-//            AlertDialog dialog = alert.create();
-//            dialog.show();
-//
-//            Log.d("abcdefg", "no patietns");
-//        }
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        this.careProPatientListPresenter.getAssignedPatients();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // being able to use the menu at the top of the app
-        getMenuInflater().inflate(R.menu.logout_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        MenuItem userIdMenu = menu.findItem(R.id.userId);
-        userIdMenu.setTitle(cpContext.getUserId());
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                Intent searchIntent = new Intent(this,SearchActivity.class);
-                startActivity(searchIntent);
-                return true;
-
-            case R.id.Logout_option:
-                careProPatientListPresenter.onLogout();
-                return true;
-
-            case R.id.userId:
-                Intent userIdIntent = new Intent(this, SignUpActivity.class);
-                startActivity(userIdIntent);
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-        }
     }
 
 
     @Override
     public void onPatientClicked(Patient patient) {
-        this.careProPatientListPresenter.clickOnPatient(patient);
-//        Intent intent = new Intent(this, PatientProblemsActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, PatientProblemsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -146,11 +81,12 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
                 .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        careProPatientListPresenter.deletePatient(patient);
+                        careProPatientListPresenter.deletePatient(cpContext, patient);
                     }
                 });
         AlertDialog dialog = alert.create();
         dialog.show();
+
 
     }
     private void openDialog() {
@@ -169,7 +105,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onAddPatientSuccess() {
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
-        this.careProPatientListPresenter.getAssignedPatients();
+
     }
 
     @Override
@@ -203,16 +139,8 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
     @Override
     public void noPatients() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setCancelable(true)
-                .setTitle("No patients click bottom plus button to add")
-                .setPositiveButton("okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-        AlertDialog dialog = alert.create();
-        dialog.show();
+        Toast toast = Toast.makeText(this, "NO PATIENTS", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
@@ -221,15 +149,4 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         this.careProPatientListPresenter.getAssignedPatients();
     }
 
-    @Override
-    public void onClickPatient() {
-        Intent intent = new Intent(this, PatientProblemsActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onLogout() {
-        Intent logoutIntent = new Intent(this,MainActivity.class);
-        startActivity(logoutIntent);
-    }
 }

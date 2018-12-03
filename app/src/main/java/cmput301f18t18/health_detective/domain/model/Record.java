@@ -17,9 +17,7 @@ public class Record implements Searchable, Serializable {
     private String title;
     private String comment;
     private Date date;
-    private String bodyloaction1;
-    private String bodyloaction2;
-    private ArrayList<String> photos = new ArrayList<>();
+    private ArrayList<String> photos;
     private Geolocation geolocation;
     private String author;
 
@@ -122,11 +120,6 @@ public class Record implements Searchable, Serializable {
     }
 
     public void deletePhoto(DomainImage image) {
-        if (image.getImageId() == bodyloaction1)
-            bodyloaction1 = null;
-        if (image.getImageId() == bodyloaction2)
-            bodyloaction2 = null;
-
         photos.remove(image.getImageId());
     }
 
@@ -144,27 +137,5 @@ public class Record implements Searchable, Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getBodyloaction1Id() {
-        return bodyloaction1;
-    }
-
-    public void setBodyloaction1(DomainImage bodyloaction1) {
-        if (bodyloaction1 == null)
-            this.bodyloaction1 = null;
-
-        this.bodyloaction1 = bodyloaction1.getImageId();
-    }
-
-    public String getBodyloaction2Id() {
-        return bodyloaction2;
-    }
-
-    public void setBodyloaction2(DomainImage bodyloaction2) {
-        if (bodyloaction2 == null)
-            this.bodyloaction2 = null;
-
-        this.bodyloaction2 = bodyloaction2.getImageId();
     }
 }

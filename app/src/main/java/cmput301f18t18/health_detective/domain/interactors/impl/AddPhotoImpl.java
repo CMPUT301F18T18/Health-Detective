@@ -11,20 +11,20 @@ import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreePars
 import cmput301f18t18.health_detective.domain.repository.ImageRepo;
 import cmput301f18t18.health_detective.domain.repository.RecordRepo;
 
-public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
+class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
     private Callback callback;
     private String label;
-    private String image;
-    private boolean type;
-    private boolean leftRight;
+    private byte[] image;
+    private Integer xPos;
+    private Integer yPos;
 
-    public AddPhotoImpl(Callback callback, String label, String image, boolean type, boolean leftRight) {
+    public AddPhotoImpl(Callback callback, String label, byte[] image, Integer xPos, Integer yPos) {
         this.callback = callback;
         this.label = label;
         this.image = image;
-        this.type = type;
-        this.leftRight = leftRight;
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
         patient = treeParser.getCurrentPatientContext();
         recordContext = treeParser.getCurrentRecordContext();
 
-        if (patient == null || !patient.equals(loggedInUser)) {
+        if (patient == null || !patient.equals(loggedInUser) || recordContext == null) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
@@ -74,28 +74,11 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
         newImage = new DomainImage(image);
 
-        if (type) {
-            if (label != null && label != "")
-                newImage.setLabel(label);
-            
-            context.getUserRepo().updateUser(patient);
+        if (label != null && label != "")
+            newImage.setLabel(label);
 
-            if (recordContext != null) {
-                if (leftRight) {
-                    recordContext.setBodyloaction2(newImage);
-                }
-                else {
-                    recordContext.setBodyloaction1(newImage);
-                }
-
-                recordRepo.updateRecord(recordContext);
-            }
-        } else {
-            recordContext.insertPhoto(newImage);
-            recordRepo.updateRecord(recordContext);
-        }
-
-        imageRepo.insertImage(newImage);
+        if (xPos != null && yPos != null)
+            newImage.setPos(xPos, yPos);
 
         mainThread.post(new Runnable() {
             @Override
@@ -105,5 +88,8 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
             }
         });
 
+        recordContext.insertPhoto(newImage);
+        recordRepo.updateRecord(recordContext);
+        imageRepo.insertImage(newImage);
     }
 }

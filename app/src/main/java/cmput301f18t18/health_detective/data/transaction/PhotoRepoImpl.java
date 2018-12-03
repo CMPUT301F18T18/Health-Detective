@@ -1,7 +1,6 @@
 package cmput301f18t18.health_detective.data.transaction;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.searchly.jestdroid.JestDroidClient;
@@ -41,7 +40,7 @@ public class PhotoRepoImpl extends AbstractRepo {
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
-                "      \"imageId\": \"" + imageId + "\"\n" +
+                "      \"imageId\": " + imageId + "\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
@@ -73,7 +72,6 @@ public class PhotoRepoImpl extends AbstractRepo {
     public void insert() {
         if (image == null)
             return;
-
         Index index = new Index.Builder(image)
                 .index(elasticIndex)
                 .type(image.getClass().getSimpleName())
@@ -139,11 +137,7 @@ public class PhotoRepoImpl extends AbstractRepo {
 
         for (String id : ids) {
             this.imageId = id;
-
-            DomainImage image = retrieve();
-
-            if (image != null)
-                images.add(image);
+            images.add(retrieve());
         }
 
         return images;
