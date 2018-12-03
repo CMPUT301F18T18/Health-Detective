@@ -5,22 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import com.searchly.jestdroid.JestDroidClient;
 
 public abstract class AbstractRepo {
-    private JestDroidClient client;
+    protected JestDroidClient client;
     protected String elasticIndex;
-    private SQLiteDatabase db;
+    protected SQLiteDatabase db;
+    protected Boolean online;
 
-    public AbstractRepo(JestDroidClient client, String index, SQLiteDatabase db) {
+    public AbstractRepo(JestDroidClient client, String index, SQLiteDatabase db, Boolean online) {
         this.client = client;
         this.db = db;
         this.elasticIndex = index;
-    }
-
-    protected synchronized JestDroidClient getClient() {
-        return client;
-    }
-
-    protected synchronized SQLiteDatabase getDb() {
-        return db;
+        this.online = online;
     }
 
     public abstract void insert();

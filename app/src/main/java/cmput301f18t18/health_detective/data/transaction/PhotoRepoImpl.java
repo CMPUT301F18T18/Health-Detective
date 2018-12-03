@@ -24,14 +24,14 @@ public class PhotoRepoImpl extends AbstractRepo {
     private DomainImage image;
     private String imageId;
 
-    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, DomainImage image) {
-        super(client, index, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, DomainImage image) {
+        super(client, index, db, online);
         this.image = image;
         this.imageId = image.getImageId();
     }
 
-    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
-        super(client, index, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
+        super(client, index, db, online);
         this.imageId = id;
     }
 
@@ -50,7 +50,7 @@ public class PhotoRepoImpl extends AbstractRepo {
                 .addType("DomainImage")
                 .build();
         try {
-            SearchResult result = getClient().execute(search);
+            SearchResult result = client.execute(search);
             List<SearchResult.Hit<DomainImage, Void>> images = result.getHits(DomainImage.class);
 
             Log.d("ESC:getImageElasticSearchId", "Result succeeded");
@@ -78,7 +78,7 @@ public class PhotoRepoImpl extends AbstractRepo {
                 .refresh(true)
                 .build();
         try {
-            DocumentResult result = getClient().execute(index);
+            DocumentResult result = client.execute(index);
             if (result.isSucceeded()) {
                 Log.d("ESC:insertImage", "Image inserted");
                 Log.d("ESC:insertImage", result.getId());
@@ -103,7 +103,7 @@ public class PhotoRepoImpl extends AbstractRepo {
                 .type(image.getClass().getSimpleName())
                 .build();
         try {
-            DocumentResult result = getClient().execute(delete);
+            DocumentResult result = client.execute(delete);
             if (result.isSucceeded()) {
                 Log.d("ESC:deleteImage", "Deleted" + result.getId());
             }
@@ -118,7 +118,7 @@ public class PhotoRepoImpl extends AbstractRepo {
                 .type("DomainImage")
                 .build();
         try {
-            JestResult result = getClient().execute(get);
+            JestResult result = client.execute(get);
             if (result.isSucceeded()) {
                 return result.getSourceAsObject(DomainImage.class);
             }

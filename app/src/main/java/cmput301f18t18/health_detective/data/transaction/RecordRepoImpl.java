@@ -24,14 +24,14 @@ public class RecordRepoImpl extends AbstractRepo {
     private Record record;
     private String recordId;
 
-    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Record record) {
-        super(client, index, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, Record record) {
+        super(client, index, db, online);
         this.record = record;
         this.recordId = record.getRecordId();
     }
 
-    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
-        super(client, index, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
+        super(client, index, db, online);
         this.recordId = id;
     }
 
@@ -55,7 +55,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .addType("Record")
                 .build();
         try {
-            SearchResult result = getClient().execute(search);
+            SearchResult result = client.execute(search);
             List<SearchResult.Hit<Record, Void>> records = result.getHits(Record.class);
 
             Log.d("ESC:getRecordElasticSearchId", "Result succeeded");
@@ -87,7 +87,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .refresh(true)
                 .build();
         try {
-            DocumentResult result = getClient().execute(index);
+            DocumentResult result = client.execute(index);
             if (result.isSucceeded()) {
                 Log.d("ESC:insertRecord", "Record inserted");
                 Log.d("ESC:insertRecord", result.getId());
@@ -122,7 +122,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .type("Record")
                 .build();
         try {
-            JestResult result = getClient().execute(get);
+            JestResult result = client.execute(get);
             if (result.isSucceeded()) {
                 return result.getSourceAsObject(Record.class);
             }
@@ -171,7 +171,7 @@ public class RecordRepoImpl extends AbstractRepo {
                 .type(record.getClass().getSimpleName())
                 .build();
         try {
-            DocumentResult result = getClient().execute(delete);
+            DocumentResult result = client.execute(delete);
             if (result.isSucceeded()) {
                 Log.d("ESC:deleteRecord", "Deleted" + result.getId());
             }

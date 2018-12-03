@@ -19,27 +19,27 @@ import cmput301f18t18.health_detective.domain.model.User;
 public abstract class RepoFactory {
 
     private RepoFactory() { }
-    public static AbstractRepo build(JestDroidClient client, String index, SQLiteDatabase db, Object o) {
+    public static AbstractRepo build(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, Object o) {
         if (o instanceof Problem)
-            return new ProblemRepoImpl(client, index, db, (Problem) o);
+            return new ProblemRepoImpl(client, index, db, online, (Problem) o);
         if (o instanceof Record)
-            return new RecordRepoImpl(client, index, db, (Record) o);
+            return new RecordRepoImpl(client, index, db, online, (Record) o);
         if (o instanceof User)
-            return new UserRepoImpl(client, index, db, (User) o);
+            return new UserRepoImpl(client, index, db, online, (User) o);
         if (o instanceof DomainImage)
-            return new PhotoRepoImpl(client, index, db, (DomainImage) o);
+            return new PhotoRepoImpl(client, index, db, online, (DomainImage) o);
         return null;
     }
 
-    public static AbstractRepo build(JestDroidClient client, String index, SQLiteDatabase db, Class clazz, String id) {
+    public static AbstractRepo build(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, Class clazz, String id) {
         if (clazz == Problem.class)
-            return new ProblemRepoImpl(client, index, db, id);
+            return new ProblemRepoImpl(client, index, db, online, id);
         if (clazz == Record.class)
-            return new RecordRepoImpl(client, index, db, id);
+            return new RecordRepoImpl(client, index, db, online, id);
         if (clazz == Patient.class || clazz == CareProvider.class || clazz == User.class)
-            return new UserRepoImpl(client, index, db, id);
+            return new UserRepoImpl(client, index, db, online, id);
         if (clazz == DomainImage.class)
-            return new PhotoRepoImpl(client, index, db, id);
+            return new PhotoRepoImpl(client, index, db, online, id);
         return null;
     }
 
