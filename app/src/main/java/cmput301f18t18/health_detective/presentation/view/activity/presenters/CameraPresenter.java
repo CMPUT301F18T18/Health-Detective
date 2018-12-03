@@ -8,10 +8,14 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 
 import cmput301f18t18.health_detective.domain.interactors.AddPhoto;
+import cmput301f18t18.health_detective.domain.interactors.GetLoggedInUser;
 import cmput301f18t18.health_detective.domain.interactors.impl.AddPhotoImpl;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetLoggedInUserImpl;
+import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.DomainImage;
+import cmput301f18t18.health_detective.domain.model.Patient;
 
-public class CameraPresenter implements AddPhoto.Callback {
+public class CameraPresenter implements AddPhoto.Callback, GetLoggedInUser.Callback {
 
     private View view;
     private boolean type;
@@ -47,23 +51,25 @@ public class CameraPresenter implements AddPhoto.Callback {
 
     public interface View {
         void onDone();
+        void onPView();
+        void onCPView();
     }
 
     public CameraPresenter(View view, boolean type, boolean leftRight) {
         this.view = view;
         this.type = type;
         this.leftRight = leftRight;
+        new GetLoggedInUserImpl(this).execute();
     }
 
-    public void onImage(Bitmap image) {
+    public void onImage(Bitmap image, String blLabel) {
         byte[] byteImage = toByteArray(image);
         String base64String = byteArrayToString(byteImage);
 
-        new AddPhotoImpl(this, "This Is a Label", base64String, type, leftRight).execute();
+        new AddPhotoImpl(this, blLabel, base64String, type, leftRight).execute();
     }
 
     public void onSave() {
-
     }
 
     //TODO: this will convert to the byte array if that's how you want to store it
@@ -76,4 +82,20 @@ public class CameraPresenter implements AddPhoto.Callback {
         return byteArray;
 
     }
+
+    @Override
+    public void onGLIUNoUserLoggedIn() {
+
+    }
+
+    @Override
+    public void onGLIUPatient(Patient patient) {
+        this.view.onPView();
+    }
+
+    @Override
+    public void onGLIUCareProvider(CareProvider careProvider) {
+        this.view.onCPView();
+    }
+
 }

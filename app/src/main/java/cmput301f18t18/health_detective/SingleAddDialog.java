@@ -17,7 +17,7 @@ public class SingleAddDialog extends AppCompatDialogFragment {
     private String title;
 
     public SingleAddDialog(){
-        this.title = "Add patient";
+        this.title = "Add a Body Location Part";
     }
 
     @SuppressLint("ValidFragment")

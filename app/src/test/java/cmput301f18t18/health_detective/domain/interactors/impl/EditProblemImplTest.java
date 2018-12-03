@@ -47,7 +47,6 @@ public class EditProblemImplTest {
 
         EditProblem command = new EditProblemImpl(
                 callback,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -80,7 +79,6 @@ public class EditProblemImplTest {
 
         EditProblem command = new EditProblemImpl(
                 callback,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -112,7 +110,6 @@ public class EditProblemImplTest {
         Date date = new Date();
         EditProblem command = new EditProblemImpl(
                 callback,
-                problemToEdit,
                 title,
                 description,
                 date
@@ -134,7 +131,6 @@ public class EditProblemImplTest {
         Date date = null;
         EditProblem command = new EditProblemImpl(
                 callback,
-                problemToEdit,
                 title,
                 description,
                 date

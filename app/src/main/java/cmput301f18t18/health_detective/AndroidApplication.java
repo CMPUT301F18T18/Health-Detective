@@ -35,7 +35,6 @@ public class AndroidApplication extends Application {
                 DbController.getInstance(),
                 //mockRR,
                 DbController.getInstance(),
-                null,
                 DbController.getInstance());
                 //new ImageRepoMock());
     }
