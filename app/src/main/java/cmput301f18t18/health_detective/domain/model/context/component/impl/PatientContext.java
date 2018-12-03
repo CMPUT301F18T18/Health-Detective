@@ -4,6 +4,9 @@ import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteracto
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.context.component.base.AbstractContextTreeComponent;
 
+/**
+ * Patient context tree component, stores a patient in the context tree
+ */
 public class PatientContext extends AbstractContextTreeComponent {
     private final Patient patient;
 

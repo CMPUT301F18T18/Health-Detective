@@ -14,10 +14,23 @@ import cmput301f18t18.health_detective.domain.model.context.component.impl.UserC
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTree;
 import cmput301f18t18.health_detective.domain.model.context.tree.ContextTreeParser;
 
+
+/**
+ * Creates context tree components based on the type of data, and state of the context tree provided
+ */
 public class ContextTreeComponentFactory {
 
     private ContextTreeComponentFactory() {}
 
+
+    /**
+     * Creates the apprioriate type of ContextTreeComponent based on the provided context data and
+     * current state of the context tree.
+     *
+     * @param contextData
+     * @param tree
+     * @return ContextTreeComponent
+     */
     public static ContextTreeComponent getContextComponent(Object contextData, ContextTree tree) {
         // Determine type of context tree component to be generated based on type of provided data
         if (contextData instanceof User) {

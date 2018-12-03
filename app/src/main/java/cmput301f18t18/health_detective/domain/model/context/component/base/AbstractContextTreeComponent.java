@@ -3,9 +3,12 @@ package cmput301f18t18.health_detective.domain.model.context.component.base;
 import cmput301f18t18.health_detective.domain.interactors.base.AbstractInteractor;
 import cmput301f18t18.health_detective.domain.model.context.component.ContextTreeComponent;
 
+
+/**
+ * Base context tree component, provides methods for getting and setting a components child and parent component
+ */
 public class AbstractContextTreeComponent implements ContextTreeComponent, Cloneable{
 
-    private Class<? extends AbstractInteractor> commandType;
     private ContextTreeComponent next;
     private ContextTreeComponent prev;
 
@@ -35,12 +38,4 @@ public class AbstractContextTreeComponent implements ContextTreeComponent, Clone
         this.prev = prev;
     }
 
-    @Override
-    public Class<? extends AbstractInteractor> getCommandContext() {
-        return commandType;
-    }
-
-    public void setCommandType(Class<? extends AbstractInteractor> commandType) {
-        this.commandType = commandType;
-    }
 }
