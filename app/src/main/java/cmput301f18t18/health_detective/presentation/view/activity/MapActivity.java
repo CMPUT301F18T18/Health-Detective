@@ -73,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     private ArrayList<Record> recordlist = new ArrayList<Record>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
     private ArrayList<Integer> testclick = new ArrayList<Integer>();
-    private Boolean userType;
+    private Geolocation hospital = new Geolocation(53.521331248, -113.521331248);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,7 +336,6 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
-        userType = false;
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
 
         Window window = this.getWindow();
@@ -372,8 +371,8 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public boolean onMarkerClick(Marker marker) {
         if (this.markers.contains(marker)) {
             int index = this.markers.indexOf(marker);
-
-            if (testclick.get(index) == 1) {
+            LatLng pos = markers.get(index).getPosition();
+            if ((testclick.get(index) == 1) &&(pos.latitude != hospital.getlatitude()) && (pos.longitude != hospital.getlongitude()) ) {
                 new PutContext(this.recordlist.get(index)).execute();
                 Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
                 changeActivity(intent);
