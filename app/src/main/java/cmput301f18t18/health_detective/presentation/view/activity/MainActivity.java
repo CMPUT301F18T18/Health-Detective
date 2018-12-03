@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.signUpText:
                 Intent signUpIntent = new Intent(this,SignUpActivity.class);
+                signUpIntent.putExtra("type", 0);
                 startActivity(signUpIntent);
                 break;
 

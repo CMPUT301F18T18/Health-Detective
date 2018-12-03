@@ -90,6 +90,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
 
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
 

@@ -3,6 +3,7 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,16 +15,20 @@ import android.widget.Toast;
 
 
 import cmput301f18t18.health_detective.R;
+import cmput301f18t18.health_detective.domain.interactors.GetUser;
+import cmput301f18t18.health_detective.domain.interactors.impl.GetUserImpl;
 import cmput301f18t18.health_detective.domain.model.CareProvider;
 import cmput301f18t18.health_detective.domain.model.Patient;
 import cmput301f18t18.health_detective.domain.model.User;
 import cmput301f18t18.health_detective.presentation.view.activity.presenters.SignUpPresenter;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignUpPresenter.View {
+public class SignUpActivity extends AppCompatActivity implements GetUser.Callback, View.OnClickListener, SignUpPresenter.View {
     private TextView userText, phoneText, emailText;
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
     private Boolean activityType;
+    private String user;
+    private int type;
 
 
     @Override
@@ -31,6 +36,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         getSupportActionBar().hide();
+
+        Intent intent = this.getIntent();
+        type = (int) intent.getSerializableExtra("type");
+        if (type == 1) {
+            user = (String) intent.getSerializableExtra("id");
+        }
+
+        new GetUserImpl(this,user).execute();
 
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
@@ -176,5 +189,25 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         signUp.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onGetUserPatientSuccess(Patient patient) {
+        Log.d("abcdefg",patient.getUserId());
+    }
+
+    @Override
+    public void onGetUserProviderSuccess(CareProvider careProvider) {
+        Log.d("abcdefg",careProvider.getUserId());
+    }
+
+    @Override
+    public void onGetUserInvalidUserId() {
+
+    }
+
+    @Override
+    public void onGetUserDoesNotExist() {
+
     }
 }

@@ -99,6 +99,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
 
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
 
