@@ -73,8 +73,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     private static void setClient() {
         if (client == null) {
             DroidClientConfig config = new DroidClientConfig
-                    .readTimeout(10000)
                     .Builder(elasticURL)
+                    .readTimeout(10000)
                     .build();
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);
