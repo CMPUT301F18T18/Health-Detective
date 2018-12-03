@@ -9,9 +9,7 @@ import android.support.v4.app.DialogFragment;
 
 import java.util.Calendar;
 
-/**
- * The DatePickerFragment program creates a date picker dialog and prompts the user to select a date
- */
+//DatePickerFragment program creates a date picker dialog and prompts the user to select a date
 public class DatePickerFragment extends DialogFragment {
 
     @NonNull
