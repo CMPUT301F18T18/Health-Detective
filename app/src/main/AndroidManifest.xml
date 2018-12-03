@@ -39,7 +39,7 @@
             android:label=""/>
         <activity
             android:name=".presentation.view.activity.PatientProblemsActivity"
-            android:parentActivityName=".presentation.view.activity.MainActivity"
+            android:parentActivityName=".presentation.view.activity.CareProPatientListActivity"
             android:label=""/>
         <activity
             android:name=".presentation.view.activity.ProblemEditAddActivity"

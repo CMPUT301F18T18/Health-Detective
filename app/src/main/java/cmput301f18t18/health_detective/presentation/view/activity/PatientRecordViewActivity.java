@@ -413,7 +413,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
                         }
                     }
                     LocationPermissionsGranted = true;
-                    initMap();
+                    //initMap();
                 }
         }
     }
@@ -467,6 +467,7 @@ public class PatientRecordViewActivity extends AppCompatActivity implements View
             }
             if (resultCode == PatientRecordsActivity.RESULT_CANCELED) {
                 //Write your code if there's no result
+                Log.d("abcdefghi","failed");
             }
         }
     }

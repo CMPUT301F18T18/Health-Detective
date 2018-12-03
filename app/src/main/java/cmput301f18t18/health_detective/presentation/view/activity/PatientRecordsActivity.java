@@ -273,6 +273,22 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void noRecords() {
+        if (exampleDialog == null) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setCancelable(true)
+                    .setTitle("No records click plus button to add")
+                    .setPositiveButton("okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+        }
+    }
+
+    @Override
     public void applyEdit(String newTitle, String newComment) {
         this.title = newTitle;
         this.desc = newComment;

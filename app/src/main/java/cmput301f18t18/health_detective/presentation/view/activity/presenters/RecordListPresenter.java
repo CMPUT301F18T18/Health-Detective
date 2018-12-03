@@ -37,6 +37,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
     @Override
     public void onVPNoRecords() {
         this.view.onRecordListUpdate(new ArrayList<Record>());
+        this.view.noRecords();
     }
 
     @Override
@@ -115,6 +116,7 @@ public class RecordListPresenter implements ViewProblem.Callback, CreateRecord.C
         void onCPView(CareProvider careProvider);
         void onPView(Patient patient);
         void onLogout();
+        void noRecords();
     }
 
     public RecordListPresenter(View view)
