@@ -3,7 +3,6 @@ package cmput301f18t18.health_detective.presentation.view.activity;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +31,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -63,7 +60,6 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     RecordListAdapter adapter;
     ArrayList<Record> recordList = new ArrayList<>();
     RecordListPresenter recordListPresenter;
-    int currentPosition;
     private String title, desc;
     private Date date;
     private Geolocation currentGeoLocation;
@@ -86,30 +82,13 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         getDeviceLocation();
 
         this.recordListPresenter = new RecordListPresenter(this);
-
         addRecBtn = findViewById(R.id.addRecordsBtn);
         addRecBtn.setOnClickListener(PatientRecordsActivity.this);
-
-        //final Context context = PatientRecordsActivity.this;
-        //listView = findViewById(R.id.recordListView);
-
-
-        //adapter = new RecordListAdapter(this, this.recordList, this);
-        //listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                recordListPresenter.onView(recordList.get(position));
-//            }
-//        });
-
-        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //this.recordListPresenter.getUserRecords();
     }
 
     @Override
@@ -159,6 +138,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
         }
     }
 
+    //creating a dialog that adds a new record to to a problem
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addRecordsBtn) {
