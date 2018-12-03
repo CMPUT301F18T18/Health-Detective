@@ -24,8 +24,8 @@ public class BodyLocationChooseActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast toast = Toast.makeText(PatientRecordViewActivity.this, "Photo Click", Toast.LENGTH_SHORT);
-//                toast.show();
+                Toast toast = Toast.makeText(BodyLocationChooseActivity.this, "Photo Click", Toast.LENGTH_SHORT);
+                toast.show();
 //                Intent intent = new Intent(PatientRecordViewActivity.this, PhotoViewActivity.class);
 //                startActivity(intent);
             }
