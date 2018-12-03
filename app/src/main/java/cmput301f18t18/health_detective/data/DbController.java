@@ -8,8 +8,6 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import cmput301f18t18.health_detective.data.transaction.PhotoRepoImpl;
@@ -43,26 +41,25 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
 
     private static boolean online = true;
 
+
     /**
      * Allows other classes to get a reference to the singleton
      *
      * @return reference to this object
      */
-    public static DbController getInstance() {
+    public synchronized static DbController getInstance() {
         setClient();
-        online = isOnline();
         return ourInstance;
     }
 
     private DbController() {
     }
 
-    public void init_ONLY_CALL_START(Context context) {
+    public synchronized void init_ONLY_CALL_START(Context context) {
         db = new LocalDbHelper(context).getWritableDatabase();
-        db.enableWriteAheadLogging();
     }
 
-    public void closeDB_ONLY_CALL_END() {
+    public synchronized void closeDB_ONLY_CALL_END() {
         db.close();
     }
 
@@ -82,36 +79,21 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
         }
     }
 
-    private static boolean isOnline() {
-        try {
-            HttpURLConnection urlConnection = (HttpURLConnection) new URL(elasticURL).openConnection();
-            urlConnection.setRequestProperty("Connection", "close");
-            urlConnection.setConnectTimeout(1500);
-            urlConnection.connect();
-            return (urlConnection.getResponseCode() == 200);
-        }
-        catch (Exception e) {
-            Log.d("DBC:isOnline", "Exception", e);
-        }
-        Log.d("DBC:isOnline", "Online");
-        return false;
-    }
-
     @Override
-    public void insertProblem(Problem problem) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, problem);
+    public synchronized void insertProblem(Problem problem) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, problem);
         repo.insert();
     }
 
     @Override
-    public void updateProblem(Problem problem) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, problem);
+    public synchronized void updateProblem(Problem problem) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, problem);
         repo.update();
     }
 
     @Override
-    public Problem retrieveProblemById(String problemId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Problem.class, problemId);
+    public synchronized Problem retrieveProblemById(String problemId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Problem.class, problemId);
         if (repo instanceof ProblemRepoImpl) {
             return ((ProblemRepoImpl) repo).retrieve();
         }
@@ -119,8 +101,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Problem.class, null);
+    public synchronized ArrayList<Problem> retrieveProblemsById(ArrayList<String> problemId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Problem.class, null);
         if (repo instanceof ProblemRepoImpl) {
             return ((ProblemRepoImpl) repo).retrieveProblemsById(problemId);
         }
@@ -128,26 +110,26 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public void deleteProblem(Problem problem) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, problem);
+    public synchronized void deleteProblem(Problem problem) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, problem);
         repo.delete();
     }
 
     @Override
-    public void insertRecord(Record record) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, record);
+    public synchronized void insertRecord(Record record) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, record);
         repo.insert();
     }
 
     @Override
-    public void updateRecord(Record record) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, record);
+    public synchronized void updateRecord(Record record) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, record);
         repo.update();
     }
 
     @Override
-    public Record retrieveRecordById(String recordId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Record.class, recordId);
+    public synchronized Record retrieveRecordById(String recordId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Record.class, recordId);
         if (repo instanceof RecordRepoImpl) {
             return ((RecordRepoImpl) repo).retrieve();
         }
@@ -155,8 +137,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Record> retrieveRecordsById(ArrayList<String> recordId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Record.class, null);
+    public synchronized ArrayList<Record> retrieveRecordsById(ArrayList<String> recordId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Record.class, null);
         if (repo instanceof RecordRepoImpl) {
             return ((RecordRepoImpl) repo).retrieveRecordsById(recordId);
         }
@@ -164,32 +146,32 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public void deleteRecord(Record record) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, record);
+    public synchronized void deleteRecord(Record record) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, record);
         repo.delete();
     }
 
     @Override
-    public void insertUser(User user) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, user);
+    public synchronized void insertUser(User user) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, user);
         repo.insert();
     }
 
     @Override
-    public void updateUser(User user) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, user);
+    public synchronized void updateUser(User user) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, user);
         repo.update();
     }
 
     @Override
-    public void deleteUser(User user) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, user);
+    public synchronized void deleteUser(User user) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, user);
         repo.delete();
     }
 
     @Override
-    public Patient retrievePatientById(String patientId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Patient.class, patientId);
+    public synchronized Patient retrievePatientById(String patientId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Patient.class, patientId);
         if (repo instanceof UserRepoImpl) {
             User usr = ((UserRepoImpl) repo).retrievePatient();
             if (usr != null)
@@ -199,8 +181,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, Patient.class, null);
+    public synchronized ArrayList<Patient> retrievePatientsById(ArrayList<String> patientIds) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, Patient.class, null);
         if (repo instanceof UserRepoImpl) {
             return ((UserRepoImpl) repo).retrievePatientsById(patientIds);
         }
@@ -209,8 +191,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public CareProvider retrieveCareProviderById(String careProviderId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, CareProvider.class, careProviderId);
+    public synchronized CareProvider retrieveCareProviderById(String careProviderId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, CareProvider.class, careProviderId);
         if (repo instanceof UserRepoImpl) {
             User usr = ((UserRepoImpl) repo).retrieveCareProvider();
             if (usr != null)
@@ -220,8 +202,8 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     }
 
     @Override
-    public boolean validateUserIdUniqueness(String userId) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, User.class, userId);
+    public synchronized boolean validateUserIdUniqueness(String userId) {
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, User.class, userId);
         if (repo instanceof UserRepoImpl)
             return ((UserRepoImpl) repo).validateUserIdUniqueness();
         return false;
@@ -229,13 +211,13 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
 
     @Override
     public void insertImage(DomainImage DomainImage) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, DomainImage);
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, DomainImage);
         repo.insert();
     }
 
     @Override
     public DomainImage retrieveImageById(String id) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, DomainImage.class, id);
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, DomainImage.class, id);
         if (repo instanceof PhotoRepoImpl)
             return ((PhotoRepoImpl) repo).retrieve();
         return null;
@@ -243,7 +225,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
 
     @Override
     public ArrayList<DomainImage> retrieveImagesByIds(ArrayList<String> id) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, DomainImage.class, null);
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, DomainImage.class, null);
         if (repo instanceof PhotoRepoImpl) {
             return ((PhotoRepoImpl) repo).retrievePhotosById(id);
         }
@@ -252,7 +234,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
 
     @Override
     public void deleteImage(DomainImage DomainImage) {
-        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, online, DomainImage);
+        AbstractRepo repo = RepoFactory.build(client, elasticIndex, db, DomainImage);
         repo.delete();
     }
 }

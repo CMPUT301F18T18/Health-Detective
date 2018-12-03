@@ -29,14 +29,14 @@ public class ProblemRepoImpl extends AbstractRepo {
     private Problem problem;
     private String problemId;
 
-    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, Problem problem) {
-        super(client, index, db, online);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Problem problem) {
+        super(client, index, db);
         this.problem = problem;
         this.problemId = problem.getProblemId();
     }
 
-    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
-        super(client, index, db, online);
+    public ProblemRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
+        super(client, index, db);
         this.problemId = id;
     }
 
@@ -47,8 +47,6 @@ public class ProblemRepoImpl extends AbstractRepo {
      * @return          The problem's _ID from elasticsearch
      */
     private String getProblemElasticSearchId() {
-        if (!online)
-            return null;
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
@@ -62,7 +60,7 @@ public class ProblemRepoImpl extends AbstractRepo {
                 .addType("Problem")
                 .build();
         try {
-            SearchResult result = client.execute(search);
+            SearchResult result = getClient().execute(search);
             List<SearchResult.Hit<Problem, Void>> problems = result.getHits(Problem.class);
 
             Log.d("ESC:getProblemElasticSearchId", "Result succeeded");
@@ -87,24 +85,21 @@ public class ProblemRepoImpl extends AbstractRepo {
      */
     @Override
     public void insert() {
-        if (online)
-        {
-            if (problem == null)
-                return;
-            Index index = new Index.Builder(problem)
-                    .index(elasticIndex)
-                    .type(problem.getClass().getSimpleName())
-                    .refresh(true)
-                    .build();
-            try {
-                DocumentResult result = client.execute(index);
-                if (result.isSucceeded()) {
-                    Log.d("ESC:insertProblem", "Problem inserted");
-                    Log.d("ESC:insertProblem", result.getId());
-                }
-            } catch (IOException e) {
-                Log.d("ESC:insertProblem", "IOException", e);
+        if (problem == null)
+            return;
+        Index index = new Index.Builder(problem)
+                .index(elasticIndex)
+                .type(problem.getClass().getSimpleName())
+                .refresh(true)
+                .build();
+        try {
+            DocumentResult result = getClient().execute(index);
+            if (result.isSucceeded()) {
+                Log.d("ESC:insertProblem", "Problem inserted");
+                Log.d("ESC:insertProblem", result.getId());
             }
+        } catch (IOException e) {
+            Log.d("ESC:insertProblem", "IOException", e);
         }
         insertLocal();
     }
@@ -128,7 +123,7 @@ public class ProblemRepoImpl extends AbstractRepo {
 
         values.put("recordIds", recordIds);
 
-        db.insert("Problems", null, values);
+        getDb().insert("Problems", null, values);
     }
 
     /**
@@ -149,14 +144,11 @@ public class ProblemRepoImpl extends AbstractRepo {
      */
     public Problem retrieve() {
         String elasticSearchId = getProblemElasticSearchId();
-        if (elasticSearchId == null) {
-            return retrieveLocal();
-        }
         Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("Problem")
                 .build();
         try {
-            JestResult result = client.execute(get);
+            JestResult result = getClient().execute(get);
             if (result.isSucceeded()) {
                 problem = result.getSourceAsObject(Problem.class);
             }
@@ -176,31 +168,31 @@ public class ProblemRepoImpl extends AbstractRepo {
     }
 
     private Problem retrieveLocal() {
-        Cursor cursor = db.query(
-                "Problems",
+        Cursor cursor = getDb().query(
+                "Problem",
                 null,
-                "problemId = ?",
+                "problemId = \"?\"",
                 new String[] {problemId},
                 null,
                 null,
                 null);
-        Problem ret = null;
-        if(cursor.moveToNext()) {
-            try {
-                String problemId = cursor.getString(0);
-                String problemTitle = cursor.getString(1);
-                String problemDesc = cursor.getString(2);
-                Date problemDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(3));
+        cursor.moveToNext();
+        Problem ret;
+        try {
+            String problemId = cursor.getString(0);
+            String problemTitle = cursor.getString(1);
+            String problemDesc = cursor.getString(2);
+            Date problemDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(cursor.getString(3));
 
-                ret = new Problem(problemId, problemTitle, problemDesc, problemDate);
+            ret = new Problem(problemId, problemTitle, problemDesc, problemDate);
 
-                for (String recordId : cursor.getString(4).split(",")) {
-                    ret.addRecord(recordId);
-                }
-            } catch (ParseException e) {
-                Log.d("DBC:retrieveProblemById", "Parse exception", e);
-                ret = null;
+            for (String recordId : cursor.getString(4).split(",")) {
+                ret.addRecord(recordId);
             }
+        }
+        catch (ParseException e) {
+            Log.d("DBC:retrieveProblemById", "Parse exception", e);
+            ret = null;
         }
         cursor.close();
         return ret;
@@ -229,16 +221,14 @@ public class ProblemRepoImpl extends AbstractRepo {
     @Override
     public void delete() {
         String elasticSearchId = getProblemElasticSearchId();
-        if (elasticSearchId == null) {
-            deleteLocal();
+        if (elasticSearchId == null)
             return;
-        }
         Delete delete = new Delete.Builder(elasticSearchId)
                 .index(elasticIndex)
                 .type(problem.getClass().getSimpleName())
                 .build();
         try {
-            DocumentResult result = client.execute(delete);
+            DocumentResult result = getClient().execute(delete);
             if (result.isSucceeded()) {
                 Log.d("ESC:deleteProblem", "Deleted" + result.getId());
             }
@@ -249,8 +239,8 @@ public class ProblemRepoImpl extends AbstractRepo {
     }
 
     private void deleteLocal() {
-        db.delete("Problems",
-                "problemId = ?",
+        getDb().delete("Problems",
+                "problemId = \"?\"",
                 new String[] {problemId}
         );
     }
