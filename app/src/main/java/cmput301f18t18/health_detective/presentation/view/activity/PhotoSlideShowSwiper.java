@@ -5,7 +5,14 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-//https://stackoverflow.com/questions/32966069/how-implement-left-right-swipe-fling-on-layout-in-android
+
+/*
+    Author: End Game
+    Title: How implement left/ right swipe/fling on layout in android
+    Source: https://stackoverflow.com/questions/32966069/how-implement-left-right-swipe-fling-on-layout-in-android
+
+    This was taken for a finger swiper on the slideshow view
+ */
 public class PhotoSlideShowSwiper implements View.OnTouchListener {
 
     public GestureDetector gestureDetector;
@@ -52,7 +59,6 @@ public class PhotoSlideShowSwiper implements View.OnTouchListener {
 
     public void onSwipeRight(){}
     public void onSwipeLeft(){}
-    public void onTapOnce(){}
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
