@@ -196,6 +196,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         LatLng startLatLng = new LatLng(startLocation.getlatitude(), startLocation.getlongitude());
         moveCamera(startLatLng, ZOOM);
         if (type == 1) {
+            Log.d("maptest", Double.toString(startLocation.getlatitude()));
             createMarker(startLatLng, "Location");
         }
         if (type == 0){
