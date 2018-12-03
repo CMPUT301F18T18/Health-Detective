@@ -129,6 +129,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
             case R.id.Logout_option:
@@ -187,8 +188,10 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
     public void onUserClicked(Record record) {
         //TODO: JORDAN THIS SECTION FOR YOU! MAKE ON INTENT TO GO TO LOGIN!!!!!! THIS IS WHEN YOU
         //TODO: CLICK ON A USER!!!!
-        Toast toast = Toast.makeText(this, record.getAuthor(), Toast.LENGTH_SHORT);
-        toast.show();
+        Intent userIdIntent = new Intent(this, SignUpActivity.class);
+        userIdIntent.putExtra("type",2);
+        userIdIntent.putExtra("id",record.getAuthor());
+        startActivity(userIdIntent);
     }
 
     @Override

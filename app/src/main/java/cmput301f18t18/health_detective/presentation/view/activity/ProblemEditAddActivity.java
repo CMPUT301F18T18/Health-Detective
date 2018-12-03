@@ -40,9 +40,13 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problem_edit_add);
 
+        // get type
+        // true - editing
+        // false - adding
         Intent intent = getIntent();
         type = (Boolean) intent.getSerializableExtra("TYPE");
 
+        // set view id's
         problemTitle = findViewById(R.id.problemTitle);
         problemDate = findViewById(R.id.problemDate);
         problemDesc = findViewById(R.id.problemDesc);
@@ -50,10 +54,7 @@ public class ProblemEditAddActivity extends AppCompatActivity implements View.On
 
         // time default set
         problemDate.setText(dateFormat.format(new Date()).replace("AM","am").replace("PM","pm"));
-
-
-
-
+        // create problem presenter
         problemAddEditPresenter = new ProblemAddEditPresenter(this);
 
         TextView cancelBtn = findViewById(R.id.cancelBtn);
