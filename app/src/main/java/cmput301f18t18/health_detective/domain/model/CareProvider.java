@@ -40,6 +40,10 @@ public class CareProvider extends User {
         patients.add(patientUserId);
     }
 
+    public void addPatient(String id) {
+        patients.add(id);
+    }
+
     public void removePatient(Patient patient) {
         if (patient == null)
             return;

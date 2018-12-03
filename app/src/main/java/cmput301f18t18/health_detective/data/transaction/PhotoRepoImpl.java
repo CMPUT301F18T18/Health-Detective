@@ -25,14 +25,14 @@ public class PhotoRepoImpl extends AbstractRepo {
     private DomainImage image;
     private String imageId;
 
-    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, DomainImage image) {
-        super(client, index, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, DomainImage image) {
+        super(client, index, db, online);
         this.image = image;
         this.imageId = image.getImageId();
     }
 
-    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
-        super(client, index, db);
+    public PhotoRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
+        super(client, index, db, online);
         this.imageId = id;
     }
 

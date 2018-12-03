@@ -24,14 +24,14 @@ public class RecordRepoImpl extends AbstractRepo {
     private Record record;
     private String recordId;
 
-    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Record record) {
-        super(client, index, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, Record record) {
+        super(client, index, db, online);
         this.record = record;
         this.recordId = record.getRecordId();
     }
 
-    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
-        super(client, index, db);
+    public RecordRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
+        super(client, index, db, online);
         this.recordId = id;
     }
 

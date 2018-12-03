@@ -8,11 +8,13 @@ public abstract class AbstractRepo {
     protected JestDroidClient client;
     protected String elasticIndex;
     protected SQLiteDatabase db;
+    protected Boolean online;
 
-    public AbstractRepo(JestDroidClient client, String index, SQLiteDatabase db) {
+    public AbstractRepo(JestDroidClient client, String index, SQLiteDatabase db, Boolean online) {
         this.client = client;
         this.db = db;
         this.elasticIndex = index;
+        this.online = online;
     }
 
     public abstract void insert();
