@@ -205,12 +205,14 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
             }
 
             for (int i = 0; i < this.recordlist.size();i++){
-                Marker marker = createMarker(new LatLng(
-                        recordlist.get(i).getGeolocation().getlatitude(),
-                        recordlist.get(i).getGeolocation().getlongitude()),
-                        recordlist.get(i).getTitle());
-                testclick.add(0);
-                markers.add(marker);
+                    Marker marker = createMarker(new LatLng(
+                                    recordlist.get(i).getGeolocation().getlatitude(),
+                                    recordlist.get(i).getGeolocation().getlongitude()),
+                            recordlist.get(i).getTitle());
+
+                    testclick.add(0);
+                    markers.add(marker);
+
 
             }
         }

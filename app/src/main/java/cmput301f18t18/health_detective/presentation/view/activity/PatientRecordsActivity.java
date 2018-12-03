@@ -422,7 +422,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void applyCareRecord(String comment) {
-        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, myLocation);
+        recordListPresenter.createUserRecord("Care Provider Comment", comment, this.date, new Geolocation(53.521331248, -113.521331248));
     }
 
     public void init(){
