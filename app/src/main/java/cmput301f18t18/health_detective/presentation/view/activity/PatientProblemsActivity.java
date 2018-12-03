@@ -69,6 +69,7 @@ public class PatientProblemsActivity extends AppCompatActivity implements View.O
     @Override
     public void onBackPressed() {
         // Logout button works don't remove
+        problemsListPresenter.onLogout();
     }
 
     @Override

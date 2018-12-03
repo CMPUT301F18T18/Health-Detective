@@ -119,7 +119,7 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
                 try {
                     /*
                         This part was getting the taken image and creating a bitmap. This bitmap was
-                        then scaled to 256x256
+                        then scaled to 256x256 for ease of storing.
                      */
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageFileUri);
                     int newWidth = 256;
@@ -140,9 +140,9 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
         if (v.getId() == R.id.saveBtn){
             if (bitmap != null)
                 if (type)
-                openDialog();
+                openDialog(); // creating dialog to type in body location
                 else {
-                    presenter.onImage(bitmap, null);
+                    presenter.onImage(bitmap, null); // saving image
                 }
         }
         else if (v.getId() == R.id.cancelBtn) {
@@ -169,6 +169,6 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
 
     @Override
     public void applyEdit(String patient) {
-        presenter.onImage(bitmap, patient);
+        presenter.onImage(bitmap, patient); // saving body location image with the string
     }
 }
