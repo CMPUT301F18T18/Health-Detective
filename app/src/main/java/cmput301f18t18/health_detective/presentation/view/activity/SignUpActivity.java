@@ -24,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private CheckBox careCheck, patientCheck;
     private SignUpPresenter signUpPresenter;
     private Boolean activityType;
+    private int type;
 
 
     @Override
@@ -32,12 +33,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
         getSupportActionBar().hide();
 
+
+        Intent intent = this.getIntent();
+        type = (int) intent.getSerializableExtra("type");
         userText = findViewById(R.id.userEdit);
         phoneText = findViewById(R.id.phoneNumEdit);
         emailText = findViewById(R.id.emailEdit);
         careCheck = findViewById(R.id.CPcheckBox);
         patientCheck = findViewById(R.id.PcheckBox);
-        //patientCheck.setChecked(true);
         careCheck.setOnClickListener(this);
         patientCheck.setOnClickListener(this);
 

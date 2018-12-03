@@ -150,6 +150,7 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.userId:
                 Intent userIdIntent = new Intent(this, SignUpActivity.class);
+                userIdIntent.putExtra("type",1);
                 startActivity(userIdIntent);
                 return true;
             case R.id.Logout_option:
