@@ -90,8 +90,6 @@ public class EditUserProfileImpl extends AbstractInteractor implements EditUserP
         userToEdit.setPhoneNumber(this.phoneNumber);
         userRepo.updateUser(userToEdit);
 
-        new PutContext(userToEdit);
-
         this.mainThread.post(new Runnable(){
 
             @Override

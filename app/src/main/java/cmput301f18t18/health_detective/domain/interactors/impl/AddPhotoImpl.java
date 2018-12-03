@@ -16,15 +16,15 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
     private Callback callback;
     private String label;
     private String image;
-    private Integer xPos;
-    private Integer yPos;
+    private boolean type;
+    private boolean leftRight;
 
-    public AddPhotoImpl(Callback callback, String label, String image, Integer xPos, Integer yPos) {
+    public AddPhotoImpl(Callback callback, String label, String image, boolean type, boolean leftRight) {
         this.callback = callback;
         this.label = label;
         this.image = image;
-        this.xPos = xPos;
-        this.yPos = yPos;
+        this.type = type;
+        this.leftRight = leftRight;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
         patient = treeParser.getCurrentPatientContext();
         recordContext = treeParser.getCurrentRecordContext();
 
-        if (patient == null || !patient.equals(loggedInUser) || recordContext == null) {
+        if (patient == null || !patient.equals(loggedInUser)) {
             mainThread.post(new Runnable() {
                 @Override
                 public void run() {
@@ -74,14 +74,28 @@ public class AddPhotoImpl extends AbstractInteractor implements AddPhoto {
 
         newImage = new DomainImage(image);
 
-        if (label != null && label != "")
-            newImage.setLabel(label);
+        if (type) {
+            if (label != null && label != "")
+                newImage.setLabel(label);
 
-        if (xPos != null && yPos != null)
-            newImage.setPos(xPos, yPos);
+            patient.addBodylocation(newImage);
+            context.getUserRepo().updateUser(patient);
 
-        recordContext.insertPhoto(newImage);
-        recordRepo.updateRecord(recordContext);
+            if (recordContext != null) {
+                if (leftRight) {
+                    recordContext.setBodyloaction2(newImage);
+                }
+                else {
+                    recordContext.setBodyloaction1(newImage);
+                }
+
+                recordRepo.updateRecord(recordContext);
+            }
+        } else {
+            recordContext.insertPhoto(newImage);
+            recordRepo.updateRecord(recordContext);
+        }
+
         imageRepo.insertImage(newImage);
 
         mainThread.post(new Runnable() {
