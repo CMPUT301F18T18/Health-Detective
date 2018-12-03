@@ -133,7 +133,8 @@ public class PatientRecordsActivityTest {
     public void PRRecordUpdateTest() {
         // Checking if added record is correctly displayed
         onView(withId(R.id.addRecordsBtn)).perform(click());
-        onView(withHint("Title")).perform(replaceText("TestRecord"));
+        onView(withHint("Title"))
+                .perform(replaceText("TestRecord"));
         onView(withText("SAVE")).perform(click());
         try {
             Thread.sleep(1000);
