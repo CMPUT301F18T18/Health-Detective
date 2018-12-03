@@ -12,13 +12,29 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "test.db";
 
-    private static final String SQL_CREATE_ENTRIES = "" +
+    private static final String SQL_CREATE_PROBLEMS = "" +
             "CREATE TABLE Problems (" +
-                "problemId TEXT PRIMARY KEY, " +
-                "title TEXT, " +
-                "description TEXT, " +
-                "startDate TEXT, " +
-                "recordIds TEXT " +
+            "problemId TEXT PRIMARY KEY, " +
+            "title TEXT, " +
+            "description TEXT, " +
+            "startDate TEXT, " +
+            "recordIds TEXT " +
+            ")";
+
+    private static final String SQL_CREATE_PATIENTS = "" +
+            "CREATE TABLE Patients (" +
+            "userId TEXT PRIMARY KEY, " +
+            "phone TEXT, " +
+            "email TEXT, " +
+            "problemIds TEXT" +
+            ")";
+
+    private static final String SQL_CREATE_CAREPROVIDERS = "" +
+            "CREATE TABLE CareProviders (" +
+            "userId TEXT PRIMARY KEY, " +
+            "phone TEXT, " +
+            "email TEXT, " +
+            "patientIds TEXT" +
             ")";
 
     public LocalDbHelper(Context context) {
@@ -27,12 +43,16 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_PROBLEMS);
+        db.execSQL(SQL_CREATE_PATIENTS);
+        db.execSQL(SQL_CREATE_CAREPROVIDERS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Problems");
+        db.execSQL("DROP TABLE IF EXISTS Patients");
+        db.execSQL("DROP TABLE IF EXISTS CareProviders");
 
         onCreate(db);
     }
@@ -40,6 +60,8 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Problems");
+        db.execSQL("DROP TABLE IF EXISTS Patients");
+        db.execSQL("DROP TABLE IF EXISTS CareProviders");
 
         onCreate(db);
     }

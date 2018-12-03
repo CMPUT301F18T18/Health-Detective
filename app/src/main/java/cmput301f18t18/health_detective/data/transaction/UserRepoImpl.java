@@ -1,5 +1,7 @@
 package cmput301f18t18.health_detective.data.transaction;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -26,14 +28,14 @@ public class UserRepoImpl extends AbstractRepo {
     private User user;
     private String userId;
 
-    public UserRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, User user) {
-        super(client, index, db);
+    public UserRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, User user) {
+        super(client, index, db, online);
         this.user = user;
         this.userId = user.getUserId();
     }
 
-    public UserRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, String id) {
-        super(client, index, db);
+    public UserRepoImpl(JestDroidClient client, String index, SQLiteDatabase db, Boolean online, String id) {
+        super(client, index, db, online);
         this.userId = id;
     }
 
@@ -44,6 +46,9 @@ public class UserRepoImpl extends AbstractRepo {
      * @return          The user's _ID from elasticsearch
      */
     private String getUserElasticSearchId() {
+        if (!online) {
+            return null;
+        }
         String query = "{\n" +
                 "  \"query\": {\n" +
                 "    \"match\": {\n" +
@@ -72,7 +77,7 @@ public class UserRepoImpl extends AbstractRepo {
             }
             return users.get(0).id;
         } catch (IOException e) {
-            Log.d("ESC:getUserElasticSearchId", "IOEception", e);
+            Log.d("ESC:getUserElasticSearchId", "IOException", e);
         }
         return null;
     }
@@ -83,20 +88,72 @@ public class UserRepoImpl extends AbstractRepo {
      */
     @Override
     public void insert() {
-        Index index = new Index.Builder(user)
-                .index(elasticIndex)
-                .type(user.getClass().getSimpleName())
-                .refresh(true)
-                .build();
-        try {
-            DocumentResult result = client.execute(index);
-            if (result.isSucceeded()) {
-                Log.d("ESC:insertUser", "User inserted");
-                Log.d("ESC:insertUser", result.getId());
+        if (online) {
+            Index index = new Index.Builder(user)
+                    .index(elasticIndex)
+                    .type(user.getClass().getSimpleName())
+                    .refresh(true)
+                    .build();
+            try {
+                DocumentResult result = client.execute(index);
+                if (result.isSucceeded()) {
+                    Log.d("ESC:insertUser", "User inserted");
+                    Log.d("ESC:insertUser", result.getId());
+                }
+            } catch (IOException e) {
+                Log.d("ESC:insertUser", "IOException", e);
             }
-        } catch (IOException e) {
-            Log.d("ESC:insertUser", "IOException", e);
         }
+        insertLocal();
+    }
+
+    private void insertLocal() {
+        if (user instanceof Patient)
+            insertLocalPatient();
+        else if (user instanceof  CareProvider)
+            insertLocalCareProvider();
+    }
+
+    private void insertLocalPatient() {
+        Patient pat = (Patient) user;
+        ContentValues values = new ContentValues();
+        values.put("userId", pat.getUserId());
+        values.put("phone", pat.getPhoneNumber());
+        values.put("email", pat.getEmailAddress());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String id : pat.getProblemIds()) {
+            stringBuilder.append(id).append(",");
+        }
+
+        String subIds = stringBuilder.toString();
+        if (stringBuilder.length() > 2) { // Trim trailing ","
+            subIds = subIds.substring(0, subIds.length()-1);
+        }
+
+        values.put("problemIds", subIds);
+        db.insert("Patients", null, values);
+    }
+
+    private void insertLocalCareProvider() {
+        CareProvider pat = (CareProvider) user;
+        ContentValues values = new ContentValues();
+        values.put("userId", pat.getUserId());
+        values.put("phone", pat.getPhoneNumber());
+        values.put("email", pat.getEmailAddress());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String id : pat.getPatientIds()) {
+            stringBuilder.append(id).append(",");
+        }
+
+        String subIds = stringBuilder.toString();
+        if (stringBuilder.length() > 2) { // Trim trailing ","
+            subIds = subIds.substring(0, subIds.length()-1);
+        }
+
+        values.put("patientIds", subIds);
+        db.insert("CareProviders", null, values);
     }
 
     /**
@@ -117,8 +174,10 @@ public class UserRepoImpl extends AbstractRepo {
     @Override
     public void delete() {
         String elasticSearchId = getUserElasticSearchId();
-        if (elasticSearchId == null)
+        if (elasticSearchId == null) {
+            deleteLocal();
             return;
+        }
         Delete delete = new Delete.Builder(elasticSearchId)
                 .index(elasticIndex)
                 .type(user.getClass().getSimpleName())
@@ -133,6 +192,22 @@ public class UserRepoImpl extends AbstractRepo {
         } catch (IOException e) {
             Log.d("ESC:deleteUser", "IOException", e);
         }
+        deleteLocal();
+    }
+
+    private void deleteLocal() {
+        String table;
+        if (user instanceof  Patient)
+            table = "Patients";
+        else if (user instanceof CareProvider)
+            table = "CareProviders";
+        else
+            return;
+
+        db.delete(table,
+                "userId = ?",
+                new String[] {userId}
+        );
     }
 
     /**
@@ -141,24 +216,61 @@ public class UserRepoImpl extends AbstractRepo {
      * @return          The patient associated with patientId
      */
     public Patient retrievePatient() {
+        Log.d("ESC:getPatientElasticSearchId", userId);
         String elasticSearchId = getUserElasticSearchId();
+        if (elasticSearchId == null) {
+            Log.d("ESC:retrievePatientById", "Patient not found in Elastic");
+            return retrieveLocalPatient();
+        }
         Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("Patient")
                 .build();
         try {
             JestResult result = client.execute(get);
             if (result.isSucceeded()) {
-                return result.getSourceAsObject(Patient.class);
+                user = result.getSourceAsObject(Patient.class);
             }
             else {
-                Log.d("ESC:retrieveUserById", "result not succeeded");
+                Log.d("ESC:retrievePatientById", "result not succeeded");
             }
         } catch (IOException e) {
-            Log.d("ESC:retrieveUserById", "IOException", e);
+            Log.d("ESC:retrievePatientById", "IOException", e);
+            return retrieveLocalPatient();
         }
-        return null;
+
+        if (retrieveLocalPatient() == null) {
+            insertLocalPatient();
+        }
+
+        return (Patient) user;
     }
 
+    private Patient retrieveLocalPatient() {
+        Cursor cursor = db.query(
+                "Patients",
+                null,
+                "userId = ?",
+                new String[] {userId},
+                null,
+                null,
+                null);
+        Patient ret = null;
+        if(cursor.moveToNext()) {
+            String userId = cursor.getString(0);
+            String phone = cursor.getString(1);
+            String email = cursor.getString(2);
+
+
+            ret = new Patient(userId, phone, email);
+
+            for (String recordId : cursor.getString(3).split(",")) {
+                ret.addProblem(recordId);
+            }
+        }
+
+        cursor.close();
+        return ret;
+    }
 
     /**
      * Used to return a CareProvider from elasticsearch based on its careProviderId
@@ -166,24 +278,50 @@ public class UserRepoImpl extends AbstractRepo {
      * @return          The careprovider associated with careproviderId
      */
     public CareProvider retrieveCareProvider() {
+        Log.d("ESC:getCareProviderElasticSearchId", userId);
         String elasticSearchId = getUserElasticSearchId();
+        if (elasticSearchId == null)
+            return retrieveLocalCareProvider();
         Get get = new Get.Builder(elasticIndex, elasticSearchId)
                 .type("CareProvider")
                 .build();
         try {
             JestResult result = client.execute(get);
             if (result.isSucceeded()) {
-                return result.getSourceAsObject(CareProvider.class);
+                user = result.getSourceAsObject(CareProvider.class);
             }
             else {
-                Log.d("ESC:retrieveRecordById", "result not succeeded");
+                Log.d("ESC:retrieveCareProviderById", "result not succeeded");
             }
         } catch (IOException e) {
-            Log.d("ESC:retrieveRecordById", "IOException", e);
+            Log.d("ESC:retrieveCareProviderById", "IOException", e);
+            return retrieveLocalCareProvider();
         }
-        return null;
+
+        if (retrieveLocalCareProvider() == null) {
+            insertLocalCareProvider();
+        }
+        return (CareProvider) user;
     }
 
+
+    private CareProvider retrieveLocalCareProvider() {
+        Cursor cursor = db.query("CareProviders", null, "userId = ?", new String[] {userId}, null, null, null);
+        CareProvider ret = null;
+        if(cursor.moveToNext()) {
+            String userId = cursor.getString(0);
+            String phone = cursor.getString(1);
+            String email = cursor.getString(2);
+
+            ret = new CareProvider(userId, phone, email);
+
+            for (String patientId : cursor.getString(3).split(",")) {
+                ret.addPatient(patientId);
+            }
+        }
+        cursor.close();
+        return ret;
+    }
 
     /**
      * Gets a list of patients from a list of patient IDs
