@@ -174,8 +174,6 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void applyEdit(String patient) {
         // add the patient done here
-        Toast toast = Toast.makeText(this, patient, Toast.LENGTH_SHORT);
-        toast.show();
         careProPatientListPresenter.addNewPatient(patient);
     }
 
