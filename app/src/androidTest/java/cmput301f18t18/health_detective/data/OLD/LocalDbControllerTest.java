@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data.OLD;
+/*package cmput301f18t18.health_detective.data.OLD;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -37,4 +37,4 @@ public class LocalDbControllerTest {
 //        localDbController.deleteProblem(problem);
     }
 
-}
+}*/

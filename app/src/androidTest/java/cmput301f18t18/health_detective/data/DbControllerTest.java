@@ -1,4 +1,4 @@
-package cmput301f18t18.health_detective.data;
+/*package cmput301f18t18.health_detective.data;
 
 import org.junit.Test;
 
@@ -122,5 +122,5 @@ public class DbControllerTest {
         assertNull(retPatient);
         assertNull(retCareProvider);
     }
-}
+}*/
 
