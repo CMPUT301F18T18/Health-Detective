@@ -188,6 +188,16 @@ public class CamaraActivity extends AppCompatActivity implements CameraPresenter
     }
 
     @Override
+    public void onPView() {
+
+    }
+
+    @Override
+    public void onCPView() {
+
+    }
+
+    @Override
     public void applyEdit(String patient) {
         presenter.onImage(bitmap, patient);
     }

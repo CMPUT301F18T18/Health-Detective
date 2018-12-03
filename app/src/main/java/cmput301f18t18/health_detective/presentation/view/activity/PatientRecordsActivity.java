@@ -232,7 +232,9 @@ public class PatientRecordsActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onCreateRecord() {
-        if (userType){}
+        if (userType){
+            recordListPresenter.getUserRecords();
+        }
         else {
             Intent intent = new Intent(this, PatientRecordViewActivity.class);
             this.startActivity(intent);
