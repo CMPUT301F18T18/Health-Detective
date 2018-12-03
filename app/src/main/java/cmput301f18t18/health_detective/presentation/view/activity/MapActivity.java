@@ -75,17 +75,22 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     private ArrayList<Integer> testclick = new ArrayList<Integer>();
     private Geolocation hospital = new Geolocation(53.521331248, -113.521331248);
 
+    // on create called upon activity creation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        new GetLoggedInUserImpl(this).execute();
+        new GetLoggedInUserImpl(this).execute();   // get user logged in
         Intent intent = this.getIntent();
+        // type represents activity task
+        // 0 - view markers
+        // 1 - add new marker
         this.type = (int) intent.getSerializableExtra("type");
         this.startLocation = (Geolocation) intent.getSerializableExtra("location");
         Cancel = findViewById(R.id.MapCancel);
         Save = findViewById(R.id.MapSave);
+        // if viewing marker remove buttons
         if (type == 0) {
             Save.setVisibility(View.INVISIBLE);
             Cancel.setVisibility(View.INVISIBLE);
@@ -93,13 +98,11 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         }
 
         searchText = findViewById(R.id.input_search);
-
-
         Cancel.setOnClickListener(this);
         Save.setOnClickListener(this);
 
 
-
+        // if adding marker get map permissions
         if (type == 1){
             getLocationPermission();
         }
@@ -107,8 +110,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     }
 
 
-
-
+    // init intializes the editor action which is the search location
     private void init(){
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -124,9 +126,11 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
             }
         });
 
+        // set on map click, which deals with adding a new marker on click
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
+                // clear last selection set marker on new
                 if (type == 1) {
                     mMap.clear();
                     createMarker(latLng, "new record");
@@ -135,13 +139,14 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         });
     }
 
+    //locateSearch takes search criteria and moves the map camera to location specified
     private void locateSearch(){
         String searchString = searchText.getText().toString();
 
         Geocoder geocoder = new Geocoder(MapActivity.this);
         List<Address> list = new ArrayList<>();
         try{
-           list = geocoder.getFromLocationName(searchString, 1);
+           list = geocoder.getFromLocationName(searchString, 1);  // returns a list of length 1 with most consistent search
         }catch(IOException e){
 
         }
@@ -154,6 +159,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     }
 
 
+    // create options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
@@ -165,6 +171,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         return true;
     }
 
+    // initializes the map, calls onMap after getMapAsync
     private void initMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
@@ -173,6 +180,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     }
 
+    // get the location permissions required for the map
     private void getLocationPermission(){
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -190,7 +198,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     }
 
-
+    // given start location as global it moves camera and sets marker on start location
     private void getDeviceLocation() {
 
         LatLng startLatLng = new LatLng(startLocation.getlatitude(), startLocation.getlongitude());
@@ -221,11 +229,12 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
 
 
-
+    // move map camera to lattitude and longitude
     private void moveCamera(LatLng latLng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
+    // request permissions returns request code 1234 if permissions granted and initializes the map
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         LocationPermissionsGranted = false;
@@ -246,6 +255,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         }
     }
 
+    // on click for the options menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -271,11 +281,12 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         }
 
 }
-
+    // change activity given an intent
     private void changeActivity(Intent intent) {
         startActivity(intent);
     }
 
+    // called when the map is created
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -296,6 +307,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     }
 
+    // given a LatLng object and title creats a marker
     private Marker createMarker( LatLng currentLatLng,String title){
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(currentLatLng)
@@ -308,11 +320,13 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     }
 
 
+    // onClick for the button clicks
     @Override
     public void onClick(View v) {
         if(v.getId()== R.id.MapCancel){
             finish();
         }
+        // sets results if in add marker type and returns a double array with [lat,lng]
         if(v.getId()==R.id.MapSave){
             if (type == 1) {
                 Intent returnIntent = new Intent();
@@ -328,12 +342,12 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
     public void onGLIUNoUserLoggedIn() {
 
     }
-
+    // get user id
     @Override
     public void onGLIUPatient(Patient patient) {
         userID = patient.getUserId();
     }
-
+    // if care provider update the UI color
     @Override
     public void onGLIUCareProvider(CareProvider careProvider) {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
@@ -344,6 +358,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
     }
 
+    // get list of records
     @Override
     public void onVPSuccess(ArrayList<Record> records) {
         this.recordlist = records;
@@ -367,17 +382,21 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMarker
 
     }
 
+    // on click for markers
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (this.markers.contains(marker)) {
             int index = this.markers.indexOf(marker);
             LatLng pos = markers.get(index).getPosition();
+            // testclick is an int array used to make sure the marker must be clicked twice to open record
+            // if location dont open record because its a care provider comment
             if ((testclick.get(index) == 1) &&(pos.latitude != hospital.getlatitude()) && (pos.longitude != hospital.getlongitude()) ) {
                 new PutContext(this.recordlist.get(index)).execute();
                 Intent intent = new Intent(MapActivity.this, PatientRecordViewActivity.class);
                 changeActivity(intent);
             }
 
+            // if first click update the marker to be last clicked and
             else {
                 for( int j = 0; j < testclick.size(); j++){
                     testclick.set(j,0);
