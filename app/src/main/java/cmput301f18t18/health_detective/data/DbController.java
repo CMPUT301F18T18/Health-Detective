@@ -35,7 +35,7 @@ public class DbController implements UserRepo, ProblemRepo, RecordRepo, ImageRep
     static private JestDroidClient client = null;
     static private SQLiteDatabase db = null;
 
-    static private final String elasticIndex = "cmput301f18t18test3";
+    static private final String elasticIndex = "cmput301f18t18";
 
     /**
      * Allows other classes to get a reference to the singleton
