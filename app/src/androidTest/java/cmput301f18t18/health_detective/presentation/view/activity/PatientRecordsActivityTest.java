@@ -47,6 +47,11 @@ public class PatientRecordsActivityTest {
     @Before
     public void LoginAndCreateTestProblem() {
         // Assuming walker2018 is a user, which it should be
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
@@ -102,9 +107,9 @@ public class PatientRecordsActivityTest {
         onView(withId(R.id.addRecordsBtn)).perform(click());
         onView(withText("Add Record")).check(matches(isDisplayed()));
         onView(withText("CANCEL")).perform(click());
-        pressBack();
+        onView(withContentDescription("Navigate up")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -134,6 +139,11 @@ public class PatientRecordsActivityTest {
         intended(hasComponent(MapActivity.class.getName()));
         pressBack();
         pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // Making sure view is updated when record added/deleted

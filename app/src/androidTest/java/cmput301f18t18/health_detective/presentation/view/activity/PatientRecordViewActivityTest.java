@@ -45,6 +45,11 @@ public class PatientRecordViewActivityTest {
     @Before
     public void LoginCredentials() {
         // Assuming walker2018 is a user, which it should be
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
@@ -77,6 +82,11 @@ public class PatientRecordViewActivityTest {
         onView(withHint("Title"))
                 .perform(replaceText("TestRecord"));
         onView(withText("SAVE")).perform(click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @After
@@ -150,7 +160,7 @@ public class PatientRecordViewActivityTest {
     @Test
     public void PRVMenuBarTest() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -159,7 +169,7 @@ public class PatientRecordViewActivityTest {
         onView(withText("Edit Title")).check(matches(isDisplayed()));
         onView(withText("CANCEL")).perform(click());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -169,6 +179,10 @@ public class PatientRecordViewActivityTest {
         onView(withText("CANCEL")).perform(click());
         pressBack();
         pressBack();
-        pressBack();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

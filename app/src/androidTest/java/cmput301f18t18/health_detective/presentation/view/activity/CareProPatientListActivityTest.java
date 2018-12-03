@@ -44,6 +44,11 @@ public class CareProPatientListActivityTest {
     @Before
     public void LoginCredentials() {
         // Assuming reklaw2018 is a user, which it should be
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("reklaw2018"), closeSoftKeyboard());
         try {

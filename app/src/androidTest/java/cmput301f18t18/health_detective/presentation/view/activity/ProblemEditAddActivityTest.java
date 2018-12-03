@@ -39,6 +39,11 @@ public class ProblemEditAddActivityTest {
     @Before
     public void LoginCredentials() {
         // Assuming walker2018 is a user, which it should be
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
@@ -73,6 +78,11 @@ public class ProblemEditAddActivityTest {
     // Testing to make sure save button is working correctly and adding problem to list
     @Test
     public void PEASaveButtonTest() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withHint("Problem Title"))
                 .perform(replaceText("TestProblem"));
         onView(withId(R.id.saveBtn)).perform(click());
@@ -94,5 +104,10 @@ public class ProblemEditAddActivityTest {
             e.printStackTrace();
         }
         onView(withText("TestProblem")).check(doesNotExist());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

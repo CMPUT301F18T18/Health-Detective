@@ -50,6 +50,11 @@ public class PatientProblemsActivityTest {
     @Before
     public void LoginCredentials() {
         // Assuming walker2018 is a user, which it should be
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.userIdLogin))
                 .perform(replaceText("walker2018"),closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
