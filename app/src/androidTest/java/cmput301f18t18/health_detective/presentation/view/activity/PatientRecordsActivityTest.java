@@ -141,8 +141,32 @@ public class PatientRecordsActivityTest {
             e.printStackTrace();
         }
         pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withText("TestRecord")).check(matches(isDisplayed()));
-    }
 
+        // Checking that view is updated after record deleted
+        onData(anything()).inAdapterView((withId(R.id.recordListView)))
+                .atPosition(0)
+                .onChildView(withId(R.id.deleteImg))
+                .perform(click());
+        onView(withText("CONFIRM")).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withText("TestRecord")).check(doesNotExist());
+        pressBack();
+        pressBack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
