@@ -40,27 +40,27 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_care_pro_patient_list);
 
+        //This is setting the colour scheme to purple
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorCareProvider)));
-
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorCareProviderDark));
-        this.careProPatientListPresenter = new CareProPatientListPresenter(this);
+
+        this.careProPatientListPresenter = new CareProPatientListPresenter(this); //creating presenter to update view
 
         ImageView addPatient = findViewById(R.id.addPatientBtn);
         addPatient.setOnClickListener(this);
         listView = findViewById(R.id.patientListView);
         adapter = new PatientListAdapter(this, this.patientList, this);
         listView.setAdapter(adapter);
-        this.careProPatientListPresenter.getAssignedPatients();
+        this.careProPatientListPresenter.getAssignedPatients(); //getting the assigned patients
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         this.careProPatientListPresenter.getAssignedPatients();
     }
 
@@ -68,11 +68,8 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public boolean onCreateOptionsMenu(Menu menu) {
         // being able to use the menu at the top of the app
         getMenuInflater().inflate(R.menu.logout_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
         MenuItem userIdMenu = menu.findItem(R.id.userId);
         userIdMenu.setTitle(cpContext.getUserId());
-
         return true;
     }
 
@@ -99,6 +96,12 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Logout button works don't remove
+        careProPatientListPresenter.onLogout();
     }
 
 
@@ -136,7 +139,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.addPatientBtn) {
-            openDialog();
+            openDialog(); // this is adding in a new patient
         }
     }
 
@@ -144,7 +147,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
     public void onAddPatientSuccess() {
         Toast toast = Toast.makeText(this, "Patient Added", Toast.LENGTH_SHORT);
         toast.show();
-        this.careProPatientListPresenter.getAssignedPatients();
+        this.careProPatientListPresenter.getAssignedPatients(); // updating this list to show the new patient
     }
 
     @Override
@@ -158,7 +161,7 @@ public class CareProPatientListActivity extends AppCompatActivity implements Vie
         // add the patient done here
         Toast toast = Toast.makeText(this, patient, Toast.LENGTH_SHORT);
         toast.show();
-        careProPatientListPresenter.addNewPatient(patient);
+        careProPatientListPresenter.addNewPatient(patient); //adding new patient to elastic search
     }
 
 
